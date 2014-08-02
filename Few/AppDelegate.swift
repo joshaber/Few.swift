@@ -29,7 +29,11 @@ func render(state: State) -> Element<State> {
 	if state.flip {
 		return Input()
 	} else {
-		return Button(frame: CGRect(x: 0, y: 0, width: 50 + state.count, height: 23), title: state.title + " \(state.count)")
+		let frame = CGRect(x: 0, y: 0, width: 50 + state.count, height: 23)
+		let title = state.title + " \(state.count)"
+		return Button(frame: frame, title: title) { s in
+			s
+		}
 	}
 }
 
