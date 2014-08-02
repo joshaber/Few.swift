@@ -8,9 +8,8 @@
 
 import Cocoa
 
-func every<S>(interval: NSTimeInterval, component: Component<S>, apply: S -> S) -> NSTimer {
-	let timerTrampoline = TargetActionTrampoline()
-	timerTrampoline.action = { component.state = apply(component.state) }
+func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
+	let timerTrampoline = TargetActionTrampoline(action: fn)
 	return NSTimer.scheduledTimerWithTimeInterval(interval, target: timerTrampoline, selector: timerTrampoline.selector, userInfo: nil, repeats: true)
 }
 
@@ -43,13 +42,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		let contentView = window.contentView as NSView
 		component.addToView(contentView)
 
-		every(0.1, component) { state in
+		every(0.1) {
+			let state = self.component.state
 			var newFlip = state.flip
 			if state.count % 20 == 0 {
 				newFlip = !state.flip
 			}
 
-			return State(title: state.title, count: state.count + 1, flip: newFlip)
+			self.component.state = State(title: state.title, count: state.count + 1, flip: newFlip)
 		}
 	}
 }
