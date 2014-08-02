@@ -20,10 +20,10 @@ public class Input<S: Equatable>: Element<S> {
 		}
 	}
 
-	public override func realize(parentView: NSView) {
+	public override func realize(parentView: NSView, component: Component<S>) {
 		textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
 
-		super.realize(parentView)
+		super.realize(parentView, component: component)
 	}
 
 	public override func getContentView() -> NSView? {
