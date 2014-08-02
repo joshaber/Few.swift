@@ -15,9 +15,14 @@ public class Button<S: Equatable>: Element<S> {
 
 	private var button: NSButton?
 
-	public init(frame: CGRect, title: String) {
+	private let trampoline: TargetActionTrampoline
+
+	public init(frame: CGRect, title: String, fn: S -> S) {
 		self.frame = frame
 		self.title = title
+		self.trampoline = TargetActionTrampoline(action: {
+
+		})
 	}
 
 	public override func applyDiff(other: Element<S>) {
@@ -38,13 +43,15 @@ public class Button<S: Equatable>: Element<S> {
 		}
 	}
 
-	public override func realize(parentView: NSView) {
+	public override func realize(parentView: NSView, component: Component<S>) {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
+		button.target = trampoline
+		button.action = trampoline.selector
 		self.button = button
 
-		super.realize(parentView)
+		super.realize(parentView, component: component)
 	}
 
 	public override func getContentView() -> NSView? {

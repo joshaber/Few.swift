@@ -9,17 +9,15 @@
 import Foundation
 
 public class TargetActionTrampoline: NSObject {
-	public var action: (() -> ())?
+	public let action: () -> ()
 
 	public let selector = Selector("performAction:")
 
-	public init() {}
+	public init(action: () -> ()) {
+		self.action = action
+	}
 
 	public func performAction(sender: AnyObject?) {
-		if !action.getLogicValue() {
-			return
-		}
-
-		self.action!()
+		self.action()
 	}
 }
