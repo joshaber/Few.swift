@@ -40,13 +40,13 @@ public class Component<S: Equatable> {
 			topElement = otherElement
 
 			if let hostView = hostView {
-				topElement.realize(hostView, component: self)
+				topElement.realize(hostView)
 			}
 		}
 	}
 
 	public func addToView(view: NSView) {
 		hostView = view
-		topElement.realize(view, component: self)
+		topElement.realize(view)
 	}
 }

@@ -10,9 +10,6 @@ import Foundation
 import AppKit
 
 public class Element<S: Equatable> {
-//	var component: Component<S>?
-//	var t: Int
-
 	public func canDiff(other: Element<S>) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}
@@ -21,9 +18,7 @@ public class Element<S: Equatable> {
 		
 	}
 
-	public func realize(parentView: NSView, component: Component<S>) {
-//		self.component = component
-
+	public func realize(parentView: NSView) {
 		if let contentView = getContentView() {
 			parentView.addSubview(contentView)
 		}

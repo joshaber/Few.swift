@@ -43,7 +43,7 @@ public class Button<S: Equatable>: Element<S> {
 		}
 	}
 
-	public override func realize(parentView: NSView, component: Component<S>) {
+	public override func realize(parentView: NSView) {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
@@ -51,7 +51,7 @@ public class Button<S: Equatable>: Element<S> {
 		button.action = trampoline.selector
 		self.button = button
 
-		super.realize(parentView, component: component)
+		super.realize(parentView)
 	}
 
 	public override func getContentView() -> NSView? {
