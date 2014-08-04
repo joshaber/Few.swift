@@ -9,7 +9,8 @@
 import Cocoa
 
 func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
-	let timerTrampoline = TargetActionTrampoline(action: fn)
+	let timerTrampoline = TargetActionTrampoline()
+	timerTrampoline.action = fn
 	return NSTimer.scheduledTimerWithTimeInterval(interval, target: timerTrampoline, selector: timerTrampoline.selector, userInfo: nil, repeats: true)
 }
 

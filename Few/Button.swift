@@ -15,7 +15,7 @@ public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S,
 
 	private var button: NSButton?
 
-	private let trampoline: TargetActionTrampoline
+	private let trampoline = TargetActionTrampoline()
 
 	private var setable: T?
 
