@@ -25,7 +25,7 @@ func ==(lhs: State, rhs: State) -> Bool {
 
 let initialState = State(title: "Hi!", count: 1, flip: false)
 
-func render(state: State) -> Element<State> {
+func render(state: State) -> Element<State, Observable<State>> {
 	if state.flip {
 		return Input()
 	} else {
@@ -47,13 +47,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		component.addToView(contentView)
 
 		every(0.1) {
-			let state = self.component.state
+			let state = self.component.state.value
 			var newFlip = state.flip
 			if state.count % 20 == 0 {
 				newFlip = !state.flip
 			}
 
-			self.component.state = State(title: state.title, count: state.count + 1, flip: newFlip)
+			self.component.state.value = State(title: state.title, count: state.count + 1, flip: newFlip)
 		}
 	}
 }

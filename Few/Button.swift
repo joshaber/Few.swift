@@ -9,13 +9,15 @@
 import Foundation
 import AppKit
 
-public class Button<S: Equatable>: Element<S> {
+public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S, T> {
 	private var title: String
 	private var frame: CGRect
 
 	private var button: NSButton?
 
 	private let trampoline: TargetActionTrampoline
+
+	private var setable: T?
 
 	public init(frame: CGRect, title: String, fn: S -> S) {
 		self.frame = frame
@@ -25,7 +27,7 @@ public class Button<S: Equatable>: Element<S> {
 		})
 	}
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element<S, T>) {
 		if !button.getLogicValue() {
 			return
 		}
@@ -43,7 +45,7 @@ public class Button<S: Equatable>: Element<S> {
 		}
 	}
 
-	public override func realize(parentView: NSView) {
+	public override func realize(parentView: NSView, setable: T) {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
@@ -51,7 +53,9 @@ public class Button<S: Equatable>: Element<S> {
 		button.action = trampoline.selector
 		self.button = button
 
-		super.realize(parentView)
+		self.setable = setable
+
+		super.realize(parentView, setable: setable)
 	}
 
 	public override func getContentView() -> NSView? {
