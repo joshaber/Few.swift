@@ -26,15 +26,21 @@ func ==(lhs: State, rhs: State) -> Bool {
 
 let initialState = State(title: "Hi!", count: 1, flip: false)
 
+func const<T, V>(val: T) -> (V -> T) {
+	return { _ in val }
+}
+
+func id<T>(val: T) -> T {
+	return val
+}
+
 func render(state: State) -> Element<State, Observable<State>> {
 	if state.flip {
 		return Input()
 	} else {
 		let frame = CGRect(x: 0, y: 0, width: 50 + state.count, height: 23)
 		let title = state.title + " \(state.count)"
-		return Button(frame: frame, title: title) { s in
-			s
-		}
+		return Button(frame: frame, title: title, fn: const(initialState))
 	}
 }
 

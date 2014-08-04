@@ -19,18 +19,27 @@ public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S,
 
 	private var setable: T?
 
+	private let fn: S -> S
+
 	public init(frame: CGRect, title: String, fn: S -> S) {
 		self.frame = frame
 		self.title = title
-		self.trampoline = TargetActionTrampoline(action: {
+		self.fn = fn
+		super.init()
 
-		})
+		self.trampoline.action = performAction
+	}
+
+	private func performAction() {
+		if !setable.getLogicValue() { return }
+
+		let s = setable!
+		let newState = fn(s.value)
+		s.setValue(newState)
 	}
 
 	public override func applyDiff(other: Element<S, T>) {
-		if !button.getLogicValue() {
-			return
-		}
+		if !button.getLogicValue() { return }
 
 		let otherButton = other as Button
 		let b = button!

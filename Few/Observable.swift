@@ -11,7 +11,10 @@ import Foundation
 public protocol Setable {
 	typealias ValueType
 
-	var value: ValueType { get set }
+	var value: ValueType { set get }
+
+	// This shouldn't be necessary since `value` is set + get?
+	func setValue(v: ValueType)
 }
 
 public class Observable<T> {
@@ -41,5 +44,7 @@ public class Observable<T> {
 }
 
 extension Observable: Setable {
-
+	public func setValue(v: T) {
+		value = v
+	}
 }
