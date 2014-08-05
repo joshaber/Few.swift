@@ -13,9 +13,9 @@ public class Label<S: Equatable>: Element<S> {
 	private var textField: NSTextField?
 
 	private var text: String
-	private var frame: NSRect
+	private var frame: CGRect
 
-	public init(frame: NSRect, text: String) {
+	public init(frame: CGRect, text: String) {
 		self.frame = frame
 		self.text = text
 	}

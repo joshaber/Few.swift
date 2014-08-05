@@ -21,7 +21,7 @@ public class Input<S: Equatable>: Element<S> {
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
-		textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
+		textField = NSTextField(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
 		super.realize(component, parentView: parentView)
 	}
