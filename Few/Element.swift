@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Element<S: Equatable, T: Setable where T.ValueType == S> {
+public class Element<S, T: Setable where T.ValueType == S> {
 	public func canDiff(other: Element<S, T>) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}

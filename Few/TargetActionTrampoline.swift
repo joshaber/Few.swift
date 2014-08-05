@@ -14,9 +14,7 @@ public class TargetActionTrampoline: NSObject {
 	public let selector = Selector("performAction:")
 
 	public func performAction(sender: AnyObject?) {
-		if !action.getLogicValue() {
-			return
-		}
+		if action == nil { return }
 
 		self.action!()
 	}

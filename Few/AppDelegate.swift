@@ -14,14 +14,10 @@ func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
 	return NSTimer.scheduledTimerWithTimeInterval(interval, target: timerTrampoline, selector: timerTrampoline.selector, userInfo: nil, repeats: true)
 }
 
-struct State: Equatable {
+struct State {
 	let title: String
 	let count: Int
 	let flip: Bool
-}
-
-func ==(lhs: State, rhs: State) -> Bool {
-	return lhs.title == rhs.title && lhs.count == rhs.count && lhs.flip == rhs.flip
 }
 
 let initialState = State(title: "Hi!", count: 1, flip: false)
@@ -32,6 +28,13 @@ func const<T, V>(val: T) -> (V -> T) {
 
 func id<T>(val: T) -> T {
 	return val
+}
+
+func void<T, U>(fn: T -> U) -> (T -> ()) {
+	return { t in
+		fn(t)
+		return ()
+	}
 }
 
 func render(state: State) -> Element<State, Observable<State>> {

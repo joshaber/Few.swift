@@ -9,15 +9,13 @@
 import Foundation
 import AppKit
 
-public class Input<S: Equatable, T: Setable where T.ValueType == S>: Element<S, T> {
+public class Input<S, T: Setable where T.ValueType == S>: Element<S, T> {
 	private var textField: NSTextField?
 
-	public init() {}
+	public override init() {}
 
 	public override func applyDiff(other: Element<S, T>) {
-		if !textField.getLogicValue() {
-			return
-		}
+		if textField == nil { return }
 	}
 
 	public override func realize(parentView: NSView, setable: T) {

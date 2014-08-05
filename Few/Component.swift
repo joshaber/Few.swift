@@ -9,8 +9,8 @@
 import Foundation
 import AppKit
 
-public class Component<S: Equatable, T: Setable where T.ValueType == S>: Element<S, T> {
-	public var state: Observable<S>
+public class Component<S, T: Setable where T.ValueType == S>: Element<S, T> {
+	internal var state: Observable<S>
 
 	private let render: S -> Element<S, T>
 

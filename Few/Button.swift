@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S, T> {
+public class Button<S, T: Setable where T.ValueType == S>: Element<S, T> {
 	private var title: String
 	private var frame: CGRect
 
@@ -31,7 +31,7 @@ public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S,
 	}
 
 	private func performAction() {
-		if !setable.getLogicValue() { return }
+		if setable == nil { return }
 
 		let s = setable!
 		let newState = fn(s.value)
@@ -39,7 +39,7 @@ public class Button<S: Equatable, T: Setable where T.ValueType == S>: Element<S,
 	}
 
 	public override func applyDiff(other: Element<S, T>) {
-		if !button.getLogicValue() { return }
+		if button == nil { return }
 
 		let otherButton = other as Button
 		let b = button!
