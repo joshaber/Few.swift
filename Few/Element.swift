@@ -22,12 +22,15 @@ public class Element<S: Equatable> {
 	/// Apply the diff. The receiver should take on any differences between it
 	/// and `other`.
 	///
-	/// This will only be called if `canDiff` returns `true`.
+	/// This will only be called if `canDiff` returns `true`. Implementations do
+	/// not need to call super.
 	public func applyDiff(other: Element<S>) {
 		
 	}
 
 	/// Realize the element in the given component and parent view.
+	///
+	/// The default implementation adds the content view to `parentView`.
 	public func realize(component: Component<S>, parentView: NSView) {
 		if let contentView = getContentView() {
 			parentView.addSubview(contentView)
@@ -35,6 +38,8 @@ public class Element<S: Equatable> {
 	}
 
 	/// Derealize the element.
+	///
+	/// The default implemetation removes the content view from its superview.
 	public func derealize() {
 		if let contentView = getContentView() {
 			contentView.removeFromSuperview()
