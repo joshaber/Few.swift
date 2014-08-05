@@ -45,11 +45,10 @@ func void<T, U>(fn: T -> U) -> (T -> ()) {
 
 func render(state: State) -> Element<State> {
 	if state.flip {
-		return Input()
+		return Label(frame: CGRect(x: 0, y: 0, width: 100, height: 23), text: "\(state.count)")
 	} else {
-		let frame = CGRect(x: 0, y: 0, width: 50 + state.count, height: 23)
-		let title = state.title + " \(state.count)"
-		return Button(frame: frame, title: title, fn: const(initialState))
+		let frame = CGRect(x: state.count, y: state.count, width: 50 + state.count, height: 23 + state.count)
+		return Button(frame: frame, title: state.title, fn: const(initialState))
 	}
 }
 
