@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Button<S, T: Setable where T.ValueType == S>: Element<S, T> {
+public class Button<S: Equatable>: Element<S> {
 	private var title: String
 	private var frame: CGRect
 
@@ -17,28 +17,27 @@ public class Button<S, T: Setable where T.ValueType == S>: Element<S, T> {
 
 	private let trampoline = TargetActionTrampoline()
 
-	private var setable: T?
+	private weak var component: Component<S>?
 
-	private let fn: S -> S
+	public convenience init(frame: CGRect, title: String, fn: S -> S) {
+		self.init(frame: frame, title: title, action: { component in
+			component.state = fn(component.state)
+		})
+	}
 
-	public init(frame: CGRect, title: String, fn: S -> S) {
+	public init(frame: CGRect, title: String, action: Component<S> -> ()) {
 		self.frame = frame
 		self.title = title
-		self.fn = fn
 		super.init()
 
-		self.trampoline.action = performAction
+		self.trampoline.action = { [unowned self] in
+			if self.component == nil { return }
+
+			action(self.component!)
+		}
 	}
 
-	private func performAction() {
-		if setable == nil { return }
-
-		let s = setable!
-		let newState = fn(s.value)
-		s.setValue(newState)
-	}
-
-	public override func applyDiff(other: Element<S, T>) {
+	public override func applyDiff(other: Element<S>) {
 		if button == nil { return }
 
 		let otherButton = other as Button
@@ -54,7 +53,9 @@ public class Button<S, T: Setable where T.ValueType == S>: Element<S, T> {
 		}
 	}
 
-	public override func realize(parentView: NSView, setable: T) {
+	public override func realize(component: Component<S>, parentView: NSView) {
+		self.component = component
+
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
@@ -62,9 +63,7 @@ public class Button<S, T: Setable where T.ValueType == S>: Element<S, T> {
 		button.action = trampoline.selector
 		self.button = button
 
-		self.setable = setable
-
-		super.realize(parentView, setable: setable)
+		super.realize(component, parentView: parentView)
 	}
 
 	public override func getContentView() -> NSView? {

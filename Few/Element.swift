@@ -9,16 +9,16 @@
 import Foundation
 import AppKit
 
-public class Element<S, T: Setable where T.ValueType == S> {
-	public func canDiff(other: Element<S, T>) -> Bool {
+public class Element<S: Equatable> {
+	public func canDiff(other: Element<S>) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}
 
-	public func applyDiff(other: Element<S, T>) {
+	public func applyDiff(other: Element<S>) {
 		
 	}
 
-	public func realize(parentView: NSView, setable: T) {
+	public func realize(component: Component<S>, parentView: NSView) {
 		if let contentView = getContentView() {
 			parentView.addSubview(contentView)
 		}

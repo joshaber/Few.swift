@@ -20,6 +20,12 @@ struct State {
 	let flip: Bool
 }
 
+extension State: Equatable {}
+
+func ==(lhs: State, rhs: State) -> Bool {
+	return lhs.title == rhs.title && lhs.count == rhs.count && lhs.flip == rhs.flip
+}
+
 let initialState = State(title: "Hi!", count: 1, flip: false)
 
 func const<T, V>(val: T) -> (V -> T) {
@@ -37,7 +43,7 @@ func void<T, U>(fn: T -> U) -> (T -> ()) {
 	}
 }
 
-func render(state: State) -> Element<State, Observable<State>> {
+func render(state: State) -> Element<State> {
 	if state.flip {
 		return Input()
 	} else {
@@ -57,13 +63,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		component.addToView(contentView)
 
 		every(0.1) {
-			let state = self.component.state.value
+			let state = self.component.state
 			var newFlip = state.flip
 			if state.count % 20 == 0 {
 				newFlip = !state.flip
 			}
 
-			self.component.state.value = State(title: state.title, count: state.count + 1, flip: newFlip)
+			self.component.state = State(title: state.title, count: state.count + 1, flip: newFlip)
 		}
 	}
 }

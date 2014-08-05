@@ -9,19 +9,19 @@
 import Foundation
 import AppKit
 
-public class Input<S, T: Setable where T.ValueType == S>: Element<S, T> {
+public class Input<S: Equatable>: Element<S> {
 	private var textField: NSTextField?
 
 	public override init() {}
 
-	public override func applyDiff(other: Element<S, T>) {
+	public override func applyDiff(other: Element<S>) {
 		if textField == nil { return }
 	}
 
-	public override func realize(parentView: NSView, setable: T) {
+	public override func realize(component: Component<S>, parentView: NSView) {
 		textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 100, height: 100))
 
-		super.realize(parentView, setable: setable)
+		super.realize(component, parentView: parentView)
 	}
 
 	public override func getContentView() -> NSView? {
