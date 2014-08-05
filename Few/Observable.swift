@@ -11,7 +11,7 @@ import Foundation
 public protocol Setable {
 	typealias ValueType
 
-	var value: ValueType { set get }
+	var value: ValueType { get set }
 
 	// This shouldn't be necessary since `value` is set + get?
 	func setValue(v: ValueType)
