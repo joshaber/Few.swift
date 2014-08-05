@@ -17,7 +17,6 @@
 		88CCABE5198C2BA500B524F8 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCABE4198C2BA500B524F8 /* Button.swift */; };
 		88CCABE7198C307200B524F8 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCABE6198C307200B524F8 /* Input.swift */; };
 		88CCABE9198C31C900B524F8 /* TargetActionTrampoline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCABE8198C31C900B524F8 /* TargetActionTrampoline.swift */; };
-		88D1ECB8198DCDE400260226 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D1ECB7198DCDE400260226 /* Observable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +44,6 @@
 		88CCABE4198C2BA500B524F8 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		88CCABE6198C307200B524F8 /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		88CCABE8198C31C900B524F8 /* TargetActionTrampoline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetActionTrampoline.swift; sourceTree = "<group>"; };
-		88D1ECB7198DCDE400260226 /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +91,6 @@
 				88CCABE4198C2BA500B524F8 /* Button.swift */,
 				88CCABE6198C307200B524F8 /* Input.swift */,
 				88CCABE8198C31C900B524F8 /* TargetActionTrampoline.swift */,
-				88D1ECB7198DCDE400260226 /* Observable.swift */,
 				880B6D0C197F4966008E6D28 /* Images.xcassets */,
 				880B6D0E197F4966008E6D28 /* MainMenu.xib */,
 				880B6D06197F4966008E6D28 /* Supporting Files */,
@@ -226,7 +223,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88D1ECB8198DCDE400260226 /* Observable.swift in Sources */,
 				88CCABE7198C307200B524F8 /* Input.swift in Sources */,
 				88CCABE5198C2BA500B524F8 /* Button.swift in Sources */,
 				880B6D0B197F4966008E6D28 /* AppDelegate.swift in Sources */,
