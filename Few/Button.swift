@@ -37,6 +37,8 @@ public class Button<S: Equatable>: Element<S> {
 		}
 	}
 
+	// MARK: Element
+
 	public override func applyDiff(other: Element<S>) {
 		if button == nil { return }
 

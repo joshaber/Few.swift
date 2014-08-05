@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class TargetActionTrampoline: NSObject {
-	public var action: (() -> ())?
+internal class TargetActionTrampoline: NSObject {
+	internal var action: (() -> ())?
 
-	public let selector = Selector("performAction:")
+	internal let selector = Selector("performAction:")
 
-	public func performAction(sender: AnyObject?) {
+	private func performAction(sender: AnyObject?) {
 		if action == nil { return }
 
 		self.action!()

@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 
 public class Component<S: Equatable>: Element<S> {
+	/// The state on which the component is dependent.
 	public var state: S {
 		didSet {
 			if state == oldValue { return }
@@ -32,6 +33,8 @@ public class Component<S: Equatable>: Element<S> {
 	private func redraw() {
 		let otherElement = render(state)
 
+		// If we can diff then apply it. Otherwise we just swap out the entire
+		// hierarchy.
 		if topElement.canDiff(otherElement) {
 			topElement.applyDiff(otherElement)
 		} else {
@@ -44,10 +47,13 @@ public class Component<S: Equatable>: Element<S> {
 		}
 	}
 
+	/// Add the component to the given view.
 	public func addToView(view: NSView) {
 		hostView = view
 		topElement.realize(self, parentView: view)
 	}
+
+	// MARK: Element
 
 	public override func canDiff(other: Element<S>) -> Bool {
 		if other.dynamicType !== self.dynamicType {

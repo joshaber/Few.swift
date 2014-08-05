@@ -10,26 +10,38 @@ import Foundation
 import AppKit
 
 public class Element<S: Equatable> {
+	/// Can the receiver and the other element be diffed?
+	///
+	/// The default implementation checks the dynamic types of both objects and
+	/// returns `true` only if they are identical. This will be good enough for
+	/// most cases.
 	public func canDiff(other: Element<S>) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}
 
+	/// Apply the diff. The receiver should take on any differences between it
+	/// and `other`.
+	///
+	/// This will only be called if `canDiff` returns `true`.
 	public func applyDiff(other: Element<S>) {
 		
 	}
 
+	/// Realize the element in the given component and parent view.
 	public func realize(component: Component<S>, parentView: NSView) {
 		if let contentView = getContentView() {
 			parentView.addSubview(contentView)
 		}
 	}
 
+	/// Derealize the element.
 	public func derealize() {
 		if let contentView = getContentView() {
 			contentView.removeFromSuperview()
 		}
 	}
 
+	/// Get the content view which represents the element.
 	public func getContentView() -> NSView? {
 		return nil
 	}

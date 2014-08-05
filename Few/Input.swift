@@ -14,6 +14,8 @@ public class Input<S: Equatable>: Element<S> {
 
 	public override init() {}
 
+	// MARK: Element
+
 	public override func applyDiff(other: Element<S>) {
 		if textField == nil { return }
 	}
