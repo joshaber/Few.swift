@@ -52,8 +52,7 @@ func render(state: State) -> Element<State> {
 		return Absolute(element: countLabel(state), frame: CGRect(x: 200, y: 0, width: 100, height: 23))
 	} else {
 		let resetButton = Button(size: CGSize(width: 100, height: 23), title: state.title, fn: const(initialState))
-		let flow: Flow<State> = [countLabel(state), resetButton, countLabel(state)]
-		return flow
+		return Flow(countLabel(state), resetButton, countLabel(state), countLabel(state), countLabel(state))
 	}
 }
 
