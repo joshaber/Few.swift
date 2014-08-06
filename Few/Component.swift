@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 public class Component<S: Equatable>: Element<S> {
-	/// The state on which the component is dependent.
+	/// The state on which the component depends.
 	public var state: S {
 		didSet {
 			if state == oldValue { return }
