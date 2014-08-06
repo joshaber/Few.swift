@@ -26,7 +26,7 @@ func ==(lhs: State, rhs: State) -> Bool {
 	return lhs.title == rhs.title && lhs.count == rhs.count && lhs.flip == rhs.flip
 }
 
-let initialState = State(title: "Hi!", count: 1, flip: false)
+let initialState = State(title: "Reset!", count: 1, flip: false)
 
 func const<T, V>(val: T) -> (V -> T) {
 	return { _ in val }
@@ -44,14 +44,14 @@ func void<T, U>(fn: T -> U) -> (T -> ()) {
 }
 
 func countLabel(state: State) -> Label<State> {
-	return Label(size: CGSize(width: 100, height: 23), text: "\(state.count)")
+	return Label(text: "\(state.count)")
 }
 
 func render(state: State) -> Element<State> {
 	if state.flip {
 		return Absolute(element: countLabel(state), frame: CGRect(x: 200, y: 0, width: 100, height: 23))
 	} else {
-		let resetButton = Button(size: CGSize(width: 100, height: 23), title: state.title, fn: const(initialState))
+		let resetButton = Button(title: state.title, fn: const(initialState))
 		return Flow(countLabel(state), resetButton, countLabel(state), countLabel(state), countLabel(state))
 	}
 }
