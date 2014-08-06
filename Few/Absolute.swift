@@ -32,7 +32,7 @@ public class Absolute<S: Equatable>: Element<S> {
 		let otherAbsolute = other as Absolute<S>
 		element.applyDiff(otherAbsolute.element)
 
-		if let v = getContentView() {
+		if let v = element.getContentView() {
 			v.frame = frame
 		}
 	}
