@@ -15,8 +15,7 @@ public class Label<S: Equatable>: Element<S> {
 	private var text: String
 	public var frame = CGRectZero
 
-	public init(size: CGSize, text: String) {
-		self.frame.size = size
+	public init(text: String) {
 		self.text = text
 	}
 
@@ -35,6 +34,8 @@ public class Label<S: Equatable>: Element<S> {
 			frame = otherLabel.frame
 			textField!.frame = frame
 		}
+
+		textField!.sizeToFit()
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {

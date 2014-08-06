@@ -19,14 +19,13 @@ public class Button<S: Equatable>: Element<S> {
 
 	private weak var component: Component<S>?
 
-	public convenience init(size: CGSize, title: String, fn: S -> S) {
-		self.init(size: size, title: title, action: { component in
+	public convenience init(title: String, fn: S -> S) {
+		self.init(title: title, action: { component in
 			component.state = fn(component.state)
 		})
 	}
 
-	public init(size: CGSize, title: String, action: Component<S> -> ()) {
-		self.frame.size = size
+	public init(title: String, action: Component<S> -> ()) {
 		self.title = title
 		super.init()
 
@@ -53,6 +52,8 @@ public class Button<S: Equatable>: Element<S> {
 			frame = otherButton.frame
 			b.frame = frame
 		}
+
+		b.sizeToFit()
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
