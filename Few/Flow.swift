@@ -16,6 +16,10 @@ public class Flow<S: Equatable>: Element<S> {
 		self.elements = elements
 	}
 
+	public convenience init(_ elements: Element<S>...) {
+		self.init(elements)
+	}
+
 	// MARK: Element
 
 	public override func applyDiff(other: Element<S>) {
