@@ -17,16 +17,16 @@ func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
 struct State {
 	let title: String
 	let count: Int
-	let flip: Bool
+	let flipped: Bool
 }
 
 extension State: Equatable {}
 
 func ==(lhs: State, rhs: State) -> Bool {
-	return lhs.title == rhs.title && lhs.count == rhs.count && lhs.flip == rhs.flip
+	return lhs.title == rhs.title && lhs.count == rhs.count && lhs.flipped == rhs.flipped
 }
 
-let initialState = State(title: "Reset!", count: 1, flip: false)
+let initialState = State(title: "Reset!", count: 1, flipped: false)
 
 func const<T, V>(val: T) -> (V -> T) {
 	return { _ in val }
@@ -48,11 +48,11 @@ func countLabel(state: State) -> Label<State> {
 }
 
 func render(state: State) -> Element<State> {
-	if state.flip {
+	if state.flipped {
 		return Absolute(element: countLabel(state), frame: CGRect(x: 200, y: 0, width: 100, height: 23))
 	} else {
 		let resetButton = Button(title: state.title, fn: const(initialState))
-		return Flow(countLabel(state), resetButton, countLabel(state), countLabel(state), countLabel(state))
+		return Flow(countLabel(state), countLabel(state), resetButton, countLabel(state), countLabel(state))
 	}
 }
 
@@ -65,14 +65,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		let contentView = window.contentView as NSView
 		component.addToView(contentView)
 
-		every(0.1) {
+		every(1) {
 			let state = self.component.state
-			var newFlip = state.flip
-			if state.count % 20 == 0 {
-				newFlip = !state.flip
+			var newFlip = state.flipped
+			if state.count % 10 == 0 {
+				newFlip = !state.flipped
 			}
 
-			self.component.state = State(title: state.title, count: state.count + 1, flip: newFlip)
+			self.component.state = State(title: state.title, count: state.count + 1, flipped: newFlip)
 		}
 	}
 }
