@@ -12,6 +12,8 @@ import AppKit
 public class Flow<S: Equatable>: Element<S> {
 	private var elements: [Element<S>]
 
+	private var parentView: NSView?
+
 	public init(_ elements: [Element<S>]) {
 		self.elements = elements
 	}
@@ -24,14 +26,14 @@ public class Flow<S: Equatable>: Element<S> {
 
 	public override func applyDiff(other: Element<S>) {
 		let otherFlow = other as Flow<S>
-		var y: CGFloat = 200
+		var y: CGFloat = parentView?.frame.size.height ?? 0
 		for pair in Zip2(elements, otherFlow.elements) {
 			if (pair.0.canDiff(pair.1)) {
 				pair.0.applyDiff(pair.1)
 
 				if let v = pair.0.getContentView() {
-					v.frame.origin.y = y
 					y -= v.frame.size.height
+					v.frame.origin.y = y
 				}
 			} else {
 				println("Wep")
@@ -40,6 +42,8 @@ public class Flow<S: Equatable>: Element<S> {
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
+		self.parentView = parentView
+
 		for element in elements {
 			element.realize(component, parentView: parentView)
 		}
