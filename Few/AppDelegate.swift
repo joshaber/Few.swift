@@ -8,12 +8,6 @@
 
 import Cocoa
 
-func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
-	let timerTrampoline = TargetActionTrampoline()
-	timerTrampoline.action = fn
-	return NSTimer.scheduledTimerWithTimeInterval(interval, target: timerTrampoline, selector: timerTrampoline.selector, userInfo: nil, repeats: true)
-}
-
 struct State {
 	let title: String
 	let count: Int
@@ -27,21 +21,6 @@ func ==(lhs: State, rhs: State) -> Bool {
 }
 
 let initialState = State(title: "Reset!", count: 1, flipped: false)
-
-func const<T, V>(val: T) -> (V -> T) {
-	return { _ in val }
-}
-
-func id<T>(val: T) -> T {
-	return val
-}
-
-func void<T, U>(fn: T -> U) -> (T -> ()) {
-	return { t in
-		fn(t)
-		return ()
-	}
-}
 
 func countLabel(state: State) -> Label<State> {
 	return Label(text: "\(state.count)")
