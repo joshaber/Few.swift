@@ -26,12 +26,15 @@ func countLabel(state: State) -> Label<State> {
 	return Label(text: "\(state.count)")
 }
 
+func resetButton(state: State) -> Button<State> {
+	return Button(title: state.title, fn: const(initialState))
+}
+
 func render(state: State) -> Element<State> {
 	if state.flipped {
 		return Absolute(element: countLabel(state), frame: CGRect(x: 200, y: 0, width: 100, height: 23))
 	} else {
-		let resetButton = Button(title: state.title, fn: const(initialState))
-		return Flow(countLabel(state), countLabel(state), resetButton, countLabel(state), countLabel(state))
+		return Flow(countLabel(state), resetButton(state), countLabel(state), resetButton(state), countLabel(state), resetButton(state), countLabel(state))
 	}
 }
 
