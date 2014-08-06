@@ -51,3 +51,7 @@ public class Element<S: Equatable> {
 		return nil
 	}
 }
+
+public protocol Frameable {
+	var frame: CGRect { get set }
+}

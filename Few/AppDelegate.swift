@@ -43,12 +43,17 @@ func void<T, U>(fn: T -> U) -> (T -> ()) {
 	}
 }
 
+func countLabel(state: State) -> Label<State> {
+	return Label(size: CGSize(width: 100, height: 23), text: "\(state.count)")
+}
+
 func render(state: State) -> Element<State> {
 	if state.flip {
-		return Label(frame: CGRect(x: 0, y: 0, width: 100, height: 23), text: "\(state.count)")
+		return Absolute(element: countLabel(state), frame: CGRect(x: 200, y: 0, width: 100, height: 23))
 	} else {
-		let frame = CGRect(x: state.count, y: state.count, width: 50 + state.count, height: 23 + state.count)
-		return Button(frame: frame, title: state.title, fn: const(initialState))
+		let resetButton = Button(size: CGSize(width: 100, height: 23), title: state.title, fn: const(initialState))
+		let flow: Flow<State> = [countLabel(state), resetButton, countLabel(state)]
+		return flow
 	}
 }
 

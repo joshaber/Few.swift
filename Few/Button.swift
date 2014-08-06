@@ -11,7 +11,7 @@ import AppKit
 
 public class Button<S: Equatable>: Element<S> {
 	private var title: String
-	private var frame: CGRect
+	public var frame = CGRectZero
 
 	private var button: NSButton?
 
@@ -19,14 +19,14 @@ public class Button<S: Equatable>: Element<S> {
 
 	private weak var component: Component<S>?
 
-	public convenience init(frame: CGRect, title: String, fn: S -> S) {
-		self.init(frame: frame, title: title, action: { component in
+	public convenience init(size: CGSize, title: String, fn: S -> S) {
+		self.init(size: size, title: title, action: { component in
 			component.state = fn(component.state)
 		})
 	}
 
-	public init(frame: CGRect, title: String, action: Component<S> -> ()) {
-		self.frame = frame
+	public init(size: CGSize, title: String, action: Component<S> -> ()) {
+		self.frame.size = size
 		self.title = title
 		super.init()
 
@@ -72,3 +72,5 @@ public class Button<S: Equatable>: Element<S> {
 		return button
 	}
 }
+
+extension Button: Frameable {}

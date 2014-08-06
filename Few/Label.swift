@@ -13,10 +13,10 @@ public class Label<S: Equatable>: Element<S> {
 	private var textField: NSTextField?
 
 	private var text: String
-	private var frame: CGRect
+	public var frame = CGRectZero
 
-	public init(frame: CGRect, text: String) {
-		self.frame = frame
+	public init(size: CGSize, text: String) {
+		self.frame.size = size
 		self.text = text
 	}
 
@@ -51,3 +51,5 @@ public class Label<S: Equatable>: Element<S> {
 		return textField
 	}
 }
+
+extension Label: Frameable {}
