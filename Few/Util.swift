@@ -28,3 +28,11 @@ func void<T, U>(fn: T -> U) -> (T -> ()) {
 		return ()
 	}
 }
+
+func inc(a: Int) -> Int {
+	return a + 1
+}
+
+func dec(a: Int) -> Int {
+	return a - 1
+}

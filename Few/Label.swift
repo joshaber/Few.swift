@@ -44,7 +44,7 @@ public class Label<S: Equatable>: Element<S> {
 		textField!.drawsBackground = false
 		textField!.bordered = false
 		textField!.stringValue = text
-
+		textField!.sizeToFit()
 		super.realize(component, parentView: parentView)
 	}
 

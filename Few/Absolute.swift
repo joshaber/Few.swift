@@ -39,6 +39,10 @@ public class Absolute<S: Equatable>: Element<S> {
 
 	public override func realize(component: Component<S>, parentView: NSView) {
 		element.realize(component, parentView: parentView)
+
+		if let v = element.getContentView() {
+			v.frame = frame
+		}
 	}
 
 	public override func derealize() {

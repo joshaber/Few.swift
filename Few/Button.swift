@@ -64,6 +64,7 @@ public class Button<S: Equatable>: Element<S> {
 		button.title = title
 		button.target = trampoline
 		button.action = trampoline.selector
+		button.sizeToFit()
 		self.button = button
 
 		super.realize(component, parentView: parentView)
