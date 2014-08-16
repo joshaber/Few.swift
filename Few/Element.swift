@@ -9,7 +9,32 @@
 import Foundation
 import AppKit
 
+public func empty<S>() -> Element<S> {
+	return rect(NSColor.clearColor())
+}
+
 public class Element<S: Equatable> {
+	internal var modelFrame = CGRectZero
+	public var frame: CGRect {
+		get {
+			return getContentView()?.frame ?? modelFrame
+		}
+
+		set {
+			modelFrame = newValue
+
+			if let view = getContentView() {
+				view.frame = newValue
+			}
+		}
+	}
+	
+	public init() {}
+	
+	public func applyLayout(fn: CGRect -> CGRect) {
+		frame = fn(frame)
+	}
+
 	/// Can the receiver and the other element be diffed?
 	///
 	/// The default implementation checks the dynamic types of both objects and
@@ -22,8 +47,8 @@ public class Element<S: Equatable> {
 	/// Apply the diff. The receiver should take on any differences between it
 	/// and `other`.
 	///
-	/// This will only be called if `canDiff` returns `true`. Implementations do
-	/// not need to call super.
+	/// This will only be called if `canDiff` returns `true`. Implementations 
+	/// should call super.
 	public func applyDiff(other: Element<S>) {
 		
 	}
@@ -32,26 +57,22 @@ public class Element<S: Equatable> {
 	///
 	/// The default implementation adds the content view to `parentView`.
 	public func realize(component: Component<S>, parentView: NSView) {
-		if let contentView = getContentView() {
-			parentView.addSubview(contentView)
-		}
+		parentView.addSubview <^> getContentView()
 	}
 
 	/// Derealize the element.
 	///
 	/// The default implemetation removes the content view from its superview.
 	public func derealize() {
-		if let contentView = getContentView() {
-			contentView.removeFromSuperview()
-		}
+		getContentView()?.removeFromSuperview()
 	}
 
 	/// Get the content view which represents the element.
 	public func getContentView() -> NSView? {
 		return nil
 	}
-}
-
-public protocol Frameable {
-	var frame: CGRect { get set }
+	
+	public func getIntrinsicSize() -> CGSize {
+		return CGSizeZero
+	}
 }

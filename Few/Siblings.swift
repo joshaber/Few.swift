@@ -14,17 +14,27 @@ public func +<S>(left: Element<S>, right: Element<S>) -> Element<S> {
 }
 
 public class Siblings<S: Equatable>: Element<S> {
-	private let siblings: [Element<S>]
+	private var left: Element<S>
+	private var right: Element<S>
 
 	private weak var component: Component<S>?
 	private var parentView: NSView?
 
-	public init(_ siblings: [Element<S>]) {
-		self.siblings = siblings
+	public init(_ left: Element<S>, _ right: Element<S>) {
+		self.left = left
+		self.right = right
 	}
 
-	convenience public init(_ siblings: Element<S>...) {
-		self.init(siblings)
+	public override var frame: CGRect {
+		set {
+			for element in [left, right] {
+				element.frame = CGRectOffset(element.frame, newValue.origin.x, newValue.origin.y)
+			}
+		}
+
+		get {
+			return CGRectZero
+		}
 	}
 
 	// MARK: Element
@@ -33,32 +43,35 @@ public class Siblings<S: Equatable>: Element<S> {
 		self.component = component
 		self.parentView = parentView
 
-		// Iterate in reverse so that objects in the front of the array are 
-		// visually in front of objects towards the back of the array.
-		for element in siblings.reverse() {
-			element.realize(component, parentView: parentView)
-		}
+		left.realize(component, parentView: parentView)
+		right.realize(component, parentView: parentView)
+
+		super.realize(component, parentView: parentView)
 	}
 
 	public override func derealize() {
-		for element in siblings {
-			element.derealize()
+		left.derealize()
+		right.derealize()
+
+		super.derealize()
+	}
+	
+	private func diffSiblings(inout ours: Element<S>, theirs: Element<S>) {
+		if ours.canDiff(theirs) {
+			ours.applyDiff(theirs)
+		} else {
+			ours.derealize()
+			ours = theirs
+			curry(ours.realize) <^> component <*> parentView
 		}
 	}
 
 	public override func applyDiff(other: Element<S>) {
 		let otherSiblings = other as Siblings
-		for pair in Zip2(siblings, otherSiblings.siblings) {
-			if (pair.0.canDiff(pair.1)) {
-				pair.0.applyDiff(pair.1)
-			} else {
-				pair.0.derealize()
-				if let component = component {
-					if let parentView = parentView {
-						pair.1.realize(component, parentView: parentView)
-					}
-				}
-			}
-		}
+		
+		diffSiblings(&left, theirs: otherSiblings.left)
+		diffSiblings(&right, theirs: otherSiblings.right)
+
+		super.applyDiff(other)
 	}
 }

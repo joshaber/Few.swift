@@ -10,9 +10,9 @@ import Foundation
 import AppKit
 
 private class DrawableView: NSView {
-	private let draw: () -> ()
+	private let draw: CGRect -> ()
 
-	init(frame: NSRect, draw: () -> ()) {
+	init(frame: NSRect, draw: CGRect -> ()) {
 		self.draw = draw
 		super.init(frame: frame)
 	}
@@ -22,24 +22,23 @@ private class DrawableView: NSView {
 	}
 
 	override func drawRect(rect: NSRect) {
-		draw()
+		draw(rect)
 	}
 }
 
-public func rect<S>(size: CGSize, #color: NSColor) -> Element<S> {
-	let path = NSBezierPath(rect: CGRect(origin: CGPointZero, size: size))
-	return Graphic {
+public func rect<S>(color: NSColor) -> Graphic<S> {
+	return Graphic { rect in
 		color.set()
-		path.fill()
+		NSRectFillUsingOperation(rect, .CompositeSourceOver)
 	}
 }
 
 public class Graphic<S: Equatable>: Element<S> {
 	private var view: DrawableView?
 
-	private var draw: () -> ()
+	private var draw: CGRect -> ()
 
-	public init(draw: () -> ()) {
+	public init(draw: CGRect -> ()) {
 		self.draw = draw
 	}
 
@@ -52,13 +51,13 @@ public class Graphic<S: Equatable>: Element<S> {
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
-		view = DrawableView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), draw: callDrawFunc)
+		view = DrawableView(frame: frame, draw: callDrawFunc)
 
 		super.realize(component, parentView: parentView)
 	}
 
-	private func callDrawFunc() {
-		draw()
+	private func callDrawFunc(rect: CGRect) {
+		draw(rect)
 	}
 
 	public override func getContentView() -> NSView? {

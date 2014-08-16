@@ -23,25 +23,60 @@ func mapCount(state: State, fn: Int -> Int) -> State {
 	return State(count: fn(state.count))
 }
 
-func formElements(state: State) -> [Element<State>] {
+func renderForm(state: State) -> Element<State> {
 	let incButton = Button(title: "Increment", fn: { mapCount($0, inc) })
+				 |> sizeToFit
+				 |> offset(0, 40)
+
 	let decButton = Button(title: "Decrement", fn: { mapCount($0, dec) })
+				 |> sizeToFit
+
 	let count = Label<State>(text: "\(state.count)")
-	return [incButton, count, decButton]
+			 |> sizeToFit
+			 |> offset(0, 20)
+
+	return offset(incButton + count + decButton, 200, 200)
 }
 
-func renderForm(state: State) -> Element<State> {
-	return Flow(.Down, formElements(state))
+func renderBackground(state: State) -> Element<State> {
+	var element: Element<State> = empty()
+	if state.count < 0 {
+		element = rect(NSColor.redColor().colorWithAlphaComponent(0.5))
+	} else if state.count > 0 {
+		element = rect(NSColor.greenColor().colorWithAlphaComponent(0.5))
+	}
+	
+	return absolute(element, CGSize(width: 1000, height: 1000))
 }
+
+func renderLost() -> Element<State> {
+	return Label(text: "Y O U  L O S E")
+		|> sizeToFit
+		|> absolute(CGPoint(x: 200, y: 225))
+}
+
+func renderWon() -> Element<State> {
+	return Label(text: "Y O U  W I N")
+		|> sizeToFit
+		|> absolute(CGPoint(x: 200, y: 225))
+}
+
+func renderReset() -> Element<State> {
+	return Button(title: "Reset", fn: const(State(count: 0)))
+		|> sizeToFit
+		|> absolute(CGPoint(x: 2, y: 300))
+}
+
+let scoreLimit = 5
 
 func render(state: State) -> Element<State> {
-	let form = renderForm(state)
-	if state.count >= 0 {
-		return form
+	let bg = renderBackground(state)
+	if state.count <= -scoreLimit {
+		return bg + renderLost() + renderReset()
+	} else if state.count >= scoreLimit {
+		return bg + renderReset() + renderWon()
 	} else {
-		let size = CGSize(width: 1000, height: 1000)
-		let danger: Element<State> = rect(size, color: NSColor.redColor())
-		return form + Absolute(element: danger, frame: CGRect(origin: CGPointZero, size: size))
+		return bg + renderForm(state)
 	}
 }
 

@@ -36,3 +36,63 @@ func inc(a: Int) -> Int {
 func dec(a: Int) -> Int {
 	return a - 1
 }
+
+public func pure<A>(a: A) -> A? {
+	return a
+}
+
+infix operator <^> { associativity left }
+public func <^><A, B>(f: A -> B, a: A?) -> B? {
+	if let x = a {
+		return f(x)
+	} else {
+		return .None
+	}
+}
+
+public func <^><A, B>(f: A -> B, a: [A]) -> [B] {
+	return map(a, f)
+}
+
+infix operator <*> { associativity left }
+public func <*><A, B>(f: (A -> B)?, a: A?) -> B? {
+	if f != nil && a != nil {
+		return f!(a!)
+	} else {
+		return .None
+	}
+}
+
+public func <*><A, B>(f: [A -> B], a: [A]) -> [B] {
+	var results = Array<B>()
+	for fn in f {
+		for x in a {
+			results.append(fn(x))
+		}
+	}
+
+	return results
+}
+
+public func curry<A, B, C>(fn: (A, B) -> C) -> A -> B -> C {
+	return { a in
+		return { b in
+			fn(a, b)
+		}
+	}
+}
+
+public func curry<A, B, C, D>(fn: (A, B, C) -> D) -> A -> B -> C -> D {
+	return { a in
+		return { b in
+			return { c in
+				fn(a, b, c)
+			}
+		}
+	}
+}
+
+infix operator |> { associativity left }
+public func |><A, B>(a: A, f: A -> B) -> B {
+	return f(a)
+}

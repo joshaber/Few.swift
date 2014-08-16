@@ -13,7 +13,6 @@ public class Label<S: Equatable>: Element<S> {
 	private var textField: NSTextField?
 
 	private var text: String
-	public var frame = CGRectZero
 
 	public init(text: String) {
 		self.text = text
@@ -30,27 +29,34 @@ public class Label<S: Equatable>: Element<S> {
 			textField!.stringValue = text
 		}
 
-		if frame != otherLabel.frame {
-			frame = otherLabel.frame
-			textField!.frame = frame
-		}
+		frame = CGRectZero
 
-		textField!.sizeToFit()
+		super.applyDiff(other)
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
-		textField = NSTextField(frame: frame)
-		textField!.editable = false
-		textField!.drawsBackground = false
-		textField!.bordered = false
-		textField!.stringValue = text
-		textField!.sizeToFit()
+		let field = NSTextField(frame: frame)
+		field.editable = false
+		field.drawsBackground = false
+		field.bordered = false
+		field.stringValue = text
+		textField = field
+
 		super.realize(component, parentView: parentView)
 	}
 
 	public override func getContentView() -> NSView? {
 		return textField
 	}
+	
+	public override func getIntrinsicSize() -> CGSize {
+		var size = CGSizeZero
+		if let textField = textField {
+			let originalFrame = textField.frame
+			textField.sizeToFit()
+			size = textField.bounds.size
+			textField.frame = originalFrame
+		}
+		return size
+	}
 }
-
-extension Label: Frameable {}

@@ -11,7 +11,6 @@ import AppKit
 
 public class Button<S: Equatable>: Element<S> {
 	private var title: String
-	public var frame = CGRectZero
 
 	private var button: NSButton?
 
@@ -30,9 +29,8 @@ public class Button<S: Equatable>: Element<S> {
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			if self.component == nil { return }
-
-			action(self.component!)
+			action <^> self.component
+			return ()
 		}
 	}
 
@@ -48,12 +46,9 @@ public class Button<S: Equatable>: Element<S> {
 			b.title = title
 		}
 
-		if frame != otherButton.frame {
-			frame = otherButton.frame
-			b.frame = frame
-		}
+		frame = CGRectZero
 
-		b.sizeToFit()
+		super.applyDiff(other)
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
@@ -64,7 +59,6 @@ public class Button<S: Equatable>: Element<S> {
 		button.title = title
 		button.target = trampoline
 		button.action = trampoline.selector
-		button.sizeToFit()
 		self.button = button
 
 		super.realize(component, parentView: parentView)
@@ -73,6 +67,8 @@ public class Button<S: Equatable>: Element<S> {
 	public override func getContentView() -> NSView? {
 		return button
 	}
+	
+	public override func getIntrinsicSize() -> CGSize {
+		return button?.intrinsicContentSize ?? CGSizeZero
+	}
 }
-
-extension Button: Frameable {}
