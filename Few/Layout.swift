@@ -102,8 +102,4 @@ public class Layout<S: Equatable>: Element<S> {
 	public override func derealize() {
 		element.derealize()
 	}
-
-	public override func getContentView() -> NSView? {
-		return element.getContentView()
-	}
 }
