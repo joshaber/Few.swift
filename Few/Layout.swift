@@ -80,6 +80,8 @@ public class Layout<S: Equatable>: Element<S> {
 		let otherLayout = other as Layout<S>
 		element.applyDiff(otherLayout.element)
 
+		layoutFn = otherLayout.layoutFn
+
 		super.applyDiff(other)
 
 		layoutElements()
