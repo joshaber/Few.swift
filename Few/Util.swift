@@ -96,3 +96,9 @@ infix operator |> { associativity left }
 public func |><A, B>(a: A, f: A -> B) -> B {
 	return f(a)
 }
+
+public func flip<A, B, C>(fn: (A, B) -> C) -> (B, A) -> C {
+	return { b, a in
+		return fn(a, b)
+	}
+}
