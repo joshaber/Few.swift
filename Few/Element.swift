@@ -31,8 +31,8 @@ public class Element<S: Equatable> {
 	
 	public init() {}
 	
-	public func applyLayout(fn: CGRect -> CGRect) {
-		frame = fn(frame)
+	public func applyLayout(fn: Element<S> -> CGRect) {
+		frame = fn(self)
 	}
 
 	/// Can the receiver and the other element be diffed?

@@ -25,19 +25,13 @@ public class Siblings<S: Equatable>: Element<S> {
 		self.right = right
 	}
 
-	public override var frame: CGRect {
-		set {
-			for element in [left, right] {
-				element.frame = CGRectOffset(element.frame, newValue.origin.x, newValue.origin.y)
-			}
-		}
-
-		get {
-			return CGRectZero
+	// MARK: Element
+	
+	public override func applyLayout(fn: Element<S> -> CGRect) {
+		for element in [left, right] {
+			element.applyLayout(fn)
 		}
 	}
-
-	// MARK: Element
 
 	public override func realize(component: Component<S>, parentView: NSView) {
 		self.component = component

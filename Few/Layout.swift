@@ -53,32 +53,18 @@ public class Layout<S: Equatable>: Element<S> {
 	
 	private weak var component: Component<S>?
 	private var parentView: NSView?
-	
-//	public override var frame: CGRect {
-//		set {
-//			element.frame = CGRectOffset(element.frame, newValue.origin.x, newValue.origin.y)
-//		}
-//		
-//		get {
-//			return element.frame
-//		}
-//	}
 
 	public init(element: Element<S>, fn: Element<S> -> CGRect) {
 		self.element = element
 		self.layoutFn = fn
 	}
 	
-	public override func applyLayout(fn: CGRect -> CGRect) {
-		element.frame = fn(element.frame)
+	public override func applyLayout(fn: Element<S> -> CGRect) {
+		element.applyLayout(fn)
 	}
 
 	private func layoutElements() {
-		// TODO: use applyLayout
-		let newFrame = layoutFn(element)
-		if newFrame != element.frame {
-			element.frame = newFrame
-		}
+		element.applyLayout(layoutFn)
 	}
 
 	// MARK: Element
