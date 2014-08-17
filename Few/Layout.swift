@@ -68,20 +68,17 @@ public class Layout<S: Equatable>: Element<S> {
 	}
 
 	// MARK: Element
+	
+	public override func canDiff(other: Element<S>) -> Bool {
+		if !super.canDiff(other) { return false }
+		
+		let otherLayout = other as Layout<S>
+		return element.canDiff(otherLayout.element)
+	}
 
 	public override func applyDiff(other: Element<S>) {
 		let otherLayout = other as Layout<S>
-		if element.canDiff(otherLayout.element) {
-			element.applyDiff(otherLayout.element)
-		} else {
-			let oldElement = element
-			element = otherLayout.element
-			curry(element.realize) <^> component <*> parentView
-			if let parentView = parentView {
-				curry(parentView.replaceSubview) <^> oldElement.getContentView() <*> element.getContentView()
-			}
-			oldElement.derealize()
-		}
+		element.applyDiff(otherLayout.element)
 
 		super.applyDiff(other)
 
