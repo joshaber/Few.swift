@@ -46,6 +46,12 @@ public func offset<S>(dx: CGFloat, dy: CGFloat)(element: Element<S>) -> Layout<S
 	return offset(element, dx, dy)
 }
 
+public func |><S>(left: Element<S>, right: Element<S>) -> Layout<S> {
+	return Layout(element: right) { element in
+		CGRect(x: CGRectGetMaxX(left.frame), y: CGRectGetMidY(left.frame), width: right.frame.width, height: right.frame.height)
+	}
+}
+
 public class Layout<S: Equatable>: Element<S> {
 	private var element: Element<S>
 
