@@ -64,7 +64,7 @@ func renderWon() -> Element<State> {
 func renderReset() -> Element<State> {
 	return Button(title: "Reset", fn: const(State(count: 0)))
 		|> sizeToFit
-		|> absolute(CGPoint(x: 2, y: 300))
+		|> absolute(CGPoint(x: 200, y: 180))
 }
 
 let scoreLimit = 5
