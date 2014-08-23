@@ -52,7 +52,7 @@ public func |><S>(left: Element<S>, right: Element<S>) -> Layout<S> {
 	}
 }
 
-public class Layout<S: Equatable>: Element<S> {
+public class Layout<S>: Element<S> {
 	private var element: Element<S>
 
 	private var layoutFn: Element<S> -> CGRect

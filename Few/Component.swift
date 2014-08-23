@@ -9,11 +9,10 @@
 import Foundation
 import AppKit
 
-public class Component<S: Equatable>: Element<S> {
+public class Component<S>: Element<S> {
 	/// The state on which the component depends.
 	public var state: S {
 		didSet {
-			if state == oldValue { return }
 			redraw()
 		}
 	}

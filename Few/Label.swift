@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Label<S: Equatable>: Element<S> {
+public class Label<S>: Element<S> {
 	private var textField: NSTextField?
 
 	private var text: String

@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Button<S: Equatable>: Element<S> {
+public class Button<S>: Element<S> {
 	private var title: String
 
 	private var button: NSButton?
