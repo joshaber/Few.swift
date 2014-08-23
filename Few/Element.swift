@@ -10,10 +10,10 @@ import Foundation
 import AppKit
 
 public func empty<S>() -> Element<S> {
-	return rect(NSColor.clearColor())
+	return fillRect(NSColor.clearColor())
 }
 
-public class Element<S: Equatable> {
+public class Element<S> {
 	internal var modelFrame = CGRectZero
 	public var frame: CGRect {
 		get {

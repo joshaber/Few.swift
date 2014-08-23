@@ -26,14 +26,27 @@ private class DrawableView: NSView {
 	}
 }
 
-public func rect<S>(color: NSColor) -> Graphic<S> {
+public func fillRect<S>(color: NSColor) -> Graphic<S> {
 	return Graphic { rect in
 		color.set()
 		NSRectFillUsingOperation(rect, .CompositeSourceOver)
 	}
 }
 
-public class Graphic<S: Equatable>: Element<S> {
+public func strokeRect<S>(color: NSColor, width: CGFloat) -> Graphic<S> {
+	return Graphic { rect in
+		color.set()
+		NSFrameRectWithWidthUsingOperation(rect, width, .CompositeSourceOver)
+	}
+}
+
+public func image<S>(image: NSImage) -> Graphic<S> {
+	return Graphic { rect in
+		image.drawInRect(rect, fromRect: CGRectZero, operation: .CompositeSourceOver, fraction: 1)
+	}
+}
+
+public class Graphic<S>: Element<S> {
 	private var view: DrawableView?
 
 	private var draw: CGRect -> ()

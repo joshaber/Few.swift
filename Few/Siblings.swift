@@ -13,7 +13,15 @@ public func +<S>(left: Element<S>, right: Element<S>) -> Element<S> {
 	return Siblings(left, right)
 }
 
-public class Siblings<S: Equatable>: Element<S> {
+public func +<S, T>(left: Component<T>, right: Element<S>) -> Element<S> {
+	return Siblings(Embed(left), right)
+}
+
+public func +<S, T>(left: Element<S>, right: Component<T>) -> Element<S> {
+	return Siblings(left, Embed(right))
+}
+
+public class Siblings<S>: Element<S> {
 	private var left: Element<S>
 	private var right: Element<S>
 
