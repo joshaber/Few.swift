@@ -9,9 +9,10 @@
 import Cocoa
 
 func renderBg(tick: Float) -> Element<Float> {
-	let R = (128 + sin((tick * 3 + 0) * 1.3) * 128) / 255
-	let G = (128 + sin((tick * 3 + 1) * 1.3) * 128) / 255
-	let B = (128 + sin((tick * 3 + 2) * 1.3) * 128) / 255
+	let low: Float = 200
+	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
+	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
+	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
 	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
 	return absolute(fillRect(color), CGSize(width: 1000, height: 1000))
 }
