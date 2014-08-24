@@ -9,9 +9,12 @@
 import Foundation
 
 public class Atom<S> {
+	private let queue = dispatch_queue_create("Few.Atom.queue", 0)
+	
 	private var value: S {
 		didSet {
 			for observer in observers {
+				// TODO: Really shouldn't notify observers while holding a lock.
 				observer(value)
 			}
 		}
@@ -25,10 +28,22 @@ public class Atom<S> {
 	}
 	
 	public func addObserver(observer: S -> ()) {
-		observers.append(observer)
+		dispatch_sync(queue) {
+			self.observers.append(observer)
+		}
 	}
 	
 	private func removeObserver(observerToRemove: S -> ()) {
 		// LOL
+	}
+	
+	public func apply(fn: S -> S) -> S {
+		var newValue = value
+		dispatch_sync(queue) {
+			newValue = fn(self.value)
+			self.value = newValue
+		}
+		
+		return newValue
 	}
 }
