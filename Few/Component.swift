@@ -66,17 +66,15 @@ public class Component<S>: Element<S> {
 	// MARK: Element
 
 	public override func canDiff(other: Element<S>) -> Bool {
-		if other.dynamicType !== self.dynamicType {
-			return false
-		}
+		if !super.canDiff(other) { return false }
 
 		let otherComponent = other as Component
-		return topElement.canDiff(otherComponent.topElement)
+		return self === otherComponent
 	}
 
 	public override func applyDiff(other: Element<S>) {
-		let otherComponent = other as Component
-		topElement.applyDiff(otherComponent.topElement)
+		// This is meaningless. The component will diff its topElement as needed
+		// for it.
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
@@ -85,5 +83,9 @@ public class Component<S>: Element<S> {
 
 	public override func getContentView() -> NSView? {
 		return topElement.getContentView()
+	}
+	
+	public override func getIntrinsicSize() -> CGSize {
+		return topElement.getIntrinsicSize()
 	}
 }
