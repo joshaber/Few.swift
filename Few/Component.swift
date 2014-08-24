@@ -13,7 +13,9 @@ public class Component<S>: Element<S> {
 	/// The state on which the component depends.
 	public var state: S {
 		didSet {
-			redraw()
+			if shouldUpdate(oldValue, newState: state) {
+				update()
+			}
 		}
 	}
 
@@ -29,7 +31,7 @@ public class Component<S>: Element<S> {
 		self.topElement = render(initialState)
 	}
 
-	private func redraw() {
+	private func update() {
 		let otherElement = render(state)
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
@@ -44,6 +46,15 @@ public class Component<S>: Element<S> {
 				topElement.realize(self, parentView: hostView)
 			}
 		}
+	}
+	
+	/// Called when the state has changed but before the component is 
+	/// re-rendered. This gives the component the chance to decide whether it 
+	/// *should* based on the new state.
+	///
+	/// The default implementation always returns true.
+	public func shouldUpdate(previousState: S, newState: S) -> Bool {
+		return true
 	}
 
 	/// Add the component to the given view.
