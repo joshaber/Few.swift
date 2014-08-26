@@ -20,14 +20,21 @@ public class Component<S>: Element<S> {
 	}
 
 	private let render: S -> Element<S>
+	
+	// Ugh. These should be Component<S> but Xcode 6b6 hangs on launch if we do 
+	// that.
+	private let didRealize: (Element<S> -> ())?
+	private let willDerealize: (Element<S> -> ())?
 
 	private var topElement: Element<S>
 
 	private var hostView: NSView?
 
-	public init(render: S -> Element<S>, initialState: S) {
+	public init(render: S -> Element<S>, initialState: S, didRealize: (Element<S> -> ())? = nil, willDerealize: (Element<S> -> ())? = nil) {
 		self.render = render
 		self.state = initialState
+		self.didRealize = didRealize
+		self.willDerealize = willDerealize
 		self.topElement = render(initialState)
 	}
 
@@ -48,6 +55,18 @@ public class Component<S>: Element<S> {
 		}
 	}
 	
+	// MARK: Lifecycle
+	
+	/// Called when the component has been realized.
+	public func componentDidRealize() {
+		didRealize?(self)
+	}
+	
+	/// Called when the component is about to be derealized.
+	public func componentWillDerealize() {
+		willDerealize?(self)
+	}
+	
 	/// Called when the state has changed but before the component is 
 	/// re-rendered. This gives the component the chance to decide whether it 
 	/// *should* based on the new state.
@@ -56,11 +75,23 @@ public class Component<S>: Element<S> {
 	public func shouldUpdate(previousState: S, newState: S) -> Bool {
 		return true
 	}
+	
+	// MARK: -
 
 	/// Add the component to the given view.
 	public func addToView(view: NSView) {
 		hostView = view
 		topElement.realize(self, parentView: view)
+		
+		componentDidRealize()
+	}
+	
+	/// Remove the component from its host view.
+	public func remove() {
+		componentWillDerealize()
+		
+		topElement.derealize()
+		hostView = nil
 	}
 
 	// MARK: Element
@@ -79,6 +110,10 @@ public class Component<S>: Element<S> {
 
 	public override func realize(component: Component<S>, parentView: NSView) {
 		addToView(parentView)
+	}
+	
+	public override func derealize() {
+		remove()
 	}
 
 	public override func getContentView() -> NSView? {

@@ -17,23 +17,28 @@ func renderBg(tick: Float) -> Element<Float> {
 	return absolute(fillRect(color), CGSize(width: 1000, height: 1000))
 }
 
-private let bgComponent = Component(render: renderBg, initialState: 0)
+var timer: NSTimer?
+private let bgComponent = Component(render: renderBg, initialState: 0, didRealize: { el in
+	let c = el as Component<Float>
+	timer = every(0.01) {
+		c.state += 0.001
+	}
+}, willDerealize: { el in
+	timer?.invalidate()
+	return ()
+})
 
 func render(state: GameState) -> Element<GameState> {
 	return bgComponent + renderGame(state)
 }
 
+let appComponent = Component(render: render, initialState: GameState(winningScore: 5))
+
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let component = Component(render: render, initialState: GameState(winningScore: 5))
-
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView
-		component.addToView(contentView)
-
-		every(0.01) {
-			bgComponent.state += 0.001
-		}
+		appComponent.addToView(contentView)
 	}
 }
