@@ -18,15 +18,16 @@ func renderBg(tick: Float) -> Element<Float> {
 }
 
 var timer: NSTimer?
-private let bgComponent = Component(render: renderBg, initialState: 0, didRealize: { el in
-	let c = el as Component<Float>
-	timer = every(0.01) {
-		c.state += 0.001
-	}
-}, willDerealize: { el in
-	timer?.invalidate()
-	return ()
-})
+private let bgComponent = Component(
+	render: renderBg,
+	initialState: 0,
+	didRealize: { el in
+		let c = el as Component<Float>
+		timer = every(0.01) {
+			c.state += 0.001
+		}
+	},
+	willDerealize: { _ in timer?.invalidate(); return () })
 
 func render(state: GameState) -> Element<GameState> {
 	return bgComponent + renderGame(state)
