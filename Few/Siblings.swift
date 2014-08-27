@@ -13,14 +13,6 @@ public func +(left: Element, right: Element) -> Element {
 	return Siblings(left, right)
 }
 
-public func +<S, T>(left: Component<T>, right: Element) -> Element {
-	return Siblings(Embed(left), right)
-}
-
-public func +<S, T>(left: Element, right: Component<T>) -> Element {
-	return Siblings(left, Embed(right))
-}
-
 public class Siblings: Element {
 	private var left: Element
 	private var right: Element

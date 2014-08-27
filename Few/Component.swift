@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Component<S> {
+public class Component<S>: Element {
 	/// The state on which the component depends.
 	public var state: S {
 		didSet {
@@ -23,14 +23,14 @@ public class Component<S> {
 	
 	// Ugh. These should be Component<S> but Xcode 6b6 hangs on launch if we do 
 	// that.
-	private let didRealize: (Any -> ())?
-	private let willDerealize: (Any -> ())?
+	private let didRealize: (Element -> ())?
+	private let willDerealize: (Element -> ())?
 
 	private var topElement: Element
 
 	private var hostView: NSView?
 
-	public init(render: S -> Element, initialState: S, didRealize: (Any -> ())? = nil, willDerealize: (Any -> ())? = nil) {
+	public init(render: S -> Element, initialState: S, didRealize: (Element -> ())? = nil, willDerealize: (Element -> ())? = nil) {
 		self.render = render
 		self.state = initialState
 		self.didRealize = didRealize
@@ -94,11 +94,37 @@ public class Component<S> {
 		hostView = nil
 	}
 	
-	public func getContentView() -> NSView? {
+	// MARK: Element
+	
+	public override func applyLayout(fn: Element -> CGRect) {
+		// TODO: It'd be nice if this worked?
+	}
+	
+//	public override func canDiff(other: Element) -> Bool {
+//		if !super.canDiff(other) { return false }
+//		
+//		let otherComponent = other as Component
+//		return self === otherComponent
+//	}
+	
+	public override func applyDiff(other: Element) {
+		// This is pretty meaningless since we check for pointer equality in
+		// canDiff.
+	}
+	
+	public override func realize(parent: Element, parentView: NSView) {
+		addToView(parentView)
+	}
+	
+	public override func derealize() {
+		getContentView()?.removeFromSuperview()
+	}
+	
+	public override func getContentView() -> NSView? {
 		return topElement.getContentView()
 	}
 	
-	public func getIntrinsicSize() -> CGSize {
+	public override func getIntrinsicSize() -> CGSize {
 		return topElement.getIntrinsicSize()
 	}
 }

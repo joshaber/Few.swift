@@ -17,7 +17,6 @@
 		886B680019A3DFC90077D9B5 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886B67FF19A3DFC90077D9B5 /* Game.swift */; };
 		8886E5D3199091AF00A09FF9 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886E5D2199091AF00A09FF9 /* Label.swift */; };
 		88A133E219999C0E00AA29C8 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A133E119999C0E00AA29C8 /* Layout.swift */; };
-		88CC6C3919A84AA4004913E8 /* Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CC6C3819A84AA4004913E8 /* Embed.swift */; };
 		88CC920F1991E7F80002849C /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CC920E1991E7F80002849C /* Util.swift */; };
 		88CCABE3198C270900B524F8 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCABE2198C270900B524F8 /* Component.swift */; };
 		88CCABE5198C2BA500B524F8 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CCABE4198C2BA500B524F8 /* Button.swift */; };
@@ -51,7 +50,6 @@
 		886B67FF19A3DFC90077D9B5 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		8886E5D2199091AF00A09FF9 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		88A133E119999C0E00AA29C8 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
-		88CC6C3819A84AA4004913E8 /* Embed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Embed.swift; sourceTree = "<group>"; };
 		88CC920E1991E7F80002849C /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		88CCABE2198C270900B524F8 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		88CCABE4198C2BA500B524F8 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 				886B67FF19A3DFC90077D9B5 /* Game.swift */,
 				88CC920E1991E7F80002849C /* Util.swift */,
 				88CCABE2198C270900B524F8 /* Component.swift */,
-				88CC6C3819A84AA4004913E8 /* Embed.swift */,
 				880B6D25197F4AC7008E6D28 /* Element.swift */,
 				88CCABE4198C2BA500B524F8 /* Button.swift */,
 				8886E5D2199091AF00A09FF9 /* Label.swift */,
@@ -249,7 +246,6 @@
 				880B6D0B197F4966008E6D28 /* AppDelegate.swift in Sources */,
 				886B680019A3DFC90077D9B5 /* Game.swift in Sources */,
 				88CCABE3198C270900B524F8 /* Component.swift in Sources */,
-				88CC6C3919A84AA4004913E8 /* Embed.swift in Sources */,
 				88CCABE9198C31C900B524F8 /* TargetActionTrampoline.swift in Sources */,
 				88EFD7091992C8A0002414C2 /* Graphic.swift in Sources */,
 				880B6D09197F4966008E6D28 /* main.swift in Sources */,

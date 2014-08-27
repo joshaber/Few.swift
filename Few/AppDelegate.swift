@@ -30,8 +30,7 @@ private let bgComponent = Component(
 	willDerealize: { _ in timer?.invalidate(); return () })
 
 func render(state: GameState) -> Element {
-	let c = Embed(bgComponent)
-	return Siblings(c, renderGame(state))
+	return bgComponent + renderGame(state)
 }
 
 let appComponent = Component(render: render, initialState: GameState(winningScore: 5))
