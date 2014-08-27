@@ -9,33 +9,33 @@
 import Foundation
 import AppKit
 
-public class Embed<S, T>: Element<S> {
-	private var component: Component<T>
+public class Embed<S>: Element {
+	private var containedComponent: Component<S>
 	
-	public init(_ component: Component<T>) {
-		self.component = component
+	public init(_ component: Component<S>) {
+		containedComponent = component
 	}
 	
 	// MARK: Element
 	
-	public override func applyLayout(fn: Element<S> -> CGRect) {
+	public override func applyLayout(fn: Element -> CGRect) {
 		// TODO: It'd be nice if this worked?
 	}
 
-	public override func canDiff(other: Element<S>) -> Bool {
+	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 		
 		let otherEmbed = other as Embed
-		return component === otherEmbed.component
+		return containedComponent === otherEmbed.containedComponent
 	}
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element) {
 		// This is pretty meaningless since we check for pointer equality in 
 		// canDiff.
 	}
 	
 	public override func realize(component: Component<S>, parentView: NSView) {
-		self.component.addToView(parentView)
+		containedComponent.addToView(parentView)
 	}
 	
 	public override func derealize() {
@@ -43,10 +43,10 @@ public class Embed<S, T>: Element<S> {
 	}
 	
 	public override func getContentView() -> NSView? {
-		return component.getContentView()
+		return containedComponent.getContentView()
 	}
 	
 	public override func getIntrinsicSize() -> CGSize {
-		return component.getIntrinsicSize()
+		return containedComponent.getIntrinsicSize()
 	}
 }

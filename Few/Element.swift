@@ -9,11 +9,11 @@
 import Foundation
 import AppKit
 
-public func empty<S>() -> Element<S> {
+public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
-public class Element<S> {
+public class Element {
 	internal var modelFrame = CGRectZero
 	public var frame: CGRect {
 		get {
@@ -29,9 +29,11 @@ public class Element<S> {
 		}
 	}
 	
+	public weak var component: Component<Any>?
+	
 	public init() {}
 	
-	public func applyLayout(fn: Element<S> -> CGRect) {
+	public func applyLayout(fn: Element -> CGRect) {
 		frame = fn(self)
 	}
 
@@ -40,7 +42,7 @@ public class Element<S> {
 	/// The default implementation checks the dynamic types of both objects and
 	/// returns `true` only if they are identical. This will be good enough for
 	/// most cases.
-	public func canDiff(other: Element<S>) -> Bool {
+	public func canDiff(other: Element) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}
 
@@ -49,14 +51,17 @@ public class Element<S> {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations 
 	/// should call super.
-	public func applyDiff(other: Element<S>) {
+	public func applyDiff(other: Element) {
 		
 	}
 
 	/// Realize the element in the given component and parent view.
 	///
 	/// The default implementation adds the content view to `parentView`.
-	public func realize(component: Component<S>, parentView: NSView) {
+	public func realize<S>(component: Component<S>, parentView: NSView) {
+		// Ugh. This shouldn't be necessary.
+		self.component = unsafeBitCast(component, Component<Any>.self)
+
 		parentView.addSubview <^> getContentView()
 	}
 

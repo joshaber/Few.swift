@@ -8,7 +8,7 @@
 
 import Cocoa
 
-func renderBg(tick: Float) -> Element<Float> {
+func renderBg(tick: Float) -> Element {
 	let low: Float = 200
 	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
@@ -29,8 +29,9 @@ private let bgComponent = Component(
 	},
 	willDerealize: { _ in timer?.invalidate(); return () })
 
-func render(state: GameState) -> Element<GameState> {
-	return bgComponent + renderGame(state)
+func render(state: GameState) -> Element {
+	let c = Embed(bgComponent)
+	return Siblings(c, renderGame(state))
 }
 
 let appComponent = Component(render: render, initialState: GameState(winningScore: 5))
