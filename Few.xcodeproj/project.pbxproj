@@ -68,6 +68,7 @@
 		889768BC19AED92D00DD079B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		889768BD19AED92D00DD079B /* FewDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FewDemoTests.swift; sourceTree = "<group>"; };
 		889768C519AED94300DD079B /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +174,7 @@
 		889768A719AED92D00DD079B /* FewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				88BEF38D19AED9D5009197F0 /* MyPlayground.playground */,
 				889768AC19AED92D00DD079B /* AppDelegate.swift */,
 				889768C519AED94300DD079B /* Game.swift */,
 				889768AE19AED92D00DD079B /* Images.xcassets */,
@@ -689,6 +691,7 @@
 				889768C019AED92D00DD079B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		889768C419AED92D00DD079B /* Build configuration list for PBXNativeTarget "FewDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -697,6 +700,7 @@
 				889768C219AED92D00DD079B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
