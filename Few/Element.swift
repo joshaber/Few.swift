@@ -60,7 +60,12 @@ public class Element {
 	/// The default implementation adds the content view to `parentView`.
 	public func realize<S>(component: Component<S>, parentView: NSView) {
 		// Ugh. This shouldn't be necessary.
-		self.component = unsafeBitCast(component, Component<Any>.self)
+		//
+		// Doing this instead of `unsafeBitCast` because that seems to cause 
+		// problems down the line when it comes to identity?
+		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
+		let castComponent: Component<Any> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
+		self.component = castComponent
 
 		parentView.addSubview <^> getContentView()
 	}
