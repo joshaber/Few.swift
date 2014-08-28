@@ -1,0 +1,33 @@
+//
+//  View.swift
+//  Few
+//
+//  Created by Josh Abernathy on 8/27/14.
+//  Copyright (c) 2014 Josh Abernathy. All rights reserved.
+//
+
+import Foundation
+import AppKit
+
+public class View<V: NSView>: Element {
+	public let view: V
+	
+	public init(_ view: V) {
+		self.view = view
+	}
+	
+	// MARK: Element
+	
+	public override func applyDiff(other: Element) {
+		// Nope. We're just wrapping a view.
+	}
+	
+	/// Get the content view which represents the element.
+	public override func getContentView() -> NSView? {
+		return view
+	}
+	
+	public override func getIntrinsicSize() -> CGSize {
+		return view.intrinsicContentSize
+	}
+}
