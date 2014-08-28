@@ -82,7 +82,14 @@ public class Element {
 		return nil
 	}
 	
+	/// Get the intrinsic size for the element. The default implementation 
+	/// returns the content view's intrinsic content size if the content view 
+	/// exists.
 	public func getIntrinsicSize() -> CGSize {
+		if let contentView = getContentView() {
+			return contentView.intrinsicContentSize
+		}
+
 		return CGSizeZero
 	}
 }
