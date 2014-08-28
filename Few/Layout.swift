@@ -29,6 +29,10 @@ public func absolute(origin: CGPoint)(element: Element) -> Layout {
 	return absolute(element, origin)
 }
 
+public func absolute(size: CGSize)(element: Element) -> Layout {
+	return absolute(element, size)
+}
+
 public func sizeToFit(element: Element) -> Layout {
 	return Layout(element: element) { element in
 		let size = element.getIntrinsicSize()
