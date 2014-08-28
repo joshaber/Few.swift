@@ -9,6 +9,8 @@
 import Foundation
 import AppKit
 
+/// An Element which acts as a dumb container for a view. It doesn't do any 
+/// diffing.
 public class View<V: NSView>: Element {
 	public let view: V
 	
