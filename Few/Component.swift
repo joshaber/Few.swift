@@ -100,12 +100,12 @@ public class Component<S>: Element {
 		// TODO: It'd be nice if this worked?
 	}
 	
-//	public override func canDiff(other: Element) -> Bool {
-//		if !super.canDiff(other) { return false }
-//		
-//		let otherComponent = other as Component
-//		return self === otherComponent
-//	}
+	public override func canDiff(other: Element) -> Bool {
+		if !super.canDiff(other) { return false }
+		
+		let otherComponent = other as Component
+		return self === otherComponent
+	}
 	
 	public override func applyDiff(other: Element) {
 		// This is pretty meaningless since we check for pointer equality in
