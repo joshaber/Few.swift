@@ -1,6 +1,6 @@
 //
-//  FewTests.swift
-//  FewTests
+//  FewDemoTests.swift
+//  FewDemoTests
 //
 //  Created by Josh Abernathy on 8/27/14.
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
@@ -9,7 +9,7 @@
 import Cocoa
 import XCTest
 
-class FewTests: XCTestCase {
+class FewDemoTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

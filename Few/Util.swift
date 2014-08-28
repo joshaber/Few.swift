@@ -8,32 +8,32 @@
 
 import Foundation
 
-func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
+public func every(interval: NSTimeInterval, fn: () -> ()) -> NSTimer {
 	let timerTrampoline = TargetActionTrampoline()
 	timerTrampoline.action = fn
 	return NSTimer.scheduledTimerWithTimeInterval(interval, target: timerTrampoline, selector: timerTrampoline.selector, userInfo: nil, repeats: true)
 }
 
-func const<T, V>(val: T) -> (V -> T) {
+public func const<T, V>(val: T) -> (V -> T) {
 	return { _ in val }
 }
 
-func id<T>(val: T) -> T {
+public func id<T>(val: T) -> T {
 	return val
 }
 
-func void<T, U>(fn: T -> U) -> (T -> ()) {
+public func void<T, U>(fn: T -> U) -> (T -> ()) {
 	return { t in
 		fn(t)
 		return ()
 	}
 }
 
-func inc(a: Int) -> Int {
+public func inc(a: Int) -> Int {
 	return a + 1
 }
 
-func dec(a: Int) -> Int {
+public func dec(a: Int) -> Int {
 	return a - 1
 }
 

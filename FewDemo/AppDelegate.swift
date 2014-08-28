@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Few
 
 func renderBg(tick: Float) -> Element {
 	let low: Float = 200
@@ -22,7 +23,7 @@ private let bgComponent = Component(
 	render: renderBg,
 	initialState: 0,
 	didRealize: { el in
-		let c = el as Component<Float>
+		let c = el as Few.Component<Float>
 		timer = every(0.01) {
 			c.state += 0.001
 		}
