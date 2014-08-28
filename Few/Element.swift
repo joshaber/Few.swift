@@ -116,4 +116,8 @@ extension Element {
 		
 		return previewImage
 	}
+
+	public func pre() -> NSImage {
+		return debugQuickLookObject()! as NSImage
+	}
 }
