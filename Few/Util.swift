@@ -22,11 +22,8 @@ public func id<T>(val: T) -> T {
 	return val
 }
 
-public func void<T, U>(fn: T -> U) -> (T -> ()) {
-	return { t in
-		fn(t)
-		return ()
-	}
+public func void<T>(fn: @autoclosure () -> T) {
+	fn()
 }
 
 public func inc(a: Int) -> Int {
