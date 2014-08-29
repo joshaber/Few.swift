@@ -28,7 +28,7 @@ private let bgComponent = Component(
 			c.state += 0.001
 		}
 	},
-	willDerealize: { _ in timer?.invalidate(); return () })
+	willDerealize: { _ in void(timer?.invalidate()) })
 
 func render(state: GameState) -> Element {
 	return bgComponent + renderGame(state)

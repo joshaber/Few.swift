@@ -29,8 +29,7 @@ public class Button<S>: Element {
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			action <^> self.typedComponent
-			return ()
+			void(action <^> self.typedComponent)
 		}
 	}
 
