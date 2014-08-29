@@ -40,6 +40,26 @@ public func strokeRect(color: NSColor, width: CGFloat) -> Graphic {
 	}
 }
 
+public func fillRect(color: NSColor, cornerRadius: CGFloat) -> Graphic {
+	return Graphic { rect in
+		color.set()
+		let path = NSBezierPath(roundedRect: rect, xRadius: cornerRadius, yRadius: cornerRadius)
+		path.fill()
+	}
+}
+
+public func fillPath(path: NSBezierPath) -> Graphic {
+	return Graphic { rect in
+		path.fill()
+	}
+}
+
+public func strokePath(path: NSBezierPath) -> Graphic {
+	return Graphic { rect in
+		path.stroke()
+	}
+}
+
 public func image(image: NSImage) -> Graphic {
 	return Graphic { rect in
 		image.drawInRect(rect, fromRect: CGRectZero, operation: .CompositeSourceOver, fraction: 1)

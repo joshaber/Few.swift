@@ -10,11 +10,16 @@ var v = fillRect(NSColor.greenColor())
 	 |> sized(CGSize(width: 100, height: 100))
 	 |> offset(20, 40)
 
-var s = Container([t, v])
-s.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
-
 v.pre()
 
 t.pre()
 
-s.pre()
+var rr = fillRect(NSColor.blueColor(), 5)
+	  |> sized(CGSize(width: 100, height: 100))
+	  |> offset(50, 0)
+rr.pre()
+
+var container1 = Container([t, v, rr])
+container1.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
+
+container1.pre()
