@@ -15,7 +15,7 @@ func renderBg(tick: Float) -> Element {
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
 	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
 	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	return absolute(fillRect(color), CGSize(width: 1000, height: 1000))
+	return sized(fillRect(color), CGSize(width: 1000, height: 1000))
 }
 
 var timer: NSTimer?

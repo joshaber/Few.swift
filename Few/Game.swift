@@ -54,7 +54,7 @@ func renderBackground(state: GameState) -> Element {
 		element = fillRect(NSColor.greenColor().colorWithAlphaComponent(0.5))
 	}
 	
-	return absolute(element, CGSize(width: 1000, height: 1000))
+	return sized(element, CGSize(width: 1000, height: 1000))
 }
 
 func renderLost() -> Element {

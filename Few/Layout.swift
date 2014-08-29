@@ -13,7 +13,7 @@ public func absolute(element: Element, frame: CGRect) -> Layout {
 	return Layout(element: element, fn: const(frame))
 }
 
-public func absolute(element: Element, size: CGSize) -> Layout {
+public func sized(element: Element, size: CGSize) -> Layout {
 	return Layout(element: element) { element in
 		CGRect(origin: element.frame.origin, size: size)
 	}
@@ -29,8 +29,8 @@ public func absolute(origin: CGPoint)(element: Element) -> Layout {
 	return absolute(element, origin)
 }
 
-public func absolute(size: CGSize)(element: Element) -> Layout {
-	return absolute(element, size)
+public func sized(size: CGSize)(element: Element) -> Layout {
+	return sized(element, size)
 }
 
 public func sizeToFit(element: Element) -> Layout {
