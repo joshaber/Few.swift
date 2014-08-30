@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88931DC419B15C9B0075FF33 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88931DC319B15C9B0075FF33 /* Cursor.swift */; };
 		8897687719AED88000DD079B /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8897688119AED88000DD079B /* FewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* FewTests.swift */; };
 		8897689619AED8AF00DD079B /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688A19AED8AF00DD079B /* Button.swift */; };
 		8897689719AED8AF00DD079B /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688B19AED8AF00DD079B /* Component.swift */; };
 		8897689819AED8AF00DD079B /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688C19AED8AF00DD079B /* Container.swift */; };
 		8897689919AED8AF00DD079B /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688D19AED8AF00DD079B /* Element.swift */; };
-		8897689A19AED8AF00DD079B /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688E19AED8AF00DD079B /* Game.swift */; };
 		8897689B19AED8AF00DD079B /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688F19AED8AF00DD079B /* Graphic.swift */; };
 		8897689C19AED8AF00DD079B /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897689019AED8AF00DD079B /* Label.swift */; };
 		8897689D19AED8AF00DD079B /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897689119AED8AF00DD079B /* Layout.swift */; };
@@ -40,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		88931DC319B15C9B0075FF33 /* Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 		8897687119AED88000DD079B /* Few.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Few.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8897687519AED88000DD079B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8897687619AED88000DD079B /* Few.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Few.h; sourceTree = "<group>"; };
@@ -50,7 +51,6 @@
 		8897688B19AED8AF00DD079B /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		8897688C19AED8AF00DD079B /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		8897688D19AED8AF00DD079B /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
-		8897688E19AED8AF00DD079B /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		8897688F19AED8AF00DD079B /* Graphic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphic.swift; sourceTree = "<group>"; };
 		8897689019AED8AF00DD079B /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		8897689119AED8AF00DD079B /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
@@ -133,7 +133,6 @@
 				8897688B19AED8AF00DD079B /* Component.swift */,
 				8897688C19AED8AF00DD079B /* Container.swift */,
 				8897688D19AED8AF00DD079B /* Element.swift */,
-				8897688E19AED8AF00DD079B /* Game.swift */,
 				8897688F19AED8AF00DD079B /* Graphic.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8897689119AED8AF00DD079B /* Layout.swift */,
@@ -141,6 +140,7 @@
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897689519AED8AF00DD079B /* View.swift */,
+				88931DC319B15C9B0075FF33 /* Cursor.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
 			path = Few;
@@ -378,9 +378,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
+				88931DC419B15C9B0075FF33 /* Cursor.swift in Sources */,
 				8897689B19AED8AF00DD079B /* Graphic.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
-				8897689A19AED8AF00DD079B /* Game.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
 				8897689D19AED8AF00DD079B /* Layout.swift in Sources */,
