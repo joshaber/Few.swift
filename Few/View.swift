@@ -20,6 +20,13 @@ public class View<V: NSView>: Element {
 	
 	// MARK: Element
 	
+	public override func canDiff(other: Element) -> Bool {
+		if !super.canDiff(other) { return false }
+		
+		let otherView = other as View
+		return view === otherView.view
+	}
+	
 	public override func applyDiff(other: Element) {
 		// Nope. We're just wrapping a view.
 	}
