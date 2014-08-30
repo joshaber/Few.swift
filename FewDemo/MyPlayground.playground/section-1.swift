@@ -6,7 +6,8 @@ import Few
 var t = fillRect(NSColor.redColor())
 	 |> sized(CGSize(width: 200, height: 200))
 
-var v = fillRect(NSColor.greenColor())
+var v = fillRect()
+	 |> color(NSColor.redColor())
 	 |> sized(CGSize(width: 100, height: 100))
 	 |> offset(20, 40)
 

@@ -33,6 +33,12 @@ public func fillRect(color: NSColor) -> Graphic {
 	}
 }
 
+public func fillRect() -> Graphic {
+	return Graphic { rect in
+		NSRectFillUsingOperation(rect, .CompositeSourceOver)
+	}
+}
+
 public func strokeRect(color: NSColor, width: CGFloat) -> Graphic {
 	return Graphic { rect in
 		color.set()
@@ -63,6 +69,13 @@ public func strokePath(path: NSBezierPath) -> Graphic {
 public func image(image: NSImage) -> Graphic {
 	return Graphic { rect in
 		image.drawInRect(rect, fromRect: CGRectZero, operation: .CompositeSourceOver, fraction: 1)
+	}
+}
+
+public func color(color: NSColor)(graphic: Graphic) -> Graphic {
+	return Graphic { rect in
+		color.set()
+		graphic.draw(rect)
 	}
 }
 
