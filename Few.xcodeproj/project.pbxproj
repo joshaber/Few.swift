@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
+		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88931DC419B15C9B0075FF33 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88931DC319B15C9B0075FF33 /* Cursor.swift */; };
 		8897687719AED88000DD079B /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8897688119AED88000DD079B /* FewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* FewTests.swift */; };
@@ -30,6 +32,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		884634E819B7C54B00896264 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8897686819AED88000DD079B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8897687019AED88000DD079B;
+			remoteInfo = Few;
+		};
 		889768B819AED92D00DD079B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8897686819AED88000DD079B /* Project object */;
@@ -38,6 +47,20 @@
 			remoteInfo = FewDemo;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		884634EB19B7C55A00896264 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		88931DC319B15C9B0075FF33 /* Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
@@ -90,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				884634EA19B7C55200896264 /* Few.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,10 +290,12 @@
 				889768A219AED92D00DD079B /* Sources */,
 				889768A319AED92D00DD079B /* Frameworks */,
 				889768A419AED92D00DD079B /* Resources */,
+				884634EB19B7C55A00896264 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				884634E919B7C54B00896264 /* PBXTargetDependency */,
 			);
 			name = FewDemo;
 			productName = FewDemo;
@@ -421,6 +447,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		884634E919B7C54B00896264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8897687019AED88000DD079B /* Few */;
+			targetProxy = 884634E819B7C54B00896264 /* PBXContainerItemProxy */;
+		};
 		889768B919AED92D00DD079B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 889768A519AED92D00DD079B /* FewDemo */;
