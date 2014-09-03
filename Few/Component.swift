@@ -20,17 +20,15 @@ public class Component<S>: Element {
 	}
 
 	private let render: S -> Element
-	
-	// Ugh. These should be Component<S> but Xcode 6b6 hangs on launch if we do 
-	// that.
-	private let didRealize: (Element -> ())?
-	private let willDerealize: (Element -> ())?
+
+	private let didRealize: (Component<S> -> ())?
+	private let willDerealize: (Component<S> -> ())?
 
 	private var topElement: Element
 
 	private var hostView: NSView?
 
-	public init(render: S -> Element, initialState: S, didRealize: (Element -> ())? = nil, willDerealize: (Element -> ())? = nil) {
+	public init(render: S -> Element, initialState: S, didRealize: (Component<S> -> ())? = nil, willDerealize: (Component<S> -> ())? = nil) {
 		self.render = render
 		self.state = initialState
 		self.didRealize = didRealize

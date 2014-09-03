@@ -22,8 +22,7 @@ var timer: NSTimer?
 private let bgComponent = Component(
 	render: renderBg,
 	initialState: 0,
-	didRealize: { el in
-		let c = el as Few.Component<Float>
+	didRealize: { c in
 		timer = every(0.01) {
 			c.state += 0.001
 		}
