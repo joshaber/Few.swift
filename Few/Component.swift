@@ -55,6 +55,9 @@ public class Component<S>: Element {
 	
 	// MARK: Lifecycle
 	
+	/// Called when the component will be realized.
+	public func componentWillRealize() {}
+	
 	/// Called when the component has been realized.
 	public func componentDidRealize() {
 		didRealize?(self)
@@ -64,6 +67,9 @@ public class Component<S>: Element {
 	public func componentWillDerealize() {
 		willDerealize?(self)
 	}
+	
+	/// Called when the has been derealized.
+	public func componentDidDerealize() {}
 	
 	/// Called when the state has changed but before the component is 
 	/// re-rendered. This gives the component the chance to decide whether it 
@@ -78,6 +84,8 @@ public class Component<S>: Element {
 
 	/// Add the component to the given view.
 	public func addToView(view: NSView) {
+		componentWillRealize()
+		
 		hostView = view
 		topElement.realize(self, parentView: view)
 		
@@ -90,6 +98,8 @@ public class Component<S>: Element {
 		
 		topElement.derealize()
 		hostView = nil
+		
+		componentDidDerealize()
 	}
 	
 	// MARK: Element
