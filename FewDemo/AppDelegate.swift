@@ -29,8 +29,6 @@ let bgComponent = Component(
 	},
 	willDerealize: constF(void(timer?.invalidate())))
 
-let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5))
-
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 	

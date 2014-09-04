@@ -20,12 +20,6 @@ struct GameState {
 	}
 }
 
-extension GameState: Equatable {}
-
-func ==(lhs: GameState, rhs: GameState) -> Bool {
-	return rhs.winningScore == lhs.winningScore && rhs.count == lhs.count
-}
-
 // TODO: We should really be using lenses here.
 func mapCount(state: GameState, fn: Int -> Int) -> GameState {
 	return GameState(winningScore: state.winningScore, count: fn(state.count))
@@ -70,9 +64,24 @@ func renderWon() -> Element {
 }
 
 func renderReset(state: GameState) -> Element {
-	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore, count: 0)))
+	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore)))
 		|> sizeToFit
 		|> absolute(CGPoint(x: 200, y: 180))
+}
+
+func renderScoreLimit(state: GameState) -> Element {
+	return Input<GameState>(text: "\(state.winningScore)", fn: { str, s in
+		let scanner = NSScanner(string: str)
+		var limit = 0
+		let success = scanner.scanInteger(&limit)
+		if success {
+			return GameState(winningScore: limit, count: s.count)
+		} else {
+			return s
+		}
+	})
+		|> sized(CGSize(width: 100, height: 23))
+		|> absolute(CGPoint(x: 0, y: 0))
 }
 
 func renderGame(state: GameState) -> Element {
@@ -82,6 +91,8 @@ func renderGame(state: GameState) -> Element {
 	} else if state.count >= state.winningScore {
 		return bg + renderWon() + renderReset(state)
 	} else {
-		return bg + renderForm(state)
+		return bg + renderForm(state) + renderScoreLimit(state)
 	}
 }
+
+let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5))
