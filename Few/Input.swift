@@ -53,8 +53,8 @@ public class Input<S>: Element {
 			text = otherInput.text
 			textField!.stringValue = text
 		}
-		
-		frame = CGRectZero
+	
+		frame = DefaultFrame
 		
 		super.applyDiff(other)
 	}

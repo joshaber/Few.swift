@@ -9,6 +9,8 @@
 import Foundation
 import AppKit
 
+public let DefaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1))
+
 public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
@@ -30,6 +32,8 @@ public class Element {
 	}
 	
 	private weak var component: Component<Any>?
+
+	public var layout: CGRect -> CGRect = const(CGRectZero)
 	
 	public init() {}
 	
