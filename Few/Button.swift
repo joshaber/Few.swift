@@ -16,8 +16,6 @@ public class Button<S>: Element {
 
 	private let trampoline = TargetActionTrampoline()
 
-	private weak var typedComponent: Component<S>?
-
 	public convenience init(title: String, fn: S -> S) {
 		self.init(title: title, action: { component in
 			component.state = fn(component.state)
@@ -29,7 +27,7 @@ public class Button<S>: Element {
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			void(action <^> self.typedComponent)
+			void(action <^> self.getComponent())
 		}
 	}
 
@@ -51,8 +49,6 @@ public class Button<S>: Element {
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
-		typedComponent = component
-
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title

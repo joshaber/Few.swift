@@ -29,6 +29,8 @@ public class Container: Element {
 				newChildren.append(myChild)
 			} else {
 				myChild.derealize()
+
+				let component: Component<Any>? = getComponent()
 				curry(theirChild.realize) <^> component <*> containerView
 				newChildren.append(theirChild)
 			}

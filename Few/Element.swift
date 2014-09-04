@@ -29,7 +29,7 @@ public class Element {
 		}
 	}
 	
-	public weak var component: Component<Any>?
+	private weak var component: Component<Any>?
 	
 	public init() {}
 	
@@ -59,15 +59,28 @@ public class Element {
 	///
 	/// The default implementation adds the content view to `parentView`.
 	public func realize<S>(component: Component<S>, parentView: NSView) {
-		// Ugh. This shouldn't be necessary.
-		//
-		// Doing this instead of `unsafeBitCast` because that seems to cause 
-		// problems down the line when it comes to identity?
-		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
-		let castComponent: Component<Any> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
-		self.component = castComponent
+		self.component = getComponent(component)
 
 		parentView.addSubview <^> getContentView()
+	}
+	
+	private func getComponent<S, T>(component: Component<S>) -> Component<T> {
+		// Ugh. This shouldn't be necessary.
+		//
+		// Doing this instead of `unsafeBitCast` because that seems to cause
+		// problems down the line when it comes to identity?
+		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
+		let castComponent: Component<T> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
+		return castComponent
+	}
+	
+	/// Get the component in which the element has been realized.
+	public func getComponent<T>() -> Component<T>? {
+		if let component = component {
+			return getComponent(component)
+		} else {
+			return nil
+		}
 	}
 
 	/// Derealize the element.

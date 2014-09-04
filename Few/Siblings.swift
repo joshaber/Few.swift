@@ -54,6 +54,8 @@ public class Siblings: Element {
 		} else {
 			ours.derealize()
 			ours = theirs
+			
+			let component: Component<Any>? = getComponent()
 			curry(ours.realize) <^> component <*> parentView
 		}
 	}
