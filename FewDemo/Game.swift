@@ -11,18 +11,30 @@ import AppKit
 import Few
 
 struct GameState {
+	enum State {
+		case Playing
+		case Done
+	}
+	
 	let winningScore: Int
-	let count: Int = 0
+	let count: Int
+	let state: State
 
-	init(winningScore: Int, count: Int = 0) {
+	init(winningScore: Int, state: State, count: Int = 0) {
 		self.winningScore = winningScore
 		self.count = count
+		self.state = state
 	}
 }
 
 // TODO: We should really be using lenses here.
 func mapCount(state: GameState, fn: Int -> Int) -> GameState {
-	return GameState(winningScore: state.winningScore, count: fn(state.count))
+	let newCount = fn(state.count)
+	if state.state == .Playing && newCount >= state.winningScore {
+		return GameState(winningScore: state.winningScore, state: .Done, count: fn(state.count))
+	} else {
+		return GameState(winningScore: state.winningScore, state: state.state, count: newCount)
+	}
 }
 
 func renderForm(state: GameState) -> Element {
@@ -64,7 +76,7 @@ func renderWon() -> Element {
 }
 
 func renderReset(state: GameState) -> Element {
-	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore)))
+	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore, state: .Playing)))
 		|> sizeToFit
 		|> absolute(CGPoint(x: 200, y: 180))
 }
@@ -74,8 +86,8 @@ func renderScoreLimit(state: GameState) -> Element {
 		let scanner = NSScanner(string: str)
 		var limit = 0
 		let success = scanner.scanInteger(&limit)
-		if success {
-			return GameState(winningScore: limit, count: s.count)
+		if success && limit > 0 {
+			return GameState(winningScore: limit, state: s.state, count: 0)
 		} else {
 			return s
 		}
@@ -95,4 +107,4 @@ func renderGame(state: GameState) -> Element {
 	}
 }
 
-let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5))
+let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5, state: .Playing))
