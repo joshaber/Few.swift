@@ -18,6 +18,10 @@ public func const<T, V>(val: T) -> (V -> T) {
 	return { _ in val }
 }
 
+public func constF<T, V>(fn: @autoclosure () -> T) -> (V -> T) {
+	return { _ in fn() }
+}
+
 public func id<T>(val: T) -> T {
 	return val
 }
