@@ -9,15 +9,21 @@
 import Foundation
 import AppKit
 
+private class InputDelegate: NSObject, NSTextFieldDelegate {
+	var action: (() -> ())?
+
+	override func controlTextDidChange(notification: NSNotification!) {
+		action?();
+	}
+}
+
 public class Input<S>: Element {
 	private var textField: NSTextField?
 	
 	private var text: String
 	
-	private let trampoline = TargetActionTrampoline()
-	
-	private weak var typedComponent: Component<S>?
-	
+	private let inputDelegate = InputDelegate()
+
 	public convenience init(text: String, fn: (String, S) -> S) {
 		self.init(text: text, action: { str, component in
 			component.state = fn(str, component.state)
@@ -28,10 +34,11 @@ public class Input<S>: Element {
 		self.text = text
 		super.init()
 		
-		self.trampoline.action = { [unowned self] in
+		self.inputDelegate.action = { [unowned self] in
 			self.text = self.textField!.stringValue
-			if let component = self.typedComponent {
-				action(self.text, component)
+			let component: Component<S>? = self.getComponent()
+			if component != nil {
+				action(self.text, component!)
 			}
 		}
 	}
@@ -55,11 +62,8 @@ public class Input<S>: Element {
 	public override func realize(component: Component<S>, parentView: NSView) {
 		let field = NSTextField(frame: frame)
 		field.editable = true
-//		field.drawsBackground = false
-//		field.bordered = false
 		field.stringValue = text
-		field.target = trampoline
-		field.action = trampoline.selector
+		field.delegate = inputDelegate
 		textField = field
 		
 		super.realize(component, parentView: parentView)
