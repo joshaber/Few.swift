@@ -19,24 +19,22 @@ func renderBg(tick: Float) -> Element {
 }
 
 var timer: NSTimer?
-private let bgComponent = Component(
+let bgComponent = Component(
 	render: renderBg,
 	initialState: 0,
 	didRealize: { c in
 		timer = every(0.01) {
-			c.state += 0.001
+			c.state += 0.01
 		}
 	},
-	willDerealize: { _ in void(timer?.invalidate()) })
+	willDerealize: constF(void(timer?.invalidate())))
 
-func render(state: GameState) -> Element {
-	return bgComponent + renderGame(state)
-}
-
-let appComponent = Component(render: render, initialState: GameState(winningScore: 5))
+let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5))
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
+	
+	private let appComponent = Component(render: const(bgComponent + gameComponent), initialState: ())
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView
