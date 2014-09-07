@@ -54,10 +54,11 @@ func renderForm(state: GameState) -> Element {
 
 func renderBackground(state: GameState) -> Element {
 	var element: Element = empty()
+	let frac = CGFloat(abs(state.count)) / CGFloat(state.winningScore - 1)
 	if state.count < 0 {
-		element = fillRect(NSColor.redColor().colorWithAlphaComponent(0.5))
+		element = fillRect(NSColor.redColor().colorWithAlphaComponent(frac))
 	} else if state.count > 0 {
-		element = fillRect(NSColor.greenColor().colorWithAlphaComponent(0.5))
+		element = fillRect(NSColor.greenColor().colorWithAlphaComponent(frac))
 	}
 	
 	return sized(element, CGSize(width: 1000, height: 1000))
