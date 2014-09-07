@@ -47,7 +47,7 @@ func renderForm(state: GameState) -> Element {
 
 	let count = Label(text: "\(state.count)")
 			 |> sizeToFit
-			 |> offset(0, 20)
+			 |> offset(0, 24)
 
 	return offset(incButton + count + decButton, 200, 200)
 }
@@ -92,8 +92,8 @@ func renderScoreLimit(state: GameState) -> Element {
 			return s
 		}
 	})
-		|> sized(CGSize(width: 100, height: 23))
-		|> absolute(CGPoint(x: 0, y: 0))
+		|> sized(CGSize(width: 70, height: 23))
+		|> absolute(CGPoint(x: 200, y: 270))
 }
 
 func renderGame(state: GameState) -> Element {
