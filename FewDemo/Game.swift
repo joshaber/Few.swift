@@ -93,8 +93,9 @@ func renderScoreLimit(state: GameState) -> Element {
 			return s
 		}
 	})
-		|> sized(CGSize(width: 70, height: 23))
-		|> absolute(CGPoint(x: 200, y: 270))
+		|> constrain
+//		|> sized(CGSize(width: 70, height: 23))
+//		|> absolute(CGPoint(x: 200, y: 270))
 }
 
 func renderGame(state: GameState) -> Element {

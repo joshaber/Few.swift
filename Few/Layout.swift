@@ -9,6 +9,27 @@
 import Foundation
 import AppKit
 
+public func constrain<E: Element>(element: E, constraint: NSLayoutConstraint) -> E {
+	if let contentView = element.getContentView() {
+		contentView.addConstraint(constraint)
+	}
+	return element
+}
+
+public func constrain<E: Element>(element: E) -> E {
+	if let contentView = element.getContentView() {
+		let c1 = NSLayoutConstraint(item: contentView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 23)
+		c1.active = true
+		contentView.addConstraint(c1)
+		
+		let c2 = NSLayoutConstraint(item: contentView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)
+		c2.active = true
+		contentView.addConstraint(c2)
+	}
+	
+	return element
+}
+
 public func absolute(element: Element, frame: CGRect) -> Layout {
 	return Layout(element: element, fn: const(frame))
 }
