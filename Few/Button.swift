@@ -43,8 +43,6 @@ public class Button<S>: Element {
 			b.title = title
 		}
 
-		frame = CGRectZero
-
 		super.applyDiff(other)
 	}
 
@@ -61,9 +59,5 @@ public class Button<S>: Element {
 
 	public override func getContentView() -> NSView? {
 		return button
-	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		return button?.intrinsicContentSize ?? CGSizeZero
 	}
 }

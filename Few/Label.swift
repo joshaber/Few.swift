@@ -48,15 +48,4 @@ public class Label: Element {
 	public override func getContentView() -> NSView? {
 		return textField
 	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		var size = CGSizeZero
-		if let textField = textField {
-			let originalFrame = textField.frame
-			textField.sizeToFit()
-			size = textField.bounds.size
-			textField.frame = originalFrame
-		}
-		return size
-	}
 }

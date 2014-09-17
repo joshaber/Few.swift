@@ -25,12 +25,6 @@ public class Siblings: Element {
 	}
 
 	// MARK: Element
-	
-	public override func applyLayout(fn: Element -> CGRect) {
-		for element in [left, right] {
-			element.applyLayout(fn)
-		}
-	}
 
 	public override func realize<S>(component: Component<S>, parentView: NSView) {
 		self.parentView = parentView

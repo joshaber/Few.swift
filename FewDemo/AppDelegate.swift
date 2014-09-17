@@ -15,7 +15,9 @@ func renderBg(tick: Float) -> Element {
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
 	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
 	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	return sized(fillRect(color), CGSize(width: 1000, height: 1000))
+	let rect = fillRect(color)
+	rect.frame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
+	return rect
 }
 
 var timer: NSTimer?
@@ -32,7 +34,7 @@ let bgComponent = Component(
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 	
-	private let appComponent = Component(render: const(bgComponent + gameComponent), initialState: ())
+	private let appComponent = Component(render: const(bgComponent), initialState: ())
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView

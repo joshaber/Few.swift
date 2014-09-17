@@ -9,37 +9,16 @@
 import Foundation
 import AppKit
 
-public let DefaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1))
-
 public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
 public class Element {
-	internal var modelFrame = CGRectZero
-	public var frame: CGRect {
-		get {
-			return getContentView()?.frame ?? modelFrame
-		}
-
-		set {
-			modelFrame = newValue
-
-			if let view = getContentView() {
-				view.frame = newValue
-			}
-		}
-	}
+	public var frame = CGRectZero
 	
 	private weak var component: Component<Any>?
-
-	public var layout: CGRect -> CGRect = const(CGRectZero)
 	
 	public init() {}
-	
-	public func applyLayout(fn: Element -> CGRect) {
-		frame = fn(self)
-	}
 
 	/// Can the receiver and the other element be diffed?
 	///
@@ -56,7 +35,9 @@ public class Element {
 	/// This will only be called if `canDiff` returns `true`. Implementations 
 	/// should call super.
 	public func applyDiff(other: Element) {
-		
+		if frame != other.frame {
+			frame = other.frame
+		}
 	}
 
 	/// Realize the element in the given component and parent view.
@@ -97,17 +78,6 @@ public class Element {
 	/// Get the content view which represents the element.
 	public func getContentView() -> NSView? {
 		return nil
-	}
-	
-	/// Get the intrinsic size for the element. The default implementation 
-	/// returns the content view's intrinsic content size if the content view 
-	/// exists.
-	public func getIntrinsicSize() -> CGSize {
-		if let contentView = getContentView() {
-			return contentView.intrinsicContentSize
-		}
-
-		return CGSizeZero
 	}
 }
 

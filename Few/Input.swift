@@ -53,9 +53,7 @@ public class Input<S>: Element {
 			text = otherInput.text
 			textField!.stringValue = text
 		}
-	
-		frame = DefaultFrame
-		
+
 		super.applyDiff(other)
 	}
 	
@@ -71,16 +69,5 @@ public class Input<S>: Element {
 	
 	public override func getContentView() -> NSView? {
 		return textField
-	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		var size = CGSizeZero
-		if let textField = textField {
-			let originalFrame = textField.frame
-			textField.sizeToFit()
-			size = textField.bounds.size
-			textField.frame = originalFrame
-		}
-		return size
 	}
 }

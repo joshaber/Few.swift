@@ -106,10 +106,6 @@ public class Component<S>: Element {
 	
 	// MARK: Element
 	
-	public override func applyLayout(fn: Element -> CGRect) {
-		// TODO: It'd be nice if this worked?
-	}
-	
 	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 		
@@ -132,9 +128,5 @@ public class Component<S>: Element {
 	
 	public override func getContentView() -> NSView? {
 		return topElement.getContentView()
-	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		return topElement.getIntrinsicSize()
 	}
 }
