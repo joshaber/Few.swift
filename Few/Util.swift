@@ -98,6 +98,11 @@ public func |><A, B>(a: A, f: A -> B) -> B {
 	return f(a)
 }
 
+infix operator ~ { associativity right precedence 10 }
+public func ~<A, B>(f: A -> B, a: A) -> B {
+	return f(a)
+}
+
 public func flip<A, B, C>(fn: (A, B) -> C) -> (B, A) -> C {
 	return { b, a in
 		return fn(a, b)

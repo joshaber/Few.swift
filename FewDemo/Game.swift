@@ -105,7 +105,11 @@ func renderGame(state: GameState) -> Element {
 	} else if state.count >= state.winningScore {
 		return bg + renderWon() + renderReset(state)
 	} else {
-		return bg + renderForm(state) + renderScoreLimit(state)
+		let w = WrappedView(type: NSButton.self, config: { b in
+			b.title = "Hi! \(state.count)"
+			b.frame = CGRect(x: 0, y: 0, width: 100, height: 23)
+		})
+		return bg + renderForm(state) + renderScoreLimit(state) + w
 	}
 }
 
