@@ -26,27 +26,60 @@ private class DrawableView: NSView {
 	}
 }
 
-public func fillRect<S>(color: NSColor) -> Graphic<S> {
+public func fillRect(color: NSColor) -> Graphic {
 	return Graphic { rect in
 		color.set()
 		NSRectFillUsingOperation(rect, .CompositeSourceOver)
 	}
 }
 
-public func strokeRect<S>(color: NSColor, width: CGFloat) -> Graphic<S> {
+public func fillRect() -> Graphic {
+	return Graphic { rect in
+		NSRectFillUsingOperation(rect, .CompositeSourceOver)
+	}
+}
+
+public func strokeRect(color: NSColor, width: CGFloat) -> Graphic {
 	return Graphic { rect in
 		color.set()
 		NSFrameRectWithWidthUsingOperation(rect, width, .CompositeSourceOver)
 	}
 }
 
-public func image<S>(image: NSImage) -> Graphic<S> {
+public func fillRect(color: NSColor, cornerRadius: CGFloat) -> Graphic {
+	return Graphic { rect in
+		color.set()
+		let path = NSBezierPath(roundedRect: rect, xRadius: cornerRadius, yRadius: cornerRadius)
+		path.fill()
+	}
+}
+
+public func fillPath(path: NSBezierPath) -> Graphic {
+	return Graphic { rect in
+		path.fill()
+	}
+}
+
+public func strokePath(path: NSBezierPath) -> Graphic {
+	return Graphic { rect in
+		path.stroke()
+	}
+}
+
+public func image(image: NSImage) -> Graphic {
 	return Graphic { rect in
 		image.drawInRect(rect, fromRect: CGRectZero, operation: .CompositeSourceOver, fraction: 1)
 	}
 }
 
-public class Graphic<S>: Element<S> {
+public func color(color: NSColor)(graphic: Graphic) -> Graphic {
+	return Graphic { rect in
+		color.set()
+		graphic.draw(rect)
+	}
+}
+
+public class Graphic: Element {
 	private var view: DrawableView?
 
 	private var draw: CGRect -> ()
@@ -57,13 +90,13 @@ public class Graphic<S>: Element<S> {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element) {
 		let otherGraphic = other as Graphic
 		draw = otherGraphic.draw
 		view?.needsDisplay = true
 	}
 
-	public override func realize(component: Component<S>, parentView: NSView) {
+	public override func realize<S>(component: Component<S>, parentView: NSView) {
 		view = DrawableView(frame: frame, draw: callDrawFunc)
 
 		super.realize(component, parentView: parentView)

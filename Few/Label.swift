@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Label<S>: Element<S> {
+public class Label: Element {
 	private var textField: NSTextField?
 
 	private var text: String
@@ -20,7 +20,7 @@ public class Label<S>: Element<S> {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element) {
 		if textField == nil { return }
 
 		let otherLabel = other as Label
@@ -34,7 +34,7 @@ public class Label<S>: Element<S> {
 		super.applyDiff(other)
 	}
 
-	public override func realize(component: Component<S>, parentView: NSView) {
+	public override func realize<S>(component: Component<S>, parentView: NSView) {
 		let field = NSTextField(frame: frame)
 		field.editable = false
 		field.drawsBackground = false

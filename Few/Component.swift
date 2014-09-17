@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public class Component<S>: Element<S> {
+public class Component<S>: Element {
 	/// The state on which the component depends.
 	public var state: S {
 		didSet {
@@ -19,18 +19,16 @@ public class Component<S>: Element<S> {
 		}
 	}
 
-	private let render: S -> Element<S>
-	
-	// Ugh. These should be Component<S> but Xcode 6b6 hangs on launch if we do 
-	// that.
-	private let didRealize: (Element<S> -> ())?
-	private let willDerealize: (Element<S> -> ())?
+	private let render: S -> Element
 
-	private var topElement: Element<S>
+	private let didRealize: (Component<S> -> ())?
+	private let willDerealize: (Component<S> -> ())?
+
+	private var topElement: Element
 
 	private var hostView: NSView?
 
-	public init(render: S -> Element<S>, initialState: S, didRealize: (Element<S> -> ())? = nil, willDerealize: (Element<S> -> ())? = nil) {
+	public init(render: S -> Element, initialState: S, didRealize: (Component<S> -> ())? = nil, willDerealize: (Component<S> -> ())? = nil) {
 		self.render = render
 		self.state = initialState
 		self.didRealize = didRealize
@@ -57,6 +55,9 @@ public class Component<S>: Element<S> {
 	
 	// MARK: Lifecycle
 	
+	/// Called when the component will be realized.
+	public func componentWillRealize() {}
+	
 	/// Called when the component has been realized.
 	public func componentDidRealize() {
 		didRealize?(self)
@@ -66,6 +67,9 @@ public class Component<S>: Element<S> {
 	public func componentWillDerealize() {
 		willDerealize?(self)
 	}
+	
+	/// Called when the has been derealized.
+	public func componentDidDerealize() {}
 	
 	/// Called when the state has changed but before the component is 
 	/// re-rendered. This gives the component the chance to decide whether it 
@@ -80,6 +84,10 @@ public class Component<S>: Element<S> {
 
 	/// Add the component to the given view.
 	public func addToView(view: NSView) {
+		assert(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
+		
+		componentWillRealize()
+		
 		hostView = view
 		topElement.realize(self, parentView: view)
 		
@@ -92,30 +100,36 @@ public class Component<S>: Element<S> {
 		
 		topElement.derealize()
 		hostView = nil
+		
+		componentDidDerealize()
 	}
-
+	
 	// MARK: Element
-
-	public override func canDiff(other: Element<S>) -> Bool {
+	
+	public override func applyLayout(fn: Element -> CGRect) {
+		// TODO: It'd be nice if this worked?
+	}
+	
+	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
-
+		
 		let otherComponent = other as Component
 		return self === otherComponent
 	}
-
-	public override func applyDiff(other: Element<S>) {
-		// This is meaningless. The component will diff its topElement as needed
-		// for it.
+	
+	public override func applyDiff(other: Element) {
+		// This is pretty meaningless since we check for pointer equality in
+		// canDiff.
 	}
-
-	public override func realize(component: Component<S>, parentView: NSView) {
+	
+	public override func realize(parent: Element, parentView: NSView) {
 		addToView(parentView)
 	}
 	
 	public override func derealize() {
-		remove()
+		getContentView()?.removeFromSuperview()
 	}
-
+	
 	public override func getContentView() -> NSView? {
 		return topElement.getContentView()
 	}

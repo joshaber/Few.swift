@@ -9,14 +9,12 @@
 import Foundation
 import AppKit
 
-public class Button<S>: Element<S> {
+public class Button<S>: Element {
 	private var title: String
 
 	private var button: NSButton?
 
 	private let trampoline = TargetActionTrampoline()
-
-	private weak var component: Component<S>?
 
 	public convenience init(title: String, fn: S -> S) {
 		self.init(title: title, action: { component in
@@ -29,14 +27,13 @@ public class Button<S>: Element<S> {
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			action <^> self.component
-			return ()
+			void(action <^> self.getComponent())
 		}
 	}
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element) {
 		if button == nil { return }
 
 		let otherButton = other as Button
@@ -52,8 +49,6 @@ public class Button<S>: Element<S> {
 	}
 
 	public override func realize(component: Component<S>, parentView: NSView) {
-		self.component = component
-
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title

@@ -14,8 +14,6 @@ internal class TargetActionTrampoline: NSObject {
 	internal let selector = Selector("performAction:")
 
 	internal func performAction(sender: AnyObject?) {
-		if action == nil { return }
-
-		self.action!()
+		self.action?()
 	}
 }

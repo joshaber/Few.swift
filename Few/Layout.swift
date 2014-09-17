@@ -9,63 +9,87 @@
 import Foundation
 import AppKit
 
-public func absolute<S>(element: Element<S>, frame: CGRect) -> Layout<S> {
+public func constrain<E: Element>(element: E, constraint: NSLayoutConstraint) -> E {
+	if let contentView = element.getContentView() {
+		contentView.addConstraint(constraint)
+	}
+	return element
+}
+
+public func constrain<E: Element>(element: E) -> E {
+	if let contentView = element.getContentView() {
+		let c1 = NSLayoutConstraint(item: contentView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 23)
+		c1.active = true
+		contentView.addConstraint(c1)
+		
+		let c2 = NSLayoutConstraint(item: contentView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)
+		c2.active = true
+		contentView.addConstraint(c2)
+	}
+	
+	return element
+}
+
+public func absolute(element: Element, frame: CGRect) -> Layout {
 	return Layout(element: element, fn: const(frame))
 }
 
-public func absolute<S>(element: Element<S>, size: CGSize) -> Layout<S> {
+public func sized(element: Element, size: CGSize) -> Layout {
 	return Layout(element: element) { element in
 		CGRect(origin: element.frame.origin, size: size)
 	}
 }
 
-public func absolute<S>(element: Element<S>, origin: CGPoint) -> Layout<S> {
+public func absolute(element: Element, origin: CGPoint) -> Layout {
 	return Layout(element: element) { element in
 		CGRect(origin: origin, size: element.frame.size)
 	}
 }
 
-public func absolute<S>(origin: CGPoint)(element: Element<S>) -> Layout<S> {
+public func absolute(origin: CGPoint)(element: Element) -> Layout {
 	return absolute(element, origin)
 }
 
-public func sizeToFit<S>(element: Element<S>) -> Layout<S> {
+public func sized(size: CGSize)(element: Element) -> Layout {
+	return sized(element, size)
+}
+
+public func sizeToFit(element: Element) -> Layout {
 	return Layout(element: element) { element in
 		let size = element.getIntrinsicSize()
 		return CGRect(origin: element.frame.origin, size: size)
 	}
 }
 
-public func offset<S>(element: Element<S>, dx: CGFloat, dy: CGFloat) -> Layout<S> {
+public func offset(element: Element, dx: CGFloat, dy: CGFloat) -> Layout {
 	return Layout(element: element) { element in
 		CGRectOffset(element.frame, dx, dy)
 	}
 }
 
-public func offset<S>(dx: CGFloat, dy: CGFloat)(element: Element<S>) -> Layout<S> {
+public func offset(dx: CGFloat, dy: CGFloat)(element: Element) -> Layout {
 	return offset(element, dx, dy)
 }
 
-public func |><S>(left: Element<S>, right: Element<S>) -> Layout<S> {
+public func |>(left: Element, right: Element) -> Layout {
 	return Layout(element: right) { element in
 		CGRect(x: CGRectGetMaxX(left.frame), y: CGRectGetMidY(left.frame), width: right.frame.width, height: right.frame.height)
 	}
 }
 
-public class Layout<S>: Element<S> {
-	private var element: Element<S>
+public class Layout: Element {
+	private var element: Element
 
-	private var layoutFn: Element<S> -> CGRect
+	private var layoutFn: Element -> CGRect
 	
-	private weak var component: Component<S>?
 	private var parentView: NSView?
 
-	public init(element: Element<S>, fn: Element<S> -> CGRect) {
+	public init(element: Element, fn: Element -> CGRect) {
 		self.element = element
 		self.layoutFn = fn
 	}
 	
-	public override func applyLayout(fn: Element<S> -> CGRect) {
+	public override func applyLayout(fn: Element -> CGRect) {
 		element.applyLayout(fn)
 	}
 
@@ -75,15 +99,15 @@ public class Layout<S>: Element<S> {
 
 	// MARK: Element
 	
-	public override func canDiff(other: Element<S>) -> Bool {
+	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 		
-		let otherLayout = other as Layout<S>
+		let otherLayout = other as Layout
 		return element.canDiff(otherLayout.element)
 	}
 
-	public override func applyDiff(other: Element<S>) {
-		let otherLayout = other as Layout<S>
+	public override func applyDiff(other: Element) {
+		let otherLayout = other as Layout
 		element.applyDiff(otherLayout.element)
 
 		layoutFn = otherLayout.layoutFn
@@ -93,8 +117,7 @@ public class Layout<S>: Element<S> {
 		layoutElements()
 	}
 
-	public override func realize(component: Component<S>, parentView: NSView) {
-		self.component = component
+	public override func realize<S>(component: Component<S>, parentView: NSView) {
 		self.parentView = parentView
 		
 		element.realize(component, parentView: parentView)
@@ -106,5 +129,9 @@ public class Layout<S>: Element<S> {
 
 	public override func derealize() {
 		element.derealize()
+	}
+	
+	public override func getContentView() -> NSView? {
+		return element.getContentView()
 	}
 }

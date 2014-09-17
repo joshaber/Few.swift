@@ -9,11 +9,13 @@
 import Foundation
 import AppKit
 
-public func empty<S>() -> Element<S> {
+public let DefaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1))
+
+public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
-public class Element<S> {
+public class Element {
 	internal var modelFrame = CGRectZero
 	public var frame: CGRect {
 		get {
@@ -29,9 +31,13 @@ public class Element<S> {
 		}
 	}
 	
+	private weak var component: Component<Any>?
+
+	public var layout: CGRect -> CGRect = const(CGRectZero)
+	
 	public init() {}
 	
-	public func applyLayout(fn: Element<S> -> CGRect) {
+	public func applyLayout(fn: Element -> CGRect) {
 		frame = fn(self)
 	}
 
@@ -40,7 +46,7 @@ public class Element<S> {
 	/// The default implementation checks the dynamic types of both objects and
 	/// returns `true` only if they are identical. This will be good enough for
 	/// most cases.
-	public func canDiff(other: Element<S>) -> Bool {
+	public func canDiff(other: Element) -> Bool {
 		return other.dynamicType === self.dynamicType
 	}
 
@@ -49,15 +55,36 @@ public class Element<S> {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations 
 	/// should call super.
-	public func applyDiff(other: Element<S>) {
+	public func applyDiff(other: Element) {
 		
 	}
 
 	/// Realize the element in the given component and parent view.
 	///
 	/// The default implementation adds the content view to `parentView`.
-	public func realize(component: Component<S>, parentView: NSView) {
+	public func realize<S>(component: Component<S>, parentView: NSView) {
+		self.component = getComponent(component)
+
 		parentView.addSubview <^> getContentView()
+	}
+	
+	private func getComponent<S, T>(component: Component<S>) -> Component<T> {
+		// Ugh. This shouldn't be necessary.
+		//
+		// Doing this instead of `unsafeBitCast` because that seems to cause
+		// problems down the line when it comes to identity?
+		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
+		let castComponent: Component<T> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
+		return castComponent
+	}
+	
+	/// Get the component in which the element has been realized.
+	public func getComponent<T>() -> Component<T>? {
+		if let component = component {
+			return getComponent(component)
+		} else {
+			return nil
+		}
 	}
 
 	/// Derealize the element.
@@ -72,7 +99,42 @@ public class Element<S> {
 		return nil
 	}
 	
+	/// Get the intrinsic size for the element. The default implementation 
+	/// returns the content view's intrinsic content size if the content view 
+	/// exists.
 	public func getIntrinsicSize() -> CGSize {
+		if let contentView = getContentView() {
+			return contentView.intrinsicContentSize
+		}
+
 		return CGSizeZero
+	}
+}
+
+extension Element {
+	public func debugQuickLookObject() -> AnyObject? {
+		let previewSize = CGSize(width: 512, height: 512)
+		let dummyComponent = Component(render: const(self), initialState: 0)
+		let dummyView = NSView(frame: CGRect(origin: CGPointZero, size: previewSize))
+		realize(dummyComponent, parentView: dummyView)
+
+		var previewImage: NSImage? = nil
+		if let view = getContentView() {
+			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
+			if imageRep == nil { return NSImage(size: previewSize) }
+
+			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
+
+			var image = NSImage(size: imageRep!.size)
+			image.addRepresentation(imageRep)
+
+			previewImage = image
+		}
+		
+		return previewImage
+	}
+
+	public func pre() -> NSImage {
+		return debugQuickLookObject()! as NSImage
 	}
 }

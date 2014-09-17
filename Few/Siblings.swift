@@ -9,40 +9,30 @@
 import Foundation
 import AppKit
 
-public func +<S>(left: Element<S>, right: Element<S>) -> Element<S> {
+public func +(left: Element, right: Element) -> Element {
 	return Siblings(left, right)
 }
 
-public func +<S, T>(left: Component<T>, right: Element<S>) -> Element<S> {
-	return Siblings(Embed(left), right)
-}
+public class Siblings: Element {
+	private var left: Element
+	private var right: Element
 
-public func +<S, T>(left: Element<S>, right: Component<T>) -> Element<S> {
-	return Siblings(left, Embed(right))
-}
-
-public class Siblings<S>: Element<S> {
-	private var left: Element<S>
-	private var right: Element<S>
-
-	private weak var component: Component<S>?
 	private var parentView: NSView?
 
-	public init(_ left: Element<S>, _ right: Element<S>) {
+	public init(_ left: Element, _ right: Element) {
 		self.left = left
 		self.right = right
 	}
 
 	// MARK: Element
 	
-	public override func applyLayout(fn: Element<S> -> CGRect) {
+	public override func applyLayout(fn: Element -> CGRect) {
 		for element in [left, right] {
 			element.applyLayout(fn)
 		}
 	}
 
-	public override func realize(component: Component<S>, parentView: NSView) {
-		self.component = component
+	public override func realize<S>(component: Component<S>, parentView: NSView) {
 		self.parentView = parentView
 
 		left.realize(component, parentView: parentView)
@@ -58,17 +48,19 @@ public class Siblings<S>: Element<S> {
 		super.derealize()
 	}
 	
-	private func diffSiblings(inout ours: Element<S>, theirs: Element<S>) {
+	private func diffSiblings(inout ours: Element, theirs: Element) {
 		if ours.canDiff(theirs) {
 			ours.applyDiff(theirs)
 		} else {
 			ours.derealize()
 			ours = theirs
+			
+			let component: Component<Any>? = getComponent()
 			curry(ours.realize) <^> component <*> parentView
 		}
 	}
 
-	public override func applyDiff(other: Element<S>) {
+	public override func applyDiff(other: Element) {
 		let otherSiblings = other as Siblings
 		
 		diffSiblings(&left, theirs: otherSiblings.left)

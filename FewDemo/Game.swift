@@ -11,24 +11,30 @@ import AppKit
 import Few
 
 struct GameState {
+	enum State {
+		case Playing
+		case Done
+	}
+	
 	let winningScore: Int
-	let count: Int = 0
+	let count: Int
+	let state: State
 
-	init(winningScore: Int, count: Int = 0) {
+	init(winningScore: Int, state: State, count: Int = 0) {
 		self.winningScore = winningScore
 		self.count = count
+		self.state = state
 	}
-}
-
-extension GameState: Equatable {}
-
-func ==(lhs: GameState, rhs: GameState) -> Bool {
-	return rhs.winningScore == lhs.winningScore && rhs.count == lhs.count
 }
 
 // TODO: We should really be using lenses here.
 func mapCount(state: GameState, fn: Int -> Int) -> GameState {
-	return GameState(winningScore: state.winningScore, count: fn(state.count))
+	let newCount = fn(state.count)
+	if state.state == .Playing && newCount >= state.winningScore {
+		return GameState(winningScore: state.winningScore, state: .Done, count: fn(state.count))
+	} else {
+		return GameState(winningScore: state.winningScore, state: state.state, count: newCount)
+	}
 }
 
 func renderForm(state: GameState) -> Element {
@@ -41,17 +47,18 @@ func renderForm(state: GameState) -> Element {
 
 	let count = Label(text: "\(state.count)")
 			 |> sizeToFit
-			 |> offset(0, 20)
+			 |> offset(0, 24)
 
 	return offset(incButton + count + decButton, 200, 200)
 }
 
 func renderBackground(state: GameState) -> Element {
 	var element: Element = empty()
+	let frac = CGFloat(abs(state.count)) / CGFloat(state.winningScore - 1)
 	if state.count < 0 {
-		element = fillRect(NSColor.redColor().colorWithAlphaComponent(0.5))
+		element = fillRect(NSColor.redColor().colorWithAlphaComponent(frac))
 	} else if state.count > 0 {
-		element = fillRect(NSColor.greenColor().colorWithAlphaComponent(0.5))
+		element = fillRect(NSColor.greenColor().colorWithAlphaComponent(frac))
 	}
 	
 	return sized(element, CGSize(width: 1000, height: 1000))
@@ -70,9 +77,25 @@ func renderWon() -> Element {
 }
 
 func renderReset(state: GameState) -> Element {
-	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore, count: 0)))
+	return Button(title: "Reset", fn: const(GameState(winningScore: state.winningScore, state: .Playing)))
 		|> sizeToFit
 		|> absolute(CGPoint(x: 200, y: 180))
+}
+
+func renderScoreLimit(state: GameState) -> Element {
+	return Input<GameState>(text: "\(state.winningScore)", fn: { str, s in
+		let scanner = NSScanner(string: str)
+		var limit = 0
+		let success = scanner.scanInteger(&limit)
+		if success && limit > 0 {
+			return GameState(winningScore: limit, state: s.state, count: 0)
+		} else {
+			return s
+		}
+	})
+		|> constrain
+//		|> sized(CGSize(width: 70, height: 23))
+//		|> absolute(CGPoint(x: 200, y: 270))
 }
 
 func renderGame(state: GameState) -> Element {
@@ -82,6 +105,12 @@ func renderGame(state: GameState) -> Element {
 	} else if state.count >= state.winningScore {
 		return bg + renderWon() + renderReset(state)
 	} else {
-		return bg + renderForm(state)
+		let w = WrappedView(type: NSButton.self, config: { b in
+			b.title = "Hi! \(state.count)"
+			b.frame = CGRect(x: 0, y: 0, width: 100, height: 23)
+		})
+		return bg + renderForm(state) + renderScoreLimit(state) + w
 	}
 }
+
+let gameComponent = Component(render: renderGame, initialState: GameState(winningScore: 5, state: .Playing))

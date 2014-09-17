@@ -7,36 +7,32 @@
 //
 
 import Cocoa
+import Few
 
-func renderBg(tick: Float) -> Element<Float> {
+func renderBg(tick: Float) -> Element {
 	let low: Float = 200
 	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
 	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
 	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	return absolute(fillRect(color), CGSize(width: 1000, height: 1000))
+	return sized(fillRect(color), CGSize(width: 1000, height: 1000))
 }
 
 var timer: NSTimer?
-private let bgComponent = Component(
+let bgComponent = Component(
 	render: renderBg,
 	initialState: 0,
-	didRealize: { el in
-		let c = el as Component<Float>
+	didRealize: { c in
 		timer = every(0.01) {
-			c.state += 0.001
+			c.state += 0.01
 		}
 	},
-	willDerealize: { _ in timer?.invalidate(); return () })
-
-func render(state: GameState) -> Element<GameState> {
-	return bgComponent + renderGame(state)
-}
-
-let appComponent = Component(render: render, initialState: GameState(winningScore: 5))
+	willDerealize: constF(void(timer?.invalidate())))
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
+	
+	private let appComponent = Component(render: const(bgComponent + gameComponent), initialState: ())
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView
