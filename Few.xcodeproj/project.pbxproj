@@ -11,7 +11,6 @@
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8891531819C8D4B90026A817 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891531719C8D4B90026A817 /* View.swift */; };
-		88931DC419B15C9B0075FF33 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88931DC319B15C9B0075FF33 /* Cursor.swift */; };
 		8897687719AED88000DD079B /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8897688119AED88000DD079B /* FewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* FewTests.swift */; };
 		8897689619AED8AF00DD079B /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688A19AED8AF00DD079B /* Button.swift */; };
@@ -64,7 +63,6 @@
 /* Begin PBXFileReference section */
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		8891531719C8D4B90026A817 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
-		88931DC319B15C9B0075FF33 /* Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 		8897687119AED88000DD079B /* Few.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Few.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8897687519AED88000DD079B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8897687619AED88000DD079B /* Few.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Few.h; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				8897689219AED8AF00DD079B /* Siblings.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
-				88931DC319B15C9B0075FF33 /* Cursor.swift */,
 				8891531719C8D4B90026A817 /* View.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
@@ -401,7 +398,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
-				88931DC419B15C9B0075FF33 /* Cursor.swift in Sources */,
 				8897689B19AED8AF00DD079B /* Graphic.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
