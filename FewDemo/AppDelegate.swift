@@ -44,7 +44,6 @@ let backgroundComponent = BackgroundComponent()
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
-	@IBOutlet weak var customView: NSView!
 
 	private let appComponent = Component(render: const(backgroundComponent), initialState: ())
 	
