@@ -29,8 +29,6 @@ public class Label: Element {
 			textField!.stringValue = text
 		}
 
-		frame = CGRectZero
-
 		super.applyDiff(other)
 	}
 

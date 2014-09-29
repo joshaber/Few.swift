@@ -18,7 +18,7 @@ public class Button<S>: Element {
 
 	public convenience init(title: String, fn: S -> S) {
 		self.init(title: title, action: { component in
-			component.state = fn(component.state)
+			void(component.updateState(fn))
 		})
 	}
 

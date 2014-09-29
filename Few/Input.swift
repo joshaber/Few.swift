@@ -26,7 +26,10 @@ public class Input<S>: Element {
 
 	public convenience init(text: String, fn: (String, S) -> S) {
 		self.init(text: text, action: { str, component in
-			component.state = fn(str, component.state)
+			component.updateState { state in
+				fn(str, state)
+			}
+			return ()
 		})
 	}
 

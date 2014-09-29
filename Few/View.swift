@@ -10,21 +10,29 @@ import Foundation
 import AppKit
 
 public class View<T: NSView>: Element {
-	private var constructor: () -> T
+	private let type: T.Type
+
 	private var config: T -> ()
 	private var view: T?
 	
-	public init(constructor: () -> T, config: T -> ()) {
-		self.constructor = constructor
+	public init(type: T.Type, config: T -> ()) {
+		self.type = type
 		self.config = config
 	}
 	
 	// MARK: Element
 	
+	public override func canDiff(other: Element) -> Bool {
+		if !super.canDiff(other) { return false }
+		
+		let otherView = other as View
+		return type === otherView.type
+	}
+	
 	// `component` should be Component<S>, but if we do then Xcode think it's 
 	// not overriding `realize`, so.
 	public override func realize<S>(component: Element, parentView: NSView) {
-		let view = constructor()
+		let view = type()
 		config(view)
 		
 		self.view = view
@@ -36,13 +44,12 @@ public class View<T: NSView>: Element {
 
 	public override func applyDiff(other: Element) {
 		let otherView = other as View
-		
 		config = otherView.config
 		if let view = view {
 			config(view)
-		} else {
-			constructor = otherView.constructor
 		}
+		
+		super.applyDiff(other)
 	}
 
 	public override func getContentView() -> NSView? {

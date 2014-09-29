@@ -13,6 +13,11 @@ public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
+public func frame(rect: CGRect)(element: Element) -> Element {
+	element.frame = rect
+	return element
+}
+
 public class Element {
 	public var frame = CGRectZero
 	
@@ -37,6 +42,10 @@ public class Element {
 	public func applyDiff(other: Element) {
 		if frame != other.frame {
 			frame = other.frame
+		}
+		
+		if let view = getContentView() {
+			view.frame = frame
 		}
 	}
 
