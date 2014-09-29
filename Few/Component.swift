@@ -11,31 +11,22 @@ import AppKit
 
 public class Component<S>: Element {
 	/// The state on which the component depends.
-	public var state: S {
-		didSet {
-			if shouldUpdate(oldValue, newState: state) {
-				update()
-			}
-		}
-	}
+	private var state: S
 
 	private let render: S -> Element
-
-	private let didRealize: (Component<S> -> ())?
-	private let willDerealize: (Component<S> -> ())?
 
 	private var topElement: Element
 
 	private var hostView: NSView?
 
-	public init(render: S -> Element, initialState: S, didRealize: (Component<S> -> ())? = nil, willDerealize: (Component<S> -> ())? = nil) {
+	public init(render: S -> Element, initialState: S) {
 		self.render = render
 		self.state = initialState
-		self.didRealize = didRealize
-		self.willDerealize = willDerealize
 		self.topElement = render(initialState)
 	}
-
+	
+	// MARK: Lifecycle
+	
 	private func update() {
 		let otherElement = render(state)
 
@@ -51,25 +42,24 @@ public class Component<S>: Element {
 				topElement.realize(self, parentView: hostView)
 			}
 		}
+		
+		componentDidUpdate()
 	}
-	
-	// MARK: Lifecycle
 	
 	/// Called when the component will be realized.
 	public func componentWillRealize() {}
 	
 	/// Called when the component has been realized.
-	public func componentDidRealize() {
-		didRealize?(self)
-	}
+	public func componentDidRealize() {}
 	
 	/// Called when the component is about to be derealized.
-	public func componentWillDerealize() {
-		willDerealize?(self)
-	}
+	public func componentWillDerealize() {}
 	
-	/// Called when the has been derealized.
+	/// Called when the component has been derealized.
 	public func componentDidDerealize() {}
+	
+	/// Called after the component has been updated and diff applied.
+	public func componentDidUpdate() {}
 	
 	/// Called when the state has changed but before the component is 
 	/// re-rendered. This gives the component the chance to decide whether it 
@@ -102,6 +92,18 @@ public class Component<S>: Element {
 		hostView = nil
 		
 		componentDidDerealize()
+	}
+	
+	/// Update the state using the given function.
+	public func updateState(fn: S -> S) -> S {
+		let oldState = state
+		state = fn(state)
+		
+		if shouldUpdate(oldState, newState: state) {
+			update()
+		}
+		
+		return state
 	}
 	
 	// MARK: Element
