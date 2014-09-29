@@ -57,6 +57,8 @@ public class Input<S>: Element {
 			textField!.stringValue = text
 		}
 
+//		inputDelegate.action = otherInput.inputDelegate.action
+
 		super.applyDiff(other)
 	}
 	

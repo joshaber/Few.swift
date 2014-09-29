@@ -43,6 +43,8 @@ public class Button<S>: Element {
 			b.title = title
 		}
 
+//		trampoline.action = otherButton.trampoline.action
+
 		super.applyDiff(other)
 	}
 
