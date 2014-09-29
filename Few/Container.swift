@@ -23,22 +23,42 @@ public class Container: Element {
 	public override func applyDiff(other: Element) {
 		let otherContainer = other as Container
 		var newChildren = Array<Element>()
-		for (myChild, theirChild) in Zip2(children, otherContainer.children) {
-			if myChild.canDiff(theirChild) {
-				myChild.applyDiff(theirChild)
-				newChildren.append(myChild)
-			} else {
-				myChild.derealize()
+		let myChildCount = children.count
+		let theirChildCount = otherContainer.children.count
+		for i in 0..<max(myChildCount, theirChildCount) {
+			var myChild: Element?
+			if i < myChildCount {
+				myChild = children[i]
+			}
 
+			var theirChild: Element?
+			if i < theirChildCount {
+				theirChild = otherContainer.children[i]
+			}
+
+			if myChild != nil && theirChild != nil {
+				if myChild!.canDiff(theirChild!) {
+					myChild!.applyDiff(theirChild!)
+					newChildren.append(myChild!)
+				} else {
+					myChild!.derealize()
+
+					let component: Component<Any>? = getComponent()
+					curry(theirChild!.realize) <^> component <*> containerView
+					newChildren.append(theirChild!)
+				}
+			} else if let myChild = myChild {
+				myChild.derealize()
+			} else if let theirChild = theirChild {
 				let component: Component<Any>? = getComponent()
 				curry(theirChild.realize) <^> component <*> containerView
 				newChildren.append(theirChild)
 			}
+
+			children = newChildren
+
+			super.applyDiff(other)
 		}
-		
-		children = newChildren
-		
-		super.applyDiff(other)
 	}
 
 	public override func realize<S>(component: Component<S>, parentView: NSView) {
