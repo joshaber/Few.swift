@@ -96,8 +96,10 @@ public class Component<S>: Element {
 	
 	/// Update the state using the given function.
 	public func updateState(fn: S -> S) -> S {
+		precondition(NSThread.isMainThread(), "Component.updateState called on a background thread. Donut do that!")
+
 		let oldState = state
-		state = fn(state)
+		state = fn(oldState)
 		
 		if shouldUpdate(oldState, newState: state) {
 			update()
