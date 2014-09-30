@@ -149,11 +149,11 @@
 			isa = PBXGroup;
 			children = (
 				8897687619AED88000DD079B /* Few.h */,
-				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
-				8897688C19AED8AF00DD079B /* Container.swift */,
 				8897688D19AED8AF00DD079B /* Element.swift */,
+				8897688C19AED8AF00DD079B /* Container.swift */,
 				8897688F19AED8AF00DD079B /* Graphic.swift */,
+				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
 				8897689219AED8AF00DD079B /* Siblings.swift */,
