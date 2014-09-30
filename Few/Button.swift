@@ -36,13 +36,10 @@ public class Button<S>: Element {
 	// MARK: Element
 
 	public override func applyDiff(other: Element) {
-		if button == nil { return }
-
 		let otherButton = other as Button
-		let b = button!
 		if title != otherButton.title {
 			title = otherButton.title
-			b.title = title
+			button?.title = title
 		}
 
 		action = otherButton.action

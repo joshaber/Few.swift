@@ -21,12 +21,10 @@ public class Label: Element {
 	// MARK: Element
 
 	public override func applyDiff(other: Element) {
-		if textField == nil { return }
-
 		let otherLabel = other as Label
 		if text != otherLabel.text {
 			text = otherLabel.text
-			textField!.stringValue = text
+			textField?.stringValue = text
 		}
 
 		super.applyDiff(other)
