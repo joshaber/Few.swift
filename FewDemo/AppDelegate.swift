@@ -24,7 +24,7 @@ func renderBackground(tick: Float) -> Element {
 	let fn = { (str: String, s: Float) -> Float in
 		return s
 	}
-	let input = Input(initialText: "Hi?", fn: fn) |> frame(CGRect(x: 200, y: 300, width: 100, height: 23))
+	let input = Input(initialText: "Hello? Is it me you're looking for?", fn: fn) |> frame(CGRect(x: 200, y: 300, width: 100, height: 23))
 
 	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
 	let background = fillRect(color) |> frame(fullFrame)
