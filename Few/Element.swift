@@ -21,7 +21,9 @@ public func frame(rect: CGRect)(element: Element) -> Element {
 public class Element {
 	public var frame = CGRectZero
 
-	/// The key used to uniquely identify the element among its siblings.
+	/// The key used to uniquely identify the element among its siblings. Note
+	/// that if this is provided it *must* be unique to its siblings. Otherwise
+	/// unexpected wackiness could occur.
 	//
 	// TODO: This doesn't *really* need to be a string. Just hashable and 
 	// equatable.
