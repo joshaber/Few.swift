@@ -12,7 +12,7 @@ import AppKit
 private class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (() -> ())?
 
-	override func controlTextDidChange(notification: NSNotification!) {
+	override func controlTextDidChange(notification: NSNotification) {
 		action?();
 	}
 }

@@ -111,7 +111,7 @@ extension Element {
 			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
 
 			var image = NSImage(size: imageRep!.size)
-			image.addRepresentation(imageRep)
+			image.addRepresentation(imageRep!)
 
 			previewImage = image
 		}
