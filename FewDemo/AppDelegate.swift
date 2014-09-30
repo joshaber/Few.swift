@@ -15,8 +15,24 @@ func renderBackground(tick: Float) -> Element {
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
 	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
 	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	let b = View(type: NSButton.self) { b in b.title = "HELLO YES THIS IS DOG" } |> frame(CGRect(x: 0, y: 0, width: 160, height: 23))
-	return (fillRect(color) |> frame(CGRect(x: 0, y: 0, width: 1000, height: 1000))) + b
+	let button1 = View(type: NSButton.self) { b in b.title = "HELLO YES THIS IS DOG" }
+			|> frame(CGRect(x: 0, y: 0, width: 160, height: 23))
+
+	let button2 = Button(title: "Hello yes this is dog.", fn: const(0))
+		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
+
+	let fn = { (str: String, s: Float) -> Float in
+		return s
+	}
+	let input = Input(initialText: "Hi?", fn: fn) |> frame(CGRect(x: 200, y: 300, width: 100, height: 23))
+
+	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
+	let background = fillRect(color) |> frame(fullFrame)
+	return Container(background,
+		             button1,
+		             button2,
+		             input)
+			|> frame(fullFrame)
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
