@@ -18,8 +18,8 @@ public class Container: Element {
 		self.children = children
 	}
 
-	public convenience init(_ child: Element...) {
-		self.init(child)
+	public convenience init(_ children: Element...) {
+		self.init(children)
 	}
 	
 	// MARK: Element
