@@ -20,13 +20,14 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 public class Input<S>: Element {
 	private var textField: NSTextField?
 	
-	private var text: String
+	private var text: String?
+	private var initialText: String?
 	private var action: (String, Component<S>) -> ()
 	
 	private let inputDelegate = InputDelegate()
 
-	public convenience init(text: String, fn: (String, S) -> S) {
-		self.init(text: text, action: { str, component in
+	public convenience init(text: String?, fn: (String, S) -> S) {
+		self.init(text: text, initialText: nil, action: { str, component in
 			component.updateState { state in
 				fn(str, state)
 			}
@@ -34,13 +35,24 @@ public class Input<S>: Element {
 		})
 	}
 
-	public init(text: String, action: (String, Component<S>) -> ()) {
+	public convenience init(initialText: String?, fn: (String, S) -> S) {
+		self.init(text: nil, initialText: initialText, action: { str, component in
+			component.updateState { state in
+				fn(str, state)
+			}
+			return ()
+		})
+	}
+
+	public init(text: String?, initialText: String?, action: (String, Component<S>) -> ()) {
 		self.text = text
+		self.initialText = initialText
 		self.action = action
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] in
-			self.text = self.textField!.stringValue
+			let stringValue = self.textField!.stringValue
+			self.text = stringValue
 			let component: Component<S>? = self.getComponent()
 			if component != nil {
 				self.action(stringValue, component!)
@@ -51,14 +63,17 @@ public class Input<S>: Element {
 	// MARK: Element
 	
 	public override func applyDiff(other: Element) {
-		if textField == nil { return }
-		
 		let otherInput = other as Input
-		if text != otherInput.text {
-			text = otherInput.text
-			textField!.stringValue = text
+		if let text = text {
+			if let otherText = otherInput.text {
+				if text != otherText {
+					self.text = otherText
+					textField?.stringValue = otherText
+				}
+			}
 		}
 
+		initialText = otherInput.initialText
 		action = otherInput.action
 
 		super.applyDiff(other)
@@ -67,7 +82,7 @@ public class Input<S>: Element {
 	public override func realize(component: Component<S>, parentView: NSView) {
 		let field = NSTextField(frame: frame)
 		field.editable = true
-		field.stringValue = text
+		field.stringValue = text ?? initialText ?? ""
 		field.delegate = inputDelegate
 		textField = field
 		
