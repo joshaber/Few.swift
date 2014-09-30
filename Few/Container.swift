@@ -17,6 +17,10 @@ public class Container: Element {
 	public init(_ children: [Element]) {
 		self.children = children
 	}
+
+	public convenience init(_ child: Element...) {
+		self.init(child)
+	}
 	
 	// MARK: Element
 
