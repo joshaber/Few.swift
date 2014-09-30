@@ -9,37 +9,29 @@
 import Foundation
 import AppKit
 
-public let DefaultFrame = CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1))
-
 public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
+public func frame(rect: CGRect)(element: Element) -> Element {
+	element.frame = rect
+	return element
+}
+
 public class Element {
-	internal var modelFrame = CGRectZero
-	public var frame: CGRect {
-		get {
-			return getContentView()?.frame ?? modelFrame
-		}
+	public var frame = CGRectZero
 
-		set {
-			modelFrame = newValue
+	/// The key used to uniquely identify the element among its siblings. Note
+	/// that if this is provided it *must* be unique to its siblings. Otherwise
+	/// unexpected wackiness could occur.
+	//
+	// TODO: This doesn't *really* need to be a string. Just hashable and 
+	// equatable.
+	public var key: String?
 
-			if let view = getContentView() {
-				view.frame = newValue
-			}
-		}
-	}
-	
 	private weak var component: Component<Any>?
-
-	public var layout: CGRect -> CGRect = const(CGRectZero)
 	
 	public init() {}
-	
-	public func applyLayout(fn: Element -> CGRect) {
-		frame = fn(self)
-	}
 
 	/// Can the receiver and the other element be diffed?
 	///
@@ -56,7 +48,13 @@ public class Element {
 	/// This will only be called if `canDiff` returns `true`. Implementations 
 	/// should call super.
 	public func applyDiff(other: Element) {
+		if frame != other.frame {
+			frame = other.frame
+		}
 		
+		if let view = getContentView() {
+			view.frame = frame
+		}
 	}
 
 	/// Realize the element in the given component and parent view.
@@ -98,17 +96,6 @@ public class Element {
 	public func getContentView() -> NSView? {
 		return nil
 	}
-	
-	/// Get the intrinsic size for the element. The default implementation 
-	/// returns the content view's intrinsic content size if the content view 
-	/// exists.
-	public func getIntrinsicSize() -> CGSize {
-		if let contentView = getContentView() {
-			return contentView.intrinsicContentSize
-		}
-
-		return CGSizeZero
-	}
 }
 
 extension Element {
@@ -126,7 +113,7 @@ extension Element {
 			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
 
 			var image = NSImage(size: imageRep!.size)
-			image.addRepresentation(imageRep)
+			image.addRepresentation(imageRep!)
 
 			previewImage = image
 		}

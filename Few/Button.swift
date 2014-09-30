@@ -11,6 +11,7 @@ import AppKit
 
 public class Button<S>: Element {
 	private var title: String
+	private var action: Component<S> -> ()
 
 	private var button: NSButton?
 
@@ -18,32 +19,30 @@ public class Button<S>: Element {
 
 	public convenience init(title: String, fn: S -> S) {
 		self.init(title: title, action: { component in
-			component.state = fn(component.state)
+			void(component.updateState(fn))
 		})
 	}
 
 	public init(title: String, action: Component<S> -> ()) {
 		self.title = title
+		self.action = action
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			void(action <^> self.getComponent())
+			void(self.action <^> self.getComponent())
 		}
 	}
 
 	// MARK: Element
 
 	public override func applyDiff(other: Element) {
-		if button == nil { return }
-
 		let otherButton = other as Button
-		let b = button!
 		if title != otherButton.title {
 			title = otherButton.title
-			b.title = title
+			button?.title = title
 		}
 
-		frame = CGRectZero
+		action = otherButton.action
 
 		super.applyDiff(other)
 	}
@@ -61,9 +60,5 @@ public class Button<S>: Element {
 
 	public override func getContentView() -> NSView? {
 		return button
-	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		return button?.intrinsicContentSize ?? CGSizeZero
 	}
 }

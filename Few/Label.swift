@@ -21,15 +21,11 @@ public class Label: Element {
 	// MARK: Element
 
 	public override func applyDiff(other: Element) {
-		if textField == nil { return }
-
 		let otherLabel = other as Label
 		if text != otherLabel.text {
 			text = otherLabel.text
-			textField!.stringValue = text
+			textField?.stringValue = text
 		}
-
-		frame = CGRectZero
 
 		super.applyDiff(other)
 	}
@@ -47,16 +43,5 @@ public class Label: Element {
 
 	public override func getContentView() -> NSView? {
 		return textField
-	}
-	
-	public override func getIntrinsicSize() -> CGSize {
-		var size = CGSizeZero
-		if let textField = textField {
-			let originalFrame = textField.frame
-			textField.sizeToFit()
-			size = textField.bounds.size
-			textField.frame = originalFrame
-		}
-		return size
 	}
 }

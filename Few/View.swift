@@ -2,20 +2,22 @@
 //  View.swift
 //  Few
 //
-//  Created by Josh Abernathy on 8/27/14.
+//  Created by Josh Abernathy on 9/16/14.
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
 //
 
 import Foundation
 import AppKit
 
-/// An Element which acts as a dumb container for a view. It doesn't do any 
-/// diffing.
-public class View<V: NSView>: Element {
-	public let view: V
+public class View<T: NSView>: Element {
+	private let type: T.Type
+
+	private var config: T -> ()
+	private var view: T?
 	
-	public init(_ view: V) {
-		self.view = view
+	public init(type: T.Type, config: T -> ()) {
+		self.type = type
+		self.config = config
 	}
 	
 	// MARK: Element
@@ -24,19 +26,34 @@ public class View<V: NSView>: Element {
 		if !super.canDiff(other) { return false }
 		
 		let otherView = other as View
-		return view === otherView.view
+		return type === otherView.type
 	}
 	
+	// `component` should be Component<S>, but if we do then Xcode think it's 
+	// not overriding `realize`, so.
+	public override func realize<S>(component: Element, parentView: NSView) {
+		let view = type()
+		config(view)
+		
+		self.view = view
+
+		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
+		let castComponent: Component<S> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
+		super.realize(castComponent, parentView: parentView)
+	}
+
 	public override func applyDiff(other: Element) {
-		// Nope. We're just wrapping a view.
+		let otherView = other as View
+		config = otherView.config
+		if let view = view {
+			config(view)
+		}
+		
+		super.applyDiff(other)
 	}
-	
-	/// Get the content view which represents the element.
+
 	public override func getContentView() -> NSView? {
 		return view
 	}
 	
-	public override func getIntrinsicSize() -> CGSize {
-		return view.intrinsicContentSize
-	}
 }
