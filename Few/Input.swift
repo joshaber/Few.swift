@@ -21,6 +21,7 @@ public class Input<S>: Element {
 	private var textField: NSTextField?
 	
 	private var text: String
+	private var action: (String, Component<S>) -> ()
 	
 	private let inputDelegate = InputDelegate()
 
@@ -35,13 +36,14 @@ public class Input<S>: Element {
 
 	public init(text: String, action: (String, Component<S>) -> ()) {
 		self.text = text
+		self.action = action
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] in
 			self.text = self.textField!.stringValue
 			let component: Component<S>? = self.getComponent()
 			if component != nil {
-				action(self.text, component!)
+				self.action(stringValue, component!)
 			}
 		}
 	}
@@ -57,7 +59,7 @@ public class Input<S>: Element {
 			textField!.stringValue = text
 		}
 
-//		inputDelegate.action = otherInput.inputDelegate.action
+		action = otherInput.action
 
 		super.applyDiff(other)
 	}

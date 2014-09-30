@@ -11,6 +11,7 @@ import AppKit
 
 public class Button<S>: Element {
 	private var title: String
+	private var action: Component<S> -> ()
 
 	private var button: NSButton?
 
@@ -24,10 +25,11 @@ public class Button<S>: Element {
 
 	public init(title: String, action: Component<S> -> ()) {
 		self.title = title
+		self.action = action
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			void(action <^> self.getComponent())
+			void(self.action <^> self.getComponent())
 		}
 	}
 
@@ -43,7 +45,7 @@ public class Button<S>: Element {
 			b.title = title
 		}
 
-//		trampoline.action = otherButton.trampoline.action
+		action = otherButton.action
 
 		super.applyDiff(other)
 	}
