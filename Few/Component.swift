@@ -15,14 +15,14 @@ public class Component<S>: Element {
 
 	private let render: S -> Element
 
-	private var topElement: Element
+	private var rootElement: Element
 
 	private var hostView: NSView?
 
 	public init(render: S -> Element, initialState: S) {
 		self.render = render
 		self.state = initialState
-		self.topElement = render(initialState)
+		self.rootElement = render(initialState)
 	}
 	
 	// MARK: Lifecycle
@@ -32,14 +32,14 @@ public class Component<S>: Element {
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
 		// hierarchy.
-		if topElement.canDiff(otherElement) {
-			topElement.applyDiff(otherElement)
+		if rootElement.canDiff(otherElement) {
+			rootElement.applyDiff(otherElement)
 		} else {
-			topElement.derealize()
-			topElement = otherElement
+			rootElement.derealize()
+			rootElement = otherElement
 
 			if let hostView = hostView {
-				topElement.realize(self, parentView: hostView)
+				rootElement.realize(self, parentView: hostView)
 			}
 		}
 		
@@ -79,7 +79,7 @@ public class Component<S>: Element {
 		componentWillRealize()
 		
 		hostView = view
-		topElement.realize(self, parentView: view)
+		rootElement.realize(self, parentView: view)
 		
 		componentDidRealize()
 	}
@@ -88,7 +88,7 @@ public class Component<S>: Element {
 	public func remove() {
 		componentWillDerealize()
 		
-		topElement.derealize()
+		rootElement.derealize()
 		hostView = nil
 		
 		componentDidDerealize()
@@ -131,6 +131,6 @@ public class Component<S>: Element {
 	}
 	
 	public override func getContentView() -> NSView? {
-		return topElement.getContentView()
+		return rootElement.getContentView()
 	}
 }
