@@ -53,7 +53,9 @@ public class Element {
 		}
 		
 		if let view = getContentView() {
-			view.frame = frame
+			if view.frame != frame {
+				view.frame = frame
+			}
 		}
 	}
 
