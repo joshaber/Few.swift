@@ -94,6 +94,8 @@ public class Graphic: Element {
 		let otherGraphic = other as Graphic
 		draw = otherGraphic.draw
 		view?.needsDisplay = true
+
+		super.applyDiff(other)
 	}
 
 	public override func realize<S>(component: Component<S>, parentView: NSView) {
