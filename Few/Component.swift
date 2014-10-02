@@ -28,20 +28,21 @@ public class Component<S>: Element {
 	// MARK: Lifecycle
 	
 	private func update() {
-		let otherElement = render(state)
+		let newRoot = render(state)
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
 		// hierarchy.
-		if rootElement.canDiff(otherElement) {
-			rootElement.applyDiff(otherElement)
+		if newRoot.canDiff(rootElement) {
+			newRoot.applyDiff(rootElement)
 		} else {
 			rootElement.derealize()
-			rootElement = otherElement
 
 			if let hostView = hostView {
-				rootElement.realize(self, parentView: hostView)
+				newRoot.realize(self, parentView: hostView)
 			}
 		}
+
+		rootElement = newRoot
 		
 		componentDidUpdate()
 	}
@@ -114,12 +115,12 @@ public class Component<S>: Element {
 		if !super.canDiff(other) { return false }
 		
 		let otherComponent = other as Component
-		return self === otherComponent
+		return rootElement.canDiff(otherComponent.rootElement)
 	}
 	
 	public override func applyDiff(other: Element) {
-		// This is pretty meaningless since we check for pointer equality in
-		// canDiff.
+		let otherComponent = other as Component
+		rootElement.applyDiff(otherComponent.rootElement)
 	}
 	
 	public override func realize(parent: Element, parentView: NSView) {

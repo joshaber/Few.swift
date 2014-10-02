@@ -21,13 +21,13 @@ public class Container: Element {
 	public convenience init(_ children: Element...) {
 		self.init(children)
 	}
-	
+
 	// MARK: Element
 
 	public override func applyDiff(other: Element) {
-		var newChildren = [Element]()
-
 		let otherContainer = other as Container
+		containerView = otherContainer.containerView
+
 		let otherChildren = otherContainer.children
 
 		let myChildrenByKey = childrenByKey(children)
@@ -37,6 +37,8 @@ public class Container: Element {
 
 		var childQueue = otherChildren
 
+		// We want to reuse children as much as possible. First we check for
+		// matches by key, and then simply by order.
 		for child in children {
 			var match: Element?
 			// First try to find a match based on the key.
@@ -63,29 +65,26 @@ public class Container: Element {
 			if let match = match {
 				if child.canDiff(match) {
 					child.applyDiff(match)
-					newChildren.append(child)
 				} else {
-					child.derealize()
+					match.derealize()
 
 					let component: Component<Any>? = getComponent()
-					curry(match.realize) <^> component <*> containerView
-					newChildren.append(match)
+					curry(child.realize) <^> component <*> containerView
 				}
 			} else {
-				// If we didn't find a match and ran out of new children, then 
-				// it must not exist anymore.
-				child.derealize()
+				// If we didn't find anything we could reuse, then we need to
+				// realize the new child.
+				let component: Component<Any>? = getComponent()
+				curry(child.realize) <^> component <*> containerView
 			}
 		}
 
-		// Anything left over at this point must be new.
+		// Anything left over at this point must be old.
 		for child in childQueue {
-			let component: Component<Any>? = getComponent()
-			curry(child.realize) <^> component <*> containerView
-			newChildren.append(child)
+			child.derealize()
 		}
 
-		children = newChildren
+		super.applyDiff(other)
 	}
 
 	private func childrenByKey(children: [Element]) -> [String: Element] {

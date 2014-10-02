@@ -9,13 +9,13 @@
 import Foundation
 import AppKit
 
-let LOG_DIFF = true
+let LOG_DIFF = false
 
 public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
 
-public func frame(rect: CGRect)(element: Element) -> Element {
+public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	element.frame = rect
 	return element
 }
@@ -44,21 +44,19 @@ public class Element {
 		return other.dynamicType === self.dynamicType
 	}
 
-	/// Apply the diff. The receiver should take on any differences between it
-	/// and `other`.
+	/// Apply the diff. The receiver is the latest version and the argument is
+	/// the previous version.
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations 
 	/// should call super.
-	public func applyDiff(other: Element) {
-		if frame != other.frame {
-			frame = other.frame
-		}
-		
+	public func applyDiff(other: Element) {		
 		if let view = getContentView() {
 			if view.frame != frame {
 				view.frame = frame
 			}
 		}
+
+		component = other.component
 
 		if LOG_DIFF {
 			println("** Diffing \(reflect(self).summary)")

@@ -64,17 +64,16 @@ public class Input<S>: Element {
 	
 	public override func applyDiff(other: Element) {
 		let otherInput = other as Input
+		textField = otherInput.textField
+		textField?.delegate = inputDelegate
+
 		if let text = text {
 			if let otherText = otherInput.text {
 				if text != otherText {
-					self.text = otherText
-					textField?.stringValue = otherText
+					textField?.stringValue = text
 				}
 			}
 		}
-
-		initialText = otherInput.initialText
-		action = otherInput.action
 
 		super.applyDiff(other)
 	}
