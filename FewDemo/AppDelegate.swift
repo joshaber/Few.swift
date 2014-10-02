@@ -18,13 +18,16 @@ func renderBackground(tick: Float) -> Container {
 	let button1 = View(type: NSButton.self) { b in b.title = "HELLO YES THIS IS DOG" }
 			|> frame(CGRect(x: 0, y: 0, width: 160, height: 23))
 
-	let button2 = Button(title: "Hello yes this is dog.", fn: const(0))
-		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
-
 	let fn = { (str: String, s: Float) -> Float in
 		return s
 	}
 	let input = Input(initialText: "Hello? Is it me you're looking for?", fn: fn) |> frame(CGRect(x: 50, y: 300, width: 300, height: 23))
+
+	let button2 = Button<Float>(title: "Hello yes this is dog.", fn: { s in
+		println("\(input.text)")
+		return 0
+	})
+		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
 
 	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
 	let background = fillRect(color) |> frame(fullFrame)
