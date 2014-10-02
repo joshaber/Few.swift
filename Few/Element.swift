@@ -47,7 +47,10 @@ public class Element {
 	/// Apply the diff. The receiver is the latest version and the argument is
 	/// the previous version.
 	///
-	/// This will only be called if `canDiff` returns `true`. Implementations 
+	/// That usually means copying over anything UI-specific from the old 
+	/// version to the new version.
+	///
+	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
 	public func applyDiff(other: Element) {		
 		if let view = getContentView() {
