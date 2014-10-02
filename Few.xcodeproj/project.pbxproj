@@ -154,9 +154,9 @@
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
+				8891531719C8D4B90026A817 /* View.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
-				8891531719C8D4B90026A817 /* View.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
 			path = Few;

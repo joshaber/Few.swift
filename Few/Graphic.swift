@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 private class DrawableView: NSView {
-	private let draw: CGRect -> ()
+	private var draw: CGRect -> ()
 
 	init(frame: NSRect, draw: CGRect -> ()) {
 		self.draw = draw
@@ -92,8 +92,12 @@ public class Graphic: Element {
 
 	public override func applyDiff(other: Element) {
 		let otherGraphic = other as Graphic
-		draw = otherGraphic.draw
+		view = otherGraphic.view
+
+		view?.draw = draw
 		view?.needsDisplay = true
+
+		super.applyDiff(other)
 	}
 
 	public override func realize<S>(component: Component<S>, parentView: NSView) {

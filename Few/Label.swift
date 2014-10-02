@@ -22,8 +22,9 @@ public class Label: Element {
 
 	public override func applyDiff(other: Element) {
 		let otherLabel = other as Label
+		textField = otherLabel.textField
+
 		if text != otherLabel.text {
-			text = otherLabel.text
 			textField?.stringValue = text
 		}
 

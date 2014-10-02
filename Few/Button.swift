@@ -37,12 +37,13 @@ public class Button<S>: Element {
 
 	public override func applyDiff(other: Element) {
 		let otherButton = other as Button
+		button = otherButton.button
+
 		if title != otherButton.title {
-			title = otherButton.title
 			button?.title = title
 		}
 
-		action = otherButton.action
+		button?.target = trampoline
 
 		super.applyDiff(other)
 	}

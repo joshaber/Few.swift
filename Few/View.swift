@@ -28,6 +28,17 @@ public class View<T: NSView>: Element {
 		let otherView = other as View
 		return type === otherView.type
 	}
+
+	public override func applyDiff(other: Element) {
+		let otherView = other as View
+		view = otherView.view
+
+		if let view = view {
+			config(view)
+		}
+
+		super.applyDiff(other)
+	}
 	
 	// `component` should be Component<S>, but if we do then Xcode think it's 
 	// not overriding `realize`, so.
@@ -40,16 +51,6 @@ public class View<T: NSView>: Element {
 		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
 		let castComponent: Component<S> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
 		super.realize(castComponent, parentView: parentView)
-	}
-
-	public override func applyDiff(other: Element) {
-		let otherView = other as View
-		config = otherView.config
-		if let view = view {
-			config(view)
-		}
-		
-		super.applyDiff(other)
 	}
 
 	public override func getContentView() -> NSView? {

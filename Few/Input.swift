@@ -20,7 +20,7 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 public class Input<S>: Element {
 	private var textField: NSTextField?
 	
-	private var text: String?
+	public var text: String?
 	private var initialText: String?
 	private var action: (String, Component<S>) -> ()
 	
@@ -64,17 +64,18 @@ public class Input<S>: Element {
 	
 	public override func applyDiff(other: Element) {
 		let otherInput = other as Input
+		textField = otherInput.textField
+		textField?.delegate = inputDelegate
+
 		if let text = text {
 			if let otherText = otherInput.text {
 				if text != otherText {
-					self.text = otherText
-					textField?.stringValue = otherText
+					textField?.stringValue = text
 				}
 			}
+		} else {
+			text = otherInput.text
 		}
-
-		initialText = otherInput.initialText
-		action = otherInput.action
 
 		super.applyDiff(other)
 	}
