@@ -20,7 +20,7 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 public class Input<S>: Element {
 	private var textField: NSTextField?
 	
-	private var text: String?
+	public var text: String?
 	private var initialText: String?
 	private var action: (String, Component<S>) -> ()
 	
@@ -73,6 +73,8 @@ public class Input<S>: Element {
 					textField?.stringValue = text
 				}
 			}
+		} else {
+			text = otherInput.text
 		}
 
 		super.applyDiff(other)
