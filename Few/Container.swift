@@ -122,11 +122,3 @@ public class Container: Element {
 		return containerView
 	}
 }
-
-// This doesn't work because Swift gets confused about Few's Element and 
-// ArrayLiteralConvertible's Element.
-//extension Container: ArrayLiteralConvertible {
-//	public class func convertFromArrayLiteral(elements: Element...) -> Self {
-//		return Container(elements)
-//	}
-//}
