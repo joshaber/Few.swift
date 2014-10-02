@@ -9,6 +9,8 @@
 import Foundation
 import AppKit
 
+let LOG_DIFF = true
+
 public func empty() -> Element {
 	return fillRect(NSColor.clearColor())
 }
@@ -56,6 +58,10 @@ public class Element {
 			if view.frame != frame {
 				view.frame = frame
 			}
+		}
+
+		if LOG_DIFF {
+			println("** Diffing \(reflect(self).summary)")
 		}
 	}
 
