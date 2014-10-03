@@ -12,6 +12,10 @@ import AppKit
 /// Components are stateful elements and the bridge between Few and 
 /// AppKit/UIKit.
 ///
+/// Simple components can be created without subclassing. More complex
+/// components will need to subclass it in order to add lifecycle events or 
+/// customize its behavior further.
+///
 /// By default whenever the component's state is changed, it re-renders itself 
 /// by calling the `render` function passed in to its init. But subclasses can
 /// optimize this by implementing `componentShouldUpdate`.
