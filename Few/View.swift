@@ -33,9 +33,7 @@ public class View<T: NSView>: Element {
 		let otherView = other as View
 		view = otherView.view
 
-		if let view = view {
-			config(view)
-		}
+		config <^> view
 
 		super.applyDiff(other)
 	}
