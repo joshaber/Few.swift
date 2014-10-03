@@ -11,9 +11,6 @@ import AppKit
 
 let LOG_DIFF = false
 
-public func empty() -> Element {
-	return fillRect(NSColor.clearColor())
-}
 
 public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	element.frame = rect
