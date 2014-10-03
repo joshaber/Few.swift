@@ -31,7 +31,7 @@ public class Label: Element {
 		super.applyDiff(other)
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: NSView) {
+	public override func realize<S>(component: Component<S>, parentView: ViewType) {
 		let field = NSTextField(frame: frame)
 		field.editable = false
 		field.drawsBackground = false
@@ -42,7 +42,7 @@ public class Label: Element {
 		super.realize(component, parentView: parentView)
 	}
 
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return textField
 	}
 }

@@ -9,7 +9,8 @@
 import Foundation
 import AppKit
 
-public class View<T: NSView>: Element {
+/// A Element-wrapped view.
+public class View<T: ViewType>: Element {
 	private let type: T.Type
 
 	private var config: T -> ()
@@ -40,7 +41,7 @@ public class View<T: NSView>: Element {
 	
 	// `component` should be Component<S>, but if we do then Xcode think it's 
 	// not overriding `realize`, so.
-	public override func realize<S>(component: Element, parentView: NSView) {
+	public override func realize<S>(component: Element, parentView: ViewType) {
 		let view = type()
 		config(view)
 		
@@ -51,7 +52,7 @@ public class View<T: NSView>: Element {
 		super.realize(castComponent, parentView: parentView)
 	}
 
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return view
 	}
 	

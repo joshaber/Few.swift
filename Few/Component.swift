@@ -17,7 +17,7 @@ public class Component<S>: Element {
 
 	private var rootElement: Element
 
-	private var hostView: NSView?
+	private var hostView: ViewType?
 
 	public init(render: S -> Element, initialState: S) {
 		self.render = render
@@ -74,7 +74,7 @@ public class Component<S>: Element {
 	// MARK: -
 
 	/// Add the component to the given view.
-	public func addToView(view: NSView) {
+	public func addToView(view: ViewType) {
 		assert(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 		
 		componentWillRealize()
@@ -127,7 +127,7 @@ public class Component<S>: Element {
 		rootElement.applyDiff(otherComponent.rootElement)
 	}
 	
-	public override func realize(parent: Element, parentView: NSView) {
+	public override func realize(parent: Element, parentView: ViewType) {
 		addToView(parentView)
 	}
 	
@@ -135,7 +135,7 @@ public class Component<S>: Element {
 		getContentView()?.removeFromSuperview()
 	}
 	
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return rootElement.getContentView()
 	}
 }

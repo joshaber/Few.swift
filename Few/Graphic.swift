@@ -100,7 +100,7 @@ public class Graphic: Element {
 		super.applyDiff(other)
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: NSView) {
+	public override func realize<S>(component: Component<S>, parentView: ViewType) {
 		view = DrawableView(frame: frame, draw: callDrawFunc)
 
 		super.realize(component, parentView: parentView)
@@ -110,7 +110,7 @@ public class Graphic: Element {
 		draw(rect)
 	}
 
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return view
 	}
 }

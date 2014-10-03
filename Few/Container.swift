@@ -12,7 +12,7 @@ import AppKit
 public class Container: Element {
 	private var children: [Element]
 
-	private var containerView: NSView?
+	private var containerView: ViewType?
 	
 	public init(_ children: [Element]) {
 		self.children = children
@@ -92,8 +92,8 @@ public class Container: Element {
 		return childrenByKey
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: NSView) {
-		let view = NSView(frame: frame)
+	public override func realize<S>(component: Component<S>, parentView: ViewType) {
+		let view = ViewType(frame: frame)
 		containerView = view
 		
 		for element in children {
@@ -111,7 +111,7 @@ public class Container: Element {
 		super.derealize()
 	}
 	
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return containerView
 	}
 }

@@ -48,7 +48,7 @@ public class Button<S>: Element {
 		super.applyDiff(other)
 	}
 
-	public override func realize(component: Component<S>, parentView: NSView) {
+	public override func realize(component: Component<S>, parentView: ViewType) {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
@@ -59,7 +59,7 @@ public class Button<S>: Element {
 		super.realize(component, parentView: parentView)
 	}
 
-	public override func getContentView() -> NSView? {
+	public override func getContentView() -> ViewType? {
 		return button
 	}
 }

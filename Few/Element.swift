@@ -9,8 +9,9 @@
 import Foundation
 import AppKit
 
-let LOG_DIFF = false
+public typealias ViewType = NSView
 
+public let LOG_DIFF = false
 
 public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	element.frame = rect
@@ -66,7 +67,7 @@ public class Element {
 	/// Realize the element in the given component and parent view.
 	///
 	/// The default implementation adds the content view to `parentView`.
-	public func realize<S>(component: Component<S>, parentView: NSView) {
+	public func realize<S>(component: Component<S>, parentView: ViewType) {
 		self.component = getComponent(component)
 
 		parentView.addSubview <^> getContentView()
@@ -99,7 +100,7 @@ public class Element {
 	}
 
 	/// Get the content view which represents the element.
-	public func getContentView() -> NSView? {
+	public func getContentView() -> ViewType? {
 		return nil
 	}
 }
