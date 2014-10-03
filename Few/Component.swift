@@ -119,6 +119,8 @@ public class Component<S>: Element {
 	}
 	
 	public override func applyDiff(other: Element) {
+		if other === self { return }
+
 		let otherComponent = other as Component
 		rootElement.applyDiff(otherComponent.rootElement)
 	}
