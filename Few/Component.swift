@@ -122,6 +122,8 @@ public class Component<S>: Element {
 		if other === self { return }
 
 		let otherComponent = other as Component
+		hostView = otherComponent.hostView
+
 		rootElement.applyDiff(otherComponent.rootElement)
 	}
 	
