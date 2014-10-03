@@ -33,8 +33,6 @@ public class Container: Element {
 		let myChildrenByKey = childrenByKey(children)
 		let theirChildrenByKey = childrenByKey(otherChildren)
 
-		var usedKeys = [String: Void]()
-
 		var childQueue = otherChildren
 
 		// We want to reuse children as much as possible. First we check for
@@ -44,7 +42,6 @@ public class Container: Element {
 			// First try to find a match based on the key.
 			if let key = child.key {
 				match = theirChildrenByKey[key]
-				usedKeys[key] = ()
 			}
 
 			// If that fails and we still have new children, use one of those.
@@ -52,12 +49,9 @@ public class Container: Element {
 				match = childQueue[0]
 				childQueue.removeAtIndex(0)
 
-				// We already used this child when doing key matching, so don't
-				// use it again.
+				// It has a key and we didn't already match it up.
 				if let key = match!.key {
-					if usedKeys[key] != nil {
-						match = nil
-					}
+					match = nil
 				}
 			}
 
