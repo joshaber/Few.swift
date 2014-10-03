@@ -35,6 +35,8 @@ public class Component<S>: Element {
 	public init(render: S -> Element, initialState: S) {
 		self.render = render
 		self.state = initialState
+
+		// TODO: Probably defer the initial render until we're realized?
 		self.rootElement = render(initialState)
 	}
 	
