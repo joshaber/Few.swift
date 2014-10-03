@@ -18,6 +18,12 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 }
 
 public class Input<S>: Element {
+	public var text: String? {
+		get {
+			return _text
+		}
+	}
+
 	private var textField: NSTextField?
 	
 	private var _text: String?
