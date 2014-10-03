@@ -11,7 +11,7 @@ import AppKit
 
 public typealias ViewType = NSView
 
-public let LOG_DIFF = false
+public var LogDiff = false
 
 public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	element.frame = rect
@@ -59,7 +59,7 @@ public class Element {
 
 		component = other.component
 
-		if LOG_DIFF {
+		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
 		}
 	}
