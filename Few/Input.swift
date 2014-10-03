@@ -20,7 +20,7 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 public class Input<S>: Element {
 	private var textField: NSTextField?
 	
-	public var text: String?
+	private var _text: String?
 	private var initialText: String?
 	private var action: (String, Component<S>) -> ()
 	
@@ -45,14 +45,14 @@ public class Input<S>: Element {
 	}
 
 	public init(text: String?, initialText: String?, action: (String, Component<S>) -> ()) {
-		self.text = text
+		self._text = text
 		self.initialText = initialText
 		self.action = action
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] in
 			let stringValue = self.textField!.stringValue
-			self.text = stringValue
+			self._text = stringValue
 			let component: Component<S>? = self.getComponent()
 			if component != nil {
 				self.action(stringValue, component!)
@@ -67,14 +67,14 @@ public class Input<S>: Element {
 		textField = otherInput.textField
 		textField?.delegate = inputDelegate
 
-		if let text = text {
-			if let otherText = otherInput.text {
+		if let text = _text {
+			if let otherText = otherInput._text {
 				if text != otherText {
 					textField?.stringValue = text
 				}
 			}
 		} else {
-			text = otherInput.text
+			_text = otherInput._text
 		}
 
 		super.applyDiff(other)
@@ -83,7 +83,7 @@ public class Input<S>: Element {
 	public override func realize(component: Component<S>, parentView: NSView) {
 		let field = NSTextField(frame: frame)
 		field.editable = true
-		field.stringValue = text ?? initialText ?? ""
+		field.stringValue = _text ?? initialText ?? ""
 		field.delegate = inputDelegate
 		textField = field
 		
