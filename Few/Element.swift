@@ -18,7 +18,10 @@ public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	return element
 }
 
+/// Elements are the basic building block. They represent a visual thing which 
+/// can be diffed with other elements.
 public class Element {
+	/// The frame of the element.
 	public var frame = CGRectZero
 
 	/// The key used to uniquely identify the element among its siblings. Note

@@ -9,6 +9,12 @@
 import Foundation
 import AppKit
 
+/// Components are stateful elements and the bridge between Few and 
+/// AppKit/UIKit.
+///
+/// By default whenever the component's state is changed, it re-renders itself 
+/// by calling the `render` function passed in to its init. But subclasses can
+/// optimize this by implementing `componentShouldUpdate`.
 public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
@@ -19,6 +25,9 @@ public class Component<S>: Element {
 
 	private var hostView: ViewType?
 
+	/// Initializes the component with a render function and its initial state.
+	/// The render function takes the current state of the component and returns
+	/// the element which represents that state.
 	public init(render: S -> Element, initialState: S) {
 		self.render = render
 		self.state = initialState
@@ -67,7 +76,7 @@ public class Component<S>: Element {
 	/// *should* based on the new state.
 	///
 	/// The default implementation always returns true.
-	public func shouldUpdate(previousState: S, newState: S) -> Bool {
+	public func componentShouldUpdate(previousState: S, newState: S) -> Bool {
 		return true
 	}
 	
@@ -102,7 +111,7 @@ public class Component<S>: Element {
 		let oldState = state
 		state = fn(oldState)
 		
-		if shouldUpdate(oldState, newState: state) {
+		if componentShouldUpdate(oldState, newState: state) {
 			update()
 		}
 		

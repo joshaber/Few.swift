@@ -9,6 +9,11 @@
 import Foundation
 import AppKit
 
+/// Containers (surprise!) contain other elements.
+///
+/// They diff their children using essentially two different passes:
+///   1. Pair up children with the same key and diff them if possible.
+///   2. Diff remaining children by order.
 public class Container: Element {
 	private var children: [Element]
 
