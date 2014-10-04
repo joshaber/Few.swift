@@ -18,7 +18,14 @@ public class Container: Element {
 	private var children: [Element]
 
 	private var containerView: ViewType?
-	
+
+	private var layout: ((Container, [Element]) -> ())?
+
+	public convenience init(_ children: [Element], layout: (Container, [Element]) -> ()) {
+		self.init(children)
+		self.layout = layout
+	}
+
 	public init(_ children: [Element]) {
 		self.children = children
 	}
@@ -32,6 +39,8 @@ public class Container: Element {
 	public override func applyDiff(other: Element) {
 		let otherContainer = other as Container
 		containerView = otherContainer.containerView
+
+		layout?(self, children)
 
 		let otherChildren = otherContainer.children
 
@@ -100,6 +109,8 @@ public class Container: Element {
 	public override func realize<S>(component: Component<S>, parentView: ViewType) {
 		let view = ViewType(frame: frame)
 		containerView = view
+
+		layout?(self, children)
 		
 		for element in children {
 			element.realize(component, parentView: view)

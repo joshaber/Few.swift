@@ -32,11 +32,28 @@ func renderBackground(tick: Float) -> Container {
 	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
 	let background = fillRect(color) |> frame(fullFrame)
 	let label = Label(text: "Fun and failure both start out the same way.") |> frame(CGRect(x: 200, y: 200, width: 100, height: 60))
+	let errrything = Container([button1, button2, label, input], containerLayout) |> frame(fullFrame)
 	return Container(background,
-		             button2,
-		             label,
-		             button1,
-		             input) |> frame(fullFrame)
+		             errrything) |> frame(fullFrame)
+}
+
+func containerLayout(container: Container, elements: [Element]) {
+	alignLefts(20)(container: container, elements: elements)
+	verticalStack(4)(container: container, elements: elements)
+}
+
+func alignLefts(origin: CGFloat)(container: Container, elements: [Element]) {
+	for el in elements {
+		el.frame.origin.x = origin
+	}
+}
+
+func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var y: CGFloat = padding
+	for el in elements {
+		el.frame.origin.y = y
+		y += el.frame.size.height + padding
+	}
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
