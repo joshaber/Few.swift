@@ -123,6 +123,11 @@ public class Component<S>: Element {
 		
 		return state
 	}
+
+	/// Get the host view of the component.
+	public func getHostView() -> ViewType? {
+		return hostView
+	}
 	
 	// MARK: Element
 	
