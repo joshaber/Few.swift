@@ -33,8 +33,18 @@ func renderBackground(tick: Float) -> Container {
 	let background = fillRect(color) |> frame(fullFrame)
 	let label = Label(text: "Fun and failure both start out the same way.") |> frame(CGRect(x: 200, y: 200, width: 100, height: 60))
 	let errrything = Container([button1, button2, label, input], containerLayout) |> frame(fullFrame)
-	return Container(background,
-		             errrything) |> frame(fullFrame)
+	return Container([background, errrything], fitInView) |> frame(fullFrame)
+}
+
+func fitInView(container: Container, elements: [Element]) {
+	let component: Few.Component<Any>? = container.getComponent()
+	if let component = component {
+		if let view = component.getHostView() {
+			for el in elements {
+				el.frame = view.bounds
+			}
+		}
+	}
 }
 
 func containerLayout(container: Container, elements: [Element]) {
@@ -49,10 +59,10 @@ func alignLefts(origin: CGFloat)(container: Container, elements: [Element]) {
 }
 
 func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) {
-	var y: CGFloat = padding
+	var y: CGFloat = container.frame.size.height - padding;
 	for el in elements {
+		y -= el.frame.size.height + padding
 		el.frame.origin.y = y
-		y += el.frame.size.height + padding
 	}
 }
 

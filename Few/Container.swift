@@ -40,6 +40,7 @@ public class Container: Element {
 		let otherContainer = other as Container
 		containerView = otherContainer.containerView
 
+		super.applyDiff(other)
 		layout?(self, children)
 
 		let otherChildren = otherContainer.children
@@ -91,8 +92,6 @@ public class Container: Element {
 		for child in childQueue {
 			child.derealize()
 		}
-
-		super.applyDiff(other)
 	}
 
 	private func childrenByKey(children: [Element]) -> [String: Element] {
