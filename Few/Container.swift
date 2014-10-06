@@ -60,7 +60,7 @@ public class Container: Element {
 			}
 
 			// If that fails and we still have new children, use one of those.
-			if match == nil && childQueue.count > 0 {
+			while match == nil && childQueue.count > 0 {
 				match = childQueue[0]
 				childQueue.removeAtIndex(0)
 

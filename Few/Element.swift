@@ -53,7 +53,7 @@ public class Element {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
-	public func applyDiff(other: Element) {		
+	public func applyDiff(other: Element) {
 		if let view = getContentView() {
 			if view.frame != frame {
 				view.frame = frame

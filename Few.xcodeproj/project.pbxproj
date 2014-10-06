@@ -27,6 +27,7 @@
 		889768B219AED92D00DD079B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 889768B019AED92D00DD079B /* MainMenu.xib */; };
 		889768BE19AED92D00DD079B /* FewDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889768BD19AED92D00DD079B /* FewDemoTests.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
+		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		889768BD19AED92D00DD079B /* FewDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FewDemoTests.swift; sourceTree = "<group>"; };
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				8824A2F319B8957B00D5625A /* Input.swift */,
 				8891531719C8D4B90026A817 /* View.swift */,
 				88BAF29219DE3094004241BA /* Empty.swift */,
+				88FC7EB019E242F4007AFBC8 /* List.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
@@ -402,6 +405,7 @@
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
+				88FC7EB119E242F4007AFBC8 /* List.swift in Sources */,
 				8897689C19AED8AF00DD079B /* Label.swift in Sources */,
 				8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */,
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
