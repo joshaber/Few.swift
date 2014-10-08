@@ -9,6 +9,69 @@
 import Foundation
 import AppKit
 
+public func diffElementLists(oldList: [Element], newList: [Element]) -> (add: [Element], remove: [Element]) {
+	var add = [Element]()
+	var remove = [Element]()
+
+	let myChildrenByKey = childrenByKey(newList)
+	let theirChildrenByKey = childrenByKey(oldList)
+
+	var childQueue = oldList
+
+	// We want to reuse children as much as possible. First we check for
+	// matches by key, and then simply by order.
+	for child in newList {
+		var match: Element?
+		// First try to find a match based on the key.
+		if let key = child.key {
+			match = theirChildrenByKey[key]
+		}
+
+		// If that fails and we still have new children, use one of those.
+		while match == nil && childQueue.count > 0 {
+			match = childQueue[0]
+			childQueue.removeAtIndex(0)
+
+			// It has a key and we didn't already match it up.
+			if let key = match!.key {
+				match = nil
+			}
+		}
+
+		// If we have a match/pair then do the diff dance.
+		if let match = match {
+			if child.canDiff(match) {
+				child.applyDiff(match)
+			} else {
+				remove.append(match)
+				add.append(child)
+			}
+		} else {
+			// If we didn't find anything we could reuse, then we need to
+			// realize the new child.
+			add.append(child)
+		}
+	}
+
+	// Anything left over at this point must be old.
+	for child in childQueue {
+		remove.append(child)
+	}
+
+	return (add: add, remove: remove)
+}
+
+private func childrenByKey(children: [Element]) -> [String: Element] {
+	var childrenByKey = [String: Element]()
+	for child in children {
+		if let key = child.key {
+			childrenByKey[key] = child
+		}
+	}
+
+	return childrenByKey
+}
+
 /// Containers (surprise!) contain other elements.
 ///
 /// They diff their children using essentially two different passes:
@@ -21,7 +84,7 @@ public class Container: Element {
 
 	private var layout: ((Container, [Element]) -> ())?
 
-	public convenience init(_ children: [Element], layout: (Container, [Element]) -> ()) {
+	public convenience init(children: [Element], layout: (Container, [Element]) -> ()) {
 		self.init(children)
 		self.layout = layout
 	}
@@ -41,68 +104,19 @@ public class Container: Element {
 		containerView = otherContainer.containerView
 
 		super.applyDiff(other)
-		layout?(self, children)
 
-		let otherChildren = otherContainer.children
+		let (add, remove) = diffElementLists(otherContainer.children, children)
 
-		let myChildrenByKey = childrenByKey(children)
-		let theirChildrenByKey = childrenByKey(otherChildren)
-
-		var childQueue = otherChildren
-
-		// We want to reuse children as much as possible. First we check for
-		// matches by key, and then simply by order.
-		for child in children {
-			var match: Element?
-			// First try to find a match based on the key.
-			if let key = child.key {
-				match = theirChildrenByKey[key]
-			}
-
-			// If that fails and we still have new children, use one of those.
-			while match == nil && childQueue.count > 0 {
-				match = childQueue[0]
-				childQueue.removeAtIndex(0)
-
-				// It has a key and we didn't already match it up.
-				if let key = match!.key {
-					match = nil
-				}
-			}
-
-			// If we have a match/pair then do the diff dance.
-			if let match = match {
-				if child.canDiff(match) {
-					child.applyDiff(match)
-				} else {
-					match.derealize()
-
-					let component: Component<Any>? = getComponent()
-					curry(child.realize) <^> component <*> containerView
-				}
-			} else {
-				// If we didn't find anything we could reuse, then we need to
-				// realize the new child.
-				let component: Component<Any>? = getComponent()
-				curry(child.realize) <^> component <*> containerView
-			}
+		for child in add {
+			let component: Component<Any>? = getComponent()
+			curry(child.realize) <^> component <*> containerView
 		}
 
-		// Anything left over at this point must be old.
-		for child in childQueue {
+		for child in remove {
 			child.derealize()
 		}
-	}
 
-	private func childrenByKey(children: [Element]) -> [String: Element] {
-		var childrenByKey = [String: Element]()
-		for child in children {
-			if let key = child.key {
-				childrenByKey[key] = child
-			}
-		}
-
-		return childrenByKey
+		layout?(self, children)
 	}
 
 	public override func realize<S>(component: Component<S>, parentView: ViewType) {
