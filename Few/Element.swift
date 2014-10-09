@@ -55,9 +55,7 @@ public class Element {
 	/// should call super.
 	public func applyDiff(other: Element) {
 		if let view = getContentView() {
-			if view.frame != frame {
-				view.frame = frame
-			}
+			frame = view.frame
 		}
 
 		component = other.component
