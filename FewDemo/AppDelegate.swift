@@ -9,7 +9,7 @@
 import Cocoa
 import Few
 
-func renderBackground(tick: Float) -> Container {
+func renderBackground(tick: Float) -> Element {
 	let low: Float = 200
 	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
 	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
@@ -29,19 +29,28 @@ func renderBackground(tick: Float) -> Container {
 	})
 		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
 
-	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
-	let background = fillRect(color) |> frame(fullFrame)
+	let background = fillRect(color)
 	let label = Label(text: "Fun and failure both start out the same way.") |> frame(CGRect(x: 200, y: 200, width: 100, height: 60))
-	let errrything = Container([button1, button2, label, input], containerLayout) |> frame(fullFrame)
-	return Container([background, errrything], fitInView) |> frame(fullFrame)
+
+	let thing = Container(children: [Label(text: "What:"), Button<Void>(title: "clicky", fn: id)]) { c, els in
+		let label = els[0]
+		let button = els[1]
+		label.frame = CGRectMake(20, 0, 50, 23)
+		button.frame = CGRectMake(CGRectGetMaxX(label.frame) + 10, 0, 50, 23)
+	}
+
+	let list = List([Label(text: "HI"), Label(text: "sup"), fillRect(color), thing]) |> frame(CGRect(x: 0, y: 0, width: 200, height: 200))
+
+	let errrything = Container(children: [button1, button2, label, input, list], layout: containerLayout)
+	return Container(children: [background, errrything], layout: fillView)
 }
 
-func fitInView(container: Container, elements: [Element]) {
-	let component: Few.Component<Any>? = container.getComponent()
-	if let component = component {
-		if let view = component.getHostView() {
-			for el in elements {
-				el.frame = view.bounds
+func fillView(container: Container, elements: [Element]) {
+	if let view = container.getContentView() {
+		for element in elements {
+			element.frame = view.bounds
+			if let childView = element.getContentView() {
+				childView.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewHeightSizable
 			}
 		}
 	}

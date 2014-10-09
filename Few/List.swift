@@ -9,11 +9,78 @@
 import Foundation
 import AppKit
 
-private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSource {
-	var items: [Element]
+private let defaultRowHeight: CGFloat = 42
 
-	init(items: [Element]) {
+func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
+	for (i, e) in enumerate(array) {
+		if e === element { return i }
+	}
+
+	return nil
+}
+
+private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSource {
+	let tableView: NSTableView
+	unowned var list: List
+
+	var items: [Element] {
+		didSet {
+			let (add, remove) = diffElementLists(oldValue, items)
+			if add.count == 0 && remove.count == 0 { return }
+
+			let addIndexes: NSIndexSet = add.map({ e in
+				return indexOf(self.items, e)
+			}).reduce(NSMutableIndexSet(indexesInRange: NSMakeRange(0, 0)), { (set: NSMutableIndexSet, i: Int?) in
+				if let index = i {
+					set.addIndex(index)
+				}
+				return set
+			})
+
+			let removeIndexes: NSIndexSet = remove.map({ e in
+				return indexOf(oldValue, e)
+			}).reduce(NSMutableIndexSet(indexesInRange: NSMakeRange(0, 0)), { (set: NSMutableIndexSet, i: Int?) in
+				if let index = i {
+					set.addIndex(index)
+				}
+				return set
+			})
+
+			tableView.beginUpdates()
+			tableView.insertRowsAtIndexes(addIndexes, withAnimation: .EffectNone)
+			tableView.removeRowsAtIndexes(removeIndexes, withAnimation: .EffectNone)
+			tableView.endUpdates()
+		}
+	}
+
+	init(tableView: NSTableView, items: [Element], list: List) {
+		self.tableView = tableView
 		self.items = items
+		self.list = list
+		super.init()
+
+		tableView.setDelegate(self)
+		tableView.setDataSource(self)
+	}
+
+	deinit {
+		tableView.setDelegate(nil)
+		tableView.setDataSource(nil)
+	}
+
+	// MARK: NSTableViewDelegate
+
+	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+		let element = items[row]
+		// LOLOLOL
+		let component: Component<Any> = list.getComponent()!
+		element.realize(component, parentView: tableView)
+		return element.getContentView()
+	}
+
+	func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+		let height = NSHeight(items[row].frame)
+		return height > CGFloat(0) ? height : defaultRowHeight
 	}
 
 	// MARK: NSTableViewDataSource
@@ -30,22 +97,20 @@ public class List: Element {
 
 	private let items: [Element]
 
-	init(_ items: [Element]) {
+	public init(_ items: [Element]) {
 		self.items = items
-	}
-
-	deinit {
-		tableView?.setDelegate(nil)
-		tableView?.setDataSource(nil)
 	}
 
 	// MARK: -
 
 	public override func applyDiff(other: Element) {
 		let otherList = other as List
+		handler = otherList.handler
 		scrollView = otherList.scrollView
 		tableView = otherList.tableView
-		handler = otherList.handler
+
+		handler?.list = self
+		handler?.items = items
 
 		super.applyDiff(other)
 	}
@@ -61,13 +126,14 @@ public class List: Element {
 		column.width = tableView.bounds.size.width
 		tableView.addTableColumn(column)
 
+		tableView.headerView = nil
+
 		scrollView.documentView = tableView
 
-		let handler = TableViewHandler(items: items)
+		let handler = TableViewHandler(tableView: tableView, items: items, list: self)
 		self.handler = handler
 
-		tableView.setDataSource(handler)
-		tableView.setDelegate(handler)
+		super.realize(component, parentView: parentView)
 	}
 
 	public override func getContentView() -> ViewType? {
