@@ -19,6 +19,15 @@ func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
 	return nil
 }
 
+func objectsToIndexes<T: AnyObject>(whole: [T], some: [T]) -> NSIndexSet {
+	return some.map { e in
+		return indexOf(whole, e)
+	}.reduce(NSMutableIndexSet(indexesInRange: NSMakeRange(0, 0))) { (set, index: Int?) in
+		set.addIndex <^> index
+		return set
+	}
+}
+
 private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSource {
 	let tableView: NSTableView
 	unowned var list: List
@@ -28,23 +37,8 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 			let (add, remove) = diffElementLists(oldValue, items)
 			if add.count == 0 && remove.count == 0 { return }
 
-			let addIndexes: NSIndexSet = add.map({ e in
-				return indexOf(self.items, e)
-			}).reduce(NSMutableIndexSet(indexesInRange: NSMakeRange(0, 0)), { (set: NSMutableIndexSet, i: Int?) in
-				if let index = i {
-					set.addIndex(index)
-				}
-				return set
-			})
-
-			let removeIndexes: NSIndexSet = remove.map({ e in
-				return indexOf(oldValue, e)
-			}).reduce(NSMutableIndexSet(indexesInRange: NSMakeRange(0, 0)), { (set: NSMutableIndexSet, i: Int?) in
-				if let index = i {
-					set.addIndex(index)
-				}
-				return set
-			})
+			let addIndexes = objectsToIndexes(items, add)
+			let removeIndexes = objectsToIndexes(oldValue, remove)
 
 			tableView.beginUpdates()
 			tableView.insertRowsAtIndexes(addIndexes, withAnimation: .EffectNone)
