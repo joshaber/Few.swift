@@ -150,6 +150,8 @@ public class Component<S>: Element {
 		hostView = otherComponent.hostView
 
 		rootElement.applyDiff(otherComponent.rootElement)
+
+		super.applyDiff(other)
 	}
 	
 	public override func realize(parent: Element, parentView: ViewType) {
