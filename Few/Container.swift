@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-public func diffElementLists(oldList: [Element], newList: [Element]) -> (add: [Element], remove: [Element]) {
+public func diffElementLists(oldList: [Element], newList: [Element], diffMatches: Bool) -> (add: [Element], remove: [Element]) {
 	var add = [Element]()
 	var remove = [Element]()
 
@@ -41,7 +41,9 @@ public func diffElementLists(oldList: [Element], newList: [Element]) -> (add: [E
 		// If we have a match/pair then do the diff dance.
 		if let match = match {
 			if child.canDiff(match) {
-				child.applyDiff(match)
+				if diffMatches {
+					child.applyDiff(match)
+				}
 			} else {
 				remove.append(match)
 				add.append(child)
@@ -105,7 +107,7 @@ public class Container: Element {
 
 		super.applyDiff(other)
 
-		let (add, remove) = diffElementLists(otherContainer.children, children)
+		let (add, remove) = diffElementLists(otherContainer.children, children, true)
 
 		for child in add {
 			let component: Component<Any>? = getComponent()

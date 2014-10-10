@@ -34,7 +34,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 
 	var items: [Element] {
 		didSet {
-			let (add, remove) = diffElementLists(oldValue, items)
+			let (add, remove) = diffElementLists(oldValue, items, false)
 			if add.count == 0 && remove.count == 0 { return }
 
 			let addIndexes = objectsToIndexes(items, add)
@@ -103,10 +103,10 @@ public class List: Element {
 		scrollView = otherList.scrollView
 		tableView = otherList.tableView
 
+		super.applyDiff(other)
+
 		handler?.list = self
 		handler?.items = items
-
-		super.applyDiff(other)
 	}
 
 	public override func realize<S>(component: Component<S>, parentView: ViewType) {

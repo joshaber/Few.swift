@@ -9,40 +9,31 @@
 import Cocoa
 import Few
 
-func renderBackground(tick: Float) -> Element {
-	let low: Float = 200
-	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
-	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
-	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
-	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	let button1 = View(type: NSButton.self) { b in b.title = "HELLO YES THIS IS DOG" }
-			|> frame(CGRect(x: 0, y: 0, width: 160, height: 23))
+func concat<T>(array: [T], value: T) -> [T] {
+	var copied = array
+	copied.append(value)
+	return copied
+}
 
-	let fn = { (str: String, s: Float) -> Float in
-		return s
-	}
-	let input = Input(initialText: "Hello? Is it me you're looking for?", fn: fn) |> frame(CGRect(x: 50, y: 300, width: 300, height: 23))
+func render(todos: [String]) -> Element {
+	// The [Element] cast is necessary because otherwise we crash trying to get
+	// metadata?
+	let items = todos.map { str in Label(text: str) } as [Element]
+	let list = List(items) |> size(CGSize(width: 200, height: 200))
 
-	let button2 = Button<Float>(title: "Hello yes this is dog.", fn: { s in
-		println("\(input.text)")
-		return 0
-	})
-		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
+	let field = Input<[String]>(initialText: "") { (str, s) in s } |> size(CGSize(width: 100, height: 23))
 
-	let background = fillRect(color)
-	let label = Label(text: "Fun and failure both start out the same way.") |> frame(CGRect(x: 200, y: 200, width: 100, height: 60))
+	let addButton = Button<[String]>(title: "Add") { (todos: [String]) in
+		if let text = field.text {
+			let realField = field.getContentView()! as NSTextField
+			realField.stringValue = ""
+			return concat(todos, text)
+		} else {
+			return todos
+		}
+	} |> size(CGSize(width: 40, height: 23))
 
-	let thing = Container(children: [Label(text: "What:"), Button<Void>(title: "clicky", fn: id)]) { c, els in
-		let label = els[0]
-		let button = els[1]
-		label.frame = CGRectMake(20, 0, 50, 23)
-		button.frame = CGRectMake(CGRectGetMaxX(label.frame) + 10, 0, 50, 23)
-	}
-
-	let list = List([Label(text: "HI"), Label(text: "sup"), fillRect(color), thing]) |> frame(CGRect(x: 0, y: 0, width: 200, height: 200))
-
-	let errrything = Container(children: [button1, button2, label, input, list], layout: containerLayout)
-	return Container(children: [background, errrything], layout: fillView)
+	return Container(children: [field, addButton, list], layout: containerLayout)
 }
 
 func fillView(container: Container, elements: [Element]) {
@@ -77,29 +68,17 @@ func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) 
 
 // This is to work around Swift's inability to have non-generic subclasses of a
 // generic superclass.
-typealias BackgroundComponent = BackgroundComponent_<Any>
-class BackgroundComponent_<Bullshit>: Few.Component<Float> {
-	var timer: NSTimer?
-	
+typealias AppComponent = AppComponent_<Any>
+class AppComponent_<Bullshit>: Few.Component<[String]> {
 	init() {
-		super.init(render: renderBackground, initialState: 0)
-	}
-	
-	override func componentDidRealize() {
-		timer = every(0.01) { [unowned self] in
-			void(self.updateState { s in s + 0.01 })
-		}
-	}
-	
-	override func componentWillDerealize() {
-		timer?.invalidate()
+		super.init(render: render, initialState: [String]())
 	}
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = BackgroundComponent()
+	private let appComponent = AppComponent()
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView

@@ -18,6 +18,11 @@ public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	return element
 }
 
+public func size<E: Element>(size: CGSize)(element: E) -> E {
+	element.frame.size = size
+	return element
+}
+
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
 public class Element {
