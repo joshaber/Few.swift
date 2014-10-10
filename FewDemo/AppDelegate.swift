@@ -15,13 +15,18 @@ func concat<T>(array: [T], value: T) -> [T] {
 	return copied
 }
 
-func render(todos: [String]) -> Element {
+func render(todos: [String]) -> Container {
 	// The [Element] cast is necessary because otherwise we crash trying to get
 	// metadata?
 	let items = todos.map { str in Label(text: str) } as [Element]
-	let list = List(items) |> size(CGSize(width: 200, height: 200))
+	for item in items {
+		item.key = "item"
+	}
+	let list = List(items) //|> size(CGSize(width: 200, height: 200))
+	list.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-	let field = Input<[String]>(initialText: "") { (str, s) in s } |> size(CGSize(width: 100, height: 23))
+	let field = Input<[String]>(initialText: "") { (str, s) in s } //|> size(CGSize(width: 100, height: 23))
+	field.frame = CGRect(x: 0, y: 0, width: 100, height: 23)
 
 	let addButton = Button<[String]>(title: "Add") { (todos: [String]) in
 		if let text = field.text {
@@ -31,7 +36,8 @@ func render(todos: [String]) -> Element {
 		} else {
 			return todos
 		}
-	} |> size(CGSize(width: 40, height: 23))
+	} //|> size(CGSize(width: 40, height: 23))
+	addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 23)
 
 	return Container(children: [field, addButton, list], layout: containerLayout)
 }
@@ -60,7 +66,8 @@ func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) 
 typealias AppComponent = AppComponent_<Any>
 class AppComponent_<Bullshit>: Few.Component<[String]> {
 	init() {
-		super.init(render: render, initialState: [String]())
+		let initial = (1...1000).map { "\($0)" }
+		super.init(render: render, initialState: initial)
 	}
 }
 
