@@ -36,17 +36,6 @@ func render(todos: [String]) -> Element {
 	return Container(children: [field, addButton, list], layout: containerLayout)
 }
 
-func fillView(container: Container, elements: [Element]) {
-	if let view = container.getContentView() {
-		for element in elements {
-			element.frame = view.bounds
-			if let childView = element.getContentView() {
-				childView.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewHeightSizable
-			}
-		}
-	}
-}
-
 func containerLayout(container: Container, elements: [Element]) {
 	alignLefts(20)(container: container, elements: elements)
 	verticalStack(4)(container: container, elements: elements)
