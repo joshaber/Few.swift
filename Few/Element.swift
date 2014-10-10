@@ -29,9 +29,9 @@ public class Element {
 	/// The frame of the element.
 	public var frame = CGRectZero
 
-	/// The key used to uniquely identify the element among its siblings. Note
-	/// that if this is provided it *must* be unique to its siblings. Otherwise
-	/// unexpected wackiness could occur.
+	/// The key used to identify the element. Elements with matching keys will 
+	/// be more readily diffed in certain situations (i.e., when in a Container
+	/// or List).
 	//
 	// TODO: This doesn't *really* need to be a string. Just hashable and 
 	// equatable.
