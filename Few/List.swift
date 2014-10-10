@@ -66,10 +66,27 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let element = items[row]
-		// LOLOLOL
-		let component: Component<Any> = list.getComponent()!
-		element.realize(component, parentView: tableView)
-		return element.getContentView()
+		var view: NSView?
+		if let key = element.key {
+			view = tableView.makeViewWithIdentifier(key, owner: nil) as NSView?
+			if view == nil {
+				let component: Component<Any> = list.getComponent()!
+				element.realize(component, parentView: tableView)
+				view = element.getContentView()
+				if let view = view {
+					view.identifier = key
+				}
+			} else {
+				println("reused!")
+				// TODO: apply the diff
+			}
+		} else {
+			let component: Component<Any> = list.getComponent()!
+			element.realize(component, parentView: tableView)
+			view = element.getContentView()
+		}
+
+		return view
 	}
 
 	func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
