@@ -13,8 +13,7 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 	var add = [Element]()
 	var remove = [Element]()
 
-	let myChildrenByKey = childrenByKey(newList)
-	let theirChildrenByKey = childrenByKey(oldList)
+	var theirChildrenByKey = childrenByKey(oldList)
 
 	var childQueue = oldList
 
@@ -24,7 +23,15 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 		var match: Element?
 		// First try to find a match based on the key.
 		if let key = child.key {
-			match = theirChildrenByKey[key]
+			var matchingChildren = theirChildrenByKey[key]
+			if let matchingChildren = matchingChildren {
+				if matchingChildren.count > 0 {
+					match = matchingChildren[0]
+					var c = matchingChildren
+					c.removeAtIndex(0)
+					theirChildrenByKey[key] = c
+				}
+			}
 		}
 
 		// If that fails and we still have new children, use one of those.
@@ -57,17 +64,32 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 
 	// Anything left over at this point must be old.
 	for child in childQueue {
-		remove.append(child)
+		if let key = child.key {
+			if let children = theirChildrenByKey[key] {
+				if children.count > 0 {
+					remove.append(child)
+				}
+			}
+		} else {
+			remove.append(child)
+		}
 	}
 
 	return (add: add, remove: remove)
 }
 
-private func childrenByKey(children: [Element]) -> [String: Element] {
-	var childrenByKey = [String: Element]()
+private func childrenByKey(children: [Element]) -> [String: [Element]] {
+	var childrenByKey = [String: [Element]]()
 	for child in children {
 		if let key = child.key {
-			childrenByKey[key] = child
+			var existing = childrenByKey[key]
+			if let existing = existing {
+				var e = existing
+				e.append(child)
+				childrenByKey[key] = e
+			} else {
+				childrenByKey[key] = [child]
+			}
 		}
 	}
 
