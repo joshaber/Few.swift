@@ -29,6 +29,8 @@ public class Input<S>: Element {
 	private var _text: String?
 	private var initialText: String?
 	private var action: (String, Component<S>) -> ()
+
+	private var component: Component<S>?
 	
 	private let inputDelegate = InputDelegate()
 
@@ -59,9 +61,8 @@ public class Input<S>: Element {
 		self.inputDelegate.action = { [unowned self] in
 			let stringValue = self.textField!.stringValue
 			self._text = stringValue
-			let component: Component<S>? = self.getComponent()
-			if component != nil {
-				self.action(stringValue, component!)
+			if let component = self.component {
+				self.action(stringValue, component)
 			}
 		}
 	}
@@ -87,6 +88,8 @@ public class Input<S>: Element {
 	}
 	
 	public override func realize(component: Component<S>, parentView: ViewType) {
+		self.component = component
+
 		let field = NSTextField(frame: frame)
 		field.editable = true
 		field.stringValue = _text ?? initialText ?? ""

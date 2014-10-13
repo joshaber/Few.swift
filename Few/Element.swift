@@ -37,7 +37,7 @@ public class Element {
 	// equatable.
 	public var key: String?
 
-	private weak var component: Component<Any>?
+	internal var realizeInComponent: ((Element, ViewType) -> ())?
 	
 	public init() {}
 
@@ -63,7 +63,7 @@ public class Element {
 			frame = view.frame
 		}
 
-		component = other.component
+		realizeInComponent = other.realizeInComponent
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
@@ -74,28 +74,11 @@ public class Element {
 	///
 	/// The default implementation adds the content view to `parentView`.
 	public func realize<S>(component: Component<S>, parentView: ViewType) {
-		self.component = getComponent(component)
+		realizeInComponent = { element, parentView in
+			element.realize(component, parentView: parentView)
+		}
 
 		parentView.addSubview <^> getContentView()
-	}
-	
-	private func getComponent<S, T>(component: Component<S>) -> Component<T> {
-		// Ugh. This shouldn't be necessary.
-		//
-		// Doing this instead of `unsafeBitCast` because that seems to cause
-		// problems down the line when it comes to identity?
-		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
-		let castComponent: Component<T> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
-		return castComponent
-	}
-	
-	/// Get the component in which the element has been realized.
-	public func getComponent<T>() -> Component<T>? {
-		if let component = component {
-			return getComponent(component)
-		} else {
-			return nil
-		}
 	}
 
 	/// Derealize the element.

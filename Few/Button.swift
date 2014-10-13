@@ -13,6 +13,8 @@ public class Button<S>: Element {
 	private var title: String
 	private var action: Component<S> -> ()
 
+	private var component: Component<S>?
+
 	private var button: NSButton?
 
 	private let trampoline = TargetActionTrampoline()
@@ -29,7 +31,7 @@ public class Button<S>: Element {
 		super.init()
 
 		self.trampoline.action = { [unowned self] in
-			void(self.action <^> self.getComponent())
+			void(self.action <^> self.component)
 		}
 	}
 
@@ -49,6 +51,8 @@ public class Button<S>: Element {
 	}
 
 	public override func realize(component: Component<S>, parentView: ViewType) {
+		self.component = component
+
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title

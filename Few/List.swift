@@ -70,20 +70,22 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		if let key = element.key {
 			view = tableView.makeViewWithIdentifier(key, owner: nil) as NSView?
 			if view == nil {
-				let component: Component<Any> = list.getComponent()!
-				element.realize(component, parentView: tableView)
-				view = element.getContentView()
-				if let view = view {
-					view.identifier = key
+				if let realizeFn = list.realizeInComponent {
+					realizeFn(element, tableView)
+					view = element.getContentView()
+					if let view = view {
+						view.identifier = key
+					}
 				}
 			} else {
 				println("reused!")
 				// TODO: apply the diff
 			}
 		} else {
-			let component: Component<Any> = list.getComponent()!
-			element.realize(component, parentView: tableView)
-			view = element.getContentView()
+			if let realizeFn = list.realizeInComponent {
+				realizeFn(element, tableView)
+				view = element.getContentView()
+			}
 		}
 
 		return view

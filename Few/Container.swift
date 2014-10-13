@@ -131,9 +131,12 @@ public class Container: Element {
 
 		let (add, remove) = diffElementLists(otherContainer.children, children, true)
 
-		for child in add {
-			let component: Component<Any>? = getComponent()
-			curry(child.realize) <^> component <*> containerView
+		if let containerView = containerView {
+			if let realizeFn = realizeInComponent {
+				for child in add {
+					realizeFn(child, containerView)
+				}
+			}
 		}
 
 		for child in remove {
