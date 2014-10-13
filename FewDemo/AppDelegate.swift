@@ -66,7 +66,7 @@ func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) 
 typealias AppComponent = AppComponent_<Any>
 class AppComponent_<Bullshit>: Few.Component<[String]> {
 	init() {
-		let initial = (1...1000).map { "\($0)" }
+		let initial = (1...10).map { "\($0)" }
 		super.init(render: render, initialState: initial)
 	}
 }

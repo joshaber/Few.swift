@@ -84,6 +84,8 @@ public class Input<S>: Element {
 			_text = otherInput._text
 		}
 
+		component = otherInput.component
+
 		super.applyDiff(other)
 	}
 	

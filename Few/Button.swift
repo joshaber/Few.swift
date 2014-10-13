@@ -47,6 +47,8 @@ public class Button<S>: Element {
 
 		button?.target = trampoline
 
+		component = otherButton.component
+
 		super.applyDiff(other)
 	}
 
