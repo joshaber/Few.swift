@@ -48,16 +48,14 @@ func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]
 
 func renderApp(component: Few.Component<Int>, state: Int) -> Element {
 	let input = Input(initialText: "") { str in
-		if str.isEmpty {
-			component.updateState(const(0))
-		} else {
-			component.updateState { s in s + 1 }
-		}
+		component.updateState(const(str.utf16Count))
+		return ()
 	}
 	input.frame.size = CGSize(width: 100, height: 23)
 
 	let label = Label(text: "\(state)")
 	label.frame.size = CGSize(width: 100, height: 23)
+
 	return Container(children: [input, label], layout: horizontalStack(10))
 }
 
