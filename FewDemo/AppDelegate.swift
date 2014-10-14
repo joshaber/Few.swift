@@ -15,43 +15,6 @@ func concat<T>(array: [T], value: T) -> [T] {
 	return copied
 }
 
-func render(state: State) -> Element {
-	// The [Element] cast is necessary because otherwise we crash trying to get
-	// metadata?
-	let todos = state.todos
-	let items = todos.map { str in Label(text: str) } as [Element]
-	for item in items {
-		item.key = "item"
-	}
-
-	let list = List(items)
-	list.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-
-	let field = Input<State>(initialText: "") { (str, state) in
-		return State(todos: state.todos, characterCount: state.characterCount + 1)
-	}
-	field.frame = CGRect(x: 0, y: 0, width: 100, height: 23)
-
-	let addButton = Button<State>(title: "Add") { (state: State) in
-		if let text = field.text {
-			let realField = field.getContentView()! as NSTextField
-			realField.stringValue = ""
-			let newTodos = concat(todos, text)
-			return State(todos: newTodos, characterCount: state.characterCount)
-		} else {
-			return state
-		}
-	}
-	addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 23)
-
-	let countLabel = Label(text: "\(state.characterCount)")
-	countLabel.frame = CGRect(x: 0, y: 0, width: 50, height: 23)
-
-	let form = Container(children: [field, addButton, list], layout: formLayout)
-	form.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
-	return Container(children: [form, countLabel], layout: horizontalStack(10))
-}
-
 func noLayout(container: Container, elements: [Element]) {
 
 }
@@ -83,18 +46,27 @@ func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]
 	}
 }
 
-struct State {
-	let todos = [String]()
-	let characterCount = 0
+func renderApp(component: Few.Component<Int>, state: Int) -> Element {
+	let input = Input(initialText: "") { str in
+		if str.isEmpty {
+			component.updateState(const(0))
+		} else {
+			component.updateState { s in s + 1 }
+		}
+	}
+	input.frame.size = CGSize(width: 100, height: 23)
+
+	let label = Label(text: "\(state)")
+	label.frame.size = CGSize(width: 100, height: 23)
+	return Container(children: [input, label], layout: horizontalStack(10))
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
 // generic superclass.
 typealias AppComponent = AppComponent_<Any>
-class AppComponent_<Bullshit>: Few.Component<State> {
+class AppComponent_<Bullshit>: Few.Component<Int> {
 	init() {
-		let initial = (1...100).map { "\($0)" }
-		super.init(render: render, initialState: State(todos: initial, characterCount: 0))
+		super.init(render: renderApp, initialState: 0)
 	}
 }
 

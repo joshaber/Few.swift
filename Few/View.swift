@@ -38,18 +38,14 @@ public class View<T: ViewType>: Element {
 
 		super.applyDiff(other)
 	}
-	
-	// `component` should be Component<S>, but if we do then Xcode think it's 
-	// not overriding `realize`, so.
-	public override func realize<S>(component: Element, parentView: ViewType) {
+
+	public override func realize(parentView: ViewType) {
 		let view = type()
 		config(view)
 		
 		self.view = view
 
-		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
-		let castComponent: Component<S> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
-		super.realize(castComponent, parentView: parentView)
+		super.realize(parentView)
 	}
 
 	public override func getContentView() -> ViewType? {

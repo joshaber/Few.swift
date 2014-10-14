@@ -70,22 +70,18 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		if let key = element.key {
 			view = tableView.makeViewWithIdentifier(key, owner: nil) as NSView?
 			if view == nil {
-				if let realizeFn = list.realizeInComponent {
-					realizeFn(element, tableView)
-					view = element.getContentView()
-					if let view = view {
-						view.identifier = key
-					}
+				element.realize(tableView)
+				view = element.getContentView()
+				if let view = view {
+					view.identifier = key
 				}
 			} else {
 				println("reused!")
 				// TODO: apply the diff
 			}
 		} else {
-			if let realizeFn = list.realizeInComponent {
-				realizeFn(element, tableView)
-				view = element.getContentView()
-			}
+			element.realize(tableView)
+			view = element.getContentView()
 		}
 
 		return view
@@ -128,7 +124,7 @@ public class List: Element {
 		handler?.items = items
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: ViewType) {
+	public override func realize(parentView: ViewType) {
 		let scrollView = NSScrollView(frame: frame)
 		self.scrollView = scrollView
 
@@ -146,7 +142,7 @@ public class List: Element {
 		let handler = TableViewHandler(tableView: tableView, items: items, list: self)
 		self.handler = handler
 
-		super.realize(component, parentView: parentView)
+		super.realize(parentView)
 	}
 
 	public override func getContentView() -> ViewType? {

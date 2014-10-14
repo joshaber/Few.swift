@@ -9,30 +9,18 @@
 import Foundation
 import AppKit
 
-public class Button<S>: Element {
+public class Button: Element {
 	private var title: String
-	private var action: Component<S> -> ()
-
-	private var component: Component<S>?
 
 	private var button: NSButton?
 
 	private let trampoline = TargetActionTrampoline()
 
-	public convenience init(title: String, fn: S -> S) {
-		self.init(title: title, action: { component in
-			void(component.updateState(fn))
-		})
-	}
-
-	public init(title: String, action: Component<S> -> ()) {
+	public init(title: String, action: () -> ()) {
 		self.title = title
-		self.action = action
 		super.init()
 
-		self.trampoline.action = { [unowned self] in
-			void(self.action <^> self.component)
-		}
+		self.trampoline.action = action
 	}
 
 	// MARK: Element
@@ -47,14 +35,10 @@ public class Button<S>: Element {
 
 		button?.target = trampoline
 
-		component = otherButton.component
-
 		super.applyDiff(other)
 	}
 
-	public override func realize(component: Component<S>, parentView: ViewType) {
-		self.component = component
-
+	public override func realize(parentView: ViewType) {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
@@ -62,7 +46,7 @@ public class Button<S>: Element {
 		button.action = trampoline.selector
 		self.button = button
 
-		super.realize(component, parentView: parentView)
+		super.realize(parentView)
 	}
 
 	public override func getContentView() -> ViewType? {
