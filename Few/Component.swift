@@ -95,7 +95,12 @@ public class Component<S>: Element {
 		componentWillRealize()
 		
 		hostView = view
+		rootElement.frame = view.bounds
 		rootElement.realize(self, parentView: view)
+
+		if let contentView = rootElement.getContentView() {
+			contentView.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewHeightSizable
+		}
 		
 		componentDidRealize()
 	}
@@ -145,6 +150,8 @@ public class Component<S>: Element {
 		hostView = otherComponent.hostView
 
 		rootElement.applyDiff(otherComponent.rootElement)
+
+		super.applyDiff(other)
 	}
 	
 	public override func realize(parent: Element, parentView: ViewType) {

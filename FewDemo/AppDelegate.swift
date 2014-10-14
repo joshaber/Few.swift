@@ -9,45 +9,54 @@
 import Cocoa
 import Few
 
-func renderBackground(tick: Float) -> Container {
-	let low: Float = 200
-	let R = (low + sin((tick * 3 + 0) * 1.3) * 128) / 255
-	let G = (low + sin((tick * 3 + 1) * 1.3) * 128) / 255
-	let B = (low + sin((tick * 3 + 2) * 1.3) * 128) / 255
-	let color = NSColor(calibratedRed: CGFloat(R), green: CGFloat(G), blue: CGFloat(B), alpha: 1)
-	let button1 = View(type: NSButton.self) { b in b.title = "HELLO YES THIS IS DOG" }
-			|> frame(CGRect(x: 0, y: 0, width: 160, height: 23))
-
-	let fn = { (str: String, s: Float) -> Float in
-		return s
-	}
-	let input = Input(initialText: "Hello? Is it me you're looking for?", fn: fn) |> frame(CGRect(x: 50, y: 300, width: 300, height: 23))
-
-	let button2 = Button<Float>(title: "Hello yes this is dog.", fn: { s in
-		println("\(input.text)")
-		return 0
-	})
-		|> frame(CGRect(x: 0, y: 200, width: 160, height: 23))
-
-	let fullFrame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
-	let background = fillRect(color) |> frame(fullFrame)
-	let label = Label(text: "Fun and failure both start out the same way.") |> frame(CGRect(x: 200, y: 200, width: 100, height: 60))
-	let errrything = Container([button1, button2, label, input], containerLayout) |> frame(fullFrame)
-	return Container([background, errrything], fitInView) |> frame(fullFrame)
+func concat<T>(array: [T], value: T) -> [T] {
+	var copied = array
+	copied.append(value)
+	return copied
 }
 
-func fitInView(container: Container, elements: [Element]) {
-	let component: Few.Component<Any>? = container.getComponent()
-	if let component = component {
-		if let view = component.getHostView() {
-			for el in elements {
-				el.frame = view.bounds
-			}
+func render(state: State) -> Element {
+	// The [Element] cast is necessary because otherwise we crash trying to get
+	// metadata?
+	let todos = state.todos
+	let items = todos.map { str in Label(text: str) } as [Element]
+	for item in items {
+		item.key = "item"
+	}
+
+	let list = List(items)
+	list.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+
+	let field = Input<State>(initialText: "") { (str, state) in
+		return State(todos: state.todos, characterCount: state.characterCount + 1)
+	}
+	field.frame = CGRect(x: 0, y: 0, width: 100, height: 23)
+
+	let addButton = Button<State>(title: "Add") { (state: State) in
+		if let text = field.text {
+			let realField = field.getContentView()! as NSTextField
+			realField.stringValue = ""
+			let newTodos = concat(todos, text)
+			return State(todos: newTodos, characterCount: state.characterCount)
+		} else {
+			return state
 		}
 	}
+	addButton.frame = CGRect(x: 0, y: 0, width: 40, height: 23)
+
+	let countLabel = Label(text: "\(state.characterCount)")
+	countLabel.frame = CGRect(x: 0, y: 0, width: 50, height: 23)
+
+	let form = Container(children: [field, addButton, list], layout: formLayout)
+	form.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
+	return Container(children: [form, countLabel], layout: horizontalStack(10))
 }
 
-func containerLayout(container: Container, elements: [Element]) {
+func noLayout(container: Container, elements: [Element]) {
+
+}
+
+func formLayout(container: Container, elements: [Element]) {
 	alignLefts(20)(container: container, elements: elements)
 	verticalStack(4)(container: container, elements: elements)
 }
@@ -66,31 +75,33 @@ func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) 
 	}
 }
 
+func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var x = padding
+	for el in elements {
+		el.frame.origin.x = x
+		x += el.frame.size.width + padding
+	}
+}
+
+struct State {
+	let todos = [String]()
+	let characterCount = 0
+}
+
 // This is to work around Swift's inability to have non-generic subclasses of a
 // generic superclass.
-typealias BackgroundComponent = BackgroundComponent_<Any>
-class BackgroundComponent_<Bullshit>: Few.Component<Float> {
-	var timer: NSTimer?
-	
+typealias AppComponent = AppComponent_<Any>
+class AppComponent_<Bullshit>: Few.Component<State> {
 	init() {
-		super.init(render: renderBackground, initialState: 0)
-	}
-	
-	override func componentDidRealize() {
-		timer = every(0.01) { [unowned self] in
-			void(self.updateState { s in s + 0.01 })
-		}
-	}
-	
-	override func componentWillDerealize() {
-		timer?.invalidate()
+		let initial = (1...100).map { "\($0)" }
+		super.init(render: render, initialState: State(todos: initial, characterCount: 0))
 	}
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = BackgroundComponent()
+	private let appComponent = AppComponent()
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView

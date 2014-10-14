@@ -20,5 +20,12 @@ rr.pre()
 
 var container1 = Container([t, v, rr])
 container1.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
-
 container1.pre()
+
+let input = Input(text: "HI!") { (str, s) -> Float in
+	return s
+} |> frame(CGRect(x: 0, y: 0, width: 100, height: 23))
+
+var container2 = Container([t, v, rr, input])
+container2.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
+container2.pre()

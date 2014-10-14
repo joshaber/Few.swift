@@ -18,21 +18,26 @@ public func frame<E: Element>(rect: CGRect)(element: E) -> E {
 	return element
 }
 
+public func size<E: Element>(size: CGSize)(element: E) -> E {
+	element.frame.size = size
+	return element
+}
+
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
 public class Element {
 	/// The frame of the element.
 	public var frame = CGRectZero
 
-	/// The key used to uniquely identify the element among its siblings. Note
-	/// that if this is provided it *must* be unique to its siblings. Otherwise
-	/// unexpected wackiness could occur.
+	/// The key used to identify the element. Elements with matching keys will 
+	/// be more readily diffed in certain situations (i.e., when in a Container
+	/// or List).
 	//
 	// TODO: This doesn't *really* need to be a string. Just hashable and 
 	// equatable.
 	public var key: String?
 
-	private weak var component: Component<Any>?
+	internal var realizeInComponent: ((Element, ViewType) -> ())?
 	
 	public init() {}
 
@@ -53,14 +58,12 @@ public class Element {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
-	public func applyDiff(other: Element) {		
+	public func applyDiff(other: Element) {
 		if let view = getContentView() {
-			if view.frame != frame {
-				view.frame = frame
-			}
+			frame = view.frame
 		}
 
-		component = other.component
+		realizeInComponent = other.realizeInComponent
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
@@ -71,28 +74,11 @@ public class Element {
 	///
 	/// The default implementation adds the content view to `parentView`.
 	public func realize<S>(component: Component<S>, parentView: ViewType) {
-		self.component = getComponent(component)
+		realizeInComponent = { element, parentView in
+			element.realize(component, parentView: parentView)
+		}
 
 		parentView.addSubview <^> getContentView()
-	}
-	
-	private func getComponent<S, T>(component: Component<S>) -> Component<T> {
-		// Ugh. This shouldn't be necessary.
-		//
-		// Doing this instead of `unsafeBitCast` because that seems to cause
-		// problems down the line when it comes to identity?
-		let opaqueComponent = Unmanaged.passRetained(component).toOpaque()
-		let castComponent: Component<T> = Unmanaged.fromOpaque(opaqueComponent).takeRetainedValue()
-		return castComponent
-	}
-	
-	/// Get the component in which the element has been realized.
-	public func getComponent<T>() -> Component<T>? {
-		if let component = component {
-			return getComponent(component)
-		} else {
-			return nil
-		}
 	}
 
 	/// Derealize the element.
