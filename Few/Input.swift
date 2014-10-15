@@ -28,21 +28,23 @@ public class Input: Element {
 	
 	private var _text: String?
 	private var initialText: String?
+	private var placeholder: String?
 	private var action: String -> ()
 
 	private let inputDelegate = InputDelegate()
 
 	public convenience init(text: String?, fn: String -> ()) {
-		self.init(text: text, initialText: nil, action: fn)
+		self.init(text: text, initialText: nil, placeholder: nil, action: fn)
 	}
 
-	public convenience init(initialText: String?, fn: String -> ()) {
-		self.init(text: nil, initialText: initialText, action: fn)
+	public convenience init(initialText: String?, placeholder: String?, fn: String -> ()) {
+		self.init(text: nil, initialText: initialText, placeholder: placeholder, action: fn)
 	}
 
-	public init(text: String?, initialText: String?, action: String -> ()) {
+	public init(text: String?, initialText: String?, placeholder: String?, action: String -> ()) {
 		self._text = text
 		self.initialText = initialText
+		self.placeholder = placeholder
 		self.action = action
 		super.init()
 		
@@ -59,6 +61,9 @@ public class Input: Element {
 		let otherInput = other as Input
 		textField = otherInput.textField
 		textField?.delegate = inputDelegate
+
+		let cell = textField?.cell() as? NSTextFieldCell
+		cell?.placeholderString = placeholder ?? ""
 
 		if let text = _text {
 			if let otherText = otherInput._text {
@@ -78,6 +83,10 @@ public class Input: Element {
 		field.editable = true
 		field.stringValue = _text ?? initialText ?? ""
 		field.delegate = inputDelegate
+
+		let cell = field.cell() as? NSTextFieldCell
+		cell?.placeholderString = placeholder ?? ""
+
 		textField = field
 		
 		super.realize(parentView)
