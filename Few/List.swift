@@ -131,6 +131,7 @@ public class List: Element {
 	public override func realize(parentView: ViewType) {
 		let scrollView = NSScrollView(frame: frame)
 		scrollView.hasVerticalScroller = true
+		scrollView.borderType = .BezelBorder
 		self.scrollView = scrollView
 
 		let tableView = NSTableView(frame: scrollView.bounds)
