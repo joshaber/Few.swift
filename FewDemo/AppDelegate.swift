@@ -9,39 +9,45 @@
 import Cocoa
 import Few
 
-func renderForm(buttonLabel: String, component: Few.Component<Int>, state: Int) -> Element {
-	let input = Input(initialText: "", placeholder: "Text") { str in
-		component.updateState(const(str.utf16Count))
-		return ()
-	}
-	input.frame.size = CGSize(width: 100, height: 23)
-
-	let label = Label(text: "\(state)")
-	label.frame.size = CGSize(width: 100, height: 23)
-
-	let button = Button(title: buttonLabel) {
-		input.textField?.stringValue = ""
-		component.updateState(const(0))
-	}
-	button.frame.size = CGSize(width: 75, height: 23)
-
-	let container = Container(children: [input, label, button], layout: horizontalStack(10))
-	container.frame.size = CGSizeMake(305, 23)
-	return container
+struct AppState {
+	let todos = [String]()
 }
 
-func renderApp(component: Few.Component<Int>, state: Int) -> Element {
-	let layout = verticalStack(10) >-- offset(CGPoint(x: 20, y: -100))
-	let items = [renderForm("Click me!", component, state), renderForm("Beat it", component, state)]
-	return Container(children: items, layout: layout)
+func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
+	// The [Element] cast works around a Swift runtime crash, lol?
+	let todos = state.todos.map { Label(text: $0) } as [Element]
+	for todo in todos {
+		todo.key = "todo"
+	}
+
+	let list = List(todos)
+	list.frame.size = CGSize(width: 200, height: 200)
+
+	let field = Input(initialText: "", placeholder: "Todo") { str in }
+	field.frame.size = CGSize(width: 150, height: 23)
+
+	let addButton = Button(title: "Add") {
+		let text = field.textField!.stringValue
+		field.textField?.stringValue = ""
+
+		var todos = state.todos
+		todos.append(text)
+		component.updateState(const(AppState(todos: todos)))
+	}
+	addButton.frame.size = CGSize(width: 50, height: 23)
+
+	let fieldAndButton = Container(children: [field, addButton], layout: horizontalStack(10))
+	fieldAndButton.frame.size = CGSize(width: 230, height: 23)
+
+	return Container(children: [fieldAndButton, list], layout: verticalStack(10))
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
 // generic superclass.
 typealias AppComponent = AppComponent_<Any>
-class AppComponent_<Bullshit>: Few.Component<Int> {
+class AppComponent_<Bullshit>: Few.Component<AppState> {
 	init() {
-		super.init(render: renderApp, initialState: 0)
+		super.init(render: renderApp, initialState: AppState())
 	}
 }
 
