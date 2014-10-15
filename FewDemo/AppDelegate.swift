@@ -20,8 +20,7 @@ func renderForm(buttonLabel: String, component: Few.Component<Int>, state: Int) 
 	label.frame.size = CGSize(width: 100, height: 23)
 
 	let button = Button(title: buttonLabel) {
-		let rawInput = input.getContentView() as NSTextField!
-		rawInput.stringValue = ""
+		input.textField?.stringValue = ""
 		component.updateState(const(0))
 	}
 	button.frame.size = CGSize(width: 75, height: 23)
@@ -32,7 +31,9 @@ func renderForm(buttonLabel: String, component: Few.Component<Int>, state: Int) 
 }
 
 func renderApp(component: Few.Component<Int>, state: Int) -> Element {
-	return Container(children: [renderForm("Click me!", component, state), renderForm("Beat it", component, state)], layout: verticalStack(10) >-- offset(CGPoint(x: 20, y: -100)))
+	let layout = verticalStack(10) >-- offset(CGPoint(x: 20, y: -100))
+	let items = [renderForm("Click me!", component, state), renderForm("Beat it", component, state)]
+	return Container(children: items, layout: layout)
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
