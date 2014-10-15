@@ -9,14 +9,8 @@
 import Cocoa
 import Few
 
-func concat<T>(array: [T], value: T) -> [T] {
-	var copied = array
-	copied.append(value)
-	return copied
-}
-
-func renderApp(component: Few.Component<Int>, state: Int) -> Element {
-	let input = Input(initialText: "") { str in
+func renderForm(buttonLabel: String, component: Few.Component<Int>, state: Int) -> Element {
+	let input = Input(initialText: "", placeholder: "Text") { str in
 		component.updateState(const(str.utf16Count))
 		return ()
 	}
@@ -25,7 +19,20 @@ func renderApp(component: Few.Component<Int>, state: Int) -> Element {
 	let label = Label(text: "\(state)")
 	label.frame.size = CGSize(width: 100, height: 23)
 
-	return Container(children: [input, label], layout: horizontalStack(10))
+	let button = Button(title: buttonLabel) {
+		let rawInput = input.getContentView() as NSTextField!
+		rawInput.stringValue = ""
+		component.updateState(const(0))
+	}
+	button.frame.size = CGSize(width: 75, height: 23)
+
+	let container = Container(children: [input, label, button], layout: horizontalStack(10))
+	container.frame.size = CGSizeMake(305, 23)
+	return container
+}
+
+func renderApp(component: Few.Component<Int>, state: Int) -> Element {
+	return Container(children: [renderForm("Click me!", component, state), renderForm("Beat it", component, state)], layout: verticalStack(10) >-- offset(CGPoint(x: 20, y: -100)))
 }
 
 // This is to work around Swift's inability to have non-generic subclasses of a
