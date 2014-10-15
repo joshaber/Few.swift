@@ -24,7 +24,7 @@ public class Input: Element {
 		}
 	}
 
-	private var textField: NSTextField?
+	private var _textField: NSTextField?
 	
 	private var _text: String?
 	private var initialText: String?
@@ -49,26 +49,30 @@ public class Input: Element {
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] in
-			let stringValue = self.textField!.stringValue
+			let stringValue = self._textField!.stringValue
 			self._text = stringValue
 			self.action(stringValue)
 		}
+	}
+
+	public var textField: NSTextField? {
+		return _textField
 	}
 
 	// MARK: Element
 	
 	public override func applyDiff(other: Element) {
 		let otherInput = other as Input
-		textField = otherInput.textField
-		textField?.delegate = inputDelegate
+		_textField = otherInput._textField
+		_textField?.delegate = inputDelegate
 
-		let cell = textField?.cell() as? NSTextFieldCell
+		let cell = _textField?.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 
 		if let text = _text {
 			if let otherText = otherInput._text {
 				if text != otherText {
-					textField?.stringValue = text
+					_textField?.stringValue = text
 				}
 			}
 		} else {
@@ -87,12 +91,12 @@ public class Input: Element {
 		let cell = field.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 
-		textField = field
+		_textField = field
 		
 		super.realize(parentView)
 	}
 	
 	public override func getContentView() -> ViewType? {
-		return textField
+		return _textField
 	}
 }
