@@ -100,10 +100,10 @@ public class Graphic: Element {
 		super.applyDiff(other)
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: ViewType) {
+	public override func realize(parentView: ViewType) {
 		view = DrawableView(frame: frame, draw: callDrawFunc)
 
-		super.realize(component, parentView: parentView)
+		super.realize(parentView)
 	}
 
 	private func callDrawFunc(rect: CGRect) {

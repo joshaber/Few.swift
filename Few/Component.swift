@@ -23,43 +23,60 @@ public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
 
-	private let render: S -> Element
-
-	private var rootElement: Element
+	private var rootElement: Element?
 
 	private var hostView: ViewType?
 
-	/// Initializes the component with a render function and its initial state.
-	/// The render function takes the current state of the component and returns
-	/// the element which represents that state.
-	public init(render: S -> Element, initialState: S) {
-		self.render = render
-		self.state = initialState
+	private let renderFn: ((Component<S>, S) -> Element)?
 
-		// TODO: Probably defer the initial render until we're realized?
-		self.rootElement = render(initialState)
+	/// Initializes the component with its initial state. The render function 
+	/// takes the current state of the component and returns the element which 
+	/// represents that state.
+	public init(initialState: S) {
+		self.state = initialState
 	}
-	
+
+	public init(render renderFn: (Component<S>, S) -> Element, initialState: S) {
+		self.renderFn = renderFn
+		self.state = initialState
+	}
+
 	// MARK: Lifecycle
-	
+
+	public func render(state: S) -> Element {
+		if let renderFn = renderFn {
+			return renderFn(self, state)
+		} else {
+			return Empty()
+		}
+	}
+
 	private func update() {
+		// We haven't been realized or added to a view yet, so no need to do 
+		// anything.
+		if rootElement == nil { return }
+
 		let newRoot = render(state)
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
 		// hierarchy.
-		if newRoot.canDiff(rootElement) {
-			newRoot.applyDiff(rootElement)
+		if newRoot.canDiff(rootElement!) {
+			newRoot.applyDiff(rootElement!)
 		} else {
-			rootElement.derealize()
-
+			rootElement!.derealize()
 			if let hostView = hostView {
-				newRoot.realize(self, parentView: hostView)
+				newRoot.realize(hostView)
 			}
 		}
 
 		rootElement = newRoot
 		
 		componentDidUpdate()
+	}
+
+	/// Update the component without changing any state.
+	public func forceUpdate() {
+		update()
 	}
 	
 	/// Called when the component will be realized.
@@ -90,13 +107,17 @@ public class Component<S>: Element {
 
 	/// Add the component to the given view.
 	public func addToView(view: ViewType) {
-		assert(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
+		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 		
 		componentWillRealize()
 		
 		hostView = view
+
+		let rootElement = render(state)
 		rootElement.frame = view.bounds
-		rootElement.realize(self, parentView: view)
+		rootElement.realize(view)
+
+		self.rootElement = rootElement
 
 		if let contentView = rootElement.getContentView() {
 			contentView.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewHeightSizable
@@ -109,7 +130,7 @@ public class Component<S>: Element {
 	public func remove() {
 		componentWillDerealize()
 		
-		rootElement.derealize()
+		rootElement?.derealize()
 		hostView = nil
 		
 		componentDidDerealize()
@@ -140,21 +161,25 @@ public class Component<S>: Element {
 		if !super.canDiff(other) { return false }
 		
 		let otherComponent = other as Component
-		return rootElement.canDiff(otherComponent.rootElement)
+		if rootElement == nil || otherComponent.rootElement == nil { return false }
+
+		return rootElement!.canDiff(otherComponent.rootElement!)
 	}
 	
 	public override func applyDiff(other: Element) {
 		if other === self { return }
 
 		let otherComponent = other as Component
+		if rootElement == nil || otherComponent.rootElement == nil { return }
+
 		hostView = otherComponent.hostView
 
-		rootElement.applyDiff(otherComponent.rootElement)
+		rootElement!.applyDiff(otherComponent.rootElement!)
 
 		super.applyDiff(other)
 	}
 	
-	public override func realize(parent: Element, parentView: ViewType) {
+	public override func realize(parentView: ViewType) {
 		addToView(parentView)
 	}
 	
@@ -163,6 +188,44 @@ public class Component<S>: Element {
 	}
 	
 	public override func getContentView() -> ViewType? {
-		return rootElement.getContentView()
+		return rootElement?.getContentView()
+	}
+}
+
+public func noLayout(container: Container, elements: [Element]) {}
+
+public func alignLefts(origin: CGFloat)(container: Container, elements: [Element]) {
+	for el in elements {
+		el.frame.origin.x = origin
+	}
+}
+
+public func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var y = container.frame.size.height - padding;
+	for el in elements {
+		y -= el.frame.size.height + padding
+		el.frame.origin.y = y
+	}
+}
+
+public func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var x = padding
+	for el in elements {
+		el.frame.origin.x = x
+		x += el.frame.size.width + padding
+	}
+}
+
+public func offset(amount: CGPoint)(container: Container, elements: [Element]) {
+	for el in elements {
+		el.frame = CGRectOffset(el.frame, amount.x, amount.y)
+	}
+}
+
+infix operator >-- { associativity left }
+public func >--(f: (Container, [Element]) -> (), g: (Container, [Element]) -> ()) -> ((Container, [Element]) -> ()) {
+	return { container, elements in
+		f(container, elements)
+		g(container, elements)
 	}
 }

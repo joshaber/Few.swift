@@ -37,8 +37,6 @@ public class Element {
 	// equatable.
 	public var key: String?
 
-	internal var realizeInComponent: ((Element, ViewType) -> ())?
-	
 	public init() {}
 
 	/// Can the receiver and the other element be diffed?
@@ -63,21 +61,15 @@ public class Element {
 			frame = view.frame
 		}
 
-		realizeInComponent = other.realizeInComponent
-
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
 		}
 	}
 
-	/// Realize the element in the given component and parent view.
+	/// Realize the element in the parent view.
 	///
 	/// The default implementation adds the content view to `parentView`.
-	public func realize<S>(component: Component<S>, parentView: ViewType) {
-		realizeInComponent = { element, parentView in
-			element.realize(component, parentView: parentView)
-		}
-
+	public func realize(parentView: ViewType) {
 		parentView.addSubview <^> getContentView()
 	}
 
@@ -97,9 +89,8 @@ public class Element {
 extension Element {
 	public func debugQuickLookObject() -> AnyObject? {
 		let previewSize = CGSize(width: 512, height: 512)
-		let dummyComponent = Component(render: const(self), initialState: 0)
 		let dummyView = NSView(frame: CGRect(origin: CGPointZero, size: previewSize))
-		realize(dummyComponent, parentView: dummyView)
+		realize(dummyView)
 
 		var previewImage: NSImage? = nil
 		if let view = getContentView() {

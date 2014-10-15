@@ -132,10 +132,8 @@ public class Container: Element {
 		let (add, remove) = diffElementLists(otherContainer.children, children, true)
 
 		if let containerView = containerView {
-			if let realizeFn = realizeInComponent {
-				for child in add {
-					realizeFn(child, containerView)
-				}
+			for child in add {
+				child.realize(containerView)
 			}
 		}
 
@@ -146,17 +144,17 @@ public class Container: Element {
 		layout?(self, children)
 	}
 
-	public override func realize<S>(component: Component<S>, parentView: ViewType) {
+	public override func realize(parentView: ViewType) {
 		let view = ViewType(frame: frame)
 		containerView = view
 
 		layout?(self, children)
 		
 		for element in children {
-			element.realize(component, parentView: view)
+			element.realize(view)
 		}
 		
-		super.realize(component, parentView: parentView)
+		super.realize(parentView)
 	}
 
 	public override func derealize() {

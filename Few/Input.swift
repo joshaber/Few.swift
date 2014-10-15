@@ -13,95 +13,90 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (() -> ())?
 
 	override func controlTextDidChange(notification: NSNotification) {
-		action?();
+		action?()
 	}
 }
 
-public class Input<S>: Element {
+public class Input: Element {
 	public var text: String? {
 		get {
 			return _text
 		}
 	}
 
-	private var textField: NSTextField?
+	private var _textField: NSTextField?
 	
 	private var _text: String?
 	private var initialText: String?
-	private var action: (String, Component<S>) -> ()
+	private var placeholder: String?
+	private var action: String -> ()
 
-	private var component: Component<S>?
-	
 	private let inputDelegate = InputDelegate()
 
-	public convenience init(text: String?, fn: (String, S) -> S) {
-		self.init(text: text, initialText: nil, action: { str, component in
-			component.updateState { state in
-				fn(str, state)
-			}
-			return ()
-		})
+	public convenience init(text: String?, fn: String -> ()) {
+		self.init(text: text, initialText: nil, placeholder: nil, action: fn)
 	}
 
-	public convenience init(initialText: String?, fn: (String, S) -> S) {
-		self.init(text: nil, initialText: initialText, action: { str, component in
-			component.updateState { state in
-				fn(str, state)
-			}
-			return ()
-		})
+	public convenience init(initialText: String?, placeholder: String?, fn: String -> ()) {
+		self.init(text: nil, initialText: initialText, placeholder: placeholder, action: fn)
 	}
 
-	public init(text: String?, initialText: String?, action: (String, Component<S>) -> ()) {
+	public init(text: String?, initialText: String?, placeholder: String?, action: String -> ()) {
 		self._text = text
 		self.initialText = initialText
+		self.placeholder = placeholder
 		self.action = action
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] in
-			let stringValue = self.textField!.stringValue
+			let stringValue = self._textField!.stringValue
 			self._text = stringValue
-			if let component = self.component {
-				self.action(stringValue, component)
-			}
+			self.action(stringValue)
 		}
+	}
+
+	public var textField: NSTextField? {
+		return _textField
 	}
 
 	// MARK: Element
 	
 	public override func applyDiff(other: Element) {
 		let otherInput = other as Input
-		textField = otherInput.textField
-		textField?.delegate = inputDelegate
+		_textField = otherInput._textField
+		_textField?.delegate = inputDelegate
+
+		let cell = _textField?.cell() as? NSTextFieldCell
+		cell?.placeholderString = placeholder ?? ""
 
 		if let text = _text {
 			if let otherText = otherInput._text {
 				if text != otherText {
-					textField?.stringValue = text
+					_textField?.stringValue = text
 				}
 			}
 		} else {
 			_text = otherInput._text
 		}
 
-		component = otherInput.component
-
 		super.applyDiff(other)
 	}
 	
-	public override func realize(component: Component<S>, parentView: ViewType) {
-		self.component = component
-
+	public override func realize(parentView: ViewType) {
 		let field = NSTextField(frame: frame)
 		field.editable = true
 		field.stringValue = _text ?? initialText ?? ""
 		field.delegate = inputDelegate
-		textField = field
+
+		let cell = field.cell() as? NSTextFieldCell
+		cell?.placeholderString = placeholder ?? ""
+
+		_textField = field
 		
-		super.realize(component, parentView: parentView)
+		super.realize(parentView)
 	}
 	
 	public override func getContentView() -> ViewType? {
-		return textField
+		return _textField
 	}
 }
