@@ -73,6 +73,11 @@ public class Component<S>: Element {
 		
 		componentDidUpdate()
 	}
+
+	/// Update the component without changing any state.
+	public func forceUpdate() {
+		update()
+	}
 	
 	/// Called when the component will be realized.
 	public func componentWillRealize() {}
