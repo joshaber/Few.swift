@@ -191,3 +191,41 @@ public class Component<S>: Element {
 		return rootElement?.getContentView()
 	}
 }
+
+public func noLayout(container: Container, elements: [Element]) {}
+
+public func alignLefts(origin: CGFloat)(container: Container, elements: [Element]) {
+	for el in elements {
+		el.frame.origin.x = origin
+	}
+}
+
+public func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var y = container.frame.size.height - padding;
+	for el in elements {
+		y -= el.frame.size.height + padding
+		el.frame.origin.y = y
+	}
+}
+
+public func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]) {
+	var x = padding
+	for el in elements {
+		el.frame.origin.x = x
+		x += el.frame.size.width + padding
+	}
+}
+
+public func offset(amount: CGPoint)(container: Container, elements: [Element]) {
+	for el in elements {
+		el.frame = CGRectOffset(el.frame, amount.x, amount.y)
+	}
+}
+
+infix operator >-- { associativity left }
+public func >--(f: (Container, [Element]) -> (), g: (Container, [Element]) -> ()) -> ((Container, [Element]) -> ()) {
+	return { container, elements in
+		f(container, elements)
+		g(container, elements)
+	}
+}

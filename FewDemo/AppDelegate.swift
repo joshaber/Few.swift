@@ -15,37 +15,6 @@ func concat<T>(array: [T], value: T) -> [T] {
 	return copied
 }
 
-func noLayout(container: Container, elements: [Element]) {
-
-}
-
-func formLayout(container: Container, elements: [Element]) {
-	alignLefts(20)(container: container, elements: elements)
-	verticalStack(4)(container: container, elements: elements)
-}
-
-func alignLefts(origin: CGFloat)(container: Container, elements: [Element]) {
-	for el in elements {
-		el.frame.origin.x = origin
-	}
-}
-
-func verticalStack(padding: CGFloat)(container: Container, elements: [Element]) {
-	var y: CGFloat = container.frame.size.height - padding;
-	for el in elements {
-		y -= el.frame.size.height + padding
-		el.frame.origin.y = y
-	}
-}
-
-func horizontalStack(padding: CGFloat)(container: Container, elements: [Element]) {
-	var x = padding
-	for el in elements {
-		el.frame.origin.x = x
-		x += el.frame.size.width + padding
-	}
-}
-
 func renderApp(component: Few.Component<Int>, state: Int) -> Element {
 	let input = Input(initialText: "") { str in
 		component.updateState(const(str.utf16Count))
