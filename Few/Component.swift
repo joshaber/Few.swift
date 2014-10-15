@@ -107,7 +107,7 @@ public class Component<S>: Element {
 
 	/// Add the component to the given view.
 	public func addToView(view: ViewType) {
-		assert(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
+		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 		
 		componentWillRealize()
 		
