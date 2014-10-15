@@ -47,7 +47,8 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
 typealias AppComponent = AppComponent_<Any>
 class AppComponent_<Bullshit>: Few.Component<AppState> {
 	init() {
-		super.init(render: renderApp, initialState: AppState())
+		let todos = (1...100).map { "\($0)" }
+		super.init(render: renderApp, initialState: AppState(todos: todos))
 	}
 }
 

@@ -9,6 +9,8 @@
 import Foundation
 import AppKit
 
+private var ElementKey = "ElementKey"
+
 private let defaultRowHeight: CGFloat = 42
 
 func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
@@ -74,10 +76,12 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 				view = element.getContentView()
 				if let view = view {
 					view.identifier = key
+					objc_setAssociatedObject(view, &ElementKey, element, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
 				}
 			} else {
-				println("reused!")
-				// TODO: apply the diff
+				let oldElement = objc_getAssociatedObject(view, &ElementKey) as Element
+				element.applyDiff(oldElement)
+				objc_setAssociatedObject(view, &ElementKey, element, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
 			}
 		} else {
 			element.realize(tableView)
