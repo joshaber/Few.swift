@@ -68,6 +68,9 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 			if let children = theirChildrenByKey[key] {
 				if children.count > 0 {
 					remove.append(child)
+					var c = children
+					c.removeAtIndex(0)
+					theirChildrenByKey[key] = c
 				}
 			}
 		} else {

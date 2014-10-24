@@ -57,19 +57,20 @@ public class Component<S>: Element {
 		if rootElement == nil { return }
 
 		let newRoot = render(state)
+		let oldRoot = rootElement!
+
+		rootElement = newRoot
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
 		// hierarchy.
-		if newRoot.canDiff(rootElement!) {
-			newRoot.applyDiff(rootElement!)
+		if newRoot.canDiff(oldRoot) {
+			newRoot.applyDiff(oldRoot)
 		} else {
-			rootElement!.derealize()
+			oldRoot.derealize()
 			if let hostView = hostView {
 				newRoot.realize(hostView)
 			}
 		}
-
-		rootElement = newRoot
 		
 		componentDidUpdate()
 	}
@@ -113,17 +114,21 @@ public class Component<S>: Element {
 		
 		hostView = view
 
+		performInitialRender()
+		
+		componentDidRealize()
+	}
+
+	private func performInitialRender() {
 		let rootElement = render(state)
-		rootElement.frame = view.bounds
-		rootElement.realize(view)
+		rootElement.frame = hostView!.bounds
+		rootElement.realize(hostView!)
 
 		self.rootElement = rootElement
 
 		if let contentView = rootElement.getContentView() {
-			contentView.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewHeightSizable
+			contentView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 		}
-		
-		componentDidRealize()
 	}
 	
 	/// Remove the component from its host view.

@@ -32,7 +32,6 @@ func objectsToIndexes<T: AnyObject>(whole: [T], some: [T]) -> NSIndexSet {
 
 private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSource {
 	let tableView: NSTableView
-	unowned var list: List
 
 	var items: [Element] {
 		didSet {
@@ -49,10 +48,9 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		}
 	}
 
-	init(tableView: NSTableView, items: [Element], list: List) {
+	init(tableView: NSTableView, items: [Element]) {
 		self.tableView = tableView
 		self.items = items
-		self.list = list
 		super.init()
 
 		tableView.setDelegate(self)
@@ -70,19 +68,17 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		let element = items[row]
 		var view: NSView?
 		if let key = element.key {
-			view = tableView.makeViewWithIdentifier(key, owner: nil) as NSView?
-			if view == nil {
-				element.realize(tableView)
-				view = element.getContentView()
-				if let view = view {
-					view.identifier = key
-					objc_setAssociatedObject(view, &ElementKey, element, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
-				}
-			} else {
-				let oldElement = objc_getAssociatedObject(view, &ElementKey) as Element
-				element.applyDiff(oldElement)
-				objc_setAssociatedObject(view, &ElementKey, element, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+			var listCell = tableView.makeViewWithIdentifier(key, owner: nil) as ListCell?
+			if listCell == nil {
+				let newListCell = ListCell(frame: CGRectZero)
+				newListCell.identifier = key
+
+				listCell = newListCell
 			}
+
+			listCell?.element = element
+
+			view = listCell
 		} else {
 			element.realize(tableView)
 			view = element.getContentView()
@@ -124,7 +120,6 @@ public class List: Element {
 
 		super.applyDiff(other)
 
-		handler?.list = self
 		handler?.items = items
 	}
 
@@ -145,7 +140,7 @@ public class List: Element {
 
 		scrollView.documentView = tableView
 
-		let handler = TableViewHandler(tableView: tableView, items: items, list: self)
+		let handler = TableViewHandler(tableView: tableView, items: items)
 		self.handler = handler
 
 		super.realize(parentView)
