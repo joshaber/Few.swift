@@ -10,45 +10,39 @@ import Cocoa
 import Few
 
 struct AppState {
-	let todos = [String]()
+	let todos: [String] = []
+	let like = false
 }
 
 func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
-	let todos = state.todos.map { Label(text: $0) }
-	for todo in todos {
-		todo.key = "todo"
+	let count = Label(text: "\(state.todos.count)")
+	count.frame.size = CGSize(width: 100, height: 23)
+
+	let button = Button(title: "Add") {
+		component.updateState { state in
+			AppState(todos: state.todos + ["a nu todo"], like: state.like)
+		}
+		return ()
 	}
+	button.frame.size = CGSize(width: 50, height: 23)
 
-	let list = List(todos)
-	list.frame.size = CGSize(width: 200, height: 200)
+	let likedness = state.like ? "do" : "donut"
+	let statusLabel = Label(text: "I \(likedness) like this.")
+	statusLabel.frame.size = CGSize(width: 100, height: 23)
 
-	let field = Input(initialText: "", placeholder: "Todo") { str in }
-	field.frame.size = CGSize(width: 150, height: 23)
-
-	let addButton = Button(title: "Add") {
-		let text = field.textField!.stringValue
-		field.textField?.stringValue = ""
-
-		var todos = state.todos
-		todos.append(text)
-		component.updateState(const(AppState(todos: todos)))
+	let toggleButton = Button(title: "Toggle") {
+		component.updateState { state in
+			AppState(todos: state.todos, like: !state.like)
+		}
+		return ()
 	}
-	addButton.frame.size = CGSize(width: 50, height: 23)
+	toggleButton.frame.size = CGSize(width: 75, height: 23)
 
-	let removeButton = Button(title: "Remove") {
-		var todos = state.todos
-		todos.removeAtIndex(0)
-		component.updateState(const(AppState(todos: todos)))
-	}
-	removeButton.frame.size = CGSize(width: 70, height: 23)
-
-	let controls = Container(children: [field, addButton, removeButton], layout: horizontalStack(10))
-	controls.frame.size = CGSize(width: 310, height: 23)
-
-	return Container(children: [controls, list], layout: verticalStack(10))
+	let layout = offset(CGPoint(x: 20, y: 0)) >-- verticalStack(12)
+	return Container(children: [count, button, statusLabel, toggleButton], layout: layout)
 }
 
-private let initialState = AppState(todos: (1...100).map { "\($0)" })
+private let initialState = AppState(todos: (1...100).map { "\($0)" }, like: false)
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!

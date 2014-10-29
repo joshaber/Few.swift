@@ -9,6 +9,11 @@
 import Foundation
 import AppKit
 
+struct RealizedElement {
+	let element: Element
+	let view: ViewType?
+}
+
 /// Components are stateful elements and the bridge between Few and 
 /// AppKit/UIKit.
 ///
@@ -23,7 +28,7 @@ public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
 
-	private var rootElement: Element?
+	private var rootRealizedElement: RealizedElement?
 
 	private var hostView: ViewType?
 
@@ -36,8 +41,8 @@ public class Component<S>: Element {
 		self.state = initialState
 	}
 
-	public init(render renderFn: (Component<S>, S) -> Element, initialState: S) {
-		self.renderFn = renderFn
+	public init(render: (Component<S>, S) -> Element, initialState: S) {
+		self.renderFn = render
 		self.state = initialState
 	}
 
@@ -54,21 +59,24 @@ public class Component<S>: Element {
 	private func update() {
 		// We haven't been realized or added to a view yet, so no need to do 
 		// anything.
-		if rootElement == nil { return }
+		if rootRealizedElement == nil { return }
 
 		let newRoot = render(state)
-		let oldRoot = rootElement!
-
-		rootElement = newRoot
+		let oldRoot = rootRealizedElement!
 
 		// If we can diff then apply it. Otherwise we just swap out the entire
 		// hierarchy.
-		if newRoot.canDiff(oldRoot) {
-			newRoot.applyDiff(oldRoot)
+		if newRoot.canDiff(oldRoot.element) {
+			if let rootView = oldRoot.view {
+				newRoot.applyDiff(rootView, other: oldRoot.element)
+			}
+
+			rootRealizedElement = RealizedElement(element: newRoot, view: oldRoot.view)
 		} else {
-			oldRoot.derealize()
+			oldRoot.element.derealize()
 			if let hostView = hostView {
-				newRoot.realize(hostView)
+				let realizedView = newRoot.realize()
+				rootRealizedElement = RealizedElement(element: newRoot, view: realizedView)
 			}
 		}
 		
@@ -122,12 +130,13 @@ public class Component<S>: Element {
 	private func performInitialRender() {
 		let rootElement = render(state)
 		rootElement.frame = hostView!.bounds
-		rootElement.realize(hostView!)
+		let realizedView = rootElement.realize()
 
-		self.rootElement = rootElement
+		rootRealizedElement = RealizedElement(element: rootElement, view: realizedView)
 
-		if let contentView = rootElement.getContentView() {
-			contentView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+		if let realizedView = realizedView {
+			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+			hostView?.addSubview(realizedView)
 		}
 	}
 	
@@ -135,7 +144,7 @@ public class Component<S>: Element {
 	public func remove() {
 		componentWillDerealize()
 		
-		rootElement?.derealize()
+		rootRealizedElement?.element.derealize()
 		hostView = nil
 		
 		componentDidDerealize()
@@ -166,34 +175,31 @@ public class Component<S>: Element {
 		if !super.canDiff(other) { return false }
 		
 		let otherComponent = other as Component
-		if rootElement == nil || otherComponent.rootElement == nil { return false }
+		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return false }
 
-		return rootElement!.canDiff(otherComponent.rootElement!)
+		return rootRealizedElement!.element.canDiff(otherComponent.rootRealizedElement!.element)
 	}
 	
-	public override func applyDiff(other: Element) {
+	public override func applyDiff(view: ViewType, other: Element) {
 		if other === self { return }
 
 		let otherComponent = other as Component
-		if rootElement == nil || otherComponent.rootElement == nil { return }
-
 		hostView = otherComponent.hostView
 
-		rootElement!.applyDiff(otherComponent.rootElement!)
+		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return }
 
-		super.applyDiff(other)
+		rootRealizedElement!.element.applyDiff(view, other: otherComponent.rootRealizedElement!.element)
+
+		super.applyDiff(view, other: other)
 	}
 	
-	public override func realize(parentView: ViewType) {
-		addToView(parentView)
+	public override func realize() -> ViewType? {
+		let element = render(state)
+		return element.realize()
 	}
 	
 	public override func derealize() {
-		getContentView()?.removeFromSuperview()
-	}
-	
-	public override func getContentView() -> ViewType? {
-		return rootElement?.getContentView()
+		
 	}
 }
 

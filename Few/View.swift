@@ -14,8 +14,7 @@ public class View<T: ViewType>: Element {
 	private let type: T.Type
 
 	private var config: T -> ()
-	private var view: T?
-	
+
 	public init(type: T.Type, config: T -> ()) {
 		self.type = type
 		self.config = config
@@ -30,26 +29,18 @@ public class View<T: ViewType>: Element {
 		return type === otherView.type
 	}
 
-	public override func applyDiff(other: Element) {
-		let otherView = other as View
-		view = otherView.view
+	public override func applyDiff(view: ViewType, other: Element) {
+		let otherView = view as T
 
-		config <^> view
+		config(otherView)
 
-		super.applyDiff(other)
+		super.applyDiff(view, other: other)
 	}
 
-	public override func realize(parentView: ViewType) {
+	public override func realize() -> ViewType? {
 		let view = type()
 		config(view)
 		
-		self.view = view
-
-		super.realize(parentView)
-	}
-
-	public override func getContentView() -> ViewType? {
 		return view
 	}
-	
 }

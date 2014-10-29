@@ -10,9 +10,7 @@ import Foundation
 import AppKit
 
 public class Button: Element {
-	private var title: String
-
-	private var button: NSButton?
+	private let title: String
 
 	private let trampoline = TargetActionTrampoline()
 
@@ -25,31 +23,26 @@ public class Button: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element) {
+	public override func applyDiff(view: ViewType, other: Element) {
 		let otherButton = other as Button
-		button = otherButton.button
+		let button = view as NSButton
 
-		if title != otherButton.title {
-			button?.title = title
+		if title != button.title {
+			button.title = title
 		}
 
-		button?.target = trampoline
+		button.target = trampoline
 
-		super.applyDiff(other)
+		super.applyDiff(view, other: other)
 	}
 
-	public override func realize(parentView: ViewType) {
+	public override func realize() -> ViewType? {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
 		button.target = trampoline
 		button.action = trampoline.selector
-		self.button = button
-
-		super.realize(parentView)
-	}
-
-	public override func getContentView() -> ViewType? {
 		return button
 	}
+
 }

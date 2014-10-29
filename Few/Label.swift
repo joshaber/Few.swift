@@ -10,9 +10,7 @@ import Foundation
 import AppKit
 
 public class Label: Element {
-	private var textField: NSTextField?
-
-	private var text: String
+	private let text: String
 
 	public init(text: String) {
 		self.text = text
@@ -20,29 +18,23 @@ public class Label: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element) {
+	public override func applyDiff(view: ViewType, other: Element) {
 		let otherLabel = other as Label
-		textField = otherLabel.textField
+		let textField = view as NSTextField
 
-		if text != otherLabel.text {
-			textField?.stringValue = text
+		if text != textField.stringValue {
+			textField.stringValue = text
 		}
 
-		super.applyDiff(other)
+		super.applyDiff(view, other: other)
 	}
 
-	public override func realize(parentView: ViewType) {
+	public override func realize() -> ViewType? {
 		let field = NSTextField(frame: frame)
 		field.editable = false
 		field.drawsBackground = false
 		field.bordered = false
 		field.stringValue = text
-		textField = field
-
-		super.realize(parentView)
-	}
-
-	public override func getContentView() -> ViewType? {
-		return textField
+		return field
 	}
 }

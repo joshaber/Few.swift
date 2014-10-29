@@ -9,9 +9,16 @@
 import Foundation
 import AppKit
 
-public func diffElementLists(oldList: [Element], newList: [Element], diffMatches: Bool) -> (add: [Element], remove: [Element]) {
-	var add = [Element]()
-	var remove = [Element]()
+internal struct ElementDiff {
+	let add: [RealizedElement]
+	let remove: [RealizedElement]
+	let diff: [(old: RealizedElement, `new`: RealizedElement)]
+}
+
+internal func diffElementLists(oldList: [RealizedElement], newList: [RealizedElement]) -> ElementDiff {
+	var add = [RealizedElement]()
+	var remove = [RealizedElement]()
+	var diff: [(old: RealizedElement, `new`: RealizedElement)] = []
 
 	var theirChildrenByKey = childrenByKey(oldList)
 
@@ -20,9 +27,9 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 	// We want to reuse children as much as possible. First we check for
 	// matches by key, and then simply by order.
 	for child in newList {
-		var match: Element?
+		var match: RealizedElement?
 		// First try to find a match based on the key.
-		if let key = child.key {
+		if let key = child.element.key {
 			var matchingChildren = theirChildrenByKey[key]
 			if let matchingChildren = matchingChildren {
 				if matchingChildren.count > 0 {
@@ -40,17 +47,15 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 			childQueue.removeAtIndex(0)
 
 			// It has a key and we didn't already match it up.
-			if let key = match!.key {
+			if let key = match!.element.key {
 				match = nil
 			}
 		}
 
 		// If we have a match/pair then do the diff dance.
 		if let match = match {
-			if child.canDiff(match) {
-				if diffMatches {
-					child.applyDiff(match)
-				}
+			if child.element.canDiff(match.element) {
+				diff.append(old: match, `new`: child)
 			} else {
 				remove.append(match)
 				add.append(child)
@@ -64,7 +69,7 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 
 	// Anything left over at this point must be old.
 	for child in childQueue {
-		if let key = child.key {
+		if let key = child.element.key {
 			if let children = theirChildrenByKey[key] {
 				if children.count > 0 {
 					remove.append(child)
@@ -78,13 +83,13 @@ public func diffElementLists(oldList: [Element], newList: [Element], diffMatches
 		}
 	}
 
-	return (add: add, remove: remove)
+	return ElementDiff(add: add, remove: remove, diff: diff)
 }
 
-private func childrenByKey(children: [Element]) -> [String: [Element]] {
-	var childrenByKey = [String: [Element]]()
+private func childrenByKey(children: [RealizedElement]) -> [String: [RealizedElement]] {
+	var childrenByKey = [String: [RealizedElement]]()
 	for child in children {
-		if let key = child.key {
+		if let key = child.element.key {
 			var existing = childrenByKey[key]
 			if let existing = existing {
 				var e = existing
@@ -99,25 +104,35 @@ private func childrenByKey(children: [Element]) -> [String: [Element]] {
 	return childrenByKey
 }
 
+class ContainerView: NSView {
+	var realizedElements: [RealizedElement] = []
+
+	required init?(coder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
+
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+	}
+}
+
 /// Containers (surprise!) contain other elements.
 ///
 /// They diff their children using essentially two different passes:
 ///   1. Pair up children with the same key and diff them if possible.
 ///   2. Diff remaining children by order.
 public class Container: Element {
-	private var children: [Element]
+	private let children: [Element]
 
-	private var containerView: ViewType?
+	private let layout: ((Container, [Element]) -> ())?
 
-	private var layout: ((Container, [Element]) -> ())?
-
-	public convenience init(children: [Element], layout: (Container, [Element]) -> ()) {
-		self.init(children)
+	public init(children: [Element], layout: ((Container, [Element]) -> ())?) {
 		self.layout = layout
+		self.children = children
 	}
 
-	public init(_ children: [Element]) {
-		self.children = children
+	public convenience init(_ children: [Element]) {
+		self.init(children: children, nil)
 	}
 
 	public convenience init(_ children: Element...) {
@@ -126,38 +141,50 @@ public class Container: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element) {
+	public override func applyDiff(view: ViewType, other: Element) {
 		let otherContainer = other as Container
-		containerView = otherContainer.containerView
+		let containerView = view as ContainerView
 
-		super.applyDiff(other)
+		super.applyDiff(view, other: other)
 
-		let (add, remove) = diffElementLists(otherContainer.children, children, true)
+		let p = children.map { RealizedElement(element: $0, view: nil) }
+		let result = diffElementLists(containerView.realizedElements, p)
 
-		if let containerView = containerView {
-			for child in add {
-				child.realize(containerView)
-			}
+		for child in result.add {
+			let view = child.element.realize()
+			containerView.addSubview <*> view
 		}
 
-		for child in remove {
-			child.derealize()
+		for child in result.remove {
+			child.view?.removeFromSuperview()
+			child.element.derealize()
+		}
+
+		for pair in result.diff {
+			let (old, `new`) = pair
+			if let view = old.view {
+				`new`.element.applyDiff(view, other: old.element)
+			}
 		}
 
 		layout?(self, children)
 	}
 
-	public override func realize(parentView: ViewType) {
-		let view = ViewType(frame: frame)
-		containerView = view
+	public override func realize() -> ViewType? {
+		let containerView = ContainerView(frame: frame)
 
 		layout?(self, children)
-		
+
+		var realizedElements: [RealizedElement] = []
 		for element in children {
-			element.realize(view)
+			let realizedView = element.realize()
+			containerView.addSubview <*> realizedView
+			realizedElements.append(RealizedElement(element: element, view: realizedView))
 		}
-		
-		super.realize(parentView)
+
+		containerView.realizedElements = realizedElements
+
+		return containerView
 	}
 
 	public override func derealize() {
@@ -166,9 +193,5 @@ public class Container: Element {
 		}
 		
 		super.derealize()
-	}
-	
-	public override func getContentView() -> ViewType? {
-		return containerView
 	}
 }
