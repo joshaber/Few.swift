@@ -56,59 +56,46 @@ public class Element {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
-	public func applyDiff(other: Element) {
-		if let view = getContentView() {
-			frame = view.frame
-		}
+	public func applyDiff(view: ViewType, other: Element) {
+		frame = view.frame
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
 		}
 	}
 
-	/// Realize the element in the parent view.
-	///
-	/// The default implementation adds the content view to `parentView`.
-	public func realize(parentView: ViewType) {
-		parentView.addSubview <^> getContentView()
+	/// Realize the element and return the view containing it.
+	public func realize() -> ViewType? {
+		return nil
 	}
 
 	/// Derealize the element.
-	///
-	/// The default implemetation removes the content view from its superview.
-	public func derealize() {
-		getContentView()?.removeFromSuperview()
-	}
-
-	/// Get the content view which represents the element.
-	public func getContentView() -> ViewType? {
-		return nil
-	}
+	public func derealize() {}
 }
 
-extension Element {
-	public func debugQuickLookObject() -> AnyObject? {
-		let previewSize = CGSize(width: 512, height: 512)
-		let dummyView = NSView(frame: CGRect(origin: CGPointZero, size: previewSize))
-		realize(dummyView)
-
-		var previewImage: NSImage? = nil
-		if let view = getContentView() {
-			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
-			if imageRep == nil { return NSImage(size: previewSize) }
-
-			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
-
-			var image = NSImage(size: imageRep!.size)
-			image.addRepresentation(imageRep!)
-
-			previewImage = image
-		}
-		
-		return previewImage
-	}
-
-	public func pre() -> NSImage {
-		return debugQuickLookObject()! as NSImage
-	}
-}
+//extension Element {
+//	public func debugQuickLookObject() -> AnyObject? {
+//		let previewSize = CGSize(width: 512, height: 512)
+//		let dummyView = NSView(frame: CGRect(origin: CGPointZero, size: previewSize))
+//		realize(dummyView)
+//
+//		var previewImage: NSImage? = nil
+//		if let view = getContentView() {
+//			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
+//			if imageRep == nil { return NSImage(size: previewSize) }
+//
+//			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
+//
+//			var image = NSImage(size: imageRep!.size)
+//			image.addRepresentation(imageRep!)
+//
+//			previewImage = image
+//		}
+//		
+//		return previewImage
+//	}
+//
+//	public func pre() -> NSImage {
+//		return debugQuickLookObject()! as NSImage
+//	}
+//}

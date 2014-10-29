@@ -80,9 +80,7 @@ public func color(color: NSColor)(graphic: Graphic) -> Graphic {
 }
 
 public class Graphic: Element {
-	private var view: DrawableView?
-
-	private var draw: CGRect -> ()
+	private let draw: CGRect -> ()
 
 	public init(draw: CGRect -> ()) {
 		self.draw = draw
@@ -90,27 +88,21 @@ public class Graphic: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(other: Element) {
+	public override func applyDiff(view: ViewType, other: Element) {
 		let otherGraphic = other as Graphic
-		view = otherGraphic.view
+		let drawableView = view as DrawableView
 
-		view?.draw = draw
-		view?.needsDisplay = true
+		drawableView.draw = draw
+		drawableView.needsDisplay = true
 
-		super.applyDiff(other)
+		super.applyDiff(view, other: other)
 	}
 
-	public override func realize(parentView: ViewType) {
-		view = DrawableView(frame: frame, draw: callDrawFunc)
-
-		super.realize(parentView)
+	public override func realize() -> ViewType? {
+		return DrawableView(frame: frame, draw: callDrawFunc)
 	}
 
 	private func callDrawFunc(rect: CGRect) {
 		draw(rect)
-	}
-
-	public override func getContentView() -> ViewType? {
-		return view
 	}
 }
