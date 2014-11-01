@@ -16,7 +16,6 @@ struct AppState {
 
 func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
 	let count = Label(text: "\(state.todos.count)")
-	count.frame.size = CGSize(width: 100, height: 23)
 
 	let button = Button(title: "Add") {
 		component.updateState { state in
@@ -24,11 +23,9 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
 		}
 		return ()
 	}
-	button.frame.size = CGSize(width: 50, height: 23)
 
-	let likedness = state.like ? "do" : "donut"
+	let likedness = (state.like ? "do" : "donut")
 	let statusLabel = Label(text: "I \(likedness) like this.")
-	statusLabel.frame.size = CGSize(width: 100, height: 23)
 
 	let toggleButton = Button(title: "Toggle") {
 		component.updateState { state in
@@ -36,13 +33,27 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
 		}
 		return ()
 	}
-	toggleButton.frame.size = CGSize(width: 75, height: 23)
+
+	let graphic = fillRect(NSColor.greenColor())
+	graphic.sizingBehavior = .Fixed(CGSize(width: 100, height: 100))
+
+	var children = [count, button, statusLabel, toggleButton]
+	if !state.like {
+		children += [graphic]
+	}
+
+	// The [Element] cast is necessary otherwise Swift loses it shit at runtime.
+	// "NSArray element failed to match the Swift Array Element type"
+	let todos = state.todos.map { Label(text: $0) } as [Element]
+	let list = List(todos)
+	list.sizingBehavior = .Fixed(CGSize(width: 100, height: 100))
+	children += [list]
 
 	let layout = offset(CGPoint(x: 20, y: 0)) >-- verticalStack(12)
-	return Container(children: [count, button, statusLabel, toggleButton], layout: layout)
+	return Container(children: children, layout: layout)
 }
 
-private let initialState = AppState(todos: (1...100).map { "\($0)" }, like: false)
+private let initialState = AppState(todos: (1...100).map { "Todo #\($0)" }, like: false)
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
