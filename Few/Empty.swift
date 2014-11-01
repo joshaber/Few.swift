@@ -9,4 +9,8 @@
 import Foundation
 
 /// An empty element. No view is created or added.
-public class Empty: Element {}
+public class Empty: Element {
+	public override init() {
+		super.init()
+	}
+}
