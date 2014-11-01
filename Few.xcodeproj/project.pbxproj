@@ -10,7 +10,7 @@
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8891531819C8D4B90026A817 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891531719C8D4B90026A817 /* View.swift */; };
+		88729C3A1A029017007AB673 /* WrappedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88729C391A029017007AB673 /* WrappedView.swift */; };
 		8897687719AED88000DD079B /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8897688119AED88000DD079B /* FewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* FewTests.swift */; };
 		8897689619AED8AF00DD079B /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688A19AED8AF00DD079B /* Button.swift */; };
@@ -64,7 +64,7 @@
 
 /* Begin PBXFileReference section */
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
-		8891531719C8D4B90026A817 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		88729C391A029017007AB673 /* WrappedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WrappedView.swift; sourceTree = "<group>"; };
 		8897687119AED88000DD079B /* Few.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Few.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8897687519AED88000DD079B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8897687619AED88000DD079B /* Few.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Few.h; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
-				8891531719C8D4B90026A817 /* View.swift */,
+				88729C391A029017007AB673 /* WrappedView.swift */,
 				88BAF29219DE3094004241BA /* Empty.swift */,
 				88FC7EB019E242F4007AFBC8 /* List.swift */,
 				88F140B319F0B231000A3CAC /* ListCell.swift */,
@@ -415,7 +415,7 @@
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
 				8824A2F419B8957B00D5625A /* Input.swift in Sources */,
-				8891531819C8D4B90026A817 /* View.swift in Sources */,
+				88729C3A1A029017007AB673 /* WrappedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
