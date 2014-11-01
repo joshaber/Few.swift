@@ -9,23 +9,23 @@
 import Foundation
 import Few
 
-struct AppState {
+struct DemoState1 {
 	let todos: [String] = []
 	let like = false
 }
 
-class DemoComponent1<S>: Few.Component<AppState> {
+class DemoComponent1<S>: Few.Component<DemoState1> {
 	init() {
-		let initialState = AppState(todos: (1...100).map { "Todo #\($0)" }, like: false)
-		super.init(render: DemoComponent1.renderApp, initialState: initialState)
+		let initialState = DemoState1(todos: (1...100).map { "Todo #\($0)" }, like: false)
+		super.init(render: DemoComponent1.render, initialState: initialState)
 	}
 
-	class func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
+	class func render(component: Few.Component<DemoState1>, state: DemoState1) -> Element {
 		let count = Label(text: "\(state.todos.count)")
 
 		let button = Button(title: "Add") {
 			component.updateState { state in
-				AppState(todos: state.todos + ["a nu todo"], like: state.like)
+				DemoState1(todos: state.todos + ["a nu todo"], like: state.like)
 			}
 			return ()
 		}
@@ -35,7 +35,7 @@ class DemoComponent1<S>: Few.Component<AppState> {
 
 		let toggleButton = Button(title: "Toggle") {
 			component.updateState { state in
-				AppState(todos: state.todos, like: !state.like)
+				DemoState1(todos: state.todos, like: !state.like)
 			}
 			return ()
 		}

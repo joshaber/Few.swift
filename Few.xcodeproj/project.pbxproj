@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88080C6D1A047084005301A5 /* DemoComponent1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6C1A047084005301A5 /* DemoComponent1.swift */; };
+		88080C6F1A0470FE005301A5 /* DemoComponent2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6E1A0470FE005301A5 /* DemoComponent2.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		88080C6C1A047084005301A5 /* DemoComponent1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoComponent1.swift; sourceTree = "<group>"; };
+		88080C6E1A0470FE005301A5 /* DemoComponent2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoComponent2.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		88729C391A029017007AB673 /* WrappedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WrappedView.swift; sourceTree = "<group>"; };
 		8897687119AED88000DD079B /* Few.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Few.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -204,6 +206,7 @@
 				88BEF38D19AED9D5009197F0 /* MyPlayground.playground */,
 				889768AC19AED92D00DD079B /* AppDelegate.swift */,
 				88080C6C1A047084005301A5 /* DemoComponent1.swift */,
+				88080C6E1A0470FE005301A5 /* DemoComponent2.swift */,
 				889768AE19AED92D00DD079B /* Images.xcassets */,
 				889768B019AED92D00DD079B /* MainMenu.xib */,
 				889768A819AED92D00DD079B /* Supporting Files */,
@@ -435,6 +438,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88080C6D1A047084005301A5 /* DemoComponent1.swift in Sources */,
+				88080C6F1A0470FE005301A5 /* DemoComponent2.swift in Sources */,
 				889768AD19AED92D00DD079B /* AppDelegate.swift in Sources */,
 				889768AB19AED92D00DD079B /* main.swift in Sources */,
 			);
