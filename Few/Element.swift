@@ -73,29 +73,28 @@ public class Element {
 	public func derealize() {}
 }
 
-//extension Element {
-//	public func debugQuickLookObject() -> AnyObject? {
-//		let previewSize = CGSize(width: 512, height: 512)
-//		let dummyView = NSView(frame: CGRect(origin: CGPointZero, size: previewSize))
-//		realize(dummyView)
-//
-//		var previewImage: NSImage? = nil
-//		if let view = getContentView() {
-//			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
-//			if imageRep == nil { return NSImage(size: previewSize) }
-//
-//			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
-//
-//			var image = NSImage(size: imageRep!.size)
-//			image.addRepresentation(imageRep!)
-//
-//			previewImage = image
-//		}
-//		
-//		return previewImage
-//	}
-//
-//	public func pre() -> NSImage {
-//		return debugQuickLookObject()! as NSImage
-//	}
-//}
+extension Element {
+	public func debugQuickLookObject() -> AnyObject? {
+		let previewSize = CGSize(width: 512, height: 512)
+		let view = realize()
+
+		var previewImage: NSImage? = nil
+		if let view = view {
+			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
+			if imageRep == nil { return NSImage(size: previewSize) }
+
+			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
+
+			var image = NSImage(size: imageRep!.size)
+			image.addRepresentation(imageRep!)
+
+			previewImage = image
+		}
+		
+		return previewImage
+	}
+
+	public func pre() -> NSImage {
+		return debugQuickLookObject()! as NSImage
+	}
+}
