@@ -11,11 +11,17 @@ import AppKit
 
 public class Button: Element {
 	private let title: String
+	private let enabled: Bool
 
 	private let trampoline = TargetActionTrampoline()
 
-	public init(title: String, action: () -> ()) {
+	public convenience init(title: String, action: () -> ()) {
+		self.init(title: title, enabled: true, action: action)
+	}
+
+	public init(title: String, enabled: Bool, action: () -> ()) {
 		self.title = title
+		self.enabled = enabled
 		super.init()
 
 		self.trampoline.action = action
@@ -29,6 +35,10 @@ public class Button: Element {
 
 		if title != button.title {
 			button.title = title
+		}
+
+		if enabled != button.enabled {
+			button.enabled = enabled
 		}
 
 		button.target = trampoline
