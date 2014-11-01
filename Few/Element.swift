@@ -13,14 +13,17 @@ public typealias ViewType = NSView
 
 public var LogDiff = false
 
-public func frame<E: Element>(rect: CGRect)(element: E) -> E {
-	element.frame = rect
-	return element
-}
-
-public func size<E: Element>(size: CGSize)(element: E) -> E {
-	element.frame.size = size
-	return element
+/// The sizing behavior for an element.
+///
+///   Fill  - Fill the parent view.
+///   Fixed - Fix the size with the given value.
+///   Fit   - Ask the view for its fitting size.
+///   None  - Don't change the view's size.
+public enum SizingBehavior {
+	case Fill
+	case Fixed(CGSize)
+	case Fit
+	case None
 }
 
 /// Elements are the basic building block. They represent a visual thing which 
@@ -28,6 +31,9 @@ public func size<E: Element>(size: CGSize)(element: E) -> E {
 public class Element {
 	/// The frame of the element.
 	public var frame = CGRectZero
+
+	/// The sizing behavior of the Element.
+	public var sizingBehavior: SizingBehavior = .Fit
 
 	/// The key used to identify the element. Elements with matching keys will 
 	/// be more readily diffed in certain situations (i.e., when in a Container
@@ -37,7 +43,7 @@ public class Element {
 	// equatable.
 	public var key: String?
 
-	public init() {}
+	internal init() {}
 
 	/// Can the receiver and the other element be diffed?
 	///
@@ -57,7 +63,21 @@ public class Element {
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
 	public func applyDiff(view: ViewType, other: Element) {
-		frame = view.frame
+		switch sizingBehavior {
+		case .Fill:
+			frame = view.superview?.bounds ?? view.frame
+		case .Fixed(let size):
+			frame.size = size
+		case .Fit:
+			frame.size = view.fittingSize
+		default:
+			frame = view.frame
+		}
+
+		if view.frame != frame {
+			view.frame = frame
+			println("\(reflect(self).summary): frame: \(frame)")
+		}
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")

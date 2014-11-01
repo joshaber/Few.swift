@@ -129,6 +129,8 @@ public class Container: Element {
 	public init(children: [Element], layout: ((Container, [Element]) -> ())?) {
 		self.layout = layout
 		self.children = children
+		super.init()
+		self.sizingBehavior = .None
 	}
 
 	public convenience init(_ children: [Element]) {
@@ -150,9 +152,14 @@ public class Container: Element {
 		let p = children.map { RealizedElement(element: $0, view: nil) }
 		let result = diffElementLists(containerView.realizedElements, p)
 
+		var realizedElements: [RealizedElement] = []
 		for child in result.add {
 			let view = child.element.realize()
+			if let view = view {
+				child.element.applyDiff(view, other: child.element)
+			}
 			containerView.addSubview <*> view
+			realizedElements.append(RealizedElement(element: child.element, view: view))
 		}
 
 		for child in result.remove {
@@ -165,19 +172,29 @@ public class Container: Element {
 			if let view = old.view {
 				`new`.element.applyDiff(view, other: old.element)
 			}
+			realizedElements.append(RealizedElement(element: `new`.element, view: old.view))
 		}
 
+		containerView.realizedElements = realizedElements
+
 		layout?(self, children)
+
+		for element in realizedElements {
+			if let view = element.view {
+				element.element.applyDiff(view, other: element.element)
+			}
+		}
 	}
 
 	public override func realize() -> ViewType? {
 		let containerView = ContainerView(frame: frame)
 
-		layout?(self, children)
-
 		var realizedElements: [RealizedElement] = []
 		for element in children {
 			let realizedView = element.realize()
+			if let view = realizedView {
+				element.applyDiff(view, other: element)
+			}
 			containerView.addSubview <*> realizedView
 			realizedElements.append(RealizedElement(element: element, view: realizedView))
 		}

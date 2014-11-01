@@ -9,9 +9,14 @@
 import Foundation
 import AppKit
 
-struct RealizedElement {
+class RealizedElement {
 	let element: Element
 	let view: ViewType?
+
+	init(element: Element, view: ViewType?) {
+		self.element = element
+		self.view = view
+	}
 }
 
 /// Components are stateful elements and the bridge between Few and 
@@ -76,6 +81,9 @@ public class Component<S>: Element {
 			oldRoot.element.derealize()
 			if let hostView = hostView {
 				let realizedView = newRoot.realize()
+				if let view = realizedView {
+					newRoot.applyDiff(view, other: newRoot)
+				}
 				rootRealizedElement = RealizedElement(element: newRoot, view: realizedView)
 			}
 		}
@@ -131,6 +139,9 @@ public class Component<S>: Element {
 		let rootElement = render(state)
 		rootElement.frame = hostView!.bounds
 		let realizedView = rootElement.realize()
+		if let view = realizedView {
+			rootElement.applyDiff(view, other: rootElement)
+		}
 
 		rootRealizedElement = RealizedElement(element: rootElement, view: realizedView)
 
