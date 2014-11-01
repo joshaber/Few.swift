@@ -76,7 +76,6 @@ public class Element {
 
 		if view.frame != frame {
 			view.frame = frame
-			println("\(reflect(self).summary): frame: \(frame)")
 		}
 
 		if LogDiff {
