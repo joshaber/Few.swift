@@ -96,7 +96,8 @@ public class Component<S>: Element {
 		update()
 	}
 	
-	/// Called when the component will be realized.
+	/// Called when the component will be realized and before the component is
+	/// rendered for the first time.
 	public func componentWillRealize() {}
 	
 	/// Called when the component has been realized.
