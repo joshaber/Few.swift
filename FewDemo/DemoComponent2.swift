@@ -22,20 +22,16 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
-			component.updateState { state in DemoState2(username: str, password: state.password) }
-			return ()
+			component.replaceState(DemoState2(username: str, password: state.password))
 		}
-		usernameField.sizingBehavior = .Fixed(CGSize(width: 100, height: 23))
 
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
-			component.updateState { state in DemoState2(username: state.username, password: str) }
-			return ()
+			component.replaceState(DemoState2(username: state.username, password: str))
 		}
-		passwordField.sizingBehavior = .Fixed(CGSize(width: 100, height: 23))
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
-			println("Login!")
+			println("Login: \(state.username): \(state.password)")
 		}
 
 		return Container(children: [usernameField, passwordField, loginButton], layout: verticalStack(12))

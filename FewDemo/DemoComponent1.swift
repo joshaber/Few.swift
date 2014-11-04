@@ -24,20 +24,14 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		let count = Label(text: "\(state.todos.count)")
 
 		let button = Button(title: "Add") {
-			component.updateState { state in
-				DemoState1(todos: state.todos + ["a nu todo"], like: state.like)
-			}
-			return ()
+			component.replaceState(DemoState1(todos: state.todos + ["a nu todo"], like: state.like))
 		}
 
 		let likedness = (state.like ? "do" : "donut")
 		let statusLabel = Label(text: "I \(likedness) like this.")
 
 		let toggleButton = Button(title: "Toggle") {
-			component.updateState { state in
-				DemoState1(todos: state.todos, like: !state.like)
-			}
-			return ()
+			component.replaceState(DemoState1(todos: state.todos, like: !state.like))
 		}
 
 		let graphic = fillRect(NSColor.greenColor())

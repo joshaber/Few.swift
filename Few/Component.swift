@@ -175,6 +175,10 @@ public class Component<S>: Element {
 		return state
 	}
 
+	public func replaceState(state: S) {
+		updateState(const(state))
+	}
+
 	/// Get the host view of the component.
 	public func getHostView() -> ViewType? {
 		return hostView
