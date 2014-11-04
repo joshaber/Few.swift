@@ -1,5 +1,5 @@
 //
-//  WrappedView.swift
+//  View.swift
 //  Few
 //
 //  Created by Josh Abernathy on 10/30/14.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class WrappedView: Element {
+public class View: Element {
 	let view: ViewType
 	let element: Element
 
@@ -32,12 +32,12 @@ public class WrappedView: Element {
 	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 
-		let otherView = other as WrappedView
+		let otherView = other as View
 		return element.canDiff(otherView.element)
 	}
 
 	public override func applyDiff(view: ViewType, other: Element) {
-		let otherView = other as WrappedView
+		let otherView = other as View
 		element.applyDiff(view, other: otherView.element)
 	}
 }
