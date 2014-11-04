@@ -44,6 +44,8 @@ public class Input: Element {
 		self.inputDelegate.action = { [unowned self] field in
 			self.action(field.stringValue)
 		}
+
+		self.sizingBehavior = .Fixed(CGSize(width: 100, height: 23))
 	}
 
 	// MARK: Element
