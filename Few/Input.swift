@@ -22,23 +22,25 @@ public class Input: Element {
 	public let text: String?
 	private let initialText: String?
 	private let placeholder: String?
+	private let enabled: Bool
 	private let action: String -> ()
 
 	private let inputDelegate = InputDelegate()
 
 	public convenience init(text: String?, fn: String -> ()) {
-		self.init(text: text, initialText: nil, placeholder: nil, action: fn)
+		self.init(text: text, initialText: nil, placeholder: nil, enabled: true, action: fn)
 	}
 
 	public convenience init(initialText: String?, placeholder: String?, fn: String -> ()) {
-		self.init(text: nil, initialText: initialText, placeholder: placeholder, action: fn)
+		self.init(text: nil, initialText: initialText, placeholder: placeholder, enabled: true, action: fn)
 	}
 
-	public init(text: String?, initialText: String?, placeholder: String?, action: String -> ()) {
+	public init(text: String?, initialText: String?, placeholder: String?, enabled: Bool, action: String -> ()) {
 		self.text = text
 		self.initialText = initialText
 		self.placeholder = placeholder
 		self.action = action
+		self.enabled = enabled
 		super.init()
 		
 		self.inputDelegate.action = { [unowned self] field in
@@ -65,6 +67,10 @@ public class Input: Element {
 			}
 		}
 
+		if enabled != textField.enabled {
+			textField.enabled = enabled
+		}
+
 		super.applyDiff(view, other: other)
 	}
 	
@@ -73,6 +79,7 @@ public class Input: Element {
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""
 		field.delegate = inputDelegate
+		field.enabled = enabled
 
 		let cell = field.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
