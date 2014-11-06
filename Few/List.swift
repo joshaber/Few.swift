@@ -15,7 +15,10 @@ private let defaultRowHeight: CGFloat = 42
 
 func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
 	for (i, e) in enumerate(array) {
-		if e === element { return i }
+		// HAHA SWIFT WHY DOES POINTER EQUALITY NOT WORK
+		let ptr1 = Unmanaged<T>.passUnretained(element).toOpaque()
+		let ptr2 = Unmanaged<T>.passUnretained(e).toOpaque()
+		if ptr1 == ptr2 { return i }
 	}
 
 	return nil
