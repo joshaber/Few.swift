@@ -34,6 +34,7 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 			println("Login: \(state.username): \(state.password)")
 		}
 
-		return Container(children: [usernameField, passwordField, loginButton], layout: verticalStack(12))
+		let layout = verticalStack(12) >-- offset(CGPoint(x: 12, y: 12))
+		return Container(children: [usernameField, passwordField, loginButton], layout: layout)
 	}
 }
