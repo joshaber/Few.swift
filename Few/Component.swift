@@ -61,39 +61,54 @@ public class Component<S>: Element {
 		}
 	}
 
+	private func realizeNewRoot(element: Element) -> RealizedElement {
+		element.frame = hostView!.bounds
+
+		let view = element.realize()
+		if let view = view {
+			element.applyDiff(view, other: element)
+		}
+
+		return RealizedElement(element: element, view: view)
+	}
+
 	private func update() {
-		// We haven't been realized or added to a view yet, so no need to do 
-		// anything.
-		if rootRealizedElement == nil { return }
-
 		let newRoot = render(state)
-		let oldRoot = rootRealizedElement!
-
-		// If we can diff then apply it. Otherwise we just swap out the entire
-		// hierarchy.
-		if newRoot.canDiff(oldRoot.element) {
-			if let rootView = oldRoot.view {
-				newRoot.applyDiff(rootView, other: oldRoot.element)
-			}
-
-			rootRealizedElement = RealizedElement(element: newRoot, view: oldRoot.view)
-		} else {
-			oldRoot.element.derealize()
-			if let hostView = hostView {
-				let realizedView = newRoot.realize()
-				if let view = realizedView {
-					newRoot.applyDiff(view, other: newRoot)
+		let oldRoot = rootRealizedElement
+		if let oldRoot = oldRoot {
+			// If we can diff then apply it. Otherwise we just swap out the 
+			// entire hierarchy.
+			if newRoot.canDiff(oldRoot.element) {
+				if let rootView = oldRoot.view {
+					newRoot.applyDiff(rootView, other: oldRoot.element)
 				}
-				rootRealizedElement = RealizedElement(element: newRoot, view: realizedView)
+
+				rootRealizedElement = RealizedElement(element: newRoot, view: oldRoot.view)
+			} else {
+				oldRoot.element.derealize()
+				rootRealizedElement = realizeNewRoot(newRoot)
+			}
+		} else {
+			rootRealizedElement = realizeNewRoot(newRoot)
+
+			if let realizedView = rootRealizedElement?.view {
+				realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+				hostView?.addSubview(realizedView)
 			}
 		}
 		
 		componentDidUpdate()
 	}
 
+	private func updateIfHosted() {
+		if hostView == nil { return }
+
+		update();
+	}
+
 	/// Update the component without changing any state.
 	public func forceUpdate() {
-		update()
+		updateIfHosted()
 	}
 	
 	/// Called when the component will be realized and before the component is
@@ -133,27 +148,11 @@ public class Component<S>: Element {
 		
 		hostView = view
 
-		performInitialRender()
-		
+		update()
+
 		componentDidRealize()
 	}
 
-	private func performInitialRender() {
-		let rootElement = render(state)
-		rootElement.frame = hostView!.bounds
-		let realizedView = rootElement.realize()
-		if let view = realizedView {
-			rootElement.applyDiff(view, other: rootElement)
-		}
-
-		rootRealizedElement = RealizedElement(element: rootElement, view: realizedView)
-
-		if let realizedView = realizedView {
-			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-			hostView?.addSubview(realizedView)
-		}
-	}
-	
 	/// Remove the component from its host view.
 	public func remove() {
 		componentWillDerealize()
@@ -172,7 +171,7 @@ public class Component<S>: Element {
 		state = fn(oldState)
 		
 		if componentShouldUpdate(oldState, newState: state) {
-			update()
+			updateIfHosted()
 		}
 		
 		return state
@@ -212,11 +211,12 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
+		// TODO: Is this right? Probably not.
 		let element = render(state)
 		return element.realize()
 	}
 	
 	public override func derealize() {
-		
+		// TODO: Do we need to do something here?
 	}
 }
