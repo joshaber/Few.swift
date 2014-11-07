@@ -19,7 +19,6 @@
 		8897689719AED8AF00DD079B /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688B19AED8AF00DD079B /* Component.swift */; };
 		8897689819AED8AF00DD079B /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688C19AED8AF00DD079B /* Container.swift */; };
 		8897689919AED8AF00DD079B /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688D19AED8AF00DD079B /* Element.swift */; };
-		8897689B19AED8AF00DD079B /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688F19AED8AF00DD079B /* Graphic.swift */; };
 		8897689C19AED8AF00DD079B /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897689019AED8AF00DD079B /* Label.swift */; };
 		8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */; };
 		889768A019AED8AF00DD079B /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897689419AED8AF00DD079B /* Util.swift */; };
@@ -79,7 +78,6 @@
 		8897688B19AED8AF00DD079B /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		8897688C19AED8AF00DD079B /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		8897688D19AED8AF00DD079B /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
-		8897688F19AED8AF00DD079B /* Graphic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphic.swift; sourceTree = "<group>"; };
 		8897689019AED8AF00DD079B /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetActionTrampoline.swift; sourceTree = "<group>"; };
 		8897689419AED8AF00DD079B /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -160,7 +158,6 @@
 				8897688D19AED8AF00DD079B /* Element.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
 				8897688C19AED8AF00DD079B /* Container.swift */,
-				8897688F19AED8AF00DD079B /* Graphic.swift */,
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
@@ -410,7 +407,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
-				8897689B19AED8AF00DD079B /* Graphic.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,

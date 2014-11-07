@@ -34,12 +34,11 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			component.replaceState(DemoState1(todos: state.todos, like: !state.like))
 		}
 
-		let graphic = fillRect(NSColor.greenColor())
-		graphic.sizingBehavior = .Fixed(CGSize(width: 100, height: 100))
+		let likesIt = Label(text: "Hi likes it he really likes it!")
 
 		var children = [count, button, statusLabel, toggleButton]
 		if !state.like {
-			children += [graphic]
+			children += [likesIt]
 		}
 
 		// The [Element] cast is necessary otherwise Swift loses it shit at runtime.
