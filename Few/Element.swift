@@ -92,6 +92,12 @@ public class Element {
 
 	/// Derealize the element.
 	public func derealize() {}
+
+	/// Get the children of the element. These are elements which should be 
+	/// realized with the receiver.
+	public func getChildren() -> [Element] {
+		return []
+	}
 }
 
 extension Element {
