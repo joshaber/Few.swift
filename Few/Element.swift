@@ -55,10 +55,12 @@ public class Element {
 	}
 
 	/// Apply the diff. The receiver is the latest version and the argument is
-	/// the previous version.
+	/// the previous version. This usually entails updating the properties of 
+	/// the given view when they are different from the properties of the 
+	/// receiver.
 	///
-	/// That usually means copying over anything UI-specific from the old 
-	/// version to the new version.
+	/// This will be called as part of the render process, and also immediately
+	/// after the element has been realized.
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.

@@ -100,7 +100,8 @@ public class Component<S>: Element {
 	/// rendered for the first time.
 	public func componentWillRealize() {}
 	
-	/// Called when the component has been realized.
+	/// Called when the component has been realized and after the component has
+	/// been rendered for the first time.
 	public func componentDidRealize() {}
 	
 	/// Called when the component is about to be derealized.
@@ -123,7 +124,8 @@ public class Component<S>: Element {
 	
 	// MARK: -
 
-	/// Add the component to the given view.
+	/// Add the component to the given view. A component can only be added to 
+	/// one view at a time.
 	public func addToView(view: ViewType) {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 		
