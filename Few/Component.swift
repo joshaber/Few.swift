@@ -72,6 +72,14 @@ public class Component<S>: Element {
 		return RealizedElement(element: element, view: view)
 	}
 
+	private func diffRoots(oldRoot: RealizedElement, _ newRoot: Element) -> RealizedElement {
+		if let rootView = oldRoot.view {
+			newRoot.applyDiff(rootView, other: oldRoot.element)
+		}
+
+		return RealizedElement(element: newRoot, view: oldRoot.view)
+	}
+
 	private func update() {
 		let newRoot = render(state)
 		let oldRoot = rootRealizedElement
@@ -79,11 +87,7 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				if let rootView = oldRoot.view {
-					newRoot.applyDiff(rootView, other: oldRoot.element)
-				}
-
-				rootRealizedElement = RealizedElement(element: newRoot, view: oldRoot.view)
+				rootRealizedElement = diffRoots(oldRoot, newRoot)
 			} else {
 				oldRoot.element.derealize()
 				rootRealizedElement = realizeNewRoot(newRoot)
