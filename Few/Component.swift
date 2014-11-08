@@ -62,7 +62,7 @@ public class Component<S>: Element {
 	}
 
 	private func realizeNewRoot(element: Element) -> RealizedElement {
-		element.frame = hostView!.bounds
+		element.frame = hostView?.bounds ?? frame
 
 		let view = element.realize()
 		if let view = view {
@@ -104,15 +104,9 @@ public class Component<S>: Element {
 		componentDidUpdate()
 	}
 
-	private func updateIfHosted() {
-		if hostView == nil { return }
-
-		update();
-	}
-
 	/// Update the component without changing any state.
 	public func forceUpdate() {
-		updateIfHosted()
+		update()
 	}
 	
 	/// Called when the component will be realized and before the component is
@@ -175,7 +169,7 @@ public class Component<S>: Element {
 		state = fn(oldState)
 		
 		if componentShouldUpdate(oldState, newState: state) {
-			updateIfHosted()
+			update()
 		}
 		
 		return state
@@ -202,8 +196,6 @@ public class Component<S>: Element {
 	}
 	
 	public override func applyDiff(view: ViewType, other: Element) {
-		if other === self { return }
-
 		let otherComponent = other as Component
 		hostView = otherComponent.hostView
 
@@ -216,11 +208,11 @@ public class Component<S>: Element {
 	
 	public override func realize() -> ViewType? {
 		// TODO: Is this right? Probably not.
-		let element = render(state)
-		return element.realize()
+		update()
+		return rootRealizedElement?.view
 	}
 	
 	public override func derealize() {
-		// TODO: Do we need to do something here?
+		rootRealizedElement?.element.derealize()
 	}
 }
