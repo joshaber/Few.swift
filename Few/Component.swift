@@ -155,7 +155,8 @@ public class Component<S>: Element {
 	/// Remove the component from its host view.
 	public func remove() {
 		componentWillDerealize()
-		
+
+		rootRealizedElement?.view?.removeFromSuperview()
 		rootRealizedElement?.element.derealize()
 		hostView = nil
 		
