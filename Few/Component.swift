@@ -212,7 +212,6 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
-		// TODO: Is this right? Probably not.
 		update()
 		return rootRealizedElement?.view
 	}
