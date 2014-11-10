@@ -20,11 +20,11 @@ struct LogInState {
 }
 
 class LogInComponent<S>: Few.Component<LogInState> {
-	init(state: LogInState) {
-		super.init(render: LogInComponent.render, initialState: state)
+	init(state: LogInState, loggedIn: (String, String) -> ()) {
+		super.init(render: LogInComponent.render(loggedIn), initialState: state)
 	}
 
-	class func render(component: Few.Component<LogInState>, state: LogInState) -> Element {
+	class func render(loggedIn: (String, String) -> ())(component: Few.Component<LogInState>, state: LogInState) -> Element {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
 			component.replaceState(LogInState(username: str, password: state.password))
 		}
@@ -35,6 +35,7 @@ class LogInComponent<S>: Few.Component<LogInState> {
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
+			loggedIn(state.username, state.password)
 			println("Login: \(state.username): \(state.password)")
 		}
 
@@ -50,7 +51,10 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 	}
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {
-		let login = LogInComponent<LogInState>(state: state.logInState)
+		let login = LogInComponent<LogInState>(state: state.logInState) { username, password in
+			component.replaceState(DemoState2(loggedIn: true, logInState: state.logInState))
+		}
+
 		login.sizingBehavior = .Fixed(CGSize(width: 480, height: 360))
 		return login
 	}
