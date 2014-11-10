@@ -188,15 +188,17 @@ public class Component<S>: Element {
 	
 	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
-		
-		let otherComponent = other as Component
+
+		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
+		let otherComponent = unsafeBitCast(other, Component.self)
 		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return false }
 
 		return rootRealizedElement!.element.canDiff(otherComponent.rootRealizedElement!.element)
 	}
 	
 	public override func applyDiff(view: ViewType, other: Element) {
-		let otherComponent = other as Component
+		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
+		let otherComponent = unsafeBitCast(other, Component.self)
 		hostView = otherComponent.hostView
 
 		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return }
