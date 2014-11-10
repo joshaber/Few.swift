@@ -95,6 +95,7 @@ public class Component<S>: Element {
 			if newRoot.canDiff(oldRoot.element) {
 				rootRealizedElement = diffRoots(oldRoot, newRoot)
 			} else {
+				oldRoot.view?.removeFromSuperview()
 				oldRoot.element.derealize()
 				rootRealizedElement = realizeNewRoot(newRoot)
 			}
