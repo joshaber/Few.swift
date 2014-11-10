@@ -69,7 +69,13 @@ public class Component<S>: Element {
 			element.applyDiff(view, other: element)
 		}
 
-		return RealizedElement(element: element, view: view)
+		let realizedElement = RealizedElement(element: element, view: view)
+		if let realizedView = realizedElement.view {
+			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+			hostView?.addSubview(realizedView)
+		}
+
+		return realizedElement
 	}
 
 	private func diffRoots(oldRoot: RealizedElement, _ newRoot: Element) -> RealizedElement {
@@ -94,11 +100,6 @@ public class Component<S>: Element {
 			}
 		} else {
 			rootRealizedElement = realizeNewRoot(newRoot)
-
-			if let realizedView = rootRealizedElement?.view {
-				realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-				hostView?.addSubview(realizedView)
-			}
 		}
 		
 		componentDidUpdate()
