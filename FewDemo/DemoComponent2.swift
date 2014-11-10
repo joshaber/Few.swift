@@ -51,11 +51,17 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 	}
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {
-		let login = LogInComponent<LogInState>(state: state.logInState) { username, password in
-			component.replaceState(DemoState2(loggedIn: true, logInState: state.logInState))
-		}
+		if state.loggedIn {
+			let demo = DemoComponent1<DemoState1>()
+			demo.sizingBehavior = .Fill
+			return demo
+		} else {
+			let login = LogInComponent<LogInState>(state: state.logInState) { username, password in
+				component.replaceState(DemoState2(loggedIn: true, logInState: state.logInState))
+			}
 
-		login.sizingBehavior = .Fixed(CGSize(width: 480, height: 360))
-		return login
+			login.sizingBehavior = .Fill
+			return login
+		}
 	}
 }
