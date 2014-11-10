@@ -216,6 +216,6 @@ public class Component<S>: Element {
 	}
 	
 	public override func derealize() {
-		rootRealizedElement?.element.derealize()
+		remove()
 	}
 }
