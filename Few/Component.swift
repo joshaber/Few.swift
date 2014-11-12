@@ -121,7 +121,7 @@ func realizeElementRecursively(element: Element, hostView: ViewType?) -> Realize
 	}
 
 	let children = element.getChildren()
-	let realizedChildren = children.map { realizeElementRecursively($0, view) }
+	let realizedChildren = children.map { realizeElementRecursively($0, view ?? hostView) }
 
 	return RealizedElement(element: element, children: realizedChildren, view: view)
 }
@@ -141,7 +141,7 @@ func diffElementRecursively(oldElement: RealizedElement, newElement: Element, ho
 
 	var existingRealizedElements: [RealizedElement] = []
 	for (old, `new`) in listDiff.diff {
-		let realizedElement = diffElementRecursively(old, `new`, old.view)
+		let realizedElement = diffElementRecursively(old, `new`, old.view ?? hostView)
 		existingRealizedElements.append(realizedElement)
 	}
 
