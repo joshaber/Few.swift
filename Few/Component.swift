@@ -158,11 +158,6 @@ public class Component<S>: Element {
 	public func replaceState(state: S) {
 		updateState(const(state))
 	}
-
-	/// Get the host view of the component.
-	public func getHostView() -> ViewType? {
-		return hostView
-	}
 	
 	// MARK: Element
 	
