@@ -92,6 +92,11 @@ public class Element {
 
 	/// Derealize the element.
 	public func derealize() {}
+
+	/// Get the children of the element.
+	public func getChildren() -> [Element] {
+		return []
+	}
 }
 
 extension Element {

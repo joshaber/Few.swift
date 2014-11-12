@@ -9,17 +9,146 @@
 import Foundation
 import AppKit
 
-class RealizedElement {
+public class RealizedElement {
 	let element: Element
+	let children: [RealizedElement]
 	let view: ViewType?
 
-	init(element: Element, view: ViewType?) {
+	init(element: Element, children: [RealizedElement], view: ViewType?) {
 		self.element = element
+		self.children = children
 		self.view = view
 	}
 }
 
-/// Components are stateful elements and the bridge between Few and 
+internal struct ElementListDiff {
+	let add: [Element]
+	let remove: [RealizedElement]
+	let diff: [(old: RealizedElement, `new`: Element)]
+}
+
+private func childrenByKey(children: [RealizedElement]) -> [String: [RealizedElement]] {
+	var childrenByKey = [String: [RealizedElement]]()
+	for child in children {
+		if let key = child.element.key {
+			var existing = childrenByKey[key]
+			if var existing = existing {
+				existing.append(child)
+				childrenByKey[key] = existing
+			} else {
+				childrenByKey[key] = [child]
+			}
+		}
+	}
+
+	return childrenByKey
+}
+
+internal func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> ElementListDiff {
+	var add: [Element] = []
+	var remove: [RealizedElement] = []
+	var diff: [(old: RealizedElement, `new`: Element)] = []
+
+	var theirChildrenByKey = childrenByKey(oldList)
+
+	var childQueue = oldList
+
+	// We want to reuse children as much as possible. First we check for
+	// matches by key, and then simply by order.
+	for child in newList {
+		var match: RealizedElement?
+		// First try to find a match based on the key.
+		if let key = child.key {
+			var matchingChildren = theirChildrenByKey[key]
+			if var matchingChildren = matchingChildren {
+				if matchingChildren.count > 0 {
+					match = matchingChildren[0]
+					matchingChildren.removeAtIndex(0)
+					theirChildrenByKey[key] = matchingChildren
+				}
+			}
+		}
+
+		// If that fails and we still have new children, use one of those.
+		while match == nil && childQueue.count > 0 {
+			match = childQueue[0]
+			childQueue.removeAtIndex(0)
+
+			// It has a key and we didn't already match it up.
+			if let key = match!.element.key {
+				match = nil
+			}
+		}
+
+		// If we have a match/pair then do the diff dance.
+		if let match = match {
+			if child.canDiff(match.element) {
+				diff.append(old: match, `new`: child)
+			} else {
+				remove.append(match)
+				add.append(child)
+			}
+		} else {
+			// If we didn't find anything we could reuse, then we need to
+			// realize the new child.
+			add.append(child)
+		}
+	}
+
+	// Anything left over at this point must be old.
+	for child in childQueue {
+		if let key = child.element.key {
+			if var children = theirChildrenByKey[key] {
+				if children.count > 0 {
+					remove.append(child)
+					children.removeAtIndex(0)
+					theirChildrenByKey[key] = children
+				}
+			}
+		} else {
+			remove.append(child)
+		}
+	}
+
+	return ElementListDiff(add: add, remove: remove, diff: diff)
+}
+
+func realizeElementRecursively(element: Element, hostView: ViewType?) -> RealizedElement {
+	let view = element.realize()
+	if let view = view {
+		element.applyDiff(view, other: element)
+		hostView?.addSubview(view)
+	}
+
+	let children = element.getChildren()
+	let realizedChildren = children.map { realizeElementRecursively($0, view) }
+
+	return RealizedElement(element: element, children: realizedChildren, view: view)
+}
+
+func diffElementRecursively(oldElement: RealizedElement, newElement: Element, hostView: ViewType?) -> RealizedElement {
+	if let view = oldElement.view {
+		newElement.applyDiff(view, other: oldElement.element)
+	}
+
+	let listDiff = diffElementLists(oldElement.children, newElement.getChildren())
+	for element in listDiff.remove {
+		element.element.derealize()
+		element.view?.removeFromSuperview()
+	}
+
+	let newRealizedElements = listDiff.add.map { realizeElementRecursively($0, hostView) }
+
+	var existingRealizedElements: [RealizedElement] = []
+	for (old, `new`) in listDiff.diff {
+		let realizedElement = diffElementRecursively(old, `new`, old.view)
+		existingRealizedElements.append(realizedElement)
+	}
+
+	return RealizedElement(element: newElement, children: existingRealizedElements + newRealizedElements, view: oldElement.view)
+}
+
+/// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
 ///
 /// Simple components can be created without subclassing. More complex
@@ -64,26 +193,13 @@ public class Component<S>: Element {
 	private func realizeNewRoot(element: Element) -> RealizedElement {
 		element.frame = hostView?.bounds ?? frame
 
-		let view = element.realize()
-		if let view = view {
-			element.applyDiff(view, other: element)
-		}
-
-		let realizedElement = RealizedElement(element: element, view: view)
+		let realizedElement = realizeElementRecursively(element, hostView)
 		if let realizedView = realizedElement.view {
 			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			hostView?.addSubview(realizedView)
 		}
 
 		return realizedElement
-	}
-
-	private func diffRoots(oldRoot: RealizedElement, _ newRoot: Element) -> RealizedElement {
-		if let rootView = oldRoot.view {
-			newRoot.applyDiff(rootView, other: oldRoot.element)
-		}
-
-		return RealizedElement(element: newRoot, view: oldRoot.view)
 	}
 
 	private func update() {
@@ -93,10 +209,10 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				rootRealizedElement = diffRoots(oldRoot, newRoot)
+				rootRealizedElement = diffElementRecursively(oldRoot, newRoot, hostView)
 			} else {
-				oldRoot.view?.removeFromSuperview()
 				oldRoot.element.derealize()
+				oldRoot.view?.removeFromSuperview()
 				rootRealizedElement = realizeNewRoot(newRoot)
 			}
 		} else {

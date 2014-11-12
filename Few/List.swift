@@ -38,12 +38,11 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 
 	var items: [Element] {
 		didSet {
-			let oldR = oldValue.map { RealizedElement(element: $0, view: nil) }
-			let itemsR = items.map { RealizedElement(element: $0, view: nil) }
-			let diff = diffElementLists(oldR, itemsR)
+			let oldR = oldValue.map { RealizedElement(element: $0, children: [], view: nil) }
+			let diff = diffElementLists(oldR, items)
 			if diff.add.count == 0 && diff.remove.count == 0 { return }
 
-			let addIndexes = objectsToIndexes(itemsR, diff.add)
+			let addIndexes = objectsToIndexes(items, diff.add)
 			let removeIndexes = objectsToIndexes(oldR, diff.remove)
 
 			tableView.beginUpdates()
@@ -81,7 +80,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 				listCell = newListCell
 			}
 
-			listCell?.element = RealizedElement(element: element, view: nil)
+			listCell?.element = RealizedElement(element: element, children: [], view: nil)
 
 			view = listCell
 		} else {
