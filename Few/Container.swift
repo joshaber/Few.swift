@@ -9,18 +9,6 @@
 import Foundation
 import AppKit
 
-class ContainerView: NSView {
-	var realizedElements: [RealizedElement] = []
-
-	required init?(coder: NSCoder) {
-	    fatalError("init(coder:) has not been implemented")
-	}
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-	}
-}
-
 /// Containers (surprise!) contain other elements.
 ///
 /// They diff their children using essentially two different passes:
@@ -49,16 +37,13 @@ public class Container: Element {
 	// MARK: Element
 
 	public override func applyDiff(view: ViewType, other: Element) {
-		let otherContainer = other as Container
-		let containerView = view as ContainerView
-
 		super.applyDiff(view, other: other)
 
 		layout?(self, children)
 	}
 
 	public override func realize() -> ViewType? {
-		return ContainerView(frame: frame)
+		return NSView(frame: frame)
 	}
 
 	public override func derealize() {
