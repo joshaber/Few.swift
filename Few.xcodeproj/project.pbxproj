@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		88080C6D1A047084005301A5 /* DemoComponent1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6C1A047084005301A5 /* DemoComponent1.swift */; };
 		88080C6F1A0470FE005301A5 /* DemoComponent2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6E1A0470FE005301A5 /* DemoComponent2.swift */; };
+		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -66,6 +67,7 @@
 /* Begin PBXFileReference section */
 		88080C6C1A047084005301A5 /* DemoComponent1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoComponent1.swift; sourceTree = "<group>"; };
 		88080C6E1A0470FE005301A5 /* DemoComponent2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoComponent2.swift; sourceTree = "<group>"; };
+		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		88729C391A029017007AB673 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8897687119AED88000DD079B /* Few.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Few.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +159,7 @@
 				8897687619AED88000DD079B /* Few.h */,
 				8897688D19AED8AF00DD079B /* Element.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
+				88173A1E1A131CF10076F5A7 /* Diffing.swift */,
 				8897688C19AED8AF00DD079B /* Container.swift */,
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
@@ -416,6 +419,7 @@
 				8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */,
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
+				88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */,
 				8824A2F419B8957B00D5625A /* Input.swift in Sources */,
 				88729C3A1A029017007AB673 /* View.swift in Sources */,
 			);

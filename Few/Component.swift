@@ -9,17 +9,7 @@
 import Foundation
 import AppKit
 
-class RealizedElement {
-	let element: Element
-	let view: ViewType?
-
-	init(element: Element, view: ViewType?) {
-		self.element = element
-		self.view = view
-	}
-}
-
-/// Components are stateful elements and the bridge between Few and 
+/// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
 ///
 /// Simple components can be created without subclassing. More complex
@@ -35,7 +25,7 @@ public class Component<S>: Element {
 
 	private var rootRealizedElement: RealizedElement?
 
-	private var hostView: ViewType?
+	private weak var hostView: ViewType?
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
@@ -64,26 +54,13 @@ public class Component<S>: Element {
 	private func realizeNewRoot(element: Element) -> RealizedElement {
 		element.frame = hostView?.bounds ?? frame
 
-		let view = element.realize()
-		if let view = view {
-			element.applyDiff(view, other: element)
-		}
-
-		let realizedElement = RealizedElement(element: element, view: view)
+		let realizedElement = realizeElementRecursively(element, hostView)
 		if let realizedView = realizedElement.view {
 			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			hostView?.addSubview(realizedView)
 		}
 
 		return realizedElement
-	}
-
-	private func diffRoots(oldRoot: RealizedElement, _ newRoot: Element) -> RealizedElement {
-		if let rootView = oldRoot.view {
-			newRoot.applyDiff(rootView, other: oldRoot.element)
-		}
-
-		return RealizedElement(element: newRoot, view: oldRoot.view)
 	}
 
 	private func update() {
@@ -93,10 +70,10 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				rootRealizedElement = diffRoots(oldRoot, newRoot)
+				rootRealizedElement = diffElementRecursively(oldRoot, newRoot, hostView)
 			} else {
-				oldRoot.view?.removeFromSuperview()
 				oldRoot.element.derealize()
+				oldRoot.view?.removeFromSuperview()
 				rootRealizedElement = realizeNewRoot(newRoot)
 			}
 		} else {
@@ -180,11 +157,6 @@ public class Component<S>: Element {
 
 	public func replaceState(state: S) {
 		updateState(const(state))
-	}
-
-	/// Get the host view of the component.
-	public func getHostView() -> ViewType? {
-		return hostView
 	}
 	
 	// MARK: Element
