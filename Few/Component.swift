@@ -25,7 +25,7 @@ public class Component<S>: Element {
 
 	private var rootRealizedElement: RealizedElement?
 
-	private var hostView: ViewType?
+	private weak var hostView: ViewType?
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
