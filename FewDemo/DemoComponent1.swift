@@ -45,10 +45,9 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		// "NSArray element failed to match the Swift Array Element type"
 		let todos = state.todos.map { Label(text: $0) } as [Element]
 		let list = List(todos)
-		list.sizingBehavior = .Fixed(CGSize(width: 100, height: 100))
+		list.frame.size = CGSize(width: 100, height: 100)
 		children += [list]
 
-		let layout = offset(CGPoint(x: 20, y: 0)) >-- verticalStack(12)
-		return Container(children: children, layout: layout)
+		return Container(children)
 	}
 }

@@ -47,7 +47,7 @@ public class Input: Element {
 			self.action(field.stringValue)
 		}
 
-		self.sizingBehavior = .Fixed(CGSize(width: 100, height: 23))
+		self.frame.size = CGSize(width: 100, height: 23)
 	}
 
 	// MARK: Element

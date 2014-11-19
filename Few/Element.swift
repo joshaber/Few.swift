@@ -13,27 +13,11 @@ public typealias ViewType = NSView
 
 public var LogDiff = false
 
-/// The sizing behavior for an element.
-///
-///   Fill  - Fill the parent view.
-///   Fixed - Fix the size with the given value.
-///   Fit   - Ask the view for its fitting size.
-///   None  - Don't change the view's size.
-public enum SizingBehavior {
-	case Fill
-	case Fixed(CGSize)
-	case Fit
-	case None
-}
-
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
 public class Element {
 	/// The frame of the element.
 	public var frame = CGRectZero
-
-	/// The sizing behavior of the Element.
-	public var sizingBehavior: SizingBehavior = .Fit
 
 	/// The key used to identify the element. Elements with matching keys will 
 	/// be more readily diffed in certain situations (i.e., when in a Container
@@ -65,17 +49,6 @@ public class Element {
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
 	public func applyDiff(view: ViewType, other: Element) {
-		switch sizingBehavior {
-		case .Fill:
-			frame = view.superview?.bounds ?? view.frame
-		case .Fixed(let size):
-			frame.size = size
-		case .Fit:
-			frame.size = view.fittingSize
-		default:
-			frame = view.frame
-		}
-
 		if view.frame != frame {
 			view.frame = frame
 		}

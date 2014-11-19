@@ -24,6 +24,7 @@ public class Button: Element {
 		self.enabled = enabled
 		super.init()
 
+		self.frame.size = CGSize(width: 50, height: 23)
 		self.trampoline.action = action
 	}
 
@@ -54,5 +55,4 @@ public class Button: Element {
 		button.action = trampoline.selector
 		return button
 	}
-
 }

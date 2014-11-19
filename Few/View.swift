@@ -15,8 +15,6 @@ public class View: Element {
 	public init(view: ViewType, element: Element) {
 		self.view = view
 		self.element = element
-		super.init()
-		self.sizingBehavior = .None
 	}
 
 	// MARK: Element
