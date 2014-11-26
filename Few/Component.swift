@@ -159,6 +159,10 @@ public class Component<S>: Element {
 	public func replaceState(state: S) {
 		updateState(const(state))
 	}
+
+	public func getState() -> S {
+		return state
+	}
 	
 	// MARK: Element
 	
@@ -192,7 +196,7 @@ public class Component<S>: Element {
 		update()
 		return rootRealizedElement?.view
 	}
-	
+
 	public override func derealize() {
 		remove()
 	}
