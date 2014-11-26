@@ -19,6 +19,12 @@ struct LogInState {
 	let password: String = ""
 }
 
+extension LogInState: Printable {
+	var description: String {
+		return "\(username), \(password)"
+	}
+}
+
 class LogInComponent<S>: Few.Component<LogInState> {
 	init(state: LogInState, loggedIn: (String, String) -> ()) {
 		super.init(render: LogInComponent.render(loggedIn), initialState: state)
@@ -28,24 +34,38 @@ class LogInComponent<S>: Few.Component<LogInState> {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
 			component.replaceState(LogInState(username: str, password: state.password))
 		}
-		usernameField.frame.origin = CGPoint(x: 16, y: 100)
 
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
 			component.replaceState(LogInState(username: state.username, password: str))
 		}
-		passwordField.frame.origin = CGPoint(x: 16, y: 50)
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
 			loggedIn(state.username, state.password)
 			println("Login: \(state.username): \(state.password)")
 		}
-		loginButton.frame = CGRect(x: 16, y: 0, width: 100, height: 23)
 
-		let container = Container([usernameField, passwordField, loginButton])
-		container.frame.size = CGSize(width: 480, height: 360)
-		return container
+		let elements = [usernameField, passwordField, loginButton]
+		return Container(verticalStack(component.frame.size.height, 4, leftAlign(16, elements)))
 	}
+}
+
+func leftAlign(x: CGFloat, elements: [Element]) -> [Element] {
+	for element in elements {
+		element.frame.origin.x = x
+	}
+
+	return elements
+}
+
+func verticalStack(top: CGFloat, padding: CGFloat, elements: [Element]) -> [Element] {
+	var y = top
+	for element in elements {
+		y -= element.frame.size.height + padding
+		element.frame.origin.y = y
+	}
+
+	return elements
 }
 
 class DemoComponent2<S>: Few.Component<DemoState2> {

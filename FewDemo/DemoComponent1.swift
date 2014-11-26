@@ -34,7 +34,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			component.replaceState(DemoState1(todos: state.todos, like: !state.like))
 		}
 
-		let likesIt = Label(text: "Hi likes it he really likes it!")
+		let likesIt = Label(text: "He likes it he really likes it!")
 
 		var children = [count, button, statusLabel, toggleButton]
 		if !state.like {
@@ -48,6 +48,6 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		list.frame.size = CGSize(width: 100, height: 100)
 		children += [list]
 
-		return Container(children)
+		return Container(verticalStack(360, 4, leftAlign(16, children)))
 	}
 }
