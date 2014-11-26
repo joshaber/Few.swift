@@ -28,7 +28,26 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8897687B19AED88000DD079B"
+               BuildableName = "FewTests.xctest"
+               BlueprintName = "FewTests"
+               ReferencedContainer = "container:Few.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8897687019AED88000DD079B"
+            BuildableName = "Few.framework"
+            BlueprintName = "Few"
+            ReferencedContainer = "container:Few.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = ""
