@@ -9,11 +9,24 @@
 import Foundation
 import AppKit
 
-public class Label: Element {
-	private let text: String
+private let DefaultLabelFont = NSFont.labelFontOfSize(NSFont.systemFontSizeForControlSize(.RegularControlSize))
+private let LabelFudge = CGSize(width: 4, height: 0)
 
-	public init(text: String) {
-		self.text = text
+public class Label: Element {
+	private let attributedString: NSAttributedString
+
+	public convenience init(text: String) {
+		let attributedString = NSAttributedString(string: text, attributes: [NSFontAttributeName: DefaultLabelFont])
+		self.init(attributedString: attributedString)
+	}
+
+	public init(attributedString: NSAttributedString) {
+		self.attributedString = attributedString
+		super.init()
+
+		let capSize = CGSize(width: 1000, height: 1000)
+		let rect = self.attributedString.boundingRectWithSize(capSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
+		self.frame.size = CGSize(width: ceil(rect.size.width) + LabelFudge.width, height: ceil(rect.size.height) + LabelFudge.height)
 	}
 
 	// MARK: Element
@@ -22,8 +35,8 @@ public class Label: Element {
 		let otherLabel = other as Label
 		let textField = view as NSTextField
 
-		if text != textField.stringValue {
-			textField.stringValue = text
+		if attributedString != textField.attributedStringValue {
+			textField.attributedStringValue = attributedString
 		}
 
 		super.applyDiff(view, other: other)
@@ -34,7 +47,8 @@ public class Label: Element {
 		field.editable = false
 		field.drawsBackground = false
 		field.bordered = false
-		field.stringValue = text
+		field.font = DefaultLabelFont
+		field.attributedStringValue = attributedString
 		return field
 	}
 }
