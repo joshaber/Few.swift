@@ -116,23 +116,28 @@ internal func diffElementLists(oldList: [RealizedElement], newList: [Element]) -
 	return ElementListDiff(add: add, remove: remove, diff: diff)
 }
 
-/// Realize the element and its children recursively in the given host view.
-internal func realizeElementRecursively(element: Element, hostView: ViewType?) -> RealizedElement {
+/// Realize the element and its children recursively.
+internal func realizeElementRecursively(element: Element) -> RealizedElement {
 	let view = element.realize()
 	if let view = view {
 		element.applyDiff(view, other: element)
-		hostView?.addSubview(view)
 	}
 
 	let children = element.getChildren()
-	let realizedChildren = children.map { realizeElementRecursively($0, view ?? hostView) }
+	let realizedChildren = children.map(realizeElementRecursively)
+	if let view = view {
+		for child in realizedChildren {
+			if let v = child.view {
+				view.addSubview(v)
+			}
+		}
+	}
 
 	return RealizedElement(element: element, children: realizedChildren, view: view)
 }
 
-/// Diff the old element and new elements and their children recursively in the 
-/// given host view.
-internal func diffElementRecursively(oldElement: RealizedElement, newElement: Element, hostView: ViewType?) -> RealizedElement {
+/// Diff the old element and new elements and their children recursively.
+internal func diffElementRecursively(oldElement: RealizedElement, newElement: Element) -> RealizedElement {
 	if let view = oldElement.view {
 		newElement.applyDiff(view, other: oldElement.element)
 	}
@@ -143,11 +148,11 @@ internal func diffElementRecursively(oldElement: RealizedElement, newElement: El
 		element.view?.removeFromSuperview()
 	}
 
-	let newRealizedElements = listDiff.add.map { realizeElementRecursively($0, hostView) }
+	let newRealizedElements = listDiff.add.map(realizeElementRecursively)
 
 	var existingRealizedElements: [RealizedElement] = []
 	for (old, `new`) in listDiff.diff {
-		let realizedElement = diffElementRecursively(old, `new`, old.view ?? hostView)
+		let realizedElement = diffElementRecursively(old, `new`)
 		existingRealizedElements.append(realizedElement)
 	}
 

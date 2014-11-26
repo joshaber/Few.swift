@@ -54,7 +54,7 @@ public class Component<S>: Element {
 	private func realizeNewRoot(element: Element) -> RealizedElement {
 		element.frame = hostView?.bounds ?? frame
 
-		let realizedElement = realizeElementRecursively(element, hostView)
+		let realizedElement = realizeElementRecursively(element)
 		if let realizedView = realizedElement.view {
 			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			hostView?.addSubview(realizedView)
@@ -70,7 +70,8 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				rootRealizedElement = diffElementRecursively(oldRoot, newRoot, hostView)
+				newRoot.frame = frame
+				rootRealizedElement = diffElementRecursively(oldRoot, newRoot)
 			} else {
 				oldRoot.element.derealize()
 				oldRoot.view?.removeFromSuperview()
