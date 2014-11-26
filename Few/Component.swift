@@ -25,7 +25,7 @@ public class Component<S>: Element {
 
 	private var rootRealizedElement: RealizedElement?
 
-	private weak var hostView: ViewType?
+	private var hostView: ViewType?
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
@@ -185,6 +185,10 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
+		if hostView == nil {
+			hostView = NSView(frame: CGRectZero)
+		}
+
 		update()
 		return rootRealizedElement?.view
 	}
