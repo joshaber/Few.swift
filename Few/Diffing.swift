@@ -147,6 +147,11 @@ internal func diffElementRecursively(oldElement: RealizedElement, newElement: El
 	}
 
 	let newRealizedElements = listDiff.add.map(realizeElementRecursively)
+	if let view = oldElement.view {
+		for element in newRealizedElements {
+			view.addSubview <^> element.view
+		}
+	}
 
 	var existingRealizedElements: [RealizedElement] = []
 	for (old, `new`) in listDiff.diff {
