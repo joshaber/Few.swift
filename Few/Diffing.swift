@@ -127,9 +127,7 @@ internal func realizeElementRecursively(element: Element) -> RealizedElement {
 	let realizedChildren = children.map(realizeElementRecursively)
 	if let view = view {
 		for child in realizedChildren {
-			if let v = child.view {
-				view.addSubview(v)
-			}
+			view.addSubview <^> child.view
 		}
 	}
 
