@@ -9,12 +9,12 @@
 import Foundation
 
 /// An Element which has been realized and now has an associated view.
-internal class RealizedElement {
+public class RealizedElement {
 	let element: Element
 	let children: [RealizedElement]
 	let view: ViewType?
 
-	init(element: Element, children: [RealizedElement], view: ViewType?) {
+	public init(element: Element, children: [RealizedElement], view: ViewType?) {
 		self.element = element
 		self.children = children
 		self.view = view
@@ -22,10 +22,10 @@ internal class RealizedElement {
 }
 
 /// The result of an element list diff.
-internal struct ElementListDiff {
-	let add: [Element]
-	let remove: [RealizedElement]
-	let diff: [(old: RealizedElement, `new`: Element)]
+public struct ElementListDiff {
+	public let add: [Element]
+	public let remove: [RealizedElement]
+	public let diff: [(old: RealizedElement, `new`: Element)]
 }
 
 /// Group the list of elements by their key.
@@ -47,7 +47,7 @@ private func groupElementsByKey(children: [RealizedElement]) -> [String: [Realiz
 }
 
 /// Diff the list of realized elements and a new list of elements.
-internal func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> ElementListDiff {
+public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> ElementListDiff {
 	var add: [Element] = []
 	var remove: [RealizedElement] = []
 	var diff: [(old: RealizedElement, `new`: Element)] = []

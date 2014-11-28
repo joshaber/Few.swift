@@ -15,7 +15,7 @@
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88729C3A1A029017007AB673 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88729C391A029017007AB673 /* View.swift */; };
 		8897687719AED88000DD079B /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8897688119AED88000DD079B /* FewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* FewTests.swift */; };
+		8897688119AED88000DD079B /* DiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688019AED88000DD079B /* DiffTests.swift */; };
 		8897689619AED8AF00DD079B /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688A19AED8AF00DD079B /* Button.swift */; };
 		8897689719AED8AF00DD079B /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688B19AED8AF00DD079B /* Component.swift */; };
 		8897689819AED8AF00DD079B /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688C19AED8AF00DD079B /* Container.swift */; };
@@ -110,6 +110,13 @@
 			remoteGlobalIDString = DAEB6B8D1943873100289F44;
 			remoteInfo = "Quick-OSX";
 		};
+		884CBA251A28284100EDE9B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8897686819AED88000DD079B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8897687019AED88000DD079B;
+			remoteInfo = Few;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,7 +146,7 @@
 		8897687619AED88000DD079B /* Few.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Few.h; sourceTree = "<group>"; };
 		8897687C19AED88000DD079B /* FewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8897687F19AED88000DD079B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8897688019AED88000DD079B /* FewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FewTests.swift; sourceTree = "<group>"; };
+		8897688019AED88000DD079B /* DiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffTests.swift; sourceTree = "<group>"; };
 		8897688A19AED8AF00DD079B /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		8897688B19AED8AF00DD079B /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		8897688C19AED8AF00DD079B /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
@@ -260,7 +267,7 @@
 		8897687D19AED88000DD079B /* FewTests */ = {
 			isa = PBXGroup;
 			children = (
-				8897688019AED88000DD079B /* FewTests.swift */,
+				8897688019AED88000DD079B /* DiffTests.swift */,
 				8897687E19AED88000DD079B /* Supporting Files */,
 			);
 			path = FewTests;
@@ -342,6 +349,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				884CBA261A28284100EDE9B2 /* PBXTargetDependency */,
 				884CBA221A263CA000EDE9B2 /* PBXTargetDependency */,
 				884CBA241A263CA000EDE9B2 /* PBXTargetDependency */,
 			);
@@ -529,7 +537,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8897688119AED88000DD079B /* FewTests.swift in Sources */,
+				8897688119AED88000DD079B /* DiffTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +569,11 @@
 			isa = PBXTargetDependency;
 			name = "Quick-OSX";
 			targetProxy = 884CBA231A263CA000EDE9B2 /* PBXContainerItemProxy */;
+		};
+		884CBA261A28284100EDE9B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8897687019AED88000DD079B /* Few */;
+			targetProxy = 884CBA251A28284100EDE9B2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
