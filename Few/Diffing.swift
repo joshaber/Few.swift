@@ -30,7 +30,7 @@ public struct ElementListDiff {
 
 /// Group the list of elements by their key.
 private func groupElementsByKey(children: [RealizedElement]) -> [String: [RealizedElement]] {
-	var childrenByKey = [String: [RealizedElement]]()
+	var childrenByKey: [String: [RealizedElement]] = [:]
 	for child in children {
 		if let key = child.element.key {
 			let existing = childrenByKey[key]
