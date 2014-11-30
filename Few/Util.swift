@@ -108,3 +108,11 @@ public func flip<A, B, C>(fn: (A, B) -> C) -> (B, A) -> C {
 		return fn(a, b)
 	}
 }
+
+public func maybe<A, B>(value: A?, none: @autoclosure () -> B, some: A -> B) -> B {
+	if let value = value {
+		return some(value)
+	} else {
+		return none()
+	}
+}
