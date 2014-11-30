@@ -189,11 +189,8 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
-		if hostView == nil {
-			hostView = NSView(frame: CGRectZero)
-		}
+		addToView(NSView(frame: CGRectZero))
 
-		update()
 		return rootRealizedElement?.view
 	}
 
