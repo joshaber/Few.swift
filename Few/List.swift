@@ -52,6 +52,8 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		}
 	}
 
+	var selectionChanged: (Int -> ())?
+
 	init(tableView: NSTableView, items: [Element]) {
 		self.tableView = tableView
 		self.items = items
@@ -95,6 +97,10 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		return height > CGFloat(0) ? height : defaultRowHeight
 	}
 
+	func tableViewSelectionDidChange(notification: NSNotification) {
+		selectionChanged?(tableView.selectedRow)
+	}
+
 	// MARK: NSTableViewDataSource
 
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
@@ -108,9 +114,15 @@ private class ListHostingScrollView: NSScrollView {
 
 public class List: Element {
 	private let items: [Element]
+	private let selectionChanged: (Int -> ())?
 
-	public init(_ items: [Element]) {
+	public init(_ items: [Element], selectionChanged: (Int -> ())?) {
 		self.items = items
+		self.selectionChanged = selectionChanged
+	}
+
+	public convenience init(_ items: [Element]) {
+		self.init(items, selectionChanged: nil)
 	}
 
 	// MARK: -
@@ -122,6 +134,7 @@ public class List: Element {
 		super.applyDiff(view, other: other)
 
 		scrollView.handler?.items = items
+		scrollView.handler?.selectionChanged = selectionChanged
 	}
 
 	public override func realize() -> ViewType? {
