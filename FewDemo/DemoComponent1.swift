@@ -102,5 +102,6 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		children += [list]
 
 		return Container(verticalStack(360, 4, leftAlign(16, children)))
+		return Container(children |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}
 }

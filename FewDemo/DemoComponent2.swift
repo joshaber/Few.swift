@@ -46,26 +46,8 @@ class LogInComponent<S>: Few.Component<LogInState> {
 		}
 
 		let elements = [usernameField, passwordField, loginButton]
-		return Container(verticalStack(component.frame.size.height, 4, leftAlign(16, elements)))
+		return Container(elements |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}
-}
-
-func leftAlign(x: CGFloat, elements: [Element]) -> [Element] {
-	for element in elements {
-		element.frame.origin.x = x
-	}
-
-	return elements
-}
-
-func verticalStack(top: CGFloat, padding: CGFloat, elements: [Element]) -> [Element] {
-	var y = top
-	for element in elements {
-		y -= element.frame.size.height + padding
-		element.frame.origin.y = y
-	}
-
-	return elements
 }
 
 class DemoComponent2<S>: Few.Component<DemoState2> {
