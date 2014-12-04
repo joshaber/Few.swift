@@ -32,6 +32,8 @@ struct DemoState1 {
 class DemoComponent1<S>: Few.Component<DemoState1> {
 	var eventMonitor: AnyObject?
 
+	var list: List?
+
 	init() {
 		let initialState = DemoState1(todos: (1...100).map { "Todo #\($0)" }, like: false, watcherCount: nil, selectedIndex: nil)
 		super.init(render: DemoComponent1.render, initialState: initialState)
@@ -60,6 +62,10 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 				let state = self.getState()
 				if let index = state.selectedIndex {
 					println("Delete \(state.todos[index])")
+
+					let v = self.getView(self.list!)
+					println("view: \(v)")
+					return nil
 				}
 			}
 			println(event.window?.firstResponder)
@@ -84,24 +90,23 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		let toggleButton = Button(title: "Toggle") {
 			component.replaceState(DemoState1(todos: state.todos, like: !state.like, watcherCount: state.watcherCount, selectedIndex: nil))
 		}
+		toggleButton.frame.size.width = 54
 
 		let likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
 			Label(text: "\($0) people like us!!!")
 		}
-
-		var children = [count, button, statusLabel, toggleButton]
-		if !state.like {
-			children += [likesIt]
-		}
+		likesIt.hidden = !state.like
 
 		let todos = state.todos.map { Label(text: $0) }
 		let list = List(todos) { index in
 			component.replaceState(DemoState1(todos: state.todos, like: state.like, watcherCount: state.watcherCount, selectedIndex: index))
 		}
 		list.frame.size = CGSize(width: 100, height: 100)
-		children += [list]
 
-		return Container(verticalStack(360, 4, leftAlign(16, children)))
+		let c = component as DemoComponent1
+		c.list = list
+
+		let children = [count, button, statusLabel, toggleButton, likesIt, list]
 		return Container(children |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}
 }

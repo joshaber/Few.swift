@@ -163,6 +163,24 @@ public class Component<S>: Element {
 	public func getState() -> S {
 		return state
 	}
+	public func getView(element: Element) -> ViewType? {
+		if let realizedElement = rootRealizedElement {
+			return getViewRecursive(element, rootElement: realizedElement)
+		} else {
+			return nil
+		}
+	}
+
+	private func getViewRecursive(elementToFind: Element, rootElement: RealizedElement) -> ViewType? {
+		if rootElement.element === elementToFind { return rootElement.view }
+
+		for element in rootElement.children {
+			let result = getViewRecursive(elementToFind, rootElement: element)
+			if result != nil { return result }
+		}
+
+		return nil
+	}
 	
 	// MARK: Element
 	
