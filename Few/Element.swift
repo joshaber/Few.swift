@@ -27,6 +27,8 @@ public class Element {
 	// equatable.
 	public var key: String?
 
+	public var hidden: Bool = false
+
 	internal init() {}
 
 	/// Can the receiver and the other element be diffed?
@@ -51,6 +53,10 @@ public class Element {
 	public func applyDiff(view: ViewType, other: Element) {
 		if view.frame != frame {
 			view.frame = frame
+		}
+
+		if view.hidden != hidden {
+			view.hidden = hidden
 		}
 
 		if LogDiff {
