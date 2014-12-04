@@ -156,13 +156,20 @@ public class Component<S>: Element {
 		return state
 	}
 
+	/// Replace the current state with the given state.
 	public func replaceState(state: S) {
 		updateState(const(state))
 	}
 
+	/// Get the current state of the component.
 	public func getState() -> S {
 		return state
 	}
+
+	/// Get the view for the given element.
+	///
+	/// This will be nil for elements which haven't been realized yet or haven't
+	/// been returned from the render function.
 	public func getView(element: Element) -> ViewType? {
 		if let realizedElement = rootRealizedElement {
 			return getViewRecursive(element, rootElement: realizedElement)

@@ -27,6 +27,7 @@ public class Element {
 	// equatable.
 	public var key: String?
 
+	/// Is the element hidden?
 	public var hidden: Bool = false
 
 	internal init() {}
