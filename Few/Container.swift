@@ -10,11 +10,15 @@ import Foundation
 import AppKit
 
 /// Containers (surprise!) contain other elements.
-public class Container: Element {
+public class Container: Element, ArrayLiteralConvertible {
 	private let children: [Element]
 
 	public init(_ children: [Element]) {
 		self.children = children
+	}
+
+	public required init(arrayLiteral elements: Element...) {
+		self.children = elements
 	}
 
 	// MARK: Element
