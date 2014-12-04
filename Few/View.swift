@@ -9,8 +9,8 @@
 import Foundation
 
 public class View: Element {
-	let view: ViewType
-	let element: Element
+	private let view: ViewType
+	private let element: Element
 
 	public init(view: ViewType, element: Element) {
 		self.view = view
