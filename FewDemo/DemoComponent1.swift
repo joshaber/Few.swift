@@ -63,6 +63,10 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 				if let index = state.selectedIndex {
 					println("Delete \(state.todos[index])")
 
+					var todos = state.todos
+					todos.removeAtIndex(index)
+					self.replaceState(DemoState1(todos: todos, like: state.like, watcherCount: state.watcherCount, selectedIndex: state.selectedIndex))
+
 					let v = self.getView(self.list!)
 					println("view: \(v)")
 					return nil

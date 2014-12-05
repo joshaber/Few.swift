@@ -20,9 +20,7 @@ struct LogInState {
 }
 
 extension LogInState: Printable {
-	var description: String {
-		return "\(username), \(password)"
-	}
+	var description: String { return "\(username), \(password)" }
 }
 
 class LogInComponent<S>: Few.Component<LogInState> {
