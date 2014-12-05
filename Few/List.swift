@@ -52,7 +52,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		}
 	}
 
-	var selectionChanged: (Int -> ())?
+	var selectionChanged: (Int? -> ())?
 
 	init(tableView: NSTableView, items: [Element]) {
 		self.tableView = tableView
@@ -98,7 +98,8 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 	}
 
 	func tableViewSelectionDidChange(notification: NSNotification) {
-		selectionChanged?(tableView.selectedRow)
+		let row = tableView.selectedRow
+		selectionChanged?(row > -1 ? row : nil)
 	}
 
 	// MARK: NSTableViewDataSource
@@ -114,9 +115,9 @@ private class ListHostingScrollView: NSScrollView {
 
 public class List: Element {
 	private let items: [Element]
-	private let selectionChanged: (Int -> ())?
+	private let selectionChanged: (Int? -> ())?
 
-	public init(_ items: [Element], selectionChanged: (Int -> ())?) {
+	public init(_ items: [Element], selectionChanged: (Int? -> ())?) {
 		self.items = items
 		self.selectionChanged = selectionChanged
 	}
