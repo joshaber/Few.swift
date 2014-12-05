@@ -101,7 +101,11 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		}
 		likesIt.hidden = !state.like
 
-		let todos = state.todos.map { Label(text: $0) }
+		let todos: [Label] = state.todos.map { str in
+			let label = Label(text: str)
+			label.key = str
+			return label
+		}
 		let list = List(todos) { index in
 			component.replaceState(DemoState1(todos: state.todos, like: state.like, watcherCount: state.watcherCount, selectedIndex: index))
 		}
