@@ -29,6 +29,8 @@ public class Component<S>: Element {
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
+	private var rendering: Bool = false
+
 	/// Initializes the component with its initial state. The render function 
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
@@ -64,6 +66,10 @@ public class Component<S>: Element {
 	}
 
 	private func update() {
+		if rendering { return }
+
+		rendering = true
+
 		let newRoot = render(state)
 		let oldRoot = rootRealizedElement
 		if let oldRoot = oldRoot {
@@ -82,6 +88,8 @@ public class Component<S>: Element {
 		}
 		
 		componentDidUpdate()
+
+		rendering = false
 	}
 
 	/// Update the component without changing any state.
