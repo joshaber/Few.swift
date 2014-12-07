@@ -31,6 +31,8 @@ public class Component<S>: Element {
 
 	private var rendering: Bool = false
 
+	private var renderQueued: Bool = false
+
 	/// Initializes the component with its initial state. The render function 
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
@@ -66,7 +68,10 @@ public class Component<S>: Element {
 	}
 
 	private func update() {
-		if rendering { return }
+		if rendering {
+			renderQueued = true
+			return
+		}
 
 		rendering = true
 
@@ -90,6 +95,11 @@ public class Component<S>: Element {
 		componentDidUpdate()
 
 		rendering = false
+
+		if renderQueued {
+			renderQueued = false
+			update()
+		}
 	}
 
 	/// Update the component without changing any state.
