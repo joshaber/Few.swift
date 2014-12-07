@@ -116,14 +116,16 @@ private class ListHostingScrollView: NSScrollView {
 public class List: Element {
 	private let items: [Element]
 	private let selectionChanged: (Int? -> ())?
+	private let selectedRow: Int?
 
-	public init(_ items: [Element], selectionChanged: (Int? -> ())?) {
+	public init(_ items: [Element], selectedRow: Int?, selectionChanged: (Int? -> ())?) {
 		self.items = items
 		self.selectionChanged = selectionChanged
+		self.selectedRow = selectedRow
 	}
 
 	public convenience init(_ items: [Element]) {
-		self.init(items, selectionChanged: nil)
+		self.init(items, selectedRow: nil, selectionChanged: nil)
 	}
 
 	// MARK: -
@@ -136,8 +138,17 @@ public class List: Element {
 
 		scrollView.handler?.items = items
 		scrollView.handler?.selectionChanged = selectionChanged
-	}
 
+		let tableView = scrollView.handler?.tableView
+		if tableView?.selectedRow != selectedRow {
+			if let selectedRow = selectedRow {
+				tableView?.selectRowIndexes(NSIndexSet(index: selectedRow), byExtendingSelection: false)
+			} else {
+				tableView?.deselectAll(nil)
+				tableView?.selectRowIndexes(NSIndexSet(), byExtendingSelection: false)
+			}
+		}
+	}
 	public override func realize() -> ViewType? {
 		let scrollView = ListHostingScrollView(frame: frame)
 		scrollView.hasVerticalScroller = true
