@@ -67,8 +67,12 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 					todos.removeAtIndex(index)
 					self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
 
-					let v = self.getView(self.list!)
-					println("view: \(v)")
+					if state.todos.count > 0 {
+						let scrollView = self.getView(self.list!) as NSScrollView
+						let clipView = scrollView.subviews[0] as NSClipView
+						let tableView = clipView.subviews[0] as NSTableView
+						tableView.selectRowIndexes(NSIndexSet(index: 0), byExtendingSelection: false)
+					}
 					return nil
 				}
 			}
