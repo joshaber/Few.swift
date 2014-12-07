@@ -151,7 +151,7 @@ public class Component<S>: Element {
 	}
 	
 	/// Update the state using the given function.
-	public func updateState(fn: S -> S) -> S {
+	public func updateState(fn: S -> S) {
 		precondition(NSThread.isMainThread(), "Component.updateState called on a background thread. Donut do that!")
 
 		let oldState = state
@@ -160,13 +160,6 @@ public class Component<S>: Element {
 		if componentShouldUpdate(oldState, newState: state) {
 			update()
 		}
-		
-		return state
-	}
-
-	/// Replace the current state with the given state.
-	public func replaceState(state: S) {
-		updateState(const(state))
 	}
 
 	/// Get the current state of the component.

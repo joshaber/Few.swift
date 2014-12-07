@@ -30,11 +30,11 @@ class LogInComponent<S>: Few.Component<LogInState> {
 
 	class func render(loggedIn: (String, String) -> ())(component: Few.Component<LogInState>, state: LogInState) -> Element {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
-			component.replaceState(LogInState(username: str, password: state.password))
+			component.updateState { LogInState(username: str, password: $0.password) }
 		}
 
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
-			component.replaceState(LogInState(username: state.username, password: str))
+			component.updateState { LogInState(username: $0.username, password: str) }
 		}
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
@@ -59,7 +59,7 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 			return DemoComponent1<DemoState1>()
 		} else {
 			return LogInComponent<LogInState>(state: state.logInState) { username, password in
-				component.replaceState(DemoState2(loggedIn: true, logInState: state.logInState))
+				component.updateState { DemoState2(loggedIn: true, logInState: $0.logInState) }
 			}
 		}
 	}

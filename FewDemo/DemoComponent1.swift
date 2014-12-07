@@ -51,7 +51,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			let watchers = JSON["watchers_count"] as? Int
 			dispatch_async(dispatch_get_main_queue()) {
 				let state = self.getState()
-				self.replaceState(DemoState1(todos: state.todos, like: state.like, watcherCount: watchers, selectedIndex: nil))
+				self.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: watchers, selectedIndex: $0.selectedIndex) }
 			}
 		}
 
@@ -65,7 +65,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 
 					var todos = state.todos
 					todos.removeAtIndex(index)
-					self.replaceState(DemoState1(todos: todos, like: state.like, watcherCount: state.watcherCount, selectedIndex: state.selectedIndex))
+					self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
 
 					let v = self.getView(self.list!)
 					println("view: \(v)")
@@ -85,14 +85,14 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		let count = Label(text: "\(state.todos.count)")
 
 		let button = Button(title: "Add") {
-			component.replaceState(DemoState1(todos: state.todos + ["a nu todo"], like: state.like, watcherCount: state.watcherCount, selectedIndex: nil))
+			component.updateState { DemoState1(todos: $0.todos + ["a nu todo"], like: $0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
 		}
 
 		let likedness = (state.like ? "do" : "donut")
 		let statusLabel = Label(text: "I \(likedness) like this.")
 
 		let toggleButton = Button(title: "Toggle") {
-			component.replaceState(DemoState1(todos: state.todos, like: !state.like, watcherCount: state.watcherCount, selectedIndex: nil))
+			component.updateState { DemoState1(todos: $0.todos, like: !$0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
 		}
 		toggleButton.frame.size.width = 54
 
@@ -107,7 +107,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			return label
 		}
 		let list = List(todos) { index in
-			component.replaceState(DemoState1(todos: state.todos, like: state.like, watcherCount: state.watcherCount, selectedIndex: index))
+			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: index) }
 		}
 		list.frame.size = CGSize(width: 100, height: 100)
 
