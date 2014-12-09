@@ -24,7 +24,7 @@ public class Container: Element, ArrayLiteralConvertible {
 	// MARK: Element
 
 	public override func realize() -> ViewType? {
-		return NSView(frame: frame)
+		return ViewType(frame: frame)
 	}
 
 	public override func getChildren() -> [Element] {
