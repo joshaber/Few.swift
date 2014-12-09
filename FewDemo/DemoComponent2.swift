@@ -50,7 +50,6 @@ class LogInComponent<S>: Few.Component<LogInState> {
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
 			loggedIn(state.username, state.password)
-			println("Login: \(state.username): \(state.password)")
 		}
 
 		let elements = [usernameField, enterUsername, passwordField, enterPassword, loginButton]

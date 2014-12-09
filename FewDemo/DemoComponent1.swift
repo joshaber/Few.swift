@@ -50,7 +50,6 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 
 			let watchers = JSON["watchers_count"] as? Int
 			dispatch_async(dispatch_get_main_queue()) {
-				let state = self.getState()
 				self.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: watchers, selectedIndex: $0.selectedIndex) }
 			}
 		}
