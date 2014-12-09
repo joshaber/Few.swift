@@ -34,9 +34,9 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 
 	var list: List?
 
-	init() {
+	init(logoutFn: () -> ()) {
 		let initialState = DemoState1(todos: (1...100).map { "Todo #\($0)" }, like: false, watcherCount: nil, selectedIndex: nil)
-		super.init(render: DemoComponent1.render, initialState: initialState)
+		super.init(render: DemoComponent1.render(logoutFn), initialState: initialState)
 	}
 
 	override func componentDidRealize() {
@@ -80,7 +80,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		NSEvent.removeMonitor <^> eventMonitor
 	}
 
-	class func render(component: Few.Component<DemoState1>, state: DemoState1) -> Element {
+	class func render(logoutFn: () -> ())(component: Few.Component<DemoState1>, state: DemoState1) -> Element {
 		let count = Label(text: "\(state.todos.count)")
 
 		let button = Button(title: "Add") {
@@ -113,7 +113,10 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		let c = component as DemoComponent1
 		c.list = list
 
-		let children = [count, button, statusLabel, toggleButton, likesIt, list]
+		let logoutButton = Button(title: "Logout", action: logoutFn)
+		logoutButton.frame.size = CGSize(width: 100, height: 23)
+
+		let children = [count, button, statusLabel, toggleButton, likesIt, list, logoutButton]
 		return Container(children |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}
 }

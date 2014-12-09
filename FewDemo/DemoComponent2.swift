@@ -66,7 +66,9 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {
 		if state.loggedIn {
-			return DemoComponent1<DemoState1>()
+			return DemoComponent1<DemoState1>() {
+				component.updateState { DemoState2(loggedIn: false, logInState: $0.logInState) }
+			}
 		} else {
 			return LogInComponent<LogInState>(state: state.logInState) { username, password in
 				component.updateState { DemoState2(loggedIn: true, logInState: $0.logInState) }
