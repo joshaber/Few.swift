@@ -225,7 +225,7 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
-		addToView(NSView(frame: CGRectZero))
+		addToView(ViewType(frame: CGRectZero))
 
 		return rootRealizedElement?.view
 	}
