@@ -59,19 +59,22 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			let characters = event.charactersIgnoringModifiers! as NSString
 			let character = Int(characters.characterAtIndex(0))
 			let listView = self.getView(self.list!)!
-			let firstResponder = event.window?.firstResponder as ViewType!
-			if character == NSDeleteCharacter && (firstResponder == listView || firstResponder.isDescendantOf(listView)) {
-				let state = self.getState()
-				if let index = state.selectedIndex {
-					var todos = state.todos
-					todos.removeAtIndex(index)
+			let firstResponder = event.window?.firstResponder as ViewType?
+			if let firstResponderView = firstResponder {
+				if character == NSDeleteCharacter && (firstResponder == listView || firstResponderView.isDescendantOf(listView)) {
+					let state = self.getState()
+					if let index = state.selectedIndex {
+						var todos = state.todos
+						todos.removeAtIndex(index)
 
-					let selectedIndex = (todos.count > 0 ? 0 : -1)
-					self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: selectedIndex) }
+						let selectedIndex = (todos.count > 0 ? 0 : -1)
+						self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: selectedIndex) }
 
-					return nil
+						return nil
+					}
 				}
 			}
+
 			return event
 		}
 	}
