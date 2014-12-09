@@ -33,9 +33,19 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			component.updateState { LogInState(username: str, password: $0.password) }
 		}
 
+		let attributes = [
+			NSForegroundColorAttributeName: NSColor.redColor(),
+			NSFontAttributeName: NSFont.systemFontOfSize(11),
+		]
+		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes))
+		enterUsername.hidden = state.username.utf16Count > 0
+
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
 			component.updateState { LogInState(username: $0.username, password: str) }
 		}
+
+		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes))
+		enterPassword.hidden = state.password.utf16Count > 0
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
@@ -43,7 +53,7 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			println("Login: \(state.username): \(state.password)")
 		}
 
-		let elements = [usernameField, passwordField, loginButton]
+		let elements = [usernameField, enterUsername, passwordField, enterPassword, loginButton]
 		return Container(elements |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}
 }
