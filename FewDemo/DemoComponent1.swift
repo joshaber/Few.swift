@@ -58,11 +58,11 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { event in
 			let characters = event.charactersIgnoringModifiers! as NSString
 			let character = Int(characters.characterAtIndex(0))
-			if character == NSDeleteCharacter {
+			let listView = self.getView(self.list!)!
+			let firstResponder = event.window?.firstResponder as ViewType!
+			if character == NSDeleteCharacter && (firstResponder == listView || firstResponder.isDescendantOf(listView)) {
 				let state = self.getState()
 				if let index = state.selectedIndex {
-					println("Delete \(state.todos[index])")
-
 					var todos = state.todos
 					todos.removeAtIndex(index)
 
@@ -72,7 +72,6 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 					return nil
 				}
 			}
-			println(event.window?.firstResponder)
 			return event
 		}
 	}
