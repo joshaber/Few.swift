@@ -66,7 +66,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 					var todos = state.todos
 					todos.removeAtIndex(index)
 
-					let selectedIndex: Int? = (todos.count > 0 ? 0 : nil)
+					let selectedIndex = (todos.count > 0 ? 0 : -1)
 					self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: selectedIndex) }
 
 					return nil
@@ -107,7 +107,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			return label
 		}
 		let list = List(todos, selectedRow: state.selectedIndex) { index in
-			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: index) }
+			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: (index > -1 ? index : nil)) }
 		}
 		list.frame.size = CGSize(width: 100, height: 100)
 

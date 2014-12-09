@@ -52,7 +52,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		}
 	}
 
-	var selectionChanged: (Int? -> ())?
+	var selectionChanged: (Int -> ())?
 
 	init(tableView: NSTableView, items: [Element]) {
 		self.tableView = tableView
@@ -98,8 +98,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 	}
 
 	func tableViewSelectionDidChange(notification: NSNotification) {
-		let row = tableView.selectedRow
-		selectionChanged?(row > -1 ? row : nil)
+		selectionChanged?(tableView.selectedRow)
 	}
 
 	// MARK: NSTableViewDataSource
@@ -115,10 +114,10 @@ private class ListHostingScrollView: NSScrollView {
 
 public class List: Element {
 	private let items: [Element]
-	private let selectionChanged: (Int? -> ())?
+	private let selectionChanged: (Int -> ())?
 	private let selectedRow: Int?
 
-	public init(_ items: [Element], selectedRow: Int?, selectionChanged: (Int? -> ())?) {
+	public init(_ items: [Element], selectedRow: Int?, selectionChanged: (Int -> ())?) {
 		self.items = items
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
@@ -142,10 +141,11 @@ public class List: Element {
 		let tableView = scrollView.handler?.tableView
 		if tableView?.selectedRow != selectedRow {
 			if let selectedRow = selectedRow {
-				tableView?.selectRowIndexes(NSIndexSet(index: selectedRow), byExtendingSelection: false)
-			} else {
-				tableView?.deselectAll(nil)
-				tableView?.selectRowIndexes(NSIndexSet(), byExtendingSelection: false)
+				if selectedRow > -1 {
+					tableView?.selectRowIndexes(NSIndexSet(index: selectedRow), byExtendingSelection: false)
+				} else {
+					tableView?.deselectAll(nil)
+				}
 			}
 		}
 	}
