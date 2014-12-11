@@ -16,15 +16,15 @@ enum LayoutF<R> {
 	case Embed(el: Element)
 }
 
-struct Layout<K> {
-	let layoutF: LayoutF<Layout<K>>
+struct Layout<S> {
+	let layoutF: LayoutF<Layout<S>>
 	let el: Element
-	let k: K
+	let state: S
 
-	init(layoutF: LayoutF<Layout<K>>, el: Element, k: K) {
+	init(layoutF: LayoutF<Layout<S>>, el: Element, state: S) {
 		self.layoutF = layoutF
 		self.el = el
-		self.k = k
+		self.state = state
 	}
 }
 
@@ -44,15 +44,15 @@ func map<A, B>(f: A -> B, l: Layout<A>) -> Layout<B> {
 		}
 	}()
 
-	return Layout(layoutF: newF, el: l.el, k: f(l.k))
+	return Layout(layoutF: newF, el: l.el, state: f(l.state))
 }
 
-func element<K>(#l: Layout<K>) -> Element {
+func element<S>(#l: Layout<S>) -> Element {
 	return l.el
 }
 
-func transform<K>(f: Element -> Element, #l: Layout<K>) -> Layout<K> {
-	return Layout(layoutF: l.layoutF, el: f(l.el), k: l.k)
+func transform<S>(f: Element -> Element, #l: Layout<S>) -> Layout<S> {
+	return Layout(layoutF: l.layoutF, el: f(l.el), state: l.state)
 }
 
 public func leftAlign(x: CGFloat)(elements: [Element]) -> [Element] {
