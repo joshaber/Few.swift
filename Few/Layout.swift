@@ -7,6 +7,45 @@
 //
 
 import Foundation
+import LlamaKit
+
+enum LayoutF<R> {
+	case Beside(left: Box<R>, right: Box<R>)
+	case Above(top: Box<R>, bottom: Box<R>)
+	case Container(rect: CGRect, r: Box<R>)
+	case Embed(el: Element)
+}
+
+struct Layout<K> {
+	let layoutF: LayoutF<Layout<K>>
+	let el: Element
+	let k: K
+
+	init(layoutF: LayoutF<Layout<K>>, el: Element, k: K) {
+		self.layoutF = layoutF
+		self.el = el
+		self.k = k
+	}
+}
+
+func map<A, B>(f: A -> B, l: Layout<A>) -> Layout<B> {
+	let newF: LayoutF<Layout<B>> = {
+		switch l.layoutF {
+		case let .Beside(r, r2):
+			let left: Box<Layout<B>> = Box(map(f, r.unbox))
+			let right: Box<Layout<B>> = Box(map(f, r.unbox))
+			return .Beside(left: left, right: right)
+		case let .Above(r, r2):
+			return .Above(top: Box(map(f, r.unbox)), bottom: Box(map(f, r2.unbox)))
+		case let .Container(rect, r):
+			return .Container(rect: rect, r: Box(map(f, r.unbox)))
+		case let .Embed(el):
+			return .Embed(el: el)
+		}
+	}()
+
+	return Layout(layoutF: newF, el: l.el, k: f(l.k))
+}
 
 public func leftAlign(x: CGFloat)(elements: [Element]) -> [Element] {
 	for element in elements {
