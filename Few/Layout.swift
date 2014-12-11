@@ -47,6 +47,14 @@ func map<A, B>(f: A -> B, l: Layout<A>) -> Layout<B> {
 	return Layout(layoutF: newF, el: l.el, k: f(l.k))
 }
 
+func element<K>(#l: Layout<K>) -> Element {
+	return l.el
+}
+
+func transform<K>(f: Element -> Element, #l: Layout<K>) -> Layout<K> {
+	return Layout(layoutF: l.layoutF, el: f(l.el), k: l.k)
+}
+
 public func leftAlign(x: CGFloat)(elements: [Element]) -> [Element] {
 	for element in elements {
 		element.frame.origin.x = x
