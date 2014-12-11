@@ -31,6 +31,7 @@
 		88CC9C511A2FBC1700C78D5F /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CC9C501A2FBC1700C78D5F /* Layout.swift */; };
 		88F140B419F0B231000A3CAC /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F140B319F0B231000A3CAC /* ListCell.swift */; };
 		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
+		D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1496DF21A395211003AC516 /* LlamaKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,34 @@
 			remoteGlobalIDString = 8897687019AED88000DD079B;
 			remoteInfo = Few;
 		};
+		D1496DF11A395211003AC516 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB2F8D8119BF637B00E4C49E;
+			remoteInfo = "LlamaKit-iOS";
+		};
+		D1496DF31A395211003AC516 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB2F8D8C19BF637B00E4C49E;
+			remoteInfo = "LlamaKit-iOSTests";
+		};
+		D1496DF51A395211003AC516 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0297D1019D67999009986A9;
+			remoteInfo = "LlamaKit-Mac";
+		};
+		D1496DF71A395211003AC516 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0297D1A19D67999009986A9;
+			remoteInfo = "LlamaKit-MacTests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -166,6 +195,7 @@
 		88CC9C501A2FBC1700C78D5F /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		88F140B319F0B231000A3CAC /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LlamaKit.xcodeproj; path = External/LlamaKit/LlamaKit.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +253,7 @@
 				8897687319AED88000DD079B /* Few */,
 				8897687D19AED88000DD079B /* FewTests */,
 				889768A719AED92D00DD079B /* FewDemo */,
+				D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */,
 				8897687219AED88000DD079B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -307,6 +339,17 @@
 				889768AA19AED92D00DD079B /* main.swift */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D1496DEB1A395211003AC516 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D1496DF21A395211003AC516 /* LlamaKit.framework */,
+				D1496DF41A395211003AC516 /* LlamaKit-iOSTests.xctest */,
+				D1496DF61A395211003AC516 /* LlamaKit.framework */,
+				D1496DF81A395211003AC516 /* LlamaKit-MacTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -413,6 +456,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D1496DEB1A395211003AC516 /* Products */;
+					ProjectRef = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
+				},
+				{
 					ProductGroup = 884CBA131A263C0600EDE9B2 /* Products */;
 					ProjectRef = 884CBA121A263C0600EDE9B2 /* Nimble.xcodeproj */;
 				},
@@ -485,6 +532,34 @@
 			fileType = wrapper.cfbundle;
 			path = "Nimble-OSXTests.xctest";
 			remoteRef = 884CBA1F1A263C0600EDE9B2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1496DF21A395211003AC516 /* LlamaKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LlamaKit.framework;
+			remoteRef = D1496DF11A395211003AC516 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1496DF41A395211003AC516 /* LlamaKit-iOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "LlamaKit-iOSTests.xctest";
+			remoteRef = D1496DF31A395211003AC516 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1496DF61A395211003AC516 /* LlamaKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LlamaKit.framework;
+			remoteRef = D1496DF51A395211003AC516 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1496DF81A395211003AC516 /* LlamaKit-MacTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "LlamaKit-MacTests.xctest";
+			remoteRef = D1496DF71A395211003AC516 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
