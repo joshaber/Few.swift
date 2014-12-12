@@ -15,6 +15,14 @@ public class View: Element {
 	public init(view: ViewType, element: Element) {
 		self.view = view
 		self.element = element
+		super.init()
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let view = copy as View
+		self.view = view.view
+		element = view.element
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: Element

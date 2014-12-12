@@ -32,6 +32,12 @@ public class Element {
 
 	internal init() {}
 
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		self.frame = frame
+		self.hidden = hidden
+		self.key = key
+	}
+
 	/// Can the receiver and the other element be diffed?
 	///
 	/// The default implementation checks the dynamic types of both objects and
@@ -76,6 +82,22 @@ public class Element {
 	/// Get the children of the element.
 	public func getChildren() -> [Element] {
 		return []
+	}
+
+	public func hide() -> Self {
+		return hidden(true)
+	}
+
+	public func show() -> Self {
+		return hidden(false)
+	}
+
+	public func hidden(h: Bool) -> Self {
+		return self.dynamicType(copy: self, frame: frame, hidden: h, key: key)
+	}
+
+	public func frame(f: CGRect) -> Self {
+		return self.dynamicType(copy: self, frame: f, hidden: hidden, key: key)
 	}
 }
 

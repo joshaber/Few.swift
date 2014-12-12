@@ -50,6 +50,17 @@ public class Input: Element {
 		self.frame.size = CGSize(width: 100, height: 23)
 	}
 
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let input = copy as Input
+		text = input.text
+		initialText = input.initialText
+		placeholder = input.placeholder
+		enabled = input.enabled
+		action = input.action
+		inputDelegate = input.inputDelegate
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+	}
+
 	// MARK: Element
 	
 	public override func applyDiff(view: ViewType, other: Element) {

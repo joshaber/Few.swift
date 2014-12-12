@@ -121,10 +121,19 @@ public class List: Element {
 		self.items = items
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
+		super.init()
 	}
 
 	public convenience init(_ items: [Element]) {
 		self.init(items, selectedRow: nil, selectionChanged: nil)
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let list = copy as List
+		items = list.items
+		selectionChanged = list.selectionChanged
+		selectedRow = list.selectedRow
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: -

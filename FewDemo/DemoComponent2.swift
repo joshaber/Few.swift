@@ -28,6 +28,10 @@ class LogInComponent<S>: Few.Component<LogInState> {
 		super.init(render: LogInComponent.render(loggedIn), initialState: state)
 	}
 
+	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
+	}
+
 	class func render(loggedIn: (String, String) -> ())(component: Few.Component<LogInState>, state: LogInState) -> Element {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
 			component.updateState { LogInState(username: str, password: $0.password) }
@@ -61,6 +65,10 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 	init() {
 		let initialState = DemoState2(loggedIn: false, logInState: LogInState(username: "", password: ""))
 		super.init(render: DemoComponent2.render, initialState: initialState)
+	}
+
+	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
 	}
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {

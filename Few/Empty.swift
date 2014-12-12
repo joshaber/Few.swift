@@ -13,4 +13,8 @@ public class Empty: Element {
 	public override init() {
 		super.init()
 	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+	}
 }

@@ -15,10 +15,18 @@ public class Container: Element, ArrayLiteralConvertible {
 
 	public init(_ children: [Element]) {
 		self.children = children
+		super.init()
 	}
 
 	public required init(arrayLiteral elements: Element...) {
 		self.children = elements
+		super.init()
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let container = copy as Container
+		children = container.children
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: Element

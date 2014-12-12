@@ -29,6 +29,12 @@ public class Label: Element {
 		self.frame.size = CGSize(width: ceil(rect.size.width) + LabelFudge.width, height: ceil(rect.size.height) + LabelFudge.height)
 	}
 
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let label = copy as Label
+		attributedString = label.attributedString
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+	}
+
 	// MARK: Element
 
 	public override func applyDiff(view: ViewType, other: Element) {

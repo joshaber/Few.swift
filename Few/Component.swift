@@ -38,11 +38,21 @@ public class Component<S>: Element {
 	/// represents that state.
 	public init(initialState: S) {
 		self.state = initialState
+		super.init()
 	}
 
 	public init(render: (Component<S>, S) -> Element, initialState: S) {
 		self.renderFn = render
 		self.state = initialState
+		super.init()
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let component = copy as Component
+		state = component.state
+		rootRealizedElement = component.rootRealizedElement
+		renderFn = component.renderFn
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: Lifecycle

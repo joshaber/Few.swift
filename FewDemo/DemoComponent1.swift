@@ -39,6 +39,10 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		super.init(render: DemoComponent1.render(logoutFn), initialState: initialState)
 	}
 
+	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
+	}
+
 	override func componentDidRealize() {
 		let URL = NSURL(string: "https://api.github.com/repos/ReactiveCocoa/ReactiveCocoa")
 		GET(URL!) { JSON, response, error in
@@ -97,10 +101,12 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		}
 		toggleButton.frame.size.width = 54
 
-		let likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
+		var likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
 			Label(text: "\($0) people like us!!!")
 		}
-		likesIt.hidden = !state.like
+		if !state.like {
+			likesIt = likesIt.hide()
+		}
 
 		let todos: [Label] = state.todos.map { str in
 			let label = Label(text: str)
