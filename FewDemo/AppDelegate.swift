@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
 	private let appComponent = DemoComponent2<DemoState2>()
-	
+
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView
 		var red = newElement(10, 10, .Space)
