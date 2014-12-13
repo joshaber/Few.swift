@@ -33,6 +33,7 @@
 		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
 		D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1496DF21A395211003AC516 /* LlamaKit.framework */; };
 		D1B478F91A3BCBC500190763 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B478E81A3BCBB200190763 /* Cartography.framework */; };
+		D1B9A6DB1A3CB6BE00437D8D /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9A6DA1A3CB6BE00437D8D /* Text.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,6 +227,7 @@
 		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LlamaKit.xcodeproj; path = External/LlamaKit/LlamaKit.xcodeproj; sourceTree = "<group>"; };
 		D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Cartography.xcodeproj; path = External/Cartography/Cartography.xcodeproj; sourceTree = "<group>"; };
+		D1B9A6DA1A3CB6BE00437D8D /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +319,7 @@
 				88F140B319F0B231000A3CAC /* ListCell.swift */,
 				88CC9C501A2FBC1700C78D5F /* Layout.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
+				D1B9A6DA1A3CB6BE00437D8D /* Text.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
@@ -671,6 +674,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
+				D1B9A6DB1A3CB6BE00437D8D /* Text.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
