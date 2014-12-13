@@ -4,3 +4,6 @@
 [submodule "External/LlamaKit"]
 	path = External/LlamaKit
 	url = https://github.com/LlamaKit/LlamaKit
+[submodule "External/Cartography"]
+	path = External/Cartography
+	url = https://github.com/robb/Cartography
