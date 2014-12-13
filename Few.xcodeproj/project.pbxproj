@@ -32,6 +32,7 @@
 		88F140B419F0B231000A3CAC /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F140B319F0B231000A3CAC /* ListCell.swift */; };
 		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
 		D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1496DF21A395211003AC516 /* LlamaKit.framework */; };
+		D1B478F91A3BCBC500190763 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B478E81A3BCBB200190763 /* Cartography.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,34 @@
 			remoteGlobalIDString = D0297D1A19D67999009986A9;
 			remoteInfo = "LlamaKit-MacTests";
 		};
+		D1B478E71A3BCBB200190763 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54C96A11195063CD000CDD27;
+			remoteInfo = "Cartography-iOS";
+		};
+		D1B478E91A3BCBB200190763 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54C96A1C195063CD000CDD27;
+			remoteInfo = "Cartography-iOS-Tests";
+		};
+		D1B478EB1A3BCBB200190763 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54F6A838195C20C100313D24;
+			remoteInfo = "Cartography-Mac";
+		};
+		D1B478ED1A3BCBB200190763 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54F6A842195C20C200313D24;
+			remoteInfo = "Cartography-Mac-Tests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -196,6 +225,7 @@
 		88F140B319F0B231000A3CAC /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LlamaKit.xcodeproj; path = External/LlamaKit/LlamaKit.xcodeproj; sourceTree = "<group>"; };
+		D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Cartography.xcodeproj; path = External/Cartography/Cartography.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +233,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1B478F91A3BCBC500190763 /* Cartography.framework in Frameworks */,
 				D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +285,7 @@
 				8897687D19AED88000DD079B /* FewTests */,
 				889768A719AED92D00DD079B /* FewDemo */,
 				D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */,
+				D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */,
 				8897687219AED88000DD079B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -348,6 +380,17 @@
 				D1496DF41A395211003AC516 /* LlamaKit-iOSTests.xctest */,
 				D1496DF61A395211003AC516 /* LlamaKit.framework */,
 				D1496DF81A395211003AC516 /* LlamaKit-MacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1B478E11A3BCBB200190763 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D1B478E81A3BCBB200190763 /* Cartography.framework */,
+				D1B478EA1A3BCBB200190763 /* Cartography-iOS-Tests.xctest */,
+				D1B478EC1A3BCBB200190763 /* Cartography.framework */,
+				D1B478EE1A3BCBB200190763 /* Cartography-Mac-Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -456,6 +499,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D1B478E11A3BCBB200190763 /* Products */;
+					ProjectRef = D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */;
+				},
+				{
 					ProductGroup = D1496DEB1A395211003AC516 /* Products */;
 					ProjectRef = D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */;
 				},
@@ -560,6 +607,34 @@
 			fileType = wrapper.cfbundle;
 			path = "LlamaKit-MacTests.xctest";
 			remoteRef = D1496DF71A395211003AC516 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B478E81A3BCBB200190763 /* Cartography.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Cartography.framework;
+			remoteRef = D1B478E71A3BCBB200190763 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B478EA1A3BCBB200190763 /* Cartography-iOS-Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Cartography-iOS-Tests.xctest";
+			remoteRef = D1B478E91A3BCBB200190763 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B478EC1A3BCBB200190763 /* Cartography.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Cartography.framework;
+			remoteRef = D1B478EB1A3BCBB200190763 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B478EE1A3BCBB200190763 /* Cartography-Mac-Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Cartography-Mac-Tests.xctest";
+			remoteRef = D1B478ED1A3BCBB200190763 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

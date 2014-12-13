@@ -8,6 +8,7 @@
 
 import Foundation
 import LlamaKit
+import Cartography
 
 struct Properties {
 	var width: CGFloat
@@ -21,8 +22,8 @@ enum Direction {
 }
 
 enum PrimitiveElement {
-	case Container(point: Point, element: Element2)
-	case Flow(direction: Direction, list: Array<Element2>)
+	case Container(position: Position, element: Box<Element2>)
+	case Flow(direction: Direction, list: Box<Array<Element2>>)
 	case Space
 }
 
@@ -35,7 +36,7 @@ func width(el: Element2) -> CGFloat {
 	return el.properties.width
 }
 
-func height (el: Element2) -> CGFloat {
+func height(el: Element2) -> CGFloat {
 	return el.properties.height
 }
 
@@ -65,7 +66,7 @@ func makeView(el: Element2) -> NSView {
 	let elem = el.element
 	switch elem {
 	case .Space: empty()
-	case let .Container(point, element): return container(point, element)
+	case let .Container(position, element): return container(position, element.unbox)
 	}
 }
 
@@ -86,16 +87,56 @@ func render(element: Element2) -> NSView {
 }
 
 /// Returns a container view with `element` rendered at `point`.
-func container(point: Point, element: Element2) -> NSView {
+func container(position: Position, element: Element2) -> NSView {
 	var view = render(element)
-	view = setPosition(point, element, view)
+	view = setPosition(position, element, view)
 	
 	return view
 }
 
+enum Horizontal {
+	case Leading, Middle, Trailing
+}
 
-func setPosition(point: Point, element: Element2, view: NSView) -> NSView {
+enum Vertical {
+	case Top, Middle, Bottom
+}
+
+/// TODO: We can totally do relative positioning
+//enum Pos {
+//	case Absolute(Int)
+//	case Relative(Float)
+//}
+
+struct Position {
+	let horizontal: Horizontal
+	let vertical: Vertical
+	let x: Float
+	let y: Float
+}
+
+
+func setPosition(position: Position, element: Element2, view: NSView) -> NSView {
+	let primitiveElement = element.element
+	let width = element.properties.width
+	let height = element.properties.height
+
+	layout(view) { view in
+		switch (position.horizontal) {
+		case .Leading: view.leading == view.superview!.leading + position.x
+		// TODO: Should Middle take `Pos.x` into account?
+		case .Middle: view.centerX == view.superview!.centerX
+		case .Trailing: view.trailing == view.superview!.trailing - position.x
+		}
+
+		switch (position.vertical) {
+		case .Top: view.top == view.superview!.top - position.y
+		case .Middle: view.centerY == view.superview!.centerY
+		case .Bottom: view.bottom == view.superview!.bottom + position.y
+		}
+	}
 	
+	return view
 }
 
 func empty() -> NSView {
