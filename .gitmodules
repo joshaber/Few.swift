@@ -7,3 +7,6 @@
 [submodule "External/Cartography"]
 	path = External/Cartography
 	url = https://github.com/robb/Cartography
+[submodule "External/ReactiveCocoa"]
+	path = External/ReactiveCocoa
+	url = https://github.com/ReactiveCocoa/ReactiveCocoa.git
