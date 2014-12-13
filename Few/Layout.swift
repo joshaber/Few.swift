@@ -9,6 +9,99 @@
 import Foundation
 import LlamaKit
 
+struct Properties {
+	var width: CGFloat
+	var height: CGFloat
+	var alphaValue: CGFloat
+	var color: NSColor?
+}
+
+enum Direction {
+	case Up, Down, Left, Right
+}
+
+enum PrimitiveElement {
+	case Container(point: Point, element: Element2)
+	case Flow(direction: Direction, list: Array<Element2>)
+	case Space
+}
+
+struct Element2 {
+	var properties: Properties
+	let element: PrimitiveElement
+}
+
+func width(el: Element2) -> CGFloat {
+	return el.properties.width
+}
+
+func height (el: Element2) -> CGFloat {
+	return el.properties.height
+}
+
+func withHeight(height: CGFloat, el: Element2) -> Element2 {
+	var el2 = el
+	el2.properties.height = height
+	
+	return el2
+}
+
+func withWidth(width: CGFloat, el: Element2) -> Element2 {
+	var el2 = el
+	el2.properties.width = width
+
+	return el2
+}
+
+func withSize(size: CGSize, el: Element2) -> Element2 {
+	return withHeight(size.height, withWidth(size.width, el))
+}
+
+func size(#el: Element2) -> CGSize {
+	return CGSize(width: CGFloat(width(el)), height: CGFloat(height(el)))
+}
+
+func makeView(el: Element2) -> NSView {
+	let elem = el.element
+	switch elem {
+	case .Space: empty()
+	case let .Container(point, element): return container(point, element)
+	}
+}
+
+/// Mutates the given view with the element's properties.
+///
+/// Returns the mutated view.
+func setProperties(element: Element2, view: NSView) -> NSView {
+	let properties = element.properties
+	let primitiveElement = element.element
+	
+	view.alphaValue = properties.alphaValue
+	
+	return view
+}
+
+func render(element: Element2) -> NSView {
+	return setProperties(element, makeView(element))
+}
+
+/// Returns a container view with `element` rendered at `point`.
+func container(point: Point, element: Element2) -> NSView {
+	var view = render(element)
+	view = setPosition(point, element, view)
+	
+	return view
+}
+
+
+func setPosition(point: Point, element: Element2, view: NSView) -> NSView {
+	
+}
+
+func empty() -> NSView {
+	return NSView(frame: CGRectZero)
+}
+
 enum LayoutF<R> {
 	case Beside(left: Box<R>, right: Box<R>)
 	case Above(top: Box<R>, bottom: Box<R>)
