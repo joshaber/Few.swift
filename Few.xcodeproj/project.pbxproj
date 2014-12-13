@@ -34,6 +34,8 @@
 		D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1496DF21A395211003AC516 /* LlamaKit.framework */; };
 		D1B478F91A3BCBC500190763 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B478E81A3BCBB200190763 /* Cartography.framework */; };
 		D1B9A6DB1A3CB6BE00437D8D /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9A6DA1A3CB6BE00437D8D /* Text.swift */; };
+		D1B9A6FA1A3CB78900437D8D /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B9A6F21A3CB75C00437D8D /* ReactiveCocoa.framework */; };
+		D1B9A6FD1A3CB96D00437D8D /* Element2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B9A6FC1A3CB96D00437D8D /* Element2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +179,34 @@
 			remoteGlobalIDString = 54F6A842195C20C200313D24;
 			remoteInfo = "Cartography-Mac-Tests";
 		};
+		D1B9A6F11A3CB75C00437D8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D04725EA19E49ED7006002AA;
+			remoteInfo = "ReactiveCocoa-Mac";
+		};
+		D1B9A6F31A3CB75C00437D8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D04725F519E49ED7006002AA;
+			remoteInfo = "ReactiveCocoa-MacTests";
+		};
+		D1B9A6F51A3CB75C00437D8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D047260C19E49F82006002AA;
+			remoteInfo = "ReactiveCocoa-iOS";
+		};
+		D1B9A6F71A3CB75C00437D8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D047261619E49F82006002AA;
+			remoteInfo = "ReactiveCocoa-iOSTests";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,6 +258,8 @@
 		D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LlamaKit.xcodeproj; path = External/LlamaKit/LlamaKit.xcodeproj; sourceTree = "<group>"; };
 		D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Cartography.xcodeproj; path = External/Cartography/Cartography.xcodeproj; sourceTree = "<group>"; };
 		D1B9A6DA1A3CB6BE00437D8D /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactiveCocoa.xcodeproj; path = External/ReactiveCocoa/ReactiveCocoa.xcodeproj; sourceTree = "<group>"; };
+		D1B9A6FC1A3CB96D00437D8D /* Element2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Element2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1B9A6FA1A3CB78900437D8D /* ReactiveCocoa.framework in Frameworks */,
 				D1B478F91A3BCBC500190763 /* Cartography.framework in Frameworks */,
 				D1496DFF1A39521C003AC516 /* LlamaKit.framework in Frameworks */,
 			);
@@ -286,6 +319,7 @@
 				8897687319AED88000DD079B /* Few */,
 				8897687D19AED88000DD079B /* FewTests */,
 				889768A719AED92D00DD079B /* FewDemo */,
+				D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */,
 				D1496DEA1A395211003AC516 /* LlamaKit.xcodeproj */,
 				D1B478E01A3BCBB200190763 /* Cartography.xcodeproj */,
 				8897687219AED88000DD079B /* Products */,
@@ -305,6 +339,7 @@
 		8897687319AED88000DD079B /* Few */ = {
 			isa = PBXGroup;
 			children = (
+				D1B9A6FB1A3CB95A00437D8D /* Element Redux */,
 				8897687619AED88000DD079B /* Few.h */,
 				8897688D19AED8AF00DD079B /* Element.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
@@ -319,7 +354,6 @@
 				88F140B319F0B231000A3CAC /* ListCell.swift */,
 				88CC9C501A2FBC1700C78D5F /* Layout.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
-				D1B9A6DA1A3CB6BE00437D8D /* Text.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
@@ -396,6 +430,26 @@
 				D1B478EE1A3BCBB200190763 /* Cartography-Mac-Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D1B9A6EB1A3CB75C00437D8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D1B9A6F21A3CB75C00437D8D /* ReactiveCocoa.framework */,
+				D1B9A6F41A3CB75C00437D8D /* ReactiveCocoa-MacTests.xctest */,
+				D1B9A6F61A3CB75C00437D8D /* ReactiveCocoa.framework */,
+				D1B9A6F81A3CB75C00437D8D /* ReactiveCocoa-iOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1B9A6FB1A3CB95A00437D8D /* Element Redux */ = {
+			isa = PBXGroup;
+			children = (
+				D1B9A6DA1A3CB6BE00437D8D /* Text.swift */,
+				D1B9A6FC1A3CB96D00437D8D /* Element2.swift */,
+			);
+			name = "Element Redux";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -516,6 +570,10 @@
 				{
 					ProductGroup = 884CBA041A263BF400EDE9B2 /* Products */;
 					ProjectRef = 884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */;
+				},
+				{
+					ProductGroup = D1B9A6EB1A3CB75C00437D8D /* Products */;
+					ProjectRef = D1B9A6EA1A3CB75C00437D8D /* ReactiveCocoa.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -640,6 +698,36 @@
 			remoteRef = D1B478ED1A3BCBB200190763 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D1B9A6F21A3CB75C00437D8D /* ReactiveCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = ReactiveCocoa.framework;
+			path = .framework;
+			remoteRef = D1B9A6F11A3CB75C00437D8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B9A6F41A3CB75C00437D8D /* ReactiveCocoa-MacTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ReactiveCocoa-MacTests.xctest";
+			remoteRef = D1B9A6F31A3CB75C00437D8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B9A6F61A3CB75C00437D8D /* ReactiveCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			name = ReactiveCocoa.framework;
+			path = .framework;
+			remoteRef = D1B9A6F51A3CB75C00437D8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D1B9A6F81A3CB75C00437D8D /* ReactiveCocoa-iOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "ReactiveCocoa-iOSTests.xctest";
+			remoteRef = D1B9A6F71A3CB75C00437D8D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -678,6 +766,7 @@
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
+				D1B9A6FD1A3CB96D00437D8D /* Element2.swift in Sources */,
 				88F140B419F0B231000A3CAC /* ListCell.swift in Sources */,
 				88FC7EB119E242F4007AFBC8 /* List.swift in Sources */,
 				8897689C19AED8AF00DD079B /* Label.swift in Sources */,

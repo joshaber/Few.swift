@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		red.properties.color = NSColor.redColor()
 		let green = newElement(10, 10, .Space)
 		let blue = newElement(10, 10, .Space)
-		let elements = flow(.Right, [red, green, blue])
+		let elements = flow(.Right)(elements: [red, green, blue])
 		contentView.addSubview(render(elements))
 	}
 }
