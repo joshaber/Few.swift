@@ -29,9 +29,7 @@ public class Component<S>: Element {
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
-	private var rendering: Bool = false
-
-	private var renderQueued: Bool = false
+	private var needsRender: Bool = false
 
 	/// Initializes the component with its initial state. The render function 
 	/// takes the current state of the component and returns the element which 
@@ -68,13 +66,6 @@ public class Component<S>: Element {
 	}
 
 	private func update() {
-		if rendering {
-			renderQueued = true
-			return
-		}
-
-		rendering = true
-
 		let newRoot = render(state)
 		let oldRoot = rootRealizedElement
 		if let oldRoot = oldRoot {
@@ -93,13 +84,6 @@ public class Component<S>: Element {
 		}
 		
 		componentDidUpdate()
-
-		rendering = false
-
-		if renderQueued {
-			renderQueued = false
-			update()
-		}
 	}
 
 	/// Update the component without changing any state.
@@ -168,8 +152,20 @@ public class Component<S>: Element {
 		state = fn(oldState)
 		
 		if componentShouldUpdate(oldState, newState: state) {
-			update()
+			enqueueRender()
 		}
+	}
+
+	private func enqueueRender() {
+		if needsRender { return }
+
+		needsRender = true
+
+		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
+			self.update()
+			self.needsRender = false
+		}
+		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopDefaultMode)
 	}
 
 	/// Get the current state of the component.
