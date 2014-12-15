@@ -58,28 +58,32 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			}
 		}
 
-		eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { event in
-			let characters = event.charactersIgnoringModifiers! as NSString
-			let character = Int(characters.characterAtIndex(0))
-			let listView = self.getView(self.list!)!
-			let firstResponder = event.window?.firstResponder as ViewType?
-			if let firstResponderView = firstResponder {
-				if character == NSDeleteCharacter && (firstResponder == listView || firstResponderView.isDescendantOf(listView)) {
-					let state = self.getState()
-					if let index = state.selectedIndex {
-						var todos = state.todos
-						todos.removeAtIndex(index)
+		eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { [unowned self] event in
+			self.handleEvent(event)
+		}
+	}
 
-						let selectedIndex = (todos.count > 0 ? 0 : -1)
-						self.updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: selectedIndex) }
+	func handleEvent(event: NSEvent) -> NSEvent? {
+		let characters = event.charactersIgnoringModifiers! as NSString
+		let character = Int(characters.characterAtIndex(0))
+		let listView = getView(self.list!)!
+		let firstResponder = event.window?.firstResponder as? ViewType
+		if let firstResponderView = firstResponder {
+			if character == NSDeleteCharacter && (firstResponder == listView || firstResponderView.isDescendantOf(listView)) {
+				let state = getState()
+				if let index = state.selectedIndex {
+					var todos = state.todos
+					todos.removeAtIndex(index)
 
-						return nil
-					}
+					let selectedIndex = (index <= todos.count && index > 0 ? index - 1 : 0)
+					updateState { DemoState1(todos: todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: selectedIndex) }
+
+					return nil
 				}
 			}
-
-			return event
 		}
+
+		return event
 	}
 
 	override func componentWillDerealize() {
