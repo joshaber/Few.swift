@@ -162,8 +162,8 @@ public class Component<S>: Element {
 		needsRender = true
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
-			self.update()
 			self.needsRender = false
+			self.update()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopDefaultMode)
 	}
