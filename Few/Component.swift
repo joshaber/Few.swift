@@ -88,7 +88,7 @@ public class Component<S>: Element {
 
 	/// Update the component without changing any state.
 	public func forceUpdate() {
-		update()
+		enqueueRender()
 	}
 	
 	/// Called when the component will be realized and before the component is
