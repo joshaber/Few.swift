@@ -41,13 +41,11 @@ public class Input: Element {
 		self.placeholder = placeholder
 		self.action = action
 		self.enabled = enabled
-		super.init()
+		super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 23))
 		
 		self.inputDelegate.action = { [unowned self] field in
 			self.action(field.stringValue)
 		}
-
-		self.frame.size = CGSize(width: 100, height: 23)
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
@@ -57,8 +55,11 @@ public class Input: Element {
 		placeholder = input.placeholder
 		enabled = input.enabled
 		action = input.action
-		inputDelegate = input.inputDelegate
 		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+
+		self.inputDelegate.action = { [unowned self] field in
+			self.action(field.stringValue)
+		}
 	}
 
 	// MARK: Element

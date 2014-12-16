@@ -22,11 +22,12 @@ public class Label: Element {
 
 	public init(attributedString: NSAttributedString) {
 		self.attributedString = attributedString
-		super.init()
 
 		let capSize = CGSize(width: 1000, height: 1000)
 		let rect = self.attributedString.boundingRectWithSize(capSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
-		self.frame.size = CGSize(width: ceil(rect.size.width) + LabelFudge.width, height: ceil(rect.size.height) + LabelFudge.height)
+		let width = ceil(rect.size.width) + LabelFudge.width
+		let height = ceil(rect.size.height) + LabelFudge.height
+		super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {

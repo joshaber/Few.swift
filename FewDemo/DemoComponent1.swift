@@ -102,8 +102,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 
 		let toggleButton = Button(title: "Toggle") {
 			component.updateState { DemoState1(todos: $0.todos, like: !$0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
-		}
-		toggleButton.frame.size.width = 54
+		}.width(54)
 
 		var likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
 			Label(text: "\($0) people like us!!!")
@@ -112,22 +111,16 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 			likesIt = likesIt.hide()
 		}
 
-		let todos: [Label] = state.todos.map { str in
-			let label = Label(text: str)
-			label.key = str
-			return label
-		}
+		let todos = state.todos.map { str in Label(text: str).key(str) }
 		let list = List(todos, selectedRow: state.selectedIndex) { index in
 			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: (index > -1 ? index : nil)) }
-		}
-		list.frame.size = CGSize(width: 100, height: 100)
+		}.width(100).height(100)
 
 		let c = component as DemoComponent1
 		c.list = list
 
-		let logoutButton = Button(title: "Logout", action: logoutFn)
-		logoutButton.frame.size = CGSize(width: 100, height: 23)
-
+		let logoutButton = Button(title: "Logout", action: logoutFn).width(100).height(23)
+		
 		let children = [count, button, statusLabel, toggleButton, likesIt, list, logoutButton]
 		return Container(children |> leftAlign(16) |> verticalStack(component.frame.size.height, 4))
 	}

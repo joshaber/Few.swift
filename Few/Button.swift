@@ -22,9 +22,8 @@ public class Button: Element {
 	public init(title: String, enabled: Bool, action: () -> ()) {
 		self.title = title
 		self.enabled = enabled
-		super.init()
+		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
 
-		self.frame.size = CGSize(width: 50, height: 23)
 		self.trampoline.action = action
 	}
 

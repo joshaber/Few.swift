@@ -8,43 +8,44 @@
 
 import Foundation
 
-public func leftAlign(x: CGFloat)(elements: [Element]) -> [Element] {
-	for element in elements {
-		element.frame.origin.x = x
-	}
+extension Array {
+	func mapWithState<S>(initial: S, fn: (S, T) -> (S, T)) -> [T] {
+		var newArray: [T] = []
+		var currentState = initial
+		for element in self {
+			let (newState, newElement) = fn(currentState, element)
+			newArray.append(newElement)
+			currentState = newState
+		}
 
-	return elements
+		return newArray
+	}
+}
+
+public func leftAlign(x: CGFloat)(elements: [Element]) -> [Element] {
+	return elements.map { el in el.x(x) }
 }
 
 public func verticalStack(top: CGFloat, padding: CGFloat)(elements: [Element]) -> [Element] {
-	var y = top
-	for element in elements {
-		if element.hidden { continue }
-
-		y -= element.frame.size.height + padding
-		element.frame.origin.y = y
-	}
-
 	return elements
+		.filter { !$0.hidden }
+		.mapWithState(top) { currentY, el in
+			let y = currentY - (el.frame.size.height + padding)
+			let newElement = el.y(y)
+			return (y, newElement)
+		}
 }
 
 public func horizontalStack(left: CGFloat, padding: CGFloat)(elements: [Element]) -> [Element] {
-	var x = left
-	for element in elements {
-		if element.hidden { continue }
-
-		x += element.frame.size.width + padding
-		element.frame.origin.x = x
-	}
-
 	return elements
+		.filter { !$0.hidden }
+		.mapWithState(left) { currentX, el in
+			let x = currentX + el.frame.size.width + padding
+			let newElement = el.x(x)
+			return (x, newElement)
+		}
 }
 
 public func offset(x: CGFloat, y: CGFloat)(elements: [Element]) -> [Element] {
-	for element in elements {
-		element.frame.origin.x += x
-		element.frame.origin.y += y
-	}
-
-	return elements
+	return elements.map { el in el.frame(CGRectOffset(el.frame, x, y)) }
 }
