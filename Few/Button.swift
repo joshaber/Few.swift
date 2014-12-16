@@ -28,7 +28,7 @@ public class Button: Element {
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
-	    let button = copy as Button
+		let button = copy as Button
 		title = button.title
 		enabled = button.enabled
 		trampoline = button.trampoline
