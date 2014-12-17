@@ -14,20 +14,26 @@ let rr = fillRoundedRect(3, NSColor.greenColor())
 		.center(rect)
 rr.ql
 
-let bg = fillRect(NSColor.blackColor())
+let bg = fillRect(NSColor.grayColor())
 		.width(200)
 		.height(200)
 
-let input = Input(text: "Hi") { str in }
-			.y(50)
-			.above(rect)
+let input1 = Input(initialText: nil, placeholder: "First name") { str in }
+			.centerY(bg)
+			.offsetX(16)
+
+let input2 = Input(initialText: nil, placeholder: "Last name") { str in }
+			.below(input1)
+			.alignLeft(input1)
+
+let label = Label(text: "Lol").below(input2).alignRight(input2)
 
 let button = Button(title: "Click me!") {}
-			.width(100)
-			.right(input)
-			.bottom(input)
+			.width(68)
+			.right(input1)
+			.alignBottom(input1)
 
-let container = Container([bg, rect, rr, input, button])
+let container = Container([bg, rect, rr, input1, button, input2, label])
 				.width(200)
 				.height(200)
 container.ql

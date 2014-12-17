@@ -67,12 +67,20 @@ extension Element {
 		return x(other.frame.origin.x + other.frame.size.width)
 	}
 
-	public func top(other: Element) -> Self {
+	public func alignTop(other: Element) -> Self {
 		return y(other.frame.origin.y + other.frame.size.height - frame.size.height)
 	}
 
-	public func bottom(other: Element) -> Self {
+	public func alignBottom(other: Element) -> Self {
 		return y(other.frame.origin.y)
+	}
+
+	public func alignLeft(other: Element) -> Self {
+		return x(other.frame.origin.x)
+	}
+
+	public func alignRight(other: Element) -> Self {
+		return x(other.frame.origin.x + other.frame.size.width - frame.size.width)
 	}
 
 	public func centerY(other: Element) -> Self {
@@ -85,5 +93,13 @@ extension Element {
 
 	public func center(other: Element) -> Self {
 		return centerX(other).centerY(other)
+	}
+
+	public func offsetX(dx: CGFloat) -> Self {
+		return x(frame.origin.x + dx)
+	}
+
+	public func offsetY(dy: CGFloat) -> Self {
+		return y(frame.origin.y + dy)
 	}
 }
