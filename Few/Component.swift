@@ -36,11 +36,21 @@ public class Component<S>: Element {
 	/// represents that state.
 	public init(initialState: S) {
 		self.state = initialState
+		super.init()
 	}
 
 	public init(render: (Component<S>, S) -> Element, initialState: S) {
 		self.renderFn = render
 		self.state = initialState
+		super.init()
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let component = copy as Component
+		state = component.state
+		rootRealizedElement = component.rootRealizedElement
+		renderFn = component.renderFn
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: Lifecycle
@@ -54,9 +64,9 @@ public class Component<S>: Element {
 	}
 
 	private func realizeNewRoot(element: Element) -> RealizedElement {
-		element.frame = hostView?.bounds ?? frame
+		let sizedElement = element.frame(hostView?.bounds ?? frame)
 
-		let realizedElement = realizeElementRecursively(element)
+		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
 			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			hostView?.addSubview(realizedView)
@@ -72,8 +82,8 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				newRoot.frame = frame
-				rootRealizedElement = diffElementRecursively(oldRoot, newRoot)
+				let rootWithFrame = newRoot.frame(frame)
+				rootRealizedElement = diffElementRecursively(oldRoot, rootWithFrame)
 			} else {
 				oldRoot.element.derealize()
 				oldRoot.view?.removeFromSuperview()

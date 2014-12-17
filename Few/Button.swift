@@ -22,10 +22,17 @@ public class Button: Element {
 	public init(title: String, enabled: Bool, action: () -> ()) {
 		self.title = title
 		self.enabled = enabled
-		super.init()
+		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
 
-		self.frame.size = CGSize(width: 50, height: 23)
 		self.trampoline.action = action
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		let button = copy as Button
+		title = button.title
+		enabled = button.enabled
+		trampoline = button.trampoline
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
 	}
 
 	// MARK: Element

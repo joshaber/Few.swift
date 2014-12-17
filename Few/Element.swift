@@ -17,7 +17,7 @@ public var LogDiff = false
 /// can be diffed with other elements.
 public class Element {
 	/// The frame of the element.
-	public var frame = CGRectZero
+	public let frame = CGRectZero
 
 	/// The key used to identify the element. Elements with matching keys will 
 	/// be more readily diffed in certain situations (i.e., when in a Container
@@ -25,12 +25,22 @@ public class Element {
 	//
 	// TODO: This doesn't *really* need to be a string. Just hashable and 
 	// equatable.
-	public var key: String?
+	public let key: String?
 
 	/// Is the element hidden?
-	public var hidden: Bool = false
+	public let hidden: Bool = false
 
-	internal init() {}
+	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false) {
+		self.frame = frame
+		self.key = key
+		self.hidden = hidden
+	}
+
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+		self.frame = frame
+		self.hidden = hidden
+		self.key = key
+	}
 
 	/// Can the receiver and the other element be diffed?
 	///
@@ -76,6 +86,46 @@ public class Element {
 	/// Get the children of the element.
 	public func getChildren() -> [Element] {
 		return []
+	}
+
+	public func hidden(h: Bool) -> Self {
+		return self.dynamicType(copy: self, frame: frame, hidden: h, key: key)
+	}
+
+	public func frame(f: CGRect) -> Self {
+		return self.dynamicType(copy: self, frame: f, hidden: hidden, key: key)
+	}
+
+	public func key(k: String) -> Self {
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, key: k)
+	}
+}
+
+extension Element {
+	public func hide() -> Self {
+		return hidden(true)
+	}
+
+	public func show() -> Self {
+		return hidden(false)
+	}
+}
+
+extension Element {
+	public func width(w: CGFloat) -> Self {
+		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: w, height: frame.size.height))
+	}
+
+	public func height(h: CGFloat) -> Self {
+		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: h))
+	}
+
+	public func x(x: CGFloat) -> Self {
+		return frame(CGRect(x: x, y: frame.origin.y, width: frame.size.width, height: frame.size.height))
+	}
+
+	public func y(y: CGFloat) -> Self {
+		return frame(CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: frame.size.height))
 	}
 }
 
