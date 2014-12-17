@@ -3,29 +3,31 @@
 import Cocoa
 import Few
 
-var t = fillRect(NSColor.redColor())
-	|> frame(CGRect(x: 0, y: 0, width: 200, height: 200))
+let rect = fillRect(NSColor.redColor())
+			.width(100)
+			.height(100)
+rect.ql
 
-var v = fillRect()
-	|> color(NSColor.redColor())
-	|> frame(CGRect(x: 20, y: 40, width: 100, height: 100))
+let rr = fillRoundedRect(3, NSColor.greenColor())
+		.width(25)
+		.height(25)
+		.center(rect)
+rr.ql
 
-v.pre()
+let bg = fillRect(NSColor.blackColor())
+		.width(200)
+		.height(200)
 
-t.pre()
+let input = Input(text: "Hi") { str in }
+			.y(50)
+			.above(rect)
 
-var rr = fillRect(NSColor.blueColor(), 5)
-	|> frame(CGRect(x: 50, y: 0, width: 100, height: 100))
-rr.pre()
+let button = Button(title: "Click me!") {}
+			.width(100)
+			.right(input)
+			.bottom(input)
 
-var container1 = Container([t, v, rr])
-container1.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
-container1.pre()
-
-let input = Input(text: "HI!") { (str, s) -> Float in
-	return s
-} |> frame(CGRect(x: 0, y: 0, width: 100, height: 23))
-
-var container2 = Container([t, v, rr, input])
-container2.frame = CGRect(origin: CGPointZero, size: CGSize(width: 200, height: 200))
-container2.pre()
+let container = Container([bg, rect, rr, input, button])
+				.width(200)
+				.height(200)
+container.ql

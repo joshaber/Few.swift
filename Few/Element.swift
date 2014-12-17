@@ -131,26 +131,23 @@ extension Element {
 
 extension Element {
 	public func debugQuickLookObject() -> AnyObject? {
-		let previewSize = CGSize(width: 512, height: 512)
-		let view = realize()
+		let realizedElement = realizeElementRecursively(self)
 
-		var previewImage: NSImage? = nil
-		if let view = view {
+		if let view = realizedElement.view {
 			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
-			if imageRep == nil { return NSImage(size: previewSize) }
+			if imageRep == nil { return NSImage(size: frame.size) }
 
 			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
 
 			var image = NSImage(size: imageRep!.size)
 			image.addRepresentation(imageRep!)
-
-			previewImage = image
+			return image
 		}
 		
-		return previewImage
+		return nil
 	}
 
-	public func pre() -> NSImage {
+	public var ql: NSImage {
 		return debugQuickLookObject()! as NSImage
 	}
 }
