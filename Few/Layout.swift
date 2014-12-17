@@ -49,3 +49,41 @@ public func horizontalStack(left: CGFloat, padding: CGFloat)(elements: [Element]
 public func offset(x: CGFloat, y: CGFloat)(elements: [Element]) -> [Element] {
 	return elements.map { el in el.frame(CGRectOffset(el.frame, x, y)) }
 }
+
+extension Element {
+	public func above(other: Element) -> Self {
+		return y(other.frame.origin.y + other.frame.size.height)
+	}
+
+	public func below(other: Element) -> Self {
+		return y(other.frame.origin.y - frame.size.height)
+	}
+
+	public func left(other: Element) -> Self {
+		return x(other.frame.origin.x - frame.size.width)
+	}
+
+	public func right(other: Element) -> Self {
+		return x(other.frame.origin.x + other.frame.size.width)
+	}
+
+	public func top(other: Element) -> Self {
+		return y(other.frame.origin.y + other.frame.size.height - frame.size.height)
+	}
+
+	public func bottom(other: Element) -> Self {
+		return y(other.frame.origin.y)
+	}
+
+	public func centerY(other: Element) -> Self {
+		return y(other.frame.origin.y + ceil(other.frame.size.height/2 - frame.size.height/2))
+	}
+
+	public func centerX(other: Element) -> Self {
+		return x(other.frame.origin.x + ceil(other.frame.size.width/2 - frame.size.width/2))
+	}
+
+	public func center(other: Element) -> Self {
+		return centerX(other).centerY(other)
+	}
+}
