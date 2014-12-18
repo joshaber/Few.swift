@@ -47,8 +47,6 @@ public class Graphic: Element {
 	}
 }
 
-public typealias ColorType = NSColor
-
 public func fillRect(color: ColorType) -> Graphic {
 	return Graphic { b in
 		color.set()

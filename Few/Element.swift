@@ -9,8 +9,6 @@
 import Foundation
 import AppKit
 
-public typealias ViewType = NSView
-
 public var LogDiff = false
 
 /// Elements are the basic building block. They represent a visual thing which 

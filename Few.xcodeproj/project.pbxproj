@@ -30,6 +30,7 @@
 		88AD8E731A412666001D617E /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD8E721A412666001D617E /* Graphic.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
 		88CC9C511A2FBC1700C78D5F /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CC9C501A2FBC1700C78D5F /* Layout.swift */; };
+		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
 		88F140B419F0B231000A3CAC /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F140B319F0B231000A3CAC /* ListCell.swift */; };
 		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
 /* End PBXBuildFile section */
@@ -166,6 +167,7 @@
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		88CC9C501A2FBC1700C78D5F /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
 		88F140B319F0B231000A3CAC /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,6 +259,7 @@
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				88AD8E721A412666001D617E /* Graphic.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
+				88DF47341A42824100F3F497 /* Mac.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
 			path = Few;
@@ -533,6 +536,7 @@
 				8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */,
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
+				88DF47351A42824100F3F497 /* Mac.swift in Sources */,
 				88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */,
 				88CC9C511A2FBC1700C78D5F /* Layout.swift in Sources */,
 				88AD8E731A412666001D617E /* Graphic.swift in Sources */,
