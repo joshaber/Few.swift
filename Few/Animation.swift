@@ -25,12 +25,12 @@ public class Animation: Element {
 		super.init(frame: element.frame, key: element.key, hidden: element.hidden, alpha: element.alpha)
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let animation = copy as Animation
 		duration = animation.duration
-		element = animation.element.dynamicType(copy: animation.element, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		element = animation.element.dynamicType(copy: animation.element, frame: frame, hidden: hidden, alpha: alpha, key: key)
 		timingFunction = animation.timingFunction
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element

@@ -27,12 +27,12 @@ public class Button: Element {
 		self.trampoline.action = action
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let button = copy as Button
 		title = button.title
 		enabled = button.enabled
 		trampoline = button.trampoline
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element

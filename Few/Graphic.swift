@@ -24,10 +24,10 @@ public class Graphic: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let graphic = copy as Graphic
 		draw = graphic.draw
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element

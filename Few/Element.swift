@@ -37,7 +37,7 @@ public class Element {
 		self.alpha = alpha
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		self.frame = frame
 		self.hidden = hidden
 		self.key = key
@@ -95,19 +95,19 @@ public class Element {
 	}
 
 	public func hidden(h: Bool) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: h, key: key, alpha: alpha)
+		return self.dynamicType(copy: self, frame: frame, hidden: h, alpha: alpha, key: key)
 	}
 
 	public func frame(f: CGRect) -> Self {
-		return self.dynamicType(copy: self, frame: f, hidden: hidden, key: key, alpha: alpha)
+		return self.dynamicType(copy: self, frame: f, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	public func key(k: String) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: hidden, key: k, alpha: alpha)
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: k)
 	}
 
 	public func alpha(a: CGFloat) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: hidden, key: key, alpha: a)
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: a, key: key)
 	}
 }
 

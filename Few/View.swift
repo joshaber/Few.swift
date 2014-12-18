@@ -18,11 +18,11 @@ public class View: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let view = copy as View
 		self.view = view.view
 		element = view.element
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element

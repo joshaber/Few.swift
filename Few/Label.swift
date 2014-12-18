@@ -30,10 +30,10 @@ public class Label: Element {
 		super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let label = copy as Label
 		attributedString = label.attributedString
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element
