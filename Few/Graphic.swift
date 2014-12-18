@@ -24,10 +24,10 @@ public class Graphic: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		let graphic = copy as Graphic
 		draw = graphic.draw
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element
@@ -46,8 +46,6 @@ public class Graphic: Element {
 		return view
 	}
 }
-
-public typealias ColorType = NSColor
 
 public func fillRect(color: ColorType) -> Graphic {
 	return Graphic { b in

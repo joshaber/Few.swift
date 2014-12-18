@@ -9,8 +9,6 @@
 import Foundation
 import AppKit
 
-public typealias ViewType = NSView
-
 public var LogDiff = false
 
 /// Elements are the basic building block. They represent a visual thing which 
@@ -30,16 +28,20 @@ public class Element {
 	/// Is the element hidden?
 	public let hidden: Bool = false
 
-	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false) {
+	public let alpha: CGFloat = 1
+
+	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1) {
 		self.frame = frame
 		self.key = key
 		self.hidden = hidden
+		self.alpha = alpha
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
 		self.frame = frame
 		self.hidden = hidden
 		self.key = key
+		self.alpha = alpha
 	}
 
 	/// Can the receiver and the other element be diffed?
@@ -63,11 +65,15 @@ public class Element {
 	/// should call super.
 	public func applyDiff(view: ViewType, other: Element) {
 		if view.frame != frame {
-			view.frame = frame
+			animatorProxy(view).frame = frame
 		}
 
 		if view.hidden != hidden {
 			view.hidden = hidden
+		}
+
+		if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
+			animatorProxy(view).alphaValue = alpha
 		}
 
 		if LogDiff {
@@ -89,15 +95,19 @@ public class Element {
 	}
 
 	public func hidden(h: Bool) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: h, key: key)
+		return self.dynamicType(copy: self, frame: frame, hidden: h, alpha: alpha, key: key)
 	}
 
 	public func frame(f: CGRect) -> Self {
-		return self.dynamicType(copy: self, frame: f, hidden: hidden, key: key)
+		return self.dynamicType(copy: self, frame: f, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	public func key(k: String) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: hidden, key: k)
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: k)
+	}
+
+	public func alpha(a: CGFloat) -> Self {
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: a, key: key)
 	}
 }
 

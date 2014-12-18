@@ -28,8 +28,8 @@ class LogInComponent<S>: Few.Component<LogInState> {
 		super.init(render: LogInComponent.render(loggedIn), initialState: state)
 	}
 
-	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
+	required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	class func render(loggedIn: (String, String) -> ())(component: Few.Component<LogInState>, state: LogInState) -> Element {
@@ -41,7 +41,7 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			NSForegroundColorAttributeName: NSColor.redColor(),
 			NSFontAttributeName: NSFont.systemFontOfSize(11),
 		]
-		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes)).hidden(state.username.utf16Count > 0).alignLeft(usernameField)
+		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes)).alpha(state.username.utf16Count > 0 ? 0 : 1).alignLeft(usernameField).animate()
 
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
 			component.updateState { LogInState(username: $0.username, password: str) }
@@ -65,8 +65,8 @@ class DemoComponent2<S>: Few.Component<DemoState2> {
 		super.init(render: DemoComponent2.render, initialState: initialState)
 	}
 
-	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
+	required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	class func render(component: Few.Component<DemoState2>, state: DemoState2) -> Element {

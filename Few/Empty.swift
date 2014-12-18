@@ -14,7 +14,7 @@ public class Empty: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 }
