@@ -29,9 +29,13 @@ struct DemoState1 {
 	let selectedIndex: Int?
 }
 
+func uniqueKey(file: String = __FILE__, line: Int = __LINE__) -> String {
+	return "\(file)+\(line)"
+}
+
 // Ideally this would be embedded in DemoComponent1, but Swift can't do that yet.
 struct Keys {
-	static let List = "list"
+	static let List = uniqueKey()
 }
 
 class DemoComponent1<S>: Few.Component<DemoState1> {
