@@ -183,23 +183,23 @@ public class Component<S>: Element {
 		return state
 	}
 
-	/// Get the view for the given element.
+	/// Get the view with the given key.
 	///
 	/// This will be nil for elements which haven't been realized yet or haven't
 	/// been returned from the render function.
-	public func getView(element: Element) -> ViewType? {
+	public func getView(#key: String) -> ViewType? {
 		if let realizedElement = rootRealizedElement {
-			return getViewRecursive(element, rootElement: realizedElement)
+			return getViewRecursive(key, rootElement: realizedElement)
 		} else {
 			return nil
 		}
 	}
 
-	private func getViewRecursive(elementToFind: Element, rootElement: RealizedElement) -> ViewType? {
-		if rootElement.element === elementToFind { return rootElement.view }
+	private func getViewRecursive(key: String, rootElement: RealizedElement) -> ViewType? {
+		if rootElement.element.key == key { return rootElement.view }
 
 		for element in rootElement.children {
-			let result = getViewRecursive(elementToFind, rootElement: element)
+			let result = getViewRecursive(key, rootElement: element)
 			if result != nil { return result }
 		}
 
