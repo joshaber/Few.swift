@@ -47,7 +47,7 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			component.updateState { LogInState(username: $0.username, password: str) }
 		}.alignLeft(usernameField)
 
-		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes)).hidden(state.password.utf16Count > 0).alignLeft(passwordField)
+		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes)).alpha(state.password.utf16Count > 0 ? 0 : 1).alignLeft(passwordField).animate()
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
