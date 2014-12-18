@@ -29,10 +29,13 @@ struct DemoState1 {
 	let selectedIndex: Int?
 }
 
+// Ideally this would be embedded in DemoComponent1, but Swift can't do that yet.
+struct Keys {
+	static let List = "list"
+}
+
 class DemoComponent1<S>: Few.Component<DemoState1> {
 	var eventMonitor: AnyObject?
-
-	var list: List?
 
 	init(logoutFn: () -> ()) {
 		let initialState = DemoState1(todos: (1...100).map { "Todo #\($0)" }, like: false, watcherCount: nil, selectedIndex: nil)
@@ -66,7 +69,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 	func handleEvent(event: NSEvent) -> NSEvent? {
 		let characters = event.charactersIgnoringModifiers! as NSString
 		let character = Int(characters.characterAtIndex(0))
-		let listView = getView(self.list!)!
+		let listView = getView(key: Keys.List)!
 		let firstResponder = event.window?.firstResponder as? ViewType
 		if let firstResponderView = firstResponder {
 			if character == NSDeleteCharacter && (firstResponder == listView || firstResponderView.isDescendantOf(listView)) {
@@ -114,10 +117,7 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		let todos = state.todos.map { str in Label(text: str).key(str) }
 		let list = List(todos, selectedRow: state.selectedIndex) { index in
 			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: (index > -1 ? index : nil)) }
-		}.width(100).height(100)
-
-		let c = component as DemoComponent1
-		c.list = list
+		}.width(100).height(100).key(Keys.List)
 
 		let logoutButton = Button(title: "Logout", action: logoutFn).width(100).height(23)
 		
