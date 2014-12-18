@@ -12,10 +12,10 @@ public typealias ViewType = NSView
 
 public typealias ColorType = NSColor
 
-internal func withAnimation(duration: NSTimeInterval, timingFunction: CAMediaTimingFunction, fn: () -> ()) {
+internal func withAnimation(duration: NSTimeInterval, timingFunction: TimingFunction, fn: () -> ()) {
 	NSAnimationContext.runAnimationGroup({ context in
 		context.duration = duration
-		context.timingFunction = timingFunction
+		context.timingFunction = timingFunction.mediaTimingFunction
 		fn()
 	}, completionHandler: nil)
 }

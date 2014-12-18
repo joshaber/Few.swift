@@ -9,16 +9,32 @@
 import Cocoa
 import QuartzCore
 
+public enum TimingFunction {
+	case Linear
+	case EaseIn
+	case EaseInOut
+	case EaseOut
+
+	public var mediaTimingFunction: CAMediaTimingFunction {
+		switch self {
+		case Linear: return CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+		case EaseIn: return CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+		case EaseInOut: return CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+		case EaseOut: return CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+		}
+	}
+}
+
 public var Animating: Bool { return _Animating }
 
 private var _Animating: Bool = false
 
 public class Animation: Element {
 	private let duration: NSTimeInterval
-	private let timingFunction: CAMediaTimingFunction
+	private let timingFunction: TimingFunction
 	private let element: Element
 
-	public init(_ element: Element, duration: NSTimeInterval, timingFunction: CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)) {
+	public init(_ element: Element, duration: NSTimeInterval, timingFunction: TimingFunction) {
 		self.element = element
 		self.duration = duration
 		self.timingFunction = timingFunction
@@ -65,7 +81,7 @@ public class Animation: Element {
 }
 
 extension Element {
-	public func animate() -> Animation {
-		return Animation(self, duration: 0.3)
+	public func animate(duration: NSTimeInterval = 0.3, timingFunction: TimingFunction = .EaseInOut) -> Animation {
+		return Animation(self, duration: duration, timingFunction: timingFunction)
 	}
 }
