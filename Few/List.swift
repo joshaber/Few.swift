@@ -128,12 +128,12 @@ public class List: Element {
 		self.init(items, selectedRow: nil, selectionChanged: nil)
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
 		let list = copy as List
 		items = list.items
 		selectionChanged = list.selectionChanged
 		selectedRow = list.selectedRow
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
 	}
 
 	// MARK: -

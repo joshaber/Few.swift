@@ -39,8 +39,8 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		super.init(render: DemoComponent1.render(logoutFn), initialState: initialState)
 	}
 
-	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key);
+	required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
 	}
 
 	override func componentDidRealize() {

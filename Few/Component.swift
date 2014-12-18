@@ -45,12 +45,12 @@ public class Component<S>: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
 		let component = copy as Component
 		state = component.state
 		rootRealizedElement = component.rootRealizedElement
 		renderFn = component.renderFn
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
 	}
 
 	// MARK: Lifecycle

@@ -23,10 +23,10 @@ public class Container: Element, ArrayLiteralConvertible {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?) {
+	public required init(copy: Element, frame: CGRect, hidden: Bool, key: String?, alpha: CGFloat) {
 		let container = copy as Container
 		children = container.children
-		super.init(copy: copy, frame: frame, hidden: hidden, key: key)
+		super.init(copy: copy, frame: frame, hidden: hidden, key: key, alpha: alpha)
 	}
 
 	// MARK: Element
