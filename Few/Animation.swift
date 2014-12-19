@@ -33,11 +33,13 @@ public class Animation: Element {
 	private let duration: NSTimeInterval
 	private let timingFunction: TimingFunction
 	private let element: Element
+	private let enabled: Bool
 
-	public init(_ element: Element, duration: NSTimeInterval, timingFunction: TimingFunction) {
+	public init(_ element: Element, duration: NSTimeInterval, timingFunction: TimingFunction, enabled: Bool) {
 		self.element = element
 		self.duration = duration
 		self.timingFunction = timingFunction
+		self.enabled = enabled
 		super.init(frame: element.frame, key: element.key, hidden: element.hidden, alpha: element.alpha)
 	}
 
@@ -46,24 +48,29 @@ public class Animation: Element {
 		duration = animation.duration
 		element = animation.element.dynamicType(copy: animation.element, frame: frame, hidden: hidden, alpha: alpha, key: key)
 		timingFunction = animation.timingFunction
+		enabled = animation.enabled
 		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Element
 
 	public override func canDiff(other: Element) -> Bool {
-		return super.canDiff(other) || element.canDiff(other)
+		if !super.canDiff(other) { return false }
+
+		let animation = other as Animation
+		return element.canDiff(animation.element)
 	}
 
 	public override func applyDiff(view: ViewType, other: Element) {
-		if let animation = other as? Animation {
+		let animation = other as Animation
+		if enabled {
 			_Animating = true
 			withAnimation(duration, timingFunction) {
 				self.element.applyDiff(view, other: animation.element)
 			}
 			_Animating = false
 		} else {
-			element.applyDiff(view, other: other)
+			element.applyDiff(view, other: animation.element)
 		}
 	}
 
@@ -81,7 +88,7 @@ public class Animation: Element {
 }
 
 extension Element {
-	public func animate(duration: NSTimeInterval = 0.3, timingFunction: TimingFunction = .EaseInOut) -> Animation {
-		return Animation(self, duration: duration, timingFunction: timingFunction)
+	public func animate(duration: NSTimeInterval = 0.3, timingFunction: TimingFunction = .EaseInOut, enabled: Bool = true) -> Animation {
+		return Animation(self, duration: duration, timingFunction: timingFunction, enabled: enabled)
 	}
 }

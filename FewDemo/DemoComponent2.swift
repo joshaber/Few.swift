@@ -41,13 +41,19 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			NSForegroundColorAttributeName: NSColor.redColor(),
 			NSFontAttributeName: NSFont.systemFontOfSize(11),
 		]
-		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes)).alpha(state.username.utf16Count > 0 ? 0 : 1).alignLeft(usernameField).animate()
+		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes))
+			.alpha(state.username.utf16Count > 0 ? 0 : 1)
+			.alignLeft(usernameField)
+			.animate(enabled: state.username.utf16Count > 0)
 
 		let passwordField = Input(initialText: "", placeholder: "Password") { str in
 			component.updateState { LogInState(username: $0.username, password: str) }
 		}.alignLeft(usernameField)
 
-		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes)).alpha(state.password.utf16Count > 0 ? 0 : 1).alignLeft(passwordField).animate()
+		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes))
+			.alpha(state.password.utf16Count > 0 ? 0 : 1)
+			.alignLeft(passwordField)
+			.animate(enabled: state.password.utf16Count > 0)
 
 		let enabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 		let loginButton = Button(title: "Login", enabled: enabled) {
