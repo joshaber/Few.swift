@@ -46,7 +46,7 @@ class LogInComponent<S>: Few.Component<LogInState> {
 			.alignLeft(usernameField)
 			.animate(enabled: state.username.utf16Count > 0)
 
-		let passwordField = Input(initialText: "", placeholder: "Password") { str in
+		let passwordField = Password(initialText: "", placeholder: "Password") { str in
 			component.updateState { LogInState(username: $0.username, password: str) }
 		}.alignLeft(usernameField)
 

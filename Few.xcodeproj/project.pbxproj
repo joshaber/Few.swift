@@ -11,6 +11,7 @@
 		88080C6F1A0470FE005301A5 /* DemoComponent2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6E1A0470FE005301A5 /* DemoComponent2.swift */; };
 		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
+		883CECA81A4532A600B8A510 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CECA71A4532A600B8A510 /* Password.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88729C3A1A029017007AB673 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88729C391A029017007AB673 /* View.swift */; };
@@ -142,6 +143,7 @@
 		88080C6E1A0470FE005301A5 /* DemoComponent2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoComponent2.swift; sourceTree = "<group>"; };
 		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		883CECA71A4532A600B8A510 /* Password.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
 		884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = External/Quick/Quick.xcodeproj; sourceTree = SOURCE_ROOT; };
 		884CBA121A263C0600EDE9B2 /* Nimble.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nimble.xcodeproj; path = External/Quick/Externals/Nimble/Nimble.xcodeproj; sourceTree = SOURCE_ROOT; };
 		88729C391A029017007AB673 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
+				883CECA71A4532A600B8A510 /* Password.swift */,
 				88729C391A029017007AB673 /* View.swift */,
 				88BAF29219DE3094004241BA /* Empty.swift */,
 				88FC7EB019E242F4007AFBC8 /* List.swift */,
@@ -529,6 +532,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				883CECA81A4532A600B8A510 /* Password.swift in Sources */,
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689819AED8AF00DD079B /* Container.swift in Sources */,
