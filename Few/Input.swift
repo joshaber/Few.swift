@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-private class InputDelegate: NSObject, NSTextFieldDelegate {
+internal class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (NSTextField -> ())?
 
 	override func controlTextDidChange(notification: NSNotification) {
@@ -20,12 +20,12 @@ private class InputDelegate: NSObject, NSTextFieldDelegate {
 
 public class Input: Element {
 	public let text: String?
-	private let initialText: String?
-	private let placeholder: String?
-	private let enabled: Bool
-	private let action: String -> ()
+	internal let initialText: String?
+	internal let placeholder: String?
+	internal let enabled: Bool
+	internal let action: String -> ()
 
-	private let inputDelegate = InputDelegate()
+	internal let inputDelegate = InputDelegate()
 
 	public convenience init(text: String?, fn: String -> ()) {
 		self.init(text: text, initialText: nil, placeholder: nil, enabled: true, action: fn)
