@@ -15,7 +15,7 @@ public typealias ColorType = UIColor
 
 internal func withAnimation(duration: NSTimeInterval, timingFunction: TimingFunction, fn: () -> ()) {
 	UIView.animateWithDuration(duration) {
-		// TODO: use timing function
+		// TODO iOS: use timing function
 		fn()
 	}
 }

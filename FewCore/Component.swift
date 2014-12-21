@@ -68,7 +68,7 @@ public class Component<S>: Element {
 
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
-			// TODO: generalize this for Mac + iOS
+			// TODO iOS: generalize this for Mac + iOS
 //			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			hostView?.addSubview(realizedView)
 		}
