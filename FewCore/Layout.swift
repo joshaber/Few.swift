@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Array {
 	func mapWithState<S>(initial: S, fn: (S, T) -> (S, T)) -> [T] {

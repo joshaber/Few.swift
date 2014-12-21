@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 
 public typealias ViewType = NSView
 
@@ -25,5 +26,11 @@ internal func animatorProxy<T: NSView>(view: T) -> T {
 		return view.animator()
 	} else {
 		return view
+	}
+}
+
+internal func compareAndSetAlpha(view: NSView, alpha: CGFloat) {
+	if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
+		animatorProxy(view).alphaValue = alpha
 	}
 }

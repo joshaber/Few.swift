@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AppKit
+import CoreGraphics
 
 public var LogDiff = false
 
@@ -72,9 +72,7 @@ public class Element {
 			view.hidden = hidden
 		}
 
-		if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
-			animatorProxy(view).alphaValue = alpha
-		}
+		compareAndSetAlpha(view, alpha)
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
@@ -136,28 +134,5 @@ extension Element {
 
 	public func y(y: CGFloat) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: frame.size.height))
-	}
-}
-
-extension Element {
-	public func debugQuickLookObject() -> AnyObject? {
-		let realizedElement = realizeElementRecursively(self)
-
-		if let view = realizedElement.view {
-			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
-			if imageRep == nil { return NSImage(size: frame.size) }
-
-			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
-
-			var image = NSImage(size: imageRep!.size)
-			image.addRepresentation(imageRep!)
-			return image
-		}
-		
-		return nil
-	}
-
-	public var ql: NSImage {
-		return debugQuickLookObject()! as NSImage
 	}
 }

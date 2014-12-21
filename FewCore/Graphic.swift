@@ -6,12 +6,13 @@
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
 //
 
-import Cocoa
+import CoreGraphics
+import AppKit
 
-private class GraphicView: NSView {
+private class GraphicView: ViewType {
 	private var draw: (CGRect -> ())?
 
-	private override func drawRect(dirtyRect: NSRect) {
+	private override func drawRect(dirtyRect: CGRect) {
 		draw?(bounds)
 	}
 }

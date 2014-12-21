@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8897687019AED88000DD079B"
                BuildableName = "Few.framework"
-               BlueprintName = "Few"
+               BlueprintName = "Few-Mac"
                ReferencedContainer = "container:Few.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8897687019AED88000DD079B"
             BuildableName = "Few.framework"
-            BlueprintName = "Few"
+            BlueprintName = "Few-Mac"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8897687019AED88000DD079B"
             BuildableName = "Few.framework"
-            BlueprintName = "Few"
+            BlueprintName = "Few-Mac"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -81,7 +81,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8897687019AED88000DD079B"
             BuildableName = "Few.framework"
-            BlueprintName = "Few"
+            BlueprintName = "Few-Mac"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

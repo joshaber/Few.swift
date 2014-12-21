@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
 //
 
-import Cocoa
 import QuartzCore
 
 public enum TimingFunction {

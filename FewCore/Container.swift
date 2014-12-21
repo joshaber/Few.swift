@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import AppKit
+import CoreGraphics
 
 /// Containers (surprise!) contain other elements.
 public class Container: Element, ArrayLiteralConvertible {

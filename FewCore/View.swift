@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 public class View: Element {
 	private let view: ViewType
