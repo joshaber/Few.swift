@@ -103,4 +103,13 @@ extension Element {
 	public func offsetY(dy: CGFloat) -> Self {
 		return y(frame.origin.y + dy)
 	}
+
+	public func sizeToFit() -> Self {
+		if let view = realize() {
+			let size = view.fittingSize
+			return width(size.width).height(size.height)
+		} else {
+			return self
+		}
+	}
 }

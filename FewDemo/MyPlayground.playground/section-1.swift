@@ -3,18 +3,21 @@
 import Cocoa
 import Few
 
-let rect = fillRect(NSColor.redColor())
+let rect = fillRect()
+			.fillColor(NSColor.redColor())
 			.width(100)
 			.height(100)
 rect.ql
 
-let rr = fillRoundedRect(3, NSColor.greenColor())
+let rr = fillRoundedRect(3)
+		.fillColor(NSColor.greenColor())
 		.width(25)
 		.height(25)
 		.center(rect)
 rr.ql
 
-let bg = fillRect(NSColor.grayColor())
+let bg = fillRect()
+		.fillColor(NSColor.grayColor())
 		.width(200)
 		.height(200)
 
@@ -29,7 +32,7 @@ let input2 = Input(initialText: nil, placeholder: "Last name") { str in }
 let label = Label(text: "Lol").below(input2).alignRight(input2)
 
 let button = Button(title: "Click me!") {}
-			.width(68)
+			.sizeToFit()
 			.right(input1)
 			.alignBottom(input1)
 

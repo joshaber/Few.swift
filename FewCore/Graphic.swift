@@ -48,17 +48,44 @@ public class Graphic: Element {
 	}
 }
 
-public func fillRect(color: ColorType) -> Graphic {
+extension Graphic {
+	public func fillColor(c: ColorType) -> Graphic {
+		return Graphic { b in
+			c.setFill()
+			self.draw(b)
+		}
+	}
+
+	public func strokeColor(c: ColorType) -> Graphic {
+		return Graphic { b in
+			c.setStroke()
+			self.draw(b)
+		}
+	}
+}
+
+public func fillRect() -> Graphic {
 	return Graphic { b in
-		color.set()
 		NSRectFillUsingOperation(b, .CompositeSourceOver)
 	}
 }
 
-public func fillRoundedRect(radius: CGFloat, color: ColorType) -> Graphic {
+public func strokeRect(width: CGFloat) -> Graphic {
+	return Graphic { b in
+		NSFrameRectWithWidthUsingOperation(b, width, .CompositeSourceOver)
+	}
+}
+
+public func fillRoundedRect(radius: CGFloat) -> Graphic {
 	return Graphic { b in
 		let path = NSBezierPath(roundedRect: b, xRadius: radius, yRadius: radius)
-		color.set()
 		path.fill()
+	}
+}
+
+public func strokeRoundedRect(radius: CGFloat) -> Graphic {
+	return Graphic { b in
+		let path = NSBezierPath(roundedRect: b, xRadius: radius, yRadius: radius)
+		path.stroke()
 	}
 }
