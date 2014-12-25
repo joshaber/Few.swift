@@ -7,7 +7,6 @@
 //
 
 import CoreGraphics
-import AppKit
 
 private class GraphicView: ViewType {
 	private var draw: (CGRect -> ())?
@@ -36,7 +35,7 @@ public class Graphic: Element {
 	public override func applyDiff(view: ViewType, other: Element) {
 		let graphicView = view as GraphicView
 		graphicView.draw = draw
-		graphicView.needsDisplay = true
+		markNeedsDisplay(graphicView)
 
 		super.applyDiff(view, other: other)
 	}
@@ -66,26 +65,28 @@ extension Graphic {
 
 public func fillRect() -> Graphic {
 	return Graphic { b in
-		NSRectFillUsingOperation(b, .CompositeSourceOver)
+		let context = currentCGContext()
+		CGContextFillRect(context, b)
 	}
 }
 
 public func strokeRect(width: CGFloat) -> Graphic {
 	return Graphic { b in
-		NSFrameRectWithWidthUsingOperation(b, width, .CompositeSourceOver)
+		let context = currentCGContext()
+		CGContextStrokeRectWithWidth(context, b, width)
 	}
 }
 
 public func fillRoundedRect(radius: CGFloat) -> Graphic {
 	return Graphic { b in
-		let path = NSBezierPath(roundedRect: b, xRadius: radius, yRadius: radius)
+		let path = pathForRoundedRect(b, radius)
 		path.fill()
 	}
 }
 
 public func strokeRoundedRect(radius: CGFloat) -> Graphic {
 	return Graphic { b in
-		let path = NSBezierPath(roundedRect: b, xRadius: radius, yRadius: radius)
+		let path = pathForRoundedRect(b, radius)
 		path.stroke()
 	}
 }

@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 public typealias ViewType = UIView
-
 public typealias ColorType = UIColor
+public typealias PathType = UIBezierPath
 
 internal func withAnimation(duration: NSTimeInterval, timingFunction: TimingFunction, fn: () -> ()) {
 	UIView.animateWithDuration(duration) {
@@ -28,4 +28,16 @@ internal func compareAndSetAlpha(view: UIView, alpha: CGFloat) {
 	if fabs(view.alpha - alpha) > CGFloat(DBL_EPSILON) {
 		view.alpha = alpha
 	}
+}
+
+internal func pathForRoundedRect(rect: CGRect, cornerRadius: CGFloat) -> PathType {
+	return UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
+}
+
+internal func currentCGContext() -> CGContextRef! {
+	return UIGraphicsGetCurrentContext()
+}
+
+internal func markNeedsDisplay(view: ViewType) {
+	view.setNeedsDisplay()
 }
