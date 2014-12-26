@@ -41,3 +41,7 @@ internal func currentCGContext() -> CGContextRef! {
 internal func markNeedsDisplay(view: ViewType) {
 	view.setNeedsDisplay()
 }
+
+internal func configureViewToAutoresize(view: ViewType) {
+	view.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+}

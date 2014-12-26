@@ -47,6 +47,10 @@ internal func markNeedsDisplay(view: ViewType) {
 	view.needsDisplay = true
 }
 
+internal func configureViewToAutoresize(view: ViewType) {
+	view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+}
+
 extension Element {
 	public func sizeToFit() -> Self {
 		if let view = realize() {
