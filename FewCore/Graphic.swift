@@ -32,6 +32,11 @@ public class Graphic: Element {
 		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
+	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?, draw: CGRect -> ()) {
+		self.draw = draw
+		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
+	}
+
 	// MARK: Element
 
 	public override func applyDiff(view: ViewType, other: Element) {
@@ -50,16 +55,27 @@ public class Graphic: Element {
 }
 
 extension Graphic {
+	public func drawFn(fn: CGRect -> ()) -> Self {
+		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: key, draw: fn)
+	}
+
 	public func fillColor(c: ColorType) -> Graphic {
-		return Graphic { b in
+		return drawFn { b in
 			c.setFill()
 			self.draw(b)
 		}
 	}
 
 	public func strokeColor(c: ColorType) -> Graphic {
-		return Graphic { b in
+		return drawFn { b in
 			c.setStroke()
+			self.draw(b)
+		}
+	}
+
+	public func color(c: ColorType) -> Graphic {
+		return drawFn { b in
+			c.set()
 			self.draw(b)
 		}
 	}
