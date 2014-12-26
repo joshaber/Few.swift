@@ -12,22 +12,10 @@ import AppKit
 extension Element {
 	public func debugQuickLookObject() -> AnyObject? {
 		let realizedElement = realizeElementRecursively(self)
-
-		if let view = realizedElement.view {
-			let imageRep = view.bitmapImageRepForCachingDisplayInRect(view.bounds)
-			if imageRep == nil { return NSImage(size: frame.size) }
-
-			view.cacheDisplayInRect(view.bounds, toBitmapImageRep: imageRep!)
-
-			var image = NSImage(size: imageRep!.size)
-			image.addRepresentation(imageRep!)
-			return image
-		}
-
-		return nil
+		return realizedElement.view
 	}
 
-	public var ql: NSImage {
-		return debugQuickLookObject()! as NSImage
+	public var ql: NSView {
+		return debugQuickLookObject()! as NSView
 	}
 }
