@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 
 /// Containers (surprise!) contain other elements.
-public class Container: Element, ArrayLiteralConvertible {
+public class Container: Element {
 	private let children: [Element]
 
 	public init(_ children: [Element]) {
@@ -18,9 +18,8 @@ public class Container: Element, ArrayLiteralConvertible {
 		super.init()
 	}
 
-	public required init(arrayLiteral elements: Element...) {
-		self.children = elements
-		super.init()
+	public convenience init(_ elements: Element...) {
+		self.init(elements)
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
