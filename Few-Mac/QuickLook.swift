@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AppKit
 
 extension Element {
 	public func debugQuickLookObject() -> AnyObject? {
@@ -15,7 +14,7 @@ extension Element {
 		return realizedElement.view
 	}
 
-	public var ql: NSView {
-		return debugQuickLookObject()! as NSView
+	public var ql: ViewType {
+		return debugQuickLookObject()! as ViewType
 	}
 }
