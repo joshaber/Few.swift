@@ -16,12 +16,14 @@ private class GraphicView: ViewType {
 	}
 }
 
+private let DefaultFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
+
 public class Graphic: Element {
 	private let draw: CGRect -> ()
 
 	public init(draw: CGRect -> ()) {
 		self.draw = draw
-		super.init()
+		super.init(frame: DefaultFrame)
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
