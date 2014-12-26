@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 
 public class Password: Input {
 	public override func realize() -> ViewType? {

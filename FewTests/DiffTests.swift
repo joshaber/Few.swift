@@ -51,9 +51,7 @@ class DiffTests: QuickSpec {
 				let labelView = label.realize()
 				let realizedLabel = RealizedElement(element: label, children: [], view: labelView)
 
-				let newLabel = Label(text: "No.")
-
-				label.key = "key"
+				let newLabel = Label(text: "No.").key("key")
 
 				let diff = diffElementLists([realizedButton, realizedLabel], [button, newLabel, label])
 				expect(diff.add.count).to(equal(1))

@@ -100,16 +100,18 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 	class func render(logoutFn: () -> ())(component: Few.Component<DemoState1>, state: DemoState1) -> Element {
 		let count = Label(text: "\(state.todos.count)")
 
-		let button = Button(title: "Add") {
+		let addTodo: () -> () = {
 			component.updateState { DemoState1(todos: $0.todos + ["a nu todo"], like: $0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
 		}
+		let button = Button(title: "Add", action: addTodo)
 
 		let likedness = (state.like ? "do" : "donut")
 		let statusLabel = Label(text: "I \(likedness) like this.")
 
-		let toggleButton = Button(title: "Toggle") {
+		let toggleLikedness: () -> () = {
 			component.updateState { DemoState1(todos: $0.todos, like: !$0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
-		}.width(54)
+		}
+		let toggleButton = Button(title: "Toggle", action: toggleLikedness).width(54)
 
 		var likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
 			Label(text: "\($0) people like us!!!")
@@ -119,9 +121,13 @@ class DemoComponent1<S>: Few.Component<DemoState1> {
 		}
 
 		let todos = state.todos.map { str in Label(text: str).key(str) }
-		let list = List(todos, selectedRow: state.selectedIndex) { index in
+		let updateSelection: Int -> () = { index in
 			component.updateState { DemoState1(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: (index > -1 ? index : nil)) }
-		}.width(100).height(100).key(Keys.List)
+		}
+		let list = List(todos, selectedRow: state.selectedIndex, selectionChanged: updateSelection)
+					.width(100)
+					.height(100)
+					.key(Keys.List)
 
 		let logoutButton = Button(title: "Logout", action: logoutFn).width(100).height(23)
 		

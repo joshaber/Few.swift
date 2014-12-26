@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 
 internal class ListCell: NSTableCellView {
 	var element: RealizedElement? {

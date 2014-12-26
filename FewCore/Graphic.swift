@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
 //
 
-import Cocoa
+import CoreGraphics
 
-private class GraphicView: NSView {
+private class GraphicView: ViewType {
 	private var draw: (CGRect -> ())?
 
-	private override func drawRect(dirtyRect: NSRect) {
+	private override func drawRect(dirtyRect: CGRect) {
 		draw?(bounds)
 	}
 }
@@ -35,7 +35,7 @@ public class Graphic: Element {
 	public override func applyDiff(view: ViewType, other: Element) {
 		let graphicView = view as GraphicView
 		graphicView.draw = draw
-		graphicView.needsDisplay = true
+		markNeedsDisplay(graphicView)
 
 		super.applyDiff(view, other: other)
 	}
@@ -47,17 +47,46 @@ public class Graphic: Element {
 	}
 }
 
-public func fillRect(color: ColorType) -> Graphic {
-	return Graphic { b in
-		color.set()
-		NSRectFillUsingOperation(b, .CompositeSourceOver)
+extension Graphic {
+	public func fillColor(c: ColorType) -> Graphic {
+		return Graphic { b in
+			c.setFill()
+			self.draw(b)
+		}
+	}
+
+	public func strokeColor(c: ColorType) -> Graphic {
+		return Graphic { b in
+			c.setStroke()
+			self.draw(b)
+		}
 	}
 }
 
-public func fillRoundedRect(radius: CGFloat, color: ColorType) -> Graphic {
+public func fillRect() -> Graphic {
 	return Graphic { b in
-		let path = NSBezierPath(roundedRect: b, xRadius: radius, yRadius: radius)
-		color.set()
+		let context = currentCGContext()
+		CGContextFillRect(context, b)
+	}
+}
+
+public func strokeRect(width: CGFloat) -> Graphic {
+	return Graphic { b in
+		let context = currentCGContext()
+		CGContextStrokeRectWithWidth(context, b, width)
+	}
+}
+
+public func fillRoundedRect(radius: CGFloat) -> Graphic {
+	return Graphic { b in
+		let path = pathForRoundedRect(b, radius)
 		path.fill()
+	}
+}
+
+public func strokeRoundedRect(radius: CGFloat) -> Graphic {
+	return Graphic { b in
+		let path = pathForRoundedRect(b, radius)
+		path.stroke()
 	}
 }
