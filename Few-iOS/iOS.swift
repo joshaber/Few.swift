@@ -14,10 +14,7 @@ public typealias ColorType = UIColor
 public typealias PathType = UIBezierPath
 
 internal func withAnimation(duration: NSTimeInterval, timingFunction: TimingFunction, fn: () -> ()) {
-	UIView.animateWithDuration(duration) {
-		// TODO iOS: use timing function
-		fn()
-	}
+	UIView.animateWithDuration(duration, delay: 0, options: timingFunction.viewAnimationOptions, animations: fn, completion: { _ in })
 }
 
 internal func animatorProxy<T: UIView>(view: T) -> T {
@@ -44,4 +41,15 @@ internal func markNeedsDisplay(view: ViewType) {
 
 internal func configureViewToAutoresize(view: ViewType) {
 	view.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+}
+
+extension TimingFunction {
+	internal var viewAnimationOptions: UIViewAnimationOptions {
+		switch self {
+		case Linear: return .CurveLinear
+		case EaseIn: return .CurveEaseIn
+		case EaseInOut: return .CurveEaseInOut
+		case EaseOut: return .CurveEaseOut
+		}
+	}
 }
