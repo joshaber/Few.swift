@@ -31,6 +31,10 @@ public class Component<S>: Element {
 
 	private var needsRender: Bool = false
 
+	private var effectiveFrame: CGRect {
+		return hostView?.bounds ?? frame
+	}
+
 	/// Initializes the component with its initial state. The render function 
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
@@ -64,12 +68,11 @@ public class Component<S>: Element {
 	}
 
 	private func realizeNewRoot(element: Element) -> RealizedElement {
-		let sizedElement = element.frame(hostView?.bounds ?? frame)
+		let sizedElement = element.frame(effectiveFrame)
 
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
-			// TODO iOS: generalize this for Mac + iOS
-//			realizedView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+			configureViewToAutoresize(realizedView)
 			hostView?.addSubview(realizedView)
 		}
 
@@ -83,7 +86,7 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the 
 			// entire hierarchy.
 			if newRoot.canDiff(oldRoot.element) {
-				let rootWithFrame = newRoot.frame(frame)
+				let rootWithFrame = newRoot.frame(effectiveFrame)
 				rootRealizedElement = diffElementRecursively(oldRoot, rootWithFrame)
 			} else {
 				oldRoot.element.derealize()
@@ -134,10 +137,13 @@ public class Component<S>: Element {
 	/// one view at a time.
 	public func addToView(view: ViewType) {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
-		
-		componentWillRealize()
-		
+
 		hostView = view
+		realizeInHostView()
+	}
+
+	private func realizeInHostView() {
+		componentWillRealize()
 
 		update()
 
@@ -232,7 +238,7 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
-		addToView(ViewType(frame: CGRectZero))
+		realizeInHostView()
 
 		return rootRealizedElement?.view
 	}
