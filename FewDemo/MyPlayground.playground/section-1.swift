@@ -36,7 +36,7 @@ let button = Button(title: "Click me!") {}
 			.right(input1)
 			.alignBottom(input1)
 
-let container = Container([bg, rect, rr, input1, button, input2, label])
+let container = Container(bg, rect, rr, input1, button, input2, label)
 				.width(200)
 				.height(200)
 container.ql
