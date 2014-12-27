@@ -120,6 +120,10 @@ extension Element {
 }
 
 extension Element {
+	public func size(s: CGSize) -> Self {
+		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: s.width, height: s.height))
+	}
+
 	public func width(w: CGFloat) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: w, height: frame.size.height))
 	}
