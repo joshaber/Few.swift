@@ -218,6 +218,10 @@ public class Component<S>: Element {
 	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 
+		if rootRealizedElement == nil {
+			update()
+		}
+
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
 		let otherComponent = unsafeBitCast(other, Component.self)
 		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return false }
