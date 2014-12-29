@@ -23,6 +23,7 @@ public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
 
+	private var rootElement: Element?
 	private var rootRealizedElement: RealizedElement?
 
 	private var hostView: ViewType?
@@ -73,30 +74,35 @@ public class Component<S>: Element {
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
 			configureViewToAutoresize(realizedView)
-			hostView?.addSubview(realizedView)
 		}
 
 		return realizedElement
 	}
 
 	private func update() {
+		updateWithRootRealizedElement(rootRealizedElement)
+	}
+
+	private func updateWithRootRealizedElement(realizedElement: RealizedElement?) {
 		let newRoot = render(state)
-		let oldRoot = rootRealizedElement
-		if let oldRoot = oldRoot {
-			// If we can diff then apply it. Otherwise we just swap out the 
+		rootElement = newRoot
+
+		if let realizedElement = realizedElement {
+			// If we can diff then apply it. Otherwise we just swap out the
 			// entire hierarchy.
-			if newRoot.canDiff(oldRoot.element) {
+			if newRoot.canDiff(realizedElement.element) {
 				let rootWithFrame = newRoot.frame(effectiveFrame)
-				rootRealizedElement = diffElementRecursively(oldRoot, rootWithFrame)
+				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame)
 			} else {
-				oldRoot.element.derealize()
-				oldRoot.view?.removeFromSuperview()
+				realizedElement.element.derealize()
+				realizedElement.view?.removeFromSuperview()
 				rootRealizedElement = realizeNewRoot(newRoot)
+				if let realizedView = rootRealizedElement?.view {
+					hostView?.addSubview(realizedView)
+				}
 			}
-		} else {
-			rootRealizedElement = realizeNewRoot(newRoot)
 		}
-		
+
 		componentDidUpdate()
 	}
 
@@ -139,15 +145,24 @@ public class Component<S>: Element {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 
 		hostView = view
-		realizeInHostView()
+		let realizedElement = realizeComponent()
+		if let realizedView = realizedElement.view {
+			view.addSubview(realizedView)
+		}
+
+		rootRealizedElement = realizedElement
 	}
 
-	private func realizeInHostView() {
+	private func realizeComponent() -> RealizedElement {
 		componentWillRealize()
 
 		update()
 
+		let realizedRoot = realizeNewRoot(rootElement!)
+
 		componentDidRealize()
+
+		return realizedRoot
 	}
 
 	/// Remove the component from its host view.
@@ -157,6 +172,7 @@ public class Component<S>: Element {
 		rootRealizedElement?.view?.removeFromSuperview()
 		rootRealizedElement?.element.derealize()
 		hostView = nil
+		rootRealizedElement = nil
 		
 		componentDidDerealize()
 	}
@@ -218,15 +234,13 @@ public class Component<S>: Element {
 	public override func canDiff(other: Element) -> Bool {
 		if !super.canDiff(other) { return false }
 
-		if rootRealizedElement == nil {
+		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
+		let otherComponent = unsafeBitCast(other, Component.self)
+		if rootElement == nil {
 			update()
 		}
 
-		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let otherComponent = unsafeBitCast(other, Component.self)
-		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return false }
-
-		return rootRealizedElement!.element.canDiff(otherComponent.rootRealizedElement!.element)
+		return rootElement!.canDiff(otherComponent.rootRealizedElement!.element)
 	}
 	
 	public override func applyDiff(view: ViewType, other: Element) {
@@ -234,16 +248,14 @@ public class Component<S>: Element {
 		let otherComponent = unsafeBitCast(other, Component.self)
 		hostView = otherComponent.hostView
 
-		if rootRealizedElement == nil || otherComponent.rootRealizedElement == nil { return }
-
-		rootRealizedElement!.element.applyDiff(view, other: otherComponent.rootRealizedElement!.element)
+		updateWithRootRealizedElement(otherComponent.rootRealizedElement)
 
 		super.applyDiff(view, other: other)
 	}
 	
 	public override func realize() -> ViewType? {
-		realizeInHostView()
-
+		let realizedRoot = realizeComponent()
+		rootRealizedElement = realizedRoot
 		return rootRealizedElement?.view
 	}
 
