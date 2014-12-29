@@ -29,7 +29,7 @@ public class Component<S>: Element {
 
 	private let renderFn: ((Component<S>, S) -> Element)?
 
-	private var needsRender: Bool = false
+	private var renderQueued: Bool = false
 
 	private var effectiveFrame: CGRect {
 		return hostView?.bounds ?? frame
@@ -174,12 +174,12 @@ public class Component<S>: Element {
 	}
 
 	private func enqueueRender() {
-		if needsRender { return }
+		if renderQueued { return }
 
-		needsRender = true
+		renderQueued = true
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
-			self.needsRender = false
+			self.renderQueued = false
 			self.update()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopDefaultMode)
