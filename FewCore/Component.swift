@@ -18,12 +18,11 @@ import CoreGraphics
 ///
 /// By default whenever the component's state is changed, it re-renders itself 
 /// by calling the `render` function passed in to its init. But subclasses can
-/// optimize this by implementing `componentShouldUpdate`.
+/// optimize this by implementing `componentShouldRender`.
 public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
 
-	private var rootElement: Element?
 	private var rootRealizedElement: RealizedElement?
 
 	private var hostView: ViewType?
@@ -70,7 +69,6 @@ public class Component<S>: Element {
 
 	private func realizeNewRoot(element: Element) -> RealizedElement {
 		let sizedElement = element.frame(effectiveFrame)
-
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
 			configureViewToAutoresize(realizedView)
@@ -79,14 +77,12 @@ public class Component<S>: Element {
 		return realizedElement
 	}
 
-	private func update() {
-		updateWithRootRealizedElement(rootRealizedElement)
+	private func render() -> Element {
+		return renderWithRootRealizedElement(rootRealizedElement)
 	}
 
-	private func updateWithRootRealizedElement(realizedElement: RealizedElement?) {
+	private func renderWithRootRealizedElement(realizedElement: RealizedElement?) -> Element {
 		let newRoot = render(state)
-		rootElement = newRoot
-
 		if let realizedElement = realizedElement {
 			// If we can diff then apply it. Otherwise we just swap out the
 			// entire hierarchy.
@@ -103,11 +99,13 @@ public class Component<S>: Element {
 			}
 		}
 
-		componentDidUpdate()
+		componentDidRender()
+
+		return newRoot
 	}
 
-	/// Update the component without changing any state.
-	public func forceUpdate() {
+	/// Render the component without changing any state.
+	public func forceRender() {
 		enqueueRender()
 	}
 	
@@ -125,15 +123,15 @@ public class Component<S>: Element {
 	/// Called when the component has been derealized.
 	public func componentDidDerealize() {}
 	
-	/// Called after the component has been updated and diff applied.
-	public func componentDidUpdate() {}
+	/// Called after the component has been rendered and diff applied.
+	public func componentDidRender() {}
 	
 	/// Called when the state has changed but before the component is 
 	/// re-rendered. This gives the component the chance to decide whether it 
 	/// *should* based on the new state.
 	///
 	/// The default implementation always returns true.
-	public func componentShouldUpdate(previousState: S, newState: S) -> Bool {
+	public func componentShouldRender(previousState: S, newState: S) -> Bool {
 		return true
 	}
 	
@@ -145,6 +143,7 @@ public class Component<S>: Element {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 
 		hostView = view
+
 		let realizedElement = realizeComponent()
 		if let realizedView = realizedElement.view {
 			view.addSubview(realizedView)
@@ -156,9 +155,8 @@ public class Component<S>: Element {
 	private func realizeComponent() -> RealizedElement {
 		componentWillRealize()
 
-		update()
-
-		let realizedRoot = realizeNewRoot(rootElement!)
+		let root = render()
+		let realizedRoot = realizeNewRoot(root)
 
 		componentDidRealize()
 
@@ -184,7 +182,7 @@ public class Component<S>: Element {
 		let oldState = state
 		state = fn(oldState)
 		
-		if componentShouldUpdate(oldState, newState: state) {
+		if componentShouldRender(oldState, newState: state) {
 			enqueueRender()
 		}
 	}
@@ -196,7 +194,7 @@ public class Component<S>: Element {
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
 			self.renderQueued = false
-			self.update()
+			self.render()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopDefaultMode)
 	}
@@ -231,24 +229,12 @@ public class Component<S>: Element {
 	
 	// MARK: Element
 	
-	public override func canDiff(other: Element) -> Bool {
-		if !super.canDiff(other) { return false }
-
-		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let otherComponent = unsafeBitCast(other, Component.self)
-		if rootElement == nil {
-			update()
-		}
-
-		return rootElement!.canDiff(otherComponent.rootRealizedElement!.element)
-	}
-	
 	public override func applyDiff(view: ViewType, other: Element) {
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
 		let otherComponent = unsafeBitCast(other, Component.self)
 		hostView = otherComponent.hostView
 
-		updateWithRootRealizedElement(otherComponent.rootRealizedElement)
+		renderWithRootRealizedElement(otherComponent.rootRealizedElement)
 
 		super.applyDiff(view, other: other)
 	}
