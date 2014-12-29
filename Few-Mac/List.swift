@@ -144,8 +144,8 @@ public class List: Element {
 
 		super.applyDiff(view, other: other)
 
-		scrollView.handler?.items = items
-		scrollView.handler?.selectionChanged = selectionChanged
+		let handler = scrollView.handler
+		handler?.items = items
 
 		let tableView = scrollView.handler?.tableView
 		if tableView?.selectedRow != selectedRow {
@@ -157,6 +157,8 @@ public class List: Element {
 				}
 			}
 		}
+
+		handler?.selectionChanged = selectionChanged
 	}
 	public override func realize() -> ViewType? {
 		let scrollView = ListHostingScrollView(frame: frame)

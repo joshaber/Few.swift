@@ -11,7 +11,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = DemoComponent2<DemoState2>()
+	private let appComponent = AppComponent()
 	
 	func applicationDidFinishLaunching(notification: NSNotification?) {
 		let contentView = window.contentView as NSView
