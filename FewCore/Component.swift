@@ -72,6 +72,7 @@ public class Component<S>: Element {
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
 			configureViewToAutoresize(realizedView)
+			hostView?.addSubview(realizedView)
 		}
 
 		return realizedElement
@@ -93,9 +94,6 @@ public class Component<S>: Element {
 				realizedElement.element.derealize()
 				realizedElement.view?.removeFromSuperview()
 				rootRealizedElement = realizeNewRoot(newRoot)
-				if let realizedView = rootRealizedElement?.view {
-					hostView?.addSubview(realizedView)
-				}
 			}
 		}
 
@@ -143,13 +141,7 @@ public class Component<S>: Element {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 
 		hostView = view
-
-		let realizedElement = realizeComponent()
-		if let realizedView = realizedElement.view {
-			view.addSubview(realizedView)
-		}
-
-		rootRealizedElement = realizedElement
+		rootRealizedElement = realizeComponent()
 	}
 
 	private func realizeComponent() -> RealizedElement {
