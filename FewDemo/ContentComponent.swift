@@ -105,18 +105,21 @@ class ContentComponent_<Lol>: Few.Component<ContentState> {
 
 		var likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
 			Label(text: "\($0) people like us!!!")
-		}.hidden(!state.like)
+		}
+			.hidden(!state.like)
 
 		let updateSelection: Int? -> () = { index in
 			c.updateState { ContentState(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: index) }
 		}
 		let list = TodoList(state.todos, selectedRow: state.selectedIndex, selectionChanged: updateSelection)
-				  .width(100)
-			      .height(100)
-				  .key(Keys.List)
+			.width(100)
+			.height(100)
+			.key(Keys.List)
 
 		let component = c as ContentComponent
-		let logoutButton = Button(title: "Logout", action: component.logout).width(100).height(23)
+		let logoutButton = Button(title: "Logout", action: component.logout)
+			.width(100)
+			.height(23)
 		
 		let children = [count, button, statusLabel, toggleButton, likesIt, list, logoutButton]
 		return Container(children |> leftAlign(16) |> verticalStack(c.frame.size.height, 4))
