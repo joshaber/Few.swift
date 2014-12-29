@@ -103,20 +103,4 @@ extension Element {
 	public func offsetY(dy: CGFloat) -> Self {
 		return y(frame.origin.y + dy)
 	}
-
-	public func subtractHeight() -> Self {
-		return y(frame.origin.y - frame.size.height)
-	}
-
-	public func addHeight() -> Self {
-		return y(frame.origin.y + frame.size.height)
-	}
-
-	public func subtractWidth() -> Self {
-		return x(frame.origin.x - frame.size.width)
-	}
-
-	public func addWidth() -> Self {
-		return x(frame.origin.x + frame.size.width)
-	}
 }

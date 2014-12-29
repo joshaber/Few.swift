@@ -37,9 +37,8 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
 			c.updateState { LogInState(username: str, password: $0.password) }
 		}
+			.alignTop(c)
 			.offsetX(16)
-			.y(c.frame.size.height)
-			.subtractHeight()
 			.offsetY(-16)
 
 		let attributes = [
