@@ -103,7 +103,7 @@ public class Component<S>: Element {
 	}
 
 	/// Render the component without changing any state.
-	public func forceRender() {
+	final public func forceRender() {
 		enqueueRender()
 	}
 	
@@ -192,7 +192,7 @@ public class Component<S>: Element {
 	}
 
 	/// Get the current state of the component.
-	public func getState() -> S {
+	final public func getState() -> S {
 		return state
 	}
 

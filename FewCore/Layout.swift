@@ -52,55 +52,55 @@ public func offset(x: CGFloat, y: CGFloat)(elements: [Element]) -> [Element] {
 }
 
 extension Element {
-	public func above(other: Element) -> Self {
+	final public func above(other: Element) -> Self {
 		return y(other.frame.origin.y + other.frame.size.height)
 	}
 
-	public func below(other: Element) -> Self {
+	final public func below(other: Element) -> Self {
 		return y(other.frame.origin.y - frame.size.height)
 	}
 
-	public func left(other: Element) -> Self {
+	final public func left(other: Element) -> Self {
 		return x(other.frame.origin.x - frame.size.width)
 	}
 
-	public func right(other: Element) -> Self {
+	final public func right(other: Element) -> Self {
 		return x(other.frame.origin.x + other.frame.size.width)
 	}
 
-	public func alignTop(other: Element) -> Self {
+	final public func alignTop(other: Element) -> Self {
 		return y(other.frame.origin.y + other.frame.size.height - frame.size.height)
 	}
 
-	public func alignBottom(other: Element) -> Self {
+	final public func alignBottom(other: Element) -> Self {
 		return y(other.frame.origin.y)
 	}
 
-	public func alignLeft(other: Element) -> Self {
+	final public func alignLeft(other: Element) -> Self {
 		return x(other.frame.origin.x)
 	}
 
-	public func alignRight(other: Element) -> Self {
+	final public func alignRight(other: Element) -> Self {
 		return x(other.frame.origin.x + other.frame.size.width - frame.size.width)
 	}
 
-	public func centerY(other: Element) -> Self {
+	final public func centerY(other: Element) -> Self {
 		return y(other.frame.origin.y + ceil(other.frame.size.height/2 - frame.size.height/2))
 	}
 
-	public func centerX(other: Element) -> Self {
+	final public func centerX(other: Element) -> Self {
 		return x(other.frame.origin.x + ceil(other.frame.size.width/2 - frame.size.width/2))
 	}
 
-	public func center(other: Element) -> Self {
+	final public func center(other: Element) -> Self {
 		return centerX(other).centerY(other)
 	}
 
-	public func offsetX(dx: CGFloat) -> Self {
+	final public func offsetX(dx: CGFloat) -> Self {
 		return x(frame.origin.x + dx)
 	}
 
-	public func offsetY(dy: CGFloat) -> Self {
+	final public func offsetY(dy: CGFloat) -> Self {
 		return y(frame.origin.y + dy)
 	}
 }

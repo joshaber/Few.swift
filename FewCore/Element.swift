@@ -92,51 +92,51 @@ public class Element {
 		return []
 	}
 
-	public func hidden(h: Bool) -> Self {
+	final public func hidden(h: Bool) -> Self {
 		return self.dynamicType(copy: self, frame: frame, hidden: h, alpha: alpha, key: key)
 	}
 
-	public func frame(f: CGRect) -> Self {
+	final public func frame(f: CGRect) -> Self {
 		return self.dynamicType(copy: self, frame: f, hidden: hidden, alpha: alpha, key: key)
 	}
 
-	public func key(k: String) -> Self {
+	final public func key(k: String) -> Self {
 		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: k)
 	}
 
-	public func alpha(a: CGFloat) -> Self {
+	final public func alpha(a: CGFloat) -> Self {
 		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: a, key: key)
 	}
 }
 
 extension Element {
-	public func hide() -> Self {
+	final public func hide() -> Self {
 		return hidden(true)
 	}
 
-	public func show() -> Self {
+	final public func show() -> Self {
 		return hidden(false)
 	}
 }
 
 extension Element {
-	public func size(s: CGSize) -> Self {
+	final public func size(s: CGSize) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: s.width, height: s.height))
 	}
 
-	public func width(w: CGFloat) -> Self {
+	final public func width(w: CGFloat) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: w, height: frame.size.height))
 	}
 
-	public func height(h: CGFloat) -> Self {
+	final public func height(h: CGFloat) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: h))
 	}
 
-	public func x(x: CGFloat) -> Self {
+	final public func x(x: CGFloat) -> Self {
 		return frame(CGRect(x: x, y: frame.origin.y, width: frame.size.width, height: frame.size.height))
 	}
 
-	public func y(y: CGFloat) -> Self {
+	final public func y(y: CGFloat) -> Self {
 		return frame(CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: frame.size.height))
 	}
 }

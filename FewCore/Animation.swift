@@ -87,7 +87,7 @@ public class Animation: Element {
 }
 
 extension Element {
-	public func animate(duration: NSTimeInterval = 0.3, timingFunction: TimingFunction = .EaseInOut, enabled: Bool = true) -> Animation {
+	final public func animate(duration: NSTimeInterval = 0.3, timingFunction: TimingFunction = .EaseInOut, enabled: Bool = true) -> Animation {
 		return Animation(self, duration: duration, timingFunction: timingFunction, enabled: enabled)
 	}
 }

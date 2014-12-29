@@ -55,25 +55,25 @@ public class Graphic: Element {
 }
 
 extension Graphic {
-	public func drawFn(fn: CGRect -> ()) -> Self {
+	final public func drawFn(fn: CGRect -> ()) -> Self {
 		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: key, draw: fn)
 	}
 
-	public func fillColor(c: ColorType) -> Graphic {
+	final public func fillColor(c: ColorType) -> Graphic {
 		return drawFn { b in
 			c.setFill()
 			self.draw(b)
 		}
 	}
 
-	public func strokeColor(c: ColorType) -> Graphic {
+	final public func strokeColor(c: ColorType) -> Graphic {
 		return drawFn { b in
 			c.setStroke()
 			self.draw(b)
 		}
 	}
 
-	public func color(c: ColorType) -> Graphic {
+	final public func color(c: ColorType) -> Graphic {
 		return drawFn { b in
 			c.set()
 			self.draw(b)
