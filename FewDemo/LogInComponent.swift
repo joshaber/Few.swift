@@ -37,6 +37,7 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 		let usernameField = Input(initialText: "", placeholder: "Username") { str in
 			c.updateState { LogInState(username: str, password: $0.password) }
 		}.offsetX(16)
+		.y(c.frame.size.height).offsetHeight().offsetY(-16)
 
 		let attributes = [
 			NSForegroundColorAttributeName: NSColor.redColor(),
@@ -45,15 +46,18 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 		let enterUsername = Label(attributedString: NSAttributedString(string: "Enter a username", attributes: attributes))
 			.alpha(state.username.utf16Count > 0 ? 0 : 1)
 			.alignLeft(usernameField)
+			.below(usernameField)
 			.animate(enabled: state.username.utf16Count > 0)
 
 		let passwordField = Password(initialText: "", placeholder: "Password") { str in
 			c.updateState { LogInState(username: $0.username, password: str) }
 		}.alignLeft(usernameField)
+		.below(enterUsername)
 
 		let enterPassword = Label(attributedString: NSAttributedString(string: "Enter a password", attributes: attributes))
 			.alpha(state.password.utf16Count > 0 ? 0 : 1)
 			.alignLeft(passwordField)
+			.below(passwordField)
 			.animate(enabled: state.password.utf16Count > 0)
 
 		let component = c as LogInComponent
@@ -61,8 +65,8 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 		let loginButton = Button(title: "Login", enabled: enabled) {
 			component.loggedIn(state.username, state.password)
 		}.alignRight(passwordField)
+		.below(enterPassword)
 
-		let elements = [usernameField, enterUsername, passwordField, enterPassword, loginButton]
-		return Container(elements |> verticalStack(component.frame.size.height, 4))
+		return Container(usernameField, enterUsername, passwordField, enterPassword, loginButton)
 	}
 }
