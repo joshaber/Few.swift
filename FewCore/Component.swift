@@ -35,7 +35,7 @@ public class Component<S>: Element {
 		return hostView?.bounds ?? frame
 	}
 
-	/// Initializes the component with its initial state. The render function 
+	/// Initializes the component with its initial state. The render function
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
 	public init(initialState: S) {
@@ -43,7 +43,7 @@ public class Component<S>: Element {
 		super.init()
 	}
 
-	public init(render: (Component<S>, S) -> Element, initialState: S) {
+	public init(render: (Component, S) -> Element, initialState: S) {
 		self.renderFn = render
 		self.state = initialState
 		super.init()

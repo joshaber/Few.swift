@@ -28,6 +28,7 @@ public class Element {
 	/// Is the element hidden?
 	public let hidden: Bool = false
 
+	/// The alpha for the element.
 	public let alpha: CGFloat = 1
 
 	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1) {
