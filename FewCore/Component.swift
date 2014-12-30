@@ -67,7 +67,7 @@ public class Component<S>: Element {
 		}
 	}
 
-	private func realizeNewRoot(element: Element) -> RealizedElement {
+	final private func realizeNewRoot(element: Element) -> RealizedElement {
 		let sizedElement = element.frame(effectiveFrame)
 		let realizedElement = realizeElementRecursively(sizedElement)
 		if let realizedView = realizedElement.view {
@@ -78,11 +78,11 @@ public class Component<S>: Element {
 		return realizedElement
 	}
 
-	private func render() -> Element {
+	final private func render() -> Element {
 		return renderWithRootRealizedElement(rootRealizedElement)
 	}
 
-	private func renderWithRootRealizedElement(realizedElement: RealizedElement?) -> Element {
+	final private func renderWithRootRealizedElement(realizedElement: RealizedElement?) -> Element {
 		let newRoot = render(state)
 		if let realizedElement = realizedElement {
 			// If we can diff then apply it. Otherwise we just swap out the
@@ -144,7 +144,7 @@ public class Component<S>: Element {
 		rootRealizedElement = realizeComponent()
 	}
 
-	private func realizeComponent() -> RealizedElement {
+	final private func realizeComponent() -> RealizedElement {
 		componentWillRealize()
 
 		let root = render()
@@ -168,7 +168,7 @@ public class Component<S>: Element {
 	}
 	
 	/// Update the state using the given function.
-	public func updateState(fn: S -> S) {
+	final public func updateState(fn: S -> S) {
 		precondition(NSThread.isMainThread(), "Component.updateState called on a background thread. Donut do that!")
 
 		let oldState = state
@@ -179,7 +179,7 @@ public class Component<S>: Element {
 		}
 	}
 
-	private func enqueueRender() {
+	final private func enqueueRender() {
 		if renderQueued { return }
 
 		renderQueued = true
@@ -200,7 +200,7 @@ public class Component<S>: Element {
 	///
 	/// This will be nil for elements which haven't been realized yet or haven't
 	/// been returned from the render function.
-	public func getView(#key: String) -> ViewType? {
+	final public func getView(#key: String) -> ViewType? {
 		if let realizedElement = rootRealizedElement {
 			return getViewRecursive(key, rootElement: realizedElement)
 		} else {
@@ -208,7 +208,7 @@ public class Component<S>: Element {
 		}
 	}
 
-	private func getViewRecursive(key: String, rootElement: RealizedElement) -> ViewType? {
+	final private func getViewRecursive(key: String, rootElement: RealizedElement) -> ViewType? {
 		if rootElement.element.key == key { return rootElement.view }
 
 		for element in rootElement.children {
