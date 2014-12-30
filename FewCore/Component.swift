@@ -141,18 +141,16 @@ public class Component<S>: Element {
 		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
 
 		hostView = view
-		rootRealizedElement = realizeComponent()
+		realizeComponent()
 	}
 
-	final private func realizeComponent() -> RealizedElement {
+	final private func realizeComponent() {
 		componentWillRealize()
 
 		let root = render()
-		let realizedRoot = realizeNewRoot(root)
+		rootRealizedElement = realizeNewRoot(root)
 
 		componentDidRealize()
-
-		return realizedRoot
 	}
 
 	/// Remove the component from its host view.
@@ -232,8 +230,7 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() -> ViewType? {
-		let realizedRoot = realizeComponent()
-		rootRealizedElement = realizedRoot
+		realizeComponent()
 		return rootRealizedElement?.view
 	}
 
