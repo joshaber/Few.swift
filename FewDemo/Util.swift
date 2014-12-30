@@ -21,6 +21,6 @@ func GET(URL: NSURL, fn: (NSDictionary!, NSURLResponse!, NSError!) -> ()) {
 	}.resume()
 }
 
-func uniqueKey(file: String = __FILE__, line: Int = __LINE__) -> String {
-	return "\(file)+\(line)"
+func uniqueKey(file: String = __FILE__, line: Int = __LINE__, column: Int = __COLUMN__) -> String {
+	return "\(file)+\(line)+\(column)"
 }
