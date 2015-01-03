@@ -11,7 +11,7 @@ import Few
 
 struct AppState {
 	let loggedIn: Bool = false
-	let logInState = LogInState(username: "", password: "")
+	let logInState = LogInState()
 }
 
 typealias AppComponent = AppComponent_<AppState>

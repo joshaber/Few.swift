@@ -17,7 +17,7 @@ struct ContentState {
 }
 
 // Ideally this would be embedded in ContentComponent, but Swift can't do that yet.
-struct Keys {
+private struct Keys {
 	static let List = uniqueKey()
 }
 
