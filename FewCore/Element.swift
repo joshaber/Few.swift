@@ -88,6 +88,12 @@ public class Element {
 	/// Derealize the element.
 	public func derealize() {}
 
+	internal func elementDidRealize() {
+		for child in getChildren() {
+			child.elementDidRealize()
+		}
+	}
+
 	/// Get the children of the element.
 	public func getChildren() -> [Element] {
 		return []

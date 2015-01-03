@@ -150,7 +150,12 @@ public class Component<S>: Element {
 		let root = render()
 		rootRealizedElement = realizeNewRoot(root)
 
-		componentDidRealize()
+		if hostView != nil {
+			componentDidRealize()
+			if let root = rootRealizedElement?.element {
+				root.elementDidRealize()
+			}
+		}
 	}
 
 	/// Remove the component from its host view.
@@ -232,6 +237,15 @@ public class Component<S>: Element {
 	public override func realize() -> ViewType? {
 		realizeComponent()
 		return rootRealizedElement?.view
+	}
+
+	internal override func elementDidRealize() {
+		componentDidRealize()
+		if let root = rootRealizedElement?.element {
+			root.elementDidRealize()
+		}
+
+		super.elementDidRealize()
 	}
 
 	public override func derealize() {

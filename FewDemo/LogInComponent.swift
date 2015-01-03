@@ -40,11 +40,9 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 	}
 
 	override func componentDidRealize() {
-		dispatch_async(dispatch_get_main_queue()) {
-			let usernameField = self.getView(key: Keys.UsernameField)
-			let window = usernameField?.window
-			window?.makeFirstResponder(usernameField!)
-		}
+		let usernameField = self.getView(key: Keys.UsernameField)
+		let window = usernameField?.window
+		window?.makeFirstResponder(usernameField!)
 		super.componentDidRealize()
 	}
 
