@@ -131,6 +131,8 @@ internal func realizeElementRecursively(element: Element) -> RealizedElement {
 		}
 	}
 
+	element.elementDidRealize()
+
 	return RealizedElement(element: element, children: realizedChildren, view: view)
 }
 
