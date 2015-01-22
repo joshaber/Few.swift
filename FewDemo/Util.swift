@@ -8,16 +8,16 @@
 
 import Foundation
 
-func GET(URL: NSURL, fn: (NSDictionary!, NSURLResponse!, NSError!) -> ()) {
+func GET(URL: NSURL, fn: (JSON: NSDictionary!, response: NSURLResponse!, error: NSError!) -> ()) {
 	NSURLSession.sharedSession().dataTaskWithURL(URL) { (data, response, error) in
 		if data == nil {
-			fn(nil, response, error)
+			fn(JSON: nil, response: response, error: error)
 			return
 		}
 
 		var JSONError: NSError?
-		let result = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: &JSONError) as? NSDictionary
-		fn(result, response, JSONError)
+		let JSON = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: &JSONError) as? NSDictionary
+		fn(JSON: JSON, response: response, error: JSONError)
 	}.resume()
 }
 

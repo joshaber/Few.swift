@@ -41,26 +41,24 @@ class ContentComponent_<Lol>: Few.Component<ContentState> {
 	}
 
 	override func componentDidRealize() {
-		let URL = NSURL(string: "https://api.github.com/repos/ReactiveCocoa/ReactiveCocoa")
-		GET(URL!) { JSON, response, error in
-			if JSON == nil {
-				println("Error: \(error)")
-				println("Response: \(response)")
+		let URL = NSURL(string: "https://api.github.com/repos/ReactiveCocoa/ReactiveCocoa")!
+		GET(URL) { result in
+			if result.JSON == nil {
+				println("Error: \(result.error)")
+				println("Response: \(result.response)")
 				return
 			}
 
-			let watchers = JSON["watchers_count"] as? Int
+			let watchers = result.JSON["watchers_count"] as? Int
 			dispatch_async(dispatch_get_main_queue()) {
 				self.updateState { ContentState(todos: $0.todos, like: $0.like, watcherCount: watchers, selectedIndex: $0.selectedIndex) }
 			}
 		}
 
-		eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { [unowned self] event in
-			self.handleEvent(event)
-		}
+		eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask, handleEvent)
 	}
 
-	func handleEvent(event: NSEvent) -> NSEvent? {
+	func handleEvent(event: NSEvent!) -> NSEvent! {
 		let characters = event.charactersIgnoringModifiers! as NSString
 		let character = Int(characters.characterAtIndex(0))
 		let listView = getView(key: Keys.List)!
