@@ -11,6 +11,8 @@
 		88080C6F1A0470FE005301A5 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6E1A0470FE005301A5 /* AppComponent.swift */; };
 		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
+		882638171A75CCBE0073514B /* Siblings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882638161A75CCBE0073514B /* Siblings.swift */; };
+		882638181A75CCBE0073514B /* Siblings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882638161A75CCBE0073514B /* Siblings.swift */; };
 		883CECA81A4532A600B8A510 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CECA71A4532A600B8A510 /* Password.swift */; };
 		8843B97E1A4BCA3000BDF1DF /* Graphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD8E721A412666001D617E /* Graphic.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
@@ -160,6 +162,7 @@
 		88080C6E1A0470FE005301A5 /* AppComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
 		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		882638161A75CCBE0073514B /* Siblings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Siblings.swift; sourceTree = "<group>"; };
 		883CECA71A4532A600B8A510 /* Password.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
 		884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = External/Quick/Quick.xcodeproj; sourceTree = SOURCE_ROOT; };
 		884CBA121A263C0600EDE9B2 /* Nimble.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nimble.xcodeproj; path = External/Quick/Externals/Nimble/Nimble.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -318,6 +321,7 @@
 				8897688B19AED8AF00DD079B /* Component.swift */,
 				88173A1E1A131CF10076F5A7 /* Diffing.swift */,
 				8897688C19AED8AF00DD079B /* Container.swift */,
+				882638161A75CCBE0073514B /* Siblings.swift */,
 				88729C391A029017007AB673 /* View.swift */,
 				88AD8E721A412666001D617E /* Graphic.swift */,
 				88BAF29219DE3094004241BA /* Empty.swift */,
@@ -631,6 +635,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				882638181A75CCBE0073514B /* Siblings.swift in Sources */,
 				888E59D81A4687330062A36B /* Util.swift in Sources */,
 				888E59CF1A4687330062A36B /* Element.swift in Sources */,
 				888E59D01A4687330062A36B /* Component.swift in Sources */,
@@ -659,6 +664,7 @@
 				88F140B419F0B231000A3CAC /* ListCell.swift in Sources */,
 				88FC7EB119E242F4007AFBC8 /* List.swift in Sources */,
 				8897689C19AED8AF00DD079B /* Label.swift in Sources */,
+				882638171A75CCBE0073514B /* Siblings.swift in Sources */,
 				8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */,
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
