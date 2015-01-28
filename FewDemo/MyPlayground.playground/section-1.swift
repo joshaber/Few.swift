@@ -38,10 +38,7 @@ func container1() -> Element {
 		.right(input1)
 		.centerY(input1)
 
-	let container = Container(bg, rect, rr, input1, button, input2, label)
-		.width(200)
-		.height(200)
-	return container
+	return bg + rect + rr + input1 + button + input2 + label
 }
 
 func container2() -> Element {
@@ -64,10 +61,14 @@ func container2() -> Element {
                 .below(toggle)
                 .sizeToFit()
 
-	return Container(label, add, like, toggle, logout)
+	return (label + add + like + toggle + logout)
           .width(200)
           .height(200)
 }
 
 container1().ql
 XCPShowView("c2", container2().ql)
+
+let label = Label(text: "Hi")
+let input = Input(initialText: nil, placeholder: "Your name") { _ in }.right(label)
+(label + input).ql

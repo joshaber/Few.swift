@@ -94,6 +94,6 @@ class LogInComponent_<Lol>: Few.Component<LogInState> {
 			.alignRight(passwordField)
 			.below(enterPassword)
 
-		return Container(usernameField, enterUsername, passwordField, enterPassword, loginButton)
+		return usernameField + enterUsername + passwordField + enterPassword + loginButton
 	}
 }
