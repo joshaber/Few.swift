@@ -70,8 +70,11 @@ public class Component<S>: Element {
 	}
 
 	final private func realizeNewRoot(element: Element) -> RealizedElement {
+		// If we're not the root component then we need to create a container 
+		// for our content.
 		if hostView == nil {
 			containerView = ViewType(frame: effectiveFrame)
+			configureViewToAutoresize(containerView!)
 		}
 
 		let hostingView = hostView ?? containerView
@@ -96,7 +99,8 @@ public class Component<S>: Element {
 			// entire hierarchy.
 			if newRoot.canDiff(realizedElement.element) {
 				let rootWithFrame = newRoot.frame(effectiveFrame)
-				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame, hostView)
+				let hostingView = hostView ?? containerView
+				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame, hostingView)
 			} else {
 				realizedElement.element.derealize()
 				realizedElement.view?.removeFromSuperview()
@@ -249,9 +253,7 @@ public class Component<S>: Element {
 
 	internal override func elementDidRealize() {
 		componentDidRealize()
-		if let root = rootRealizedElement?.element {
-			root.elementDidRealize()
-		}
+		rootRealizedElement?.element.elementDidRealize()
 
 		super.elementDidRealize()
 	}

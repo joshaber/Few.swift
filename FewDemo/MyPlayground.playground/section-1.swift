@@ -71,4 +71,6 @@ XCPShowView("c2", container2().ql)
 
 let label = Label(text: "Hi")
 let input = Input(initialText: nil, placeholder: "Your name") { _ in }.right(label)
-(label + input).ql
+let together = label + input
+let other = fillRect().color(NSColor.blueColor()).above(together)
+(together + other).ql
