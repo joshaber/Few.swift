@@ -15,7 +15,8 @@ public class Container: Element {
 
 	public init(_ children: [Element]) {
 		self.children = children
-		super.init()
+		let frame = children.reduce(CGRectZero) { accum, next in CGRectUnion(accum, next.frame) }
+		super.init(frame: frame)
 	}
 
 	public convenience init(_ elements: Element...) {

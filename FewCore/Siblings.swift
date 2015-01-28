@@ -19,7 +19,7 @@ public class Siblings: Element {
 	public init(_ child1: Element, _ child2: Element) {
 		self.child1 = child1
 		self.child2 = child2
-		super.init()
+		super.init(frame: CGRectUnion(child1.frame, child2.frame))
 	}
 
 	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
