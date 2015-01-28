@@ -117,17 +117,18 @@ public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> 
 }
 
 /// Realize the element and its children recursively.
-internal func realizeElementRecursively(element: Element) -> RealizedElement {
+internal func realizeElementRecursively(element: Element, containerView: ViewType?) -> RealizedElement {
 	let view = element.realize()
 	if let view = view {
 		element.applyDiff(view, other: element)
 	}
 
+	let hostView = view ?? containerView
 	let children = element.getChildren()
-	let realizedChildren = children.map(realizeElementRecursively)
-	if let view = view {
+	let realizedChildren = children.map { realizeElementRecursively($0, hostView) }
+	if let hostView = hostView {
 		for child in realizedChildren {
-			view.addSubview <^> child.view
+			hostView.addSubview <^> child.view
 		}
 	}
 
@@ -137,7 +138,7 @@ internal func realizeElementRecursively(element: Element) -> RealizedElement {
 }
 
 /// Diff the old element and new elements and their children recursively.
-internal func diffElementRecursively(oldElement: RealizedElement, newElement: Element) -> RealizedElement {
+internal func diffElementRecursively(oldElement: RealizedElement, newElement: Element, containerView: ViewType?) -> RealizedElement {
 	if let view = oldElement.view {
 		newElement.applyDiff(view, other: oldElement.element)
 	}
@@ -148,16 +149,18 @@ internal func diffElementRecursively(oldElement: RealizedElement, newElement: El
 		element.view?.removeFromSuperview()
 	}
 
-	let newRealizedElements = listDiff.add.map(realizeElementRecursively)
-	if let view = oldElement.view {
+	let hostView = oldElement.view ?? containerView
+	let newRealizedElements = listDiff.add.map { realizeElementRecursively($0, hostView) }
+	if let hostView = hostView {
 		for element in newRealizedElements {
-			view.addSubview <^> element.view
+			hostView.addSubview <^> element.view
 		}
 	}
 
 	var existingRealizedElements: [RealizedElement] = []
 	for (old, `new`) in listDiff.diff {
-		let realizedElement = diffElementRecursively(old, `new`)
+		let hostView = old.view ?? hostView
+		let realizedElement = diffElementRecursively(old, `new`, hostView)
 		existingRealizedElements.append(realizedElement)
 	}
 
