@@ -31,6 +31,8 @@ public class Component<S>: Element {
 
 	private var renderQueued: Bool = false
 
+	private var containerView: ViewType?
+
 	private var effectiveFrame: CGRect {
 		return hostView?.bounds ?? frame
 	}
@@ -68,11 +70,19 @@ public class Component<S>: Element {
 	}
 
 	final private func realizeNewRoot(element: Element) -> RealizedElement {
+		// If we're not the root component then we need to create a container 
+		// for our content.
+		if hostView == nil {
+			containerView = ViewType(frame: effectiveFrame)
+			configureViewToAutoresize(containerView!)
+		}
+
+		let hostingView = hostView ?? containerView
 		let sizedElement = element.frame(effectiveFrame)
-		let realizedElement = realizeElementRecursively(sizedElement)
+		let realizedElement = realizeElementRecursively(sizedElement, hostingView)
 		if let realizedView = realizedElement.view {
 			configureViewToAutoresize(realizedView)
-			hostView?.addSubview(realizedView)
+			hostingView?.addSubview(realizedView)
 		}
 
 		return realizedElement
@@ -89,7 +99,8 @@ public class Component<S>: Element {
 			// entire hierarchy.
 			if newRoot.canDiff(realizedElement.element) {
 				let rootWithFrame = newRoot.frame(effectiveFrame)
-				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame)
+				let hostingView = hostView ?? containerView
+				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame, hostingView)
 			} else {
 				realizedElement.element.derealize()
 				realizedElement.view?.removeFromSuperview()
@@ -150,11 +161,11 @@ public class Component<S>: Element {
 		let root = render()
 		rootRealizedElement = realizeNewRoot(root)
 
+		// The component which is actually hosting the view hierarchy starts the 
+		// realization events.
 		if hostView != nil {
 			componentDidRealize()
-			if let root = rootRealizedElement?.element {
-				root.elementDidRealize()
-			}
+			rootRealizedElement?.element.elementDidRealize()
 		}
 	}
 
@@ -162,6 +173,7 @@ public class Component<S>: Element {
 	public func remove() {
 		componentWillDerealize()
 
+		containerView?.removeFromSuperview()
 		rootRealizedElement?.view?.removeFromSuperview()
 		rootRealizedElement?.element.derealize()
 		hostView = nil
@@ -236,14 +248,12 @@ public class Component<S>: Element {
 	
 	public override func realize() -> ViewType? {
 		realizeComponent()
-		return rootRealizedElement?.view
+		return rootRealizedElement?.view ?? containerView
 	}
 
 	internal override func elementDidRealize() {
 		componentDidRealize()
-		if let root = rootRealizedElement?.element {
-			root.elementDidRealize()
-		}
+		rootRealizedElement?.element.elementDidRealize()
 
 		super.elementDidRealize()
 	}

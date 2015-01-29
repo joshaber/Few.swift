@@ -10,8 +10,9 @@ import Foundation
 
 extension Element {
 	public func debugQuickLookObject() -> AnyObject? {
-		let realizedElement = realizeElementRecursively(self)
-		return realizedElement.view
+		let hostView = NSView(frame: frame)
+		let realizedElement = realizeElementRecursively(self, hostView)
+		return realizedElement.view ?? hostView
 	}
 
 	public var ql: ViewType {
