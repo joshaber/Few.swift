@@ -13,25 +13,7 @@ public func +(left: Element, right: Element) -> Element {
 }
 
 internal class Siblings: Element {
-	private let child1: Element
-	private let child2: Element
-
 	internal init(_ child1: Element, _ child2: Element) {
-		self.child1 = child1
-		self.child2 = child2
-		super.init(frame: CGRectUnion(child1.frame, child2.frame))
-	}
-
-	internal required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let container = copy as Siblings
-		child1 = container.child1
-		child2 = container.child2
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
-	// MARK: Element
-
-	internal override func getChildren() -> [Element] {
-		return [ child1, child2 ]
+		super.init(frame: CGRectUnion(child1.frame, child2.frame), children: [ child1, child2 ])
 	}
 }

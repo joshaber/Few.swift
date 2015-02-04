@@ -33,13 +33,6 @@ class ContentComponent_<Lol>: Few.Component<ContentState> {
 		super.init(render: ContentComponent.render, initialState: initialState)
 	}
 
-	required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let component = copy as ContentComponent
-		logout = component.logout
-		eventMonitor = component.eventMonitor
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
 	override func componentDidRealize() {
 		let URL = NSURL(string: "https://api.github.com/repos/ReactiveCocoa/ReactiveCocoa")!
 		GET(URL) { result in
@@ -86,40 +79,6 @@ class ContentComponent_<Lol>: Few.Component<ContentState> {
 	}
 
 	class func render(c: Few.Component<ContentState>, state: ContentState) -> Element {
-		let count = Label(text: "\(state.todos.count)")
-
-		let addTodo: () -> () = {
-			c.updateState { ContentState(todos: $0.todos + ["a nu todo"], like: $0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
-		}
-		let button = Button(title: "Add", action: addTodo)
-
-		let likedness = (state.like ? "do" : "donut")
-		let statusLabel = Label(text: "I \(likedness) like this.")
-
-		let toggleLikedness: () -> () = {
-			c.updateState { ContentState(todos: $0.todos, like: !$0.like, watcherCount: $0.watcherCount, selectedIndex: $0.selectedIndex) }
-		}
-		let toggleButton = Button(title: "Toggle", action: toggleLikedness).width(54)
-
-		var likesIt = maybe(state.watcherCount, Label(text: "Checking…")) {
-			Label(text: "\($0) people like us!!!")
-		}
-			.hidden(!state.like)
-
-		let updateSelection: Int? -> () = { index in
-			c.updateState { ContentState(todos: $0.todos, like: $0.like, watcherCount: $0.watcherCount, selectedIndex: index) }
-		}
-		let list = TodoList(state.todos, selectedRow: state.selectedIndex, selectionChanged: updateSelection)
-			.width(100)
-			.height(100)
-			.key(Keys.List)
-
-		let component = c as ContentComponent
-		let logoutButton = Button(title: "Logout", action: component.logout)
-			.width(100)
-			.height(23)
-		
-		let children = [count, button, statusLabel, toggleButton, likesIt, list, logoutButton]
-		return Container(children |> leftAlign(16) |> verticalStack(c.frame.size.height, 4))
+		return Empty()
 	}
 }

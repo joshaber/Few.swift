@@ -124,7 +124,7 @@ internal func realizeElementRecursively(element: Element, containerView: ViewTyp
 	}
 
 	let hostView = view ?? containerView
-	let children = element.getChildren()
+	let children = element.children
 	let realizedChildren = children.map { realizeElementRecursively($0, hostView) }
 	if let hostView = hostView {
 		for child in realizedChildren {
@@ -143,7 +143,7 @@ internal func diffElementRecursively(oldElement: RealizedElement, newElement: El
 		newElement.applyDiff(view, other: oldElement.element)
 	}
 
-	let listDiff = diffElementLists(oldElement.children, newElement.getChildren())
+	let listDiff = diffElementLists(oldElement.children, newElement.children)
 	for element in listDiff.remove {
 		element.element.derealize()
 		element.view?.removeFromSuperview()

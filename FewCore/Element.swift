@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreGraphics
+import SwiftBox
 
 public var LogDiff = false
 
@@ -15,7 +16,7 @@ public var LogDiff = false
 /// can be diffed with other elements.
 public class Element {
 	/// The frame of the element.
-	public let frame = CGRectZero
+	public var frame = CGRectZero
 
 	/// The key used to identify the element. Elements with matching keys will 
 	/// be more readily diffed in certain situations (i.e., when in a Container
@@ -23,26 +24,38 @@ public class Element {
 	//
 	// TODO: This doesn't *really* need to be a string. Just hashable and 
 	// equatable.
-	public let key: String?
+	public var key: String?
 
 	/// Is the element hidden?
-	public let hidden: Bool = false
+	public var hidden: Bool = false
 
 	/// The alpha for the element.
-	public let alpha: CGFloat = 1
+	public var alpha: CGFloat = 1
 
-	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1) {
+	public var children: [Element]
+	public var direction: Direction
+	public var margin: Edges
+	public var padding: Edges
+	public var wrap: Bool
+	public var justification: Justification
+	public var selfAlignment: SelfAlignment
+	public var childAlignment: ChildAlignment
+	public var flex: CGFloat
+
+	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
 		self.key = key
 		self.hidden = hidden
 		self.alpha = alpha
-	}
-
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		self.frame = frame
-		self.hidden = hidden
-		self.key = key
-		self.alpha = alpha
+		self.children = children
+		self.direction = direction
+		self.margin = margin
+		self.padding = padding
+		self.wrap = wrap
+		self.justification = justification
+		self.selfAlignment = selfAlignment
+		self.childAlignment = childAlignment
+		self.flex = flex
 	}
 
 	/// Can the receiver and the other element be diffed?
@@ -66,14 +79,16 @@ public class Element {
 	/// should call super.
 	public func applyDiff(view: ViewType, other: Element) {
 		if view.frame != frame {
-			animatorProxy(view).frame = frame
+			view.frame = frame
 		}
 
 		if view.hidden != hidden {
 			view.hidden = hidden
 		}
 
-		compareAndSetAlpha(view, alpha)
+		if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
+			view.alphaValue = alpha
+		}
 
 		if LogDiff {
 			println("** Diffing \(reflect(self).summary)")
@@ -82,68 +97,24 @@ public class Element {
 
 	/// Realize the element and return the view containing it.
 	public func realize() -> ViewType? {
-		return nil
+		return ViewType(frame: frame)
 	}
 
 	/// Derealize the element.
-	public func derealize() {}
+	public func derealize() {
+		for child in children {
+			child.derealize()
+		}
+	}
 
 	internal func elementDidRealize() {
-		for child in getChildren() {
+		for child in children {
 			child.elementDidRealize()
 		}
 	}
 
-	/// Get the children of the element.
-	public func getChildren() -> [Element] {
-		return []
-	}
-
-	final public func hidden(h: Bool) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: h, alpha: alpha, key: key)
-	}
-
-	final public func frame(f: CGRect) -> Self {
-		return self.dynamicType(copy: self, frame: f, hidden: hidden, alpha: alpha, key: key)
-	}
-
-	final public func key(k: String) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: alpha, key: k)
-	}
-
-	final public func alpha(a: CGFloat) -> Self {
-		return self.dynamicType(copy: self, frame: frame, hidden: hidden, alpha: a, key: key)
-	}
-}
-
-extension Element {
-	final public func hide() -> Self {
-		return hidden(true)
-	}
-
-	final public func show() -> Self {
-		return hidden(false)
-	}
-}
-
-extension Element {
-	final public func size(s: CGSize) -> Self {
-		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: s.width, height: s.height))
-	}
-
-	final public func width(w: CGFloat) -> Self {
-		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: w, height: frame.size.height))
-	}
-
-	final public func height(h: CGFloat) -> Self {
-		return frame(CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: h))
-	}
-
-	final public func x(x: CGFloat) -> Self {
-		return frame(CGRect(x: x, y: frame.origin.y, width: frame.size.width, height: frame.size.height))
-	}
-
-	final public func y(y: CGFloat) -> Self {
-		return frame(CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: frame.size.height))
+	internal func assembleLayoutNode() -> Node {
+		let childNodes = children.map { $0.assembleLayoutNode() }
+		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
 	}
 }

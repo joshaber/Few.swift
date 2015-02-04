@@ -14,25 +14,27 @@ struct AppState {
 	let logInState = LogInState()
 }
 
+extension Element {
+	func sized(width: CGFloat, _ height: CGFloat) -> Self {
+		frame.size.width = width
+		frame.size.height = height
+		return self
+	}
+}
+
 typealias AppComponent = AppComponent_<AppState>
 class AppComponent_<Lol>: Few.Component<AppState> {
 	init() {
 		super.init(render: AppComponent.render, initialState: AppState())
 	}
 
-	required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
 	class func render(component: Few.Component<AppState>, state: AppState) -> Element {
-		if state.loggedIn {
-			return ContentComponent {
-				component.updateState { AppState(loggedIn: false, logInState: $0.logInState) }
-			}
-		} else {
-			return LogInComponent(state: state.logInState) { username, password in
-				component.updateState { AppState(loggedIn: true, logInState: $0.logInState) }
-			}
-		}
+		return Element(
+			frame: CGRect(x: 0, y: 0, width: 500, height: 500),
+			childAlignment: .Center,
+			children: [
+				Label(text: "hi there").sized(100, 23),
+				Button(title: "Click") {}.sized(50, 23),
+			])
 	}
 }

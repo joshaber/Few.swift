@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreGraphics
+import SwiftBox
 
 /// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
@@ -51,14 +52,6 @@ public class Component<S>: Element {
 		super.init()
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let component = copy as Component
-		state = component.state
-		rootRealizedElement = component.rootRealizedElement
-		renderFn = component.renderFn
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
 	// MARK: Lifecycle
 
 	public func render(state: S) -> Element {
@@ -78,10 +71,13 @@ public class Component<S>: Element {
 		}
 
 		let hostingView = hostView ?? containerView
-		let sizedElement = element.frame(effectiveFrame)
-		let realizedElement = realizeElementRecursively(sizedElement, hostingView)
+		element.frame.size = hostingView!.frame.size
+		let realizedElement = realizeElementRecursively(element, hostingView)
+		let node = element.assembleLayoutNode()
+		let layout = node.layout()
 		if let realizedView = realizedElement.view {
 			configureViewToAutoresize(realizedView)
+			layout.apply(realizedView)
 			hostingView?.addSubview(realizedView)
 		}
 
@@ -98,9 +94,8 @@ public class Component<S>: Element {
 			// If we can diff then apply it. Otherwise we just swap out the
 			// entire hierarchy.
 			if newRoot.canDiff(realizedElement.element) {
-				let rootWithFrame = newRoot.frame(effectiveFrame)
 				let hostingView = hostView ?? containerView
-				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame, hostingView)
+				rootRealizedElement = diffElementRecursively(realizedElement, newRoot, hostingView)
 			} else {
 				realizedElement.element.derealize()
 				realizedElement.view?.removeFromSuperview()

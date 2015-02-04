@@ -48,20 +48,6 @@ public class Input: Element {
 		}
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let input = copy as Input
-		text = input.text
-		initialText = input.initialText
-		placeholder = input.placeholder
-		enabled = input.enabled
-		action = input.action
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-
-		self.inputDelegate.action = { [unowned self] field in
-			self.action(field.stringValue)
-		}
-	}
-
 	// MARK: Element
 	
 	public override func applyDiff(view: ViewType, other: Element) {
