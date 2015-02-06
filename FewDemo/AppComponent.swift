@@ -8,16 +8,31 @@
 
 import Foundation
 import Few
+import SwiftBox
 
 struct AppState {
-	let loggedIn: Bool = false
-	let logInState = LogInState()
+
 }
 
 extension Element {
 	func sized(width: CGFloat, _ height: CGFloat) -> Self {
 		frame.size.width = width
 		frame.size.height = height
+		return self
+	}
+
+	func margin(edges: Edges) -> Self {
+		margin = edges
+		return self
+	}
+
+	func padding(edges: Edges) -> Self {
+		padding = edges
+		return self
+	}
+
+	func selfAlignment(alignment: SelfAlignment) -> Self {
+		selfAlignment = alignment
 		return self
 	}
 }
@@ -30,11 +45,18 @@ class AppComponent_<Lol>: Few.Component<AppState> {
 
 	class func render(component: Few.Component<AppState>, state: AppState) -> Element {
 		return Element(
-			frame: CGRect(x: 0, y: 0, width: 500, height: 500),
 			childAlignment: .Center,
+			justification: .Center,
+			direction: .Column,
 			children: [
-				Label(text: "hi there").sized(100, 23),
-				Button(title: "Click") {}.sized(50, 23),
+				Element(
+					direction: .Row,
+					frame: CGRect(x: 0, y: 0, width: 175, height: 23),
+					children: [
+						Label(text: "Username").sized(75, 19),
+						Input(text: nil) { _ in }.sized(100, 23),
+					]),
+				Button(title: "Login") {}.sized(50, 23).selfAlignment(.FlexEnd),
 			])
 	}
 }

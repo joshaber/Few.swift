@@ -28,7 +28,7 @@ public class Component<S>: Element {
 
 	private var hostView: ViewType?
 
-	private let renderFn: ((Component<S>, S) -> Element)?
+	private let renderFn: ((Component, S) -> Element)?
 
 	private var renderQueued: Bool = false
 
@@ -80,6 +80,8 @@ public class Component<S>: Element {
 			layout.apply(realizedView)
 			hostingView?.addSubview(realizedView)
 		}
+
+		println(layout)
 
 		return realizedElement
 	}
