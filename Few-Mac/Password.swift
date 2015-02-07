@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 
 public class Password: Input {
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let field = NSSecureTextField(frame: frame)
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""

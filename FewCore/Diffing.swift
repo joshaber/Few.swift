@@ -8,31 +8,18 @@
 
 import Foundation
 
-/// An Element which has been realized and now has an associated view.
-public class RealizedElement {
-	let element: Element
-	let children: [RealizedElement]
-	let view: ViewType?
-
-	public init(element: Element, children: [RealizedElement], view: ViewType?) {
-		self.element = element
-		self.children = children
-		self.view = view
-	}
-}
-
 /// The result of an element list diff.
 public struct ElementListDiff {
 	public let add: [Element]
-	public let remove: [RealizedElement]
-	public let diff: [(old: RealizedElement, `new`: Element)]
+	public let remove: [Element]
+	public let diff: [(old: Element, `new`: Element)]
 }
 
 /// Group the list of elements by their key.
-private func groupElementsByKey(children: [RealizedElement]) -> [String: [RealizedElement]] {
-	var childrenByKey: [String: [RealizedElement]] = [:]
+private func groupElementsByKey(children: [Element]) -> [String: [Element]] {
+	var childrenByKey: [String: [Element]] = [:]
 	for child in children {
-		if let key = child.element.key {
+		if let key = child.key {
 			let existing = childrenByKey[key]
 			if var existing = existing {
 				existing.append(child)
@@ -46,11 +33,11 @@ private func groupElementsByKey(children: [RealizedElement]) -> [String: [Realiz
 	return childrenByKey
 }
 
-/// Diff the list of realized elements and a new list of elements.
-public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> ElementListDiff {
+/// Diff the list of old elements and a new list of elements.
+public func diffElementLists(oldList: [Element], newList: [Element]) -> ElementListDiff {
 	var add: [Element] = []
-	var remove: [RealizedElement] = []
-	var diff: [(old: RealizedElement, `new`: Element)] = []
+	var remove: [Element] = []
+	var diff: [(old: Element, `new`: Element)] = []
 
 	var existingChildrenByKey = groupElementsByKey(oldList)
 
@@ -59,7 +46,7 @@ public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> 
 	// We want to reuse children as much as possible. First we check for
 	// matches by key, and then simply by order.
 	for child in newList {
-		var match: RealizedElement?
+		var match: Element?
 		// First try to find a match based on the key.
 		if let key = child.key {
 			let matchingChildren = existingChildrenByKey[key]
@@ -78,14 +65,14 @@ public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> 
 			childQueue.removeAtIndex(0)
 
 			// It has a key and we didn't already match it up.
-			if let key = match!.element.key {
+			if let key = match!.key {
 				match = nil
 			}
 		}
 
 		// If we have a match/pair then do the diff dance.
 		if let match = match {
-			if child.canDiff(match.element) {
+			if child.canDiff(match) {
 				diff.append(old: match, `new`: child)
 			} else {
 				remove.append(match)
@@ -100,7 +87,7 @@ public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> 
 
 	// Anything left over at this point must be old.
 	for child in childQueue {
-		if let key = child.element.key {
+		if let key = child.key {
 			if var children = existingChildrenByKey[key] {
 				if children.count > 0 {
 					remove.append(child)
@@ -114,55 +101,4 @@ public func diffElementLists(oldList: [RealizedElement], newList: [Element]) -> 
 	}
 
 	return ElementListDiff(add: add, remove: remove, diff: diff)
-}
-
-/// Realize the element and its children recursively.
-internal func realizeElementRecursively(element: Element, containerView: ViewType?) -> RealizedElement {
-	let view = element.realize()
-	if let view = view {
-		element.applyDiff(view, other: element)
-	}
-
-	let hostView = view ?? containerView
-	let children = element.children
-	let realizedChildren = children.map { realizeElementRecursively($0, hostView) }
-	if let hostView = hostView {
-		for child in realizedChildren {
-			hostView.addSubview <^> child.view
-		}
-	}
-
-	element.elementDidRealize()
-
-	return RealizedElement(element: element, children: realizedChildren, view: view)
-}
-
-/// Diff the old element and new elements and their children recursively.
-internal func diffElementRecursively(oldElement: RealizedElement, newElement: Element, containerView: ViewType?) -> RealizedElement {
-	if let view = oldElement.view {
-		newElement.applyDiff(view, other: oldElement.element)
-	}
-
-	let listDiff = diffElementLists(oldElement.children, newElement.children)
-	for element in listDiff.remove {
-		element.element.derealize()
-		element.view?.removeFromSuperview()
-	}
-
-	let hostView = oldElement.view ?? containerView
-	let newRealizedElements = listDiff.add.map { realizeElementRecursively($0, hostView) }
-	if let hostView = hostView {
-		for element in newRealizedElements {
-			hostView.addSubview <^> element.view
-		}
-	}
-
-	var existingRealizedElements: [RealizedElement] = []
-	for (old, `new`) in listDiff.diff {
-		let hostView = old.view ?? hostView
-		let realizedElement = diffElementRecursively(old, `new`, hostView)
-		existingRealizedElements.append(realizedElement)
-	}
-
-	return RealizedElement(element: newElement, children: existingRealizedElements + newRealizedElements, view: oldElement.view)
 }

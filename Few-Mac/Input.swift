@@ -50,8 +50,9 @@ public class Input: Element {
 
 	// MARK: Element
 	
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherInput = other as Input
+	public override func applyDiff(old: Element) {
+		super.applyDiff(old)
+
 		let textField = view as NSTextField
 
 		textField.delegate = inputDelegate
@@ -68,11 +69,9 @@ public class Input: Element {
 		if enabled != textField.enabled {
 			textField.enabled = enabled
 		}
-
-		super.applyDiff(view, other: other)
 	}
 	
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let field = NSTextField(frame: frame)
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""

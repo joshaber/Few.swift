@@ -29,8 +29,9 @@ public class Button: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherButton = other as Button
+	public override func applyDiff(old: Element) {
+		super.applyDiff(old)
+
 		let button = view as NSButton
 
 		if title != button.title {
@@ -42,16 +43,15 @@ public class Button: Element {
 		}
 
 		button.target = trampoline
-
-		super.applyDiff(view, other: other)
 	}
 
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
 		button.target = trampoline
 		button.action = trampoline.selector
+		button.enabled = enabled
 		return button
 	}
 }

@@ -32,18 +32,17 @@ public class Label: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherLabel = other as Label
+	public override func applyDiff(old: Element) {
+		super.applyDiff(old)
+
 		let textField = view as NSTextField
 
 		if attributedString != textField.attributedStringValue {
 			textField.attributedStringValue = attributedString
 		}
-
-		super.applyDiff(view, other: other)
 	}
 
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let field = NSTextField(frame: frame)
 		field.editable = false
 		field.drawsBackground = false

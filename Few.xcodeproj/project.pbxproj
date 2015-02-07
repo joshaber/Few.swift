@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		88080C6F1A0470FE005301A5 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88080C6E1A0470FE005301A5 /* AppComponent.swift */; };
 		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
-		882638171A75CCBE0073514B /* Siblings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882638161A75CCBE0073514B /* Siblings.swift */; };
-		882638181A75CCBE0073514B /* Siblings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882638161A75CCBE0073514B /* Siblings.swift */; };
 		883CECA81A4532A600B8A510 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CECA71A4532A600B8A510 /* Password.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -35,13 +32,11 @@
 		889768AD19AED92D00DD079B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889768AC19AED92D00DD079B /* AppDelegate.swift */; };
 		889768AF19AED92D00DD079B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 889768AE19AED92D00DD079B /* Images.xcassets */; };
 		889768B219AED92D00DD079B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 889768B019AED92D00DD079B /* MainMenu.xib */; };
-		889D34621A5113C900AD51F9 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889D34611A5113C900AD51F9 /* Util.swift */; };
+		88995D6D1A855D2000526313 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88995D6C1A855D2000526313 /* View.swift */; };
 		889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59DA1A4687E10062A36B /* QuickLook.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
 		88CA3AC21A81B7C400E14C1F /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88CA3AC11A81B7C400E14C1F /* SwiftBox.framework */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
-		88F140B419F0B231000A3CAC /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F140B319F0B231000A3CAC /* ListCell.swift */; };
-		88FC7EB119E242F4007AFBC8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FC7EB019E242F4007AFBC8 /* List.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,10 +141,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		88080C6E1A0470FE005301A5 /* AppComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
 		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
-		882638161A75CCBE0073514B /* Siblings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Siblings.swift; sourceTree = "<group>"; };
 		883CECA71A4532A600B8A510 /* Password.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
 		884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = External/Quick/Quick.xcodeproj; sourceTree = SOURCE_ROOT; };
 		884CBA121A263C0600EDE9B2 /* Nimble.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nimble.xcodeproj; path = External/Quick/Externals/Nimble/Nimble.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -175,7 +168,7 @@
 		889768AC19AED92D00DD079B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		889768AE19AED92D00DD079B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		889768B119AED92D00DD079B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		889D34611A5113C900AD51F9 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		88995D6C1A855D2000526313 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = View.swift; path = ../FewCore/View.swift; sourceTree = "<group>"; };
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		88CA3AC11A81B7C400E14C1F /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftBox.framework; path = ../External/SwiftBox/build/Debug/SwiftBox.framework; sourceTree = "<group>"; };
@@ -261,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				88DF47341A42824100F3F497 /* Mac.swift */,
+				88995D6C1A855D2000526313 /* View.swift */,
 				8897688A19AED8AF00DD079B /* Button.swift */,
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
@@ -303,7 +297,6 @@
 				8897688D19AED8AF00DD079B /* Element.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
 				88173A1E1A131CF10076F5A7 /* Diffing.swift */,
-				882638161A75CCBE0073514B /* Siblings.swift */,
 				88BAF29219DE3094004241BA /* Empty.swift */,
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
@@ -344,8 +337,6 @@
 			children = (
 				88BEF38D19AED9D5009197F0 /* MyPlayground.playground */,
 				889768AC19AED92D00DD079B /* AppDelegate.swift */,
-				88080C6E1A0470FE005301A5 /* AppComponent.swift */,
-				889D34611A5113C900AD51F9 /* Util.swift */,
 				889768AE19AED92D00DD079B /* Images.xcassets */,
 				889768B019AED92D00DD079B /* MainMenu.xib */,
 				889768A819AED92D00DD079B /* Supporting Files */,
@@ -610,7 +601,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				882638181A75CCBE0073514B /* Siblings.swift in Sources */,
 				888E59D81A4687330062A36B /* Util.swift in Sources */,
 				888E59CF1A4687330062A36B /* Element.swift in Sources */,
 				888E59D01A4687330062A36B /* Component.swift in Sources */,
@@ -626,14 +616,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88995D6D1A855D2000526313 /* View.swift in Sources */,
 				883CECA81A4532A600B8A510 /* Password.swift in Sources */,
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
-				88F140B419F0B231000A3CAC /* ListCell.swift in Sources */,
-				88FC7EB119E242F4007AFBC8 /* List.swift in Sources */,
 				8897689C19AED8AF00DD079B /* Label.swift in Sources */,
-				882638171A75CCBE0073514B /* Siblings.swift in Sources */,
 				8897689F19AED8AF00DD079B /* TargetActionTrampoline.swift in Sources */,
 				88BAF29319DE3094004241BA /* Empty.swift in Sources */,
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
@@ -656,8 +644,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88080C6F1A0470FE005301A5 /* AppComponent.swift in Sources */,
-				889D34621A5113C900AD51F9 /* Util.swift in Sources */,
 				889768AD19AED92D00DD079B /* AppDelegate.swift in Sources */,
 				889768AB19AED92D00DD079B /* main.swift in Sources */,
 			);

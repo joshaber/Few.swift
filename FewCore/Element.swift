@@ -32,8 +32,32 @@ public class Element {
 	/// The alpha for the element.
 	public var alpha: CGFloat = 1
 
+	// On OS X we have to reverse our children since the default coordinate 
+	// system is flipped.
+#if os(OSX)
+	public var children: [Element] {
+		didSet {
+			if direction == .Column {
+				children = children.reverse()
+			}
+		}
+	}
+#else
 	public var children: [Element]
+#endif
+
+#if os(OSX)
+	public var direction: Direction {
+		didSet {
+			if direction != oldValue && direction == .Column {
+				children = children.reverse()
+			}
+		}
+	}
+#else
 	public var direction: Direction
+#endif
+
 	public var margin: Edges
 	public var padding: Edges
 	public var wrap: Bool
@@ -42,7 +66,9 @@ public class Element {
 	public var childAlignment: ChildAlignment
 	public var flex: CGFloat
 
-	public init(frame: CGRect = CGRectZero, key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
+	internal var view: ViewType?
+
+	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
 		self.key = key
 		self.hidden = hidden
@@ -77,27 +103,56 @@ public class Element {
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
 	/// should call super.
-	public func applyDiff(view: ViewType, other: Element) {
-		if view.frame != frame {
-			view.frame = frame
-		}
-
-		if view.hidden != hidden {
-			view.hidden = hidden
-		}
-
-		if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
-			view.alphaValue = alpha
-		}
-
+	public func applyDiff(old: Element) {
 		if LogDiff {
-			println("** Diffing \(reflect(self).summary)")
+			println("*** Diffing \(reflect(self).summary)")
+		}
+
+		self.view = old.view
+
+		if let view = view {
+			if view.frame != frame {
+				view.frame = frame
+			}
+
+			if view.hidden != hidden {
+				view.hidden = hidden
+			}
+
+			if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
+				view.alphaValue = alpha
+			}
+		}
+
+		let listDiff = diffElementLists(old.children, children)
+
+		for child in listDiff.add {
+			child.realize()
+			view?.addSubview(child.view!)
+		}
+
+		for child in listDiff.diff {
+			child.`new`.applyDiff(child.old)
+		}
+
+		for child in listDiff.remove {
+			child.derealize()
 		}
 	}
 
-	/// Realize the element and return the view containing it.
-	public func realize() -> ViewType? {
+	public func createView() -> ViewType {
 		return ViewType(frame: frame)
+	}
+
+	/// Realize the element.
+	public func realize() {
+		let view = createView()
+		for child in children {
+			child.realize()
+			view.addSubview(child.view!)
+		}
+
+		self.view = view
 	}
 
 	/// Derealize the element.
@@ -105,16 +160,91 @@ public class Element {
 		for child in children {
 			child.derealize()
 		}
-	}
 
-	internal func elementDidRealize() {
-		for child in children {
-			child.elementDidRealize()
-		}
+		view?.removeFromSuperview()
+		view = nil
 	}
 
 	internal func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
+	}
+}
+
+extension Element {
+	public func size(width: CGFloat, _ height: CGFloat) -> Self {
+		frame.size.width = width
+		frame.size.height = height
+		return self
+	}
+
+	public func margin(edges: Edges) -> Self {
+		margin = edges
+		return self
+	}
+
+	public func padding(edges: Edges) -> Self {
+		padding = edges
+		return self
+	}
+
+	public func selfAlignment(alignment: SelfAlignment) -> Self {
+		selfAlignment = alignment
+		return self
+	}
+
+	public func direction(d: Direction) -> Self {
+		direction = d
+		return self
+	}
+
+	public func wrap(w: Bool) -> Self {
+		wrap = w
+		return self
+	}
+
+	public func justification(j: Justification) -> Self {
+		justification = j
+		return self
+	}
+
+	public func childAlignment(alignment: ChildAlignment) -> Self {
+		childAlignment = alignment
+		return self
+	}
+
+	public func flex(f: CGFloat) -> Self {
+		flex = f
+		return self
+	}
+
+	public func frame(f: CGRect) -> Self {
+		frame = f
+		return self
+	}
+
+	public func hidden(h: Bool) -> Self {
+		hidden = h
+		return self
+	}
+
+	public func children(c: [Element]) -> Self {
+		children = c
+		return self
+	}
+
+	public func alpha(a: CGFloat) -> Self {
+		alpha = a
+		return self
+	}
+}
+
+extension Element {
+	internal func applyLayout(layout: Layout) {
+		frame = CGRectIntegral(layout.frame)
+
+		for (child, layout) in Zip2(children, layout.children) {
+			child.applyLayout(layout)
+		}
 	}
 }
