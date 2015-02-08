@@ -185,7 +185,7 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize() {
-		renderWithOldRoot(nil, defaultFrame: CGRectZero)
+		performInitialRenderIfNeeded()
 	}
 
 	public override func derealize() {
@@ -195,5 +195,17 @@ public class Component<S>: Element {
 		rootElement = nil
 
 		componentDidDerealize()
+	}
+
+	private func performInitialRenderIfNeeded() {
+		if rootElement == nil {
+			renderWithOldRoot(nil, defaultFrame: frame)
+		}
+	}
+
+	internal override func assembleLayoutNode() -> Node {
+		performInitialRenderIfNeeded()
+
+		return rootElement!.assembleLayoutNode()
 	}
 }
