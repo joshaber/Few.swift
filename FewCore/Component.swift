@@ -56,7 +56,7 @@ public class Component<S>: Element {
 
 	final private func render() {
 		if let rootElement = rootElement {
-			renderWithOldRoot(rootElement, defaultFrame: rootElement.frame)
+			applyDiff(self)
 		}
 	}
 
@@ -73,7 +73,6 @@ public class Component<S>: Element {
 
 		let node = newRoot.assembleLayoutNode()
 		let layout = node.layout()
-		println(layout)
 		newRoot.applyLayout(layout)
 
 		if let root = root {
