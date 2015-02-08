@@ -174,6 +174,14 @@ public class Element {
 		let childNodes = children.map { $0.assembleLayoutNode() }
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
 	}
+
+	internal func applyLayout(layout: Layout) {
+		frame = CGRectIntegral(layout.frame)
+
+		for (child, layout) in Zip2(children, layout.children) {
+			child.applyLayout(layout)
+		}
+	}
 }
 
 extension Element {
@@ -241,15 +249,5 @@ extension Element {
 	public func alpha(a: CGFloat) -> Self {
 		alpha = a
 		return self
-	}
-}
-
-extension Element {
-	internal func applyLayout(layout: Layout) {
-		frame = CGRectIntegral(layout.frame)
-
-		for (child, layout) in Zip2(children, layout.children) {
-			child.applyLayout(layout)
-		}
 	}
 }
