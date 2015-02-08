@@ -128,7 +128,7 @@ public class Element {
 
 		for child in listDiff.add {
 			child.realize()
-			view?.addSubview(child.view!)
+			addRealizedChild(child)
 		}
 
 		for child in listDiff.diff {
