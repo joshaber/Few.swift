@@ -147,12 +147,17 @@ public class Element {
 	/// Realize the element.
 	public func realize() {
 		let view = createView()
+		view.frame = frame
+		self.view = view
+
 		for child in children {
 			child.realize()
-			view.addSubview(child.view!)
+			addRealizedChild(child)
 		}
+	}
 
-		self.view = view
+	internal func addRealizedChild(child: Element) {
+		view!.addSubview(child.view!)
 	}
 
 	/// Derealize the element.
