@@ -38,7 +38,7 @@ func renderInput(component: Few.Component<AppState>, label: String, secure: Bool
 
 func renderLogin(component: Few.Component<AppState>, state: AppState) -> Element {
 	let loginEnabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
-	let items = (1...10).map { Label(text: "Item \($0)") }
+	let items = (1...100).map { Label(text: "Item \($0)") }
 	return View()//backgroundColor: NSColor.blueColor())
 		.direction(.Column)
 		.children([
