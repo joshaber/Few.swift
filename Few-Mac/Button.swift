@@ -10,8 +10,8 @@ import Foundation
 import AppKit
 
 public class Button: Element {
-	private let title: String
-	private let enabled: Bool
+	public var title: String
+	public var enabled: Bool
 
 	private let trampoline = TargetActionTrampoline()
 
@@ -27,39 +27,31 @@ public class Button: Element {
 		self.trampoline.action = action
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let button = copy as Button
-		title = button.title
-		enabled = button.enabled
-		trampoline = button.trampoline
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
 	// MARK: Element
 
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherButton = other as Button
-		let button = view as NSButton
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		if title != button.title {
-			button.title = title
+		if let button = realizedSelf?.view as? NSButton {
+			if title != button.title {
+				button.title = title
+			}
+
+			if enabled != button.enabled {
+				button.enabled = enabled
+			}
+
+			button.target = trampoline
 		}
-
-		if enabled != button.enabled {
-			button.enabled = enabled
-		}
-
-		button.target = trampoline
-
-		super.applyDiff(view, other: other)
 	}
 
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let button = NSButton(frame: frame)
 		button.bezelStyle = .TexturedRoundedBezelStyle
 		button.title = title
 		button.target = trampoline
 		button.action = trampoline.selector
+		button.enabled = enabled
 		return button
 	}
 }

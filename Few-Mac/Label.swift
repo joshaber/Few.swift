@@ -13,7 +13,9 @@ private let DefaultLabelFont = NSFont.labelFontOfSize(NSFont.systemFontSizeForCo
 private let LabelFudge = CGSize(width: 4, height: 0)
 
 public class Label: Element {
-	private let attributedString: NSAttributedString
+	private var attributedString: NSAttributedString
+
+	public var text: String { return attributedString.string }
 
 	public convenience init(text: String) {
 		let attributedString = NSAttributedString(string: text, attributes: [NSFontAttributeName: DefaultLabelFont])
@@ -30,26 +32,19 @@ public class Label: Element {
 		super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let label = copy as Label
-		attributedString = label.attributedString
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-	}
-
 	// MARK: Element
 
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherLabel = other as Label
-		let textField = view as NSTextField
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		if attributedString != textField.attributedStringValue {
-			textField.attributedStringValue = attributedString
+		if let textField = realizedSelf?.view as? NSTextField {
+			if attributedString != textField.attributedStringValue {
+				textField.attributedStringValue = attributedString
+			}
 		}
-
-		super.applyDiff(view, other: other)
 	}
 
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let field = NSTextField(frame: frame)
 		field.editable = false
 		field.drawsBackground = false

@@ -13,17 +13,17 @@ internal class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (NSTextField -> ())?
 
 	override func controlTextDidChange(notification: NSNotification) {
-		let field = notification.object as NSTextField
+		let field = notification.object as! NSTextField
 		action?(field)
 	}
 }
 
 public class Input: Element {
-	public let text: String?
-	internal let initialText: String?
-	internal let placeholder: String?
-	internal let enabled: Bool
-	internal let action: String -> ()
+	public var text: String?
+	public var initialText: String?
+	public var placeholder: String?
+	public var enabled: Bool
+	public var action: String -> ()
 
 	internal let inputDelegate = InputDelegate()
 
@@ -48,45 +48,30 @@ public class Input: Element {
 		}
 	}
 
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let input = copy as Input
-		text = input.text
-		initialText = input.initialText
-		placeholder = input.placeholder
-		enabled = input.enabled
-		action = input.action
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
-
-		self.inputDelegate.action = { [unowned self] field in
-			self.action(field.stringValue)
-		}
-	}
-
 	// MARK: Element
 	
-	public override func applyDiff(view: ViewType, other: Element) {
-		let otherInput = other as Input
-		let textField = view as NSTextField
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		textField.delegate = inputDelegate
+		if let textField = realizedSelf?.view as? NSTextField {
+			textField.delegate = inputDelegate
 
-		let cell = textField.cell() as? NSTextFieldCell
-		cell?.placeholderString = placeholder ?? ""
+			let cell = textField.cell() as? NSTextFieldCell
+			cell?.placeholderString = placeholder ?? ""
 
-		if let text = text {
-			if text != textField.stringValue {
-				textField.stringValue = text
+			if let text = text {
+				if text != textField.stringValue {
+					textField.stringValue = text
+				}
+			}
+
+			if enabled != textField.enabled {
+				textField.enabled = enabled
 			}
 		}
-
-		if enabled != textField.enabled {
-			textField.enabled = enabled
-		}
-
-		super.applyDiff(view, other: other)
 	}
 	
-	public override func realize() -> ViewType? {
+	public override func createView() -> ViewType {
 		let field = NSTextField(frame: frame)
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""

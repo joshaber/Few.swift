@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreGraphics
+import SwiftBox
 
 /// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
@@ -23,25 +24,20 @@ public class Component<S>: Element {
 	/// The state on which the component depends.
 	private var state: S
 
-	private var rootRealizedElement: RealizedElement?
+	private var rootElement: Element?
 
-	private var hostView: ViewType?
+	private var realizedRoot: RealizedElement?
 
-	private let renderFn: ((Component<S>, S) -> Element)?
+	private let renderFn: ((Component, S) -> Element)?
 
 	private var renderQueued: Bool = false
-
-	private var containerView: ViewType?
-
-	private var effectiveFrame: CGRect {
-		return hostView?.bounds ?? frame
-	}
 
 	/// Initializes the component with its initial state. The render function
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
 	public init(initialState: S) {
 		self.state = initialState
+		self.renderFn = nil
 		super.init()
 	}
 
@@ -49,14 +45,6 @@ public class Component<S>: Element {
 		self.renderFn = render
 		self.state = initialState
 		super.init()
-	}
-
-	public required init(copy: Element, frame: CGRect, hidden: Bool, alpha: CGFloat, key: String?) {
-		let component = copy as Component
-		state = component.state
-		rootRealizedElement = component.rootRealizedElement
-		renderFn = component.renderFn
-		super.init(copy: copy, frame: frame, hidden: hidden, alpha: alpha, key: key)
 	}
 
 	// MARK: Lifecycle
@@ -69,48 +57,44 @@ public class Component<S>: Element {
 		}
 	}
 
-	final private func realizeNewRoot(element: Element) -> RealizedElement {
-		// If we're not the root component then we need to create a container 
-		// for our content.
-		if hostView == nil {
-			containerView = ViewType(frame: effectiveFrame)
-			configureViewToAutoresize(containerView!)
+	final private func render() {
+		if let rootElement = rootElement {
+			applyDiff(self, realizedSelf: nil)
 		}
-
-		let hostingView = hostView ?? containerView
-		let sizedElement = element.frame(effectiveFrame)
-		let realizedElement = realizeElementRecursively(sizedElement, hostingView)
-		if let realizedView = realizedElement.view {
-			configureViewToAutoresize(realizedView)
-			hostingView?.addSubview(realizedView)
-		}
-
-		return realizedElement
 	}
 
-	final private func render() -> Element {
-		return renderWithRootRealizedElement(rootRealizedElement)
+	final private func realizeNewRoot(newRoot: Element) {
+		let realized = newRoot.realize()
+
+		configureViewToAutoresize(realized.view)
+
+		realizedRoot?.view.removeFromSuperview()
+		realizedRoot = realized
 	}
 
-	final private func renderWithRootRealizedElement(realizedElement: RealizedElement?) -> Element {
+	final private func renderWithDefaultFrame(defaultFrame: CGRect) {
 		let newRoot = render(state)
-		if let realizedElement = realizedElement {
-			// If we can diff then apply it. Otherwise we just swap out the
-			// entire hierarchy.
-			if newRoot.canDiff(realizedElement.element) {
-				let rootWithFrame = newRoot.frame(effectiveFrame)
-				let hostingView = hostView ?? containerView
-				rootRealizedElement = diffElementRecursively(realizedElement, rootWithFrame, hostingView)
+		newRoot.frame = defaultFrame
+
+		let node = newRoot.assembleLayoutNode()
+		let layout = node.layout()
+		newRoot.applyLayout(layout)
+
+		if let rootElement = rootElement {
+			if newRoot.canDiff(rootElement) {
+				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				realizedElement.element.derealize()
-				realizedElement.view?.removeFromSuperview()
-				rootRealizedElement = realizeNewRoot(newRoot)
+				let superview = realizedRoot!.view.superview!
+				rootElement.derealize()
+
+				realizeNewRoot(newRoot)
+				superview.addSubview(realizedRoot!.view)
 			}
+
+			componentDidRender()
 		}
 
-		componentDidRender()
-
-		return newRoot
+		rootElement = newRoot
 	}
 
 	/// Render the component without changing any state.
@@ -148,38 +132,15 @@ public class Component<S>: Element {
 
 	/// Add the component to the given view. A component can only be added to 
 	/// one view at a time.
-	public func addToView(view: ViewType) {
-		precondition(hostView == nil, "\(self) has already been added to a view. Remove it before adding it to a new view.")
-
-		hostView = view
-		realizeComponent()
-	}
-
-	final private func realizeComponent() {
-		componentWillRealize()
-
-		let root = render()
-		rootRealizedElement = realizeNewRoot(root)
-
-		// The component which is actually hosting the view hierarchy starts the 
-		// realization events.
-		if hostView != nil {
-			componentDidRealize()
-			rootRealizedElement?.element.elementDidRealize()
-		}
+	public func addToView(hostView: ViewType) {
+		performInitialRenderIfNeeded(hostView.bounds)
+		realizeRootIfNeeded()
+		hostView.addSubview(realizedRoot!.view)
 	}
 
 	/// Remove the component from its host view.
 	public func remove() {
-		componentWillDerealize()
-
-		containerView?.removeFromSuperview()
-		rootRealizedElement?.view?.removeFromSuperview()
-		rootRealizedElement?.element.derealize()
-		hostView = nil
-		rootRealizedElement = nil
-		
-		componentDidDerealize()
+		derealize()
 	}
 	
 	/// Update the state using the given function.
@@ -210,55 +171,57 @@ public class Component<S>: Element {
 	final public func getState() -> S {
 		return state
 	}
-
-	/// Get the view with the given key.
-	///
-	/// This will be nil for elements which haven't been realized yet or haven't
-	/// been returned from the render function.
-	final public func getView(#key: String) -> ViewType? {
-		if let realizedElement = rootRealizedElement {
-			return getViewRecursive(key, rootElement: realizedElement)
-		} else {
-			return nil
-		}
-	}
-
-	final private func getViewRecursive(key: String, rootElement: RealizedElement) -> ViewType? {
-		if rootElement.element.key == key { return rootElement.view }
-
-		for element in rootElement.children {
-			let result = getViewRecursive(key, rootElement: element)
-			if result != nil { return result }
-		}
-
-		return nil
-	}
 	
 	// MARK: Element
 	
-	public override func applyDiff(view: ViewType, other: Element) {
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
+
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let otherComponent = unsafeBitCast(other, Component.self)
-		hostView = otherComponent.hostView
+		let replacementComponent = unsafeBitCast(old, Component.self)
 
-		renderWithRootRealizedElement(otherComponent.rootRealizedElement)
+		state = replacementComponent.state
+		rootElement = replacementComponent.rootElement
+		realizedRoot = replacementComponent.realizedRoot
 
-		super.applyDiff(view, other: other)
+		renderWithDefaultFrame(rootElement?.frame ?? frame)
 	}
 	
-	public override func realize() -> ViewType? {
-		realizeComponent()
-		return rootRealizedElement?.view ?? containerView
-	}
-
-	internal override func elementDidRealize() {
-		componentDidRealize()
-		rootRealizedElement?.element.elementDidRealize()
-
-		super.elementDidRealize()
+	public override func realize() -> RealizedElement {
+		performInitialRenderIfNeeded(frame)
+		realizeRootIfNeeded()
+		return RealizedElement(element: self, view: realizedRoot!.view)
 	}
 
 	public override func derealize() {
-		remove()
+		componentWillDerealize()
+
+		rootElement?.derealize()
+		rootElement = nil
+
+		realizedRoot?.view.removeFromSuperview()
+		realizedRoot = nil
+
+		componentDidDerealize()
+	}
+
+	final private func performInitialRenderIfNeeded(defaultFrame: CGRect) {
+		if rootElement == nil {
+			renderWithDefaultFrame(defaultFrame)
+		}
+	}
+
+	final private func realizeRootIfNeeded() {
+		if realizedRoot == nil {
+			componentWillRealize()
+			realizeNewRoot(rootElement!)
+			componentDidRealize()
+		}
+	}
+
+	internal override func assembleLayoutNode() -> Node {
+		performInitialRenderIfNeeded(frame)
+
+		return rootElement!.assembleLayoutNode()
 	}
 }

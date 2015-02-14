@@ -16,7 +16,7 @@ public func id<T>(val: T) -> T {
 	return val
 }
 
-public func void<T>(fn: @autoclosure () -> T) {
+public func void<T>(@autoclosure fn: () -> T) {
 	fn()
 }
 
@@ -82,7 +82,7 @@ public func flip<A, B, C>(fn: (A, B) -> C) -> (B, A) -> C {
 	}
 }
 
-public func maybe<A, B>(value: A?, none: @autoclosure () -> B, some: A -> B) -> B {
+public func maybe<A, B>(value: A?, @autoclosure none: () -> B, some: A -> B) -> B {
 	if let value = value {
 		return some(value)
 	} else {
