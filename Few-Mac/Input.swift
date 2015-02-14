@@ -13,17 +13,17 @@ internal class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (NSTextField -> ())?
 
 	override func controlTextDidChange(notification: NSNotification) {
-		let field = notification.object as NSTextField
+		let field = notification.object as! NSTextField
 		action?(field)
 	}
 }
 
 public class Input: Element {
-	public let text: String?
-	internal let initialText: String?
-	internal let placeholder: String?
-	internal let enabled: Bool
-	internal let action: String -> ()
+	public var text: String?
+	public var initialText: String?
+	public var placeholder: String?
+	public var enabled: Bool
+	public var action: String -> ()
 
 	internal let inputDelegate = InputDelegate()
 
@@ -50,24 +50,24 @@ public class Input: Element {
 
 	// MARK: Element
 	
-	public override func applyDiff(old: Element) {
-		super.applyDiff(old)
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		let textField = view as NSTextField
+		if let textField = realizedSelf?.view as? NSTextField {
+			textField.delegate = inputDelegate
 
-		textField.delegate = inputDelegate
+			let cell = textField.cell() as? NSTextFieldCell
+			cell?.placeholderString = placeholder ?? ""
 
-		let cell = textField.cell() as? NSTextFieldCell
-		cell?.placeholderString = placeholder ?? ""
-
-		if let text = text {
-			if text != textField.stringValue {
-				textField.stringValue = text
+			if let text = text {
+				if text != textField.stringValue {
+					textField.stringValue = text
+				}
 			}
-		}
 
-		if enabled != textField.enabled {
-			textField.enabled = enabled
+			if enabled != textField.enabled {
+				textField.enabled = enabled
+			}
 		}
 	}
 	

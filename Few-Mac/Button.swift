@@ -10,8 +10,8 @@ import Foundation
 import AppKit
 
 public class Button: Element {
-	private let title: String
-	private let enabled: Bool
+	public var title: String
+	public var enabled: Bool
 
 	private let trampoline = TargetActionTrampoline()
 
@@ -29,20 +29,20 @@ public class Button: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(old: Element) {
-		super.applyDiff(old)
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		let button = view as NSButton
+		if let button = realizedSelf?.view as? NSButton {
+			if title != button.title {
+				button.title = title
+			}
 
-		if title != button.title {
-			button.title = title
+			if enabled != button.enabled {
+				button.enabled = enabled
+			}
+
+			button.target = trampoline
 		}
-
-		if enabled != button.enabled {
-			button.enabled = enabled
-		}
-
-		button.target = trampoline
 	}
 
 	public override func createView() -> ViewType {

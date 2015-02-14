@@ -10,7 +10,47 @@ import Foundation
 import CoreGraphics
 import SwiftBox
 
-public var LogDiff = false
+public var LogDiff = true
+
+private func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
+	for (i, e) in enumerate(array) {
+		// HAHA SWIFT WHY DOES POINTER EQUALITY NOT WORK
+		let ptr1 = Unmanaged<T>.passUnretained(element).toOpaque()
+		let ptr2 = Unmanaged<T>.passUnretained(e).toOpaque()
+		if ptr1 == ptr2 { return i }
+	}
+
+	return nil
+}
+
+public class RealizedElement {
+	public var element: Element
+	public let view: ViewType
+	private var children: [RealizedElement] = []
+
+	public init(element: Element, view: ViewType) {
+		self.element = element
+		self.view = view
+	}
+
+	public func addRealizedChild(child: RealizedElement, index: Int?) {
+		if let index = index {
+			children.insert(child, atIndex: index)
+		} else {
+			children.append(child)
+		}
+
+		element.addRealizedChildView(child.view, selfView: view)
+	}
+
+	public func removeRealizedChild(child: RealizedElement) {
+		child.view.removeFromSuperview()
+
+		if let index = indexOf(children, child) {
+			children.removeAtIndex(index)
+		}
+	}
+}
 
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
@@ -66,8 +106,6 @@ public class Element {
 	public var childAlignment: ChildAlignment
 	public var flex: CGFloat
 
-	internal var view: ViewType?
-
 	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
 		self.key = key
@@ -102,41 +140,59 @@ public class Element {
 	/// after the element has been realized.
 	///
 	/// This will only be called if `canDiff` returns `true`. Implementations
-	/// should call super.
-	public func applyDiff(old: Element) {
+	/// should call super before doing their own diffing.
+	public func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		if LogDiff {
 			println("*** Diffing \(reflect(self).summary)")
 		}
 
-		self.view = old.view
-
-		if let view = view {
-			if view.frame != frame {
-				view.frame = frame
-			}
-
-			if view.hidden != hidden {
-				view.hidden = hidden
-			}
-
-			if fabs(view.alphaValue - alpha) > CGFloat(DBL_EPSILON) {
-				view.alphaValue = alpha
-			}
+		let view = realizedSelf?.view
+		if hidden != old.hidden {
+			view?.hidden = hidden
 		}
 
-		let listDiff = diffElementLists(old.children, children)
-
-		for child in listDiff.add {
-			child.realize()
-			addRealizedChild(child)
+		if fabs(alpha - old.alpha) > CGFloat(DBL_EPSILON) {
+			view?.alphaValue = alpha
 		}
 
-		for child in listDiff.diff {
-			child.`new`.applyDiff(child.old)
+		if frame != old.frame {
+			view?.frame = frame
 		}
 
-		for child in listDiff.remove {
-			child.derealize()
+		realizedSelf?.element = self
+
+		if let realizedSelf = realizedSelf {
+			let listDiff = diffElementLists(realizedSelf.children, children)
+
+			if LogDiff {
+				println("**** old: \(old.children)")
+				println("**** new: \(children)")
+
+				let diffs: [String] = listDiff.diff.map {
+					let existing = $0.existing.element
+					let replacement = $0.replacement
+					return "\(replacement) => \(existing)"
+				}
+				println("**** diffing \(diffs)")
+
+				println("**** removing \(listDiff.remove)")
+				println("**** adding \(listDiff.add)")
+				println()
+			}
+
+			for child in listDiff.remove {
+				child.element.derealize()
+				realizedSelf.removeRealizedChild(child)
+			}
+
+			for child in listDiff.add {
+				let realizedChild = child.realize()
+				realizedSelf.addRealizedChild(realizedChild, index: indexOf(children, child))
+			}
+
+			for child in listDiff.diff {
+				child.replacement.applyDiff(child.existing.element, realizedSelf: child.existing)
+			}
 		}
 	}
 
@@ -145,19 +201,21 @@ public class Element {
 	}
 
 	/// Realize the element.
-	public func realize() {
+	internal func realize() -> RealizedElement {
 		let view = createView()
 		view.frame = frame
-		self.view = view
 
-		for child in children {
-			child.realize()
-			addRealizedChild(child)
+		let realizedSelf = RealizedElement(element: self, view: view)
+		let realizedChildren = children.map { $0.realize() }
+		for child in realizedChildren {
+			realizedSelf.addRealizedChild(child, index: nil)
 		}
+
+		return realizedSelf
 	}
 
-	internal func addRealizedChild(child: Element) {
-		view!.addSubview(child.view!)
+	internal func addRealizedChildView(childView: ViewType, selfView: ViewType) {
+		selfView.addSubview(childView)
 	}
 
 	/// Derealize the element.
@@ -165,9 +223,6 @@ public class Element {
 		for child in children {
 			child.derealize()
 		}
-
-		view?.removeFromSuperview()
-		view = nil
 	}
 
 	internal func assembleLayoutNode() -> Node {

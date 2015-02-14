@@ -11,15 +11,15 @@ import Foundation
 /// The result of an element list diff.
 public struct ElementListDiff {
 	public let add: [Element]
-	public let remove: [Element]
-	public let diff: [(old: Element, `new`: Element)]
+	public let remove: [RealizedElement]
+	public let diff: [(existing: RealizedElement, replacement: Element)]
 }
 
 /// Group the list of elements by their key.
-private func groupElementsByKey(children: [Element]) -> [String: [Element]] {
-	var childrenByKey: [String: [Element]] = [:]
+private func groupElementsByKey(children: [RealizedElement]) -> [String: [RealizedElement]] {
+	var childrenByKey: [String: [RealizedElement]] = [:]
 	for child in children {
-		if let key = child.key {
+		if let key = child.element.key {
 			let existing = childrenByKey[key]
 			if var existing = existing {
 				existing.append(child)
@@ -34,19 +34,19 @@ private func groupElementsByKey(children: [Element]) -> [String: [Element]] {
 }
 
 /// Diff the list of old elements and a new list of elements.
-public func diffElementLists(oldList: [Element], newList: [Element]) -> ElementListDiff {
+public func diffElementLists(existingList: [RealizedElement], newList: [Element]) -> ElementListDiff {
 	var add: [Element] = []
-	var remove: [Element] = []
-	var diff: [(old: Element, `new`: Element)] = []
+	var remove: [RealizedElement] = []
+	var diff: [(existing: RealizedElement, replacement: Element)] = []
 
-	var existingChildrenByKey = groupElementsByKey(oldList)
+	var existingChildrenByKey = groupElementsByKey(existingList)
 
-	var childQueue = oldList
+	var childQueue = existingList
 
 	// We want to reuse children as much as possible. First we check for
 	// matches by key, and then simply by order.
 	for child in newList {
-		var match: Element?
+		var match: RealizedElement?
 		// First try to find a match based on the key.
 		if let key = child.key {
 			let matchingChildren = existingChildrenByKey[key]
@@ -65,15 +65,15 @@ public func diffElementLists(oldList: [Element], newList: [Element]) -> ElementL
 			childQueue.removeAtIndex(0)
 
 			// It has a key and we didn't already match it up.
-			if let key = match!.key {
+			if let key = match!.element.key {
 				match = nil
 			}
 		}
 
 		// If we have a match/pair then do the diff dance.
 		if let match = match {
-			if child.canDiff(match) {
-				diff.append(old: match, `new`: child)
+			if child.canDiff(match.element) {
+				diff.append(existing: match, replacement: child)
 			} else {
 				remove.append(match)
 				add.append(child)
@@ -87,7 +87,7 @@ public func diffElementLists(oldList: [Element], newList: [Element]) -> ElementL
 
 	// Anything left over at this point must be old.
 	for child in childQueue {
-		if let key = child.key {
+		if let key = child.element.key {
 			if var children = existingChildrenByKey[key] {
 				if children.count > 0 {
 					remove.append(child)

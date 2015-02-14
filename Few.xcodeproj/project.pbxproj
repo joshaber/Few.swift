@@ -35,7 +35,7 @@
 		88995D6D1A855D2000526313 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88995D6C1A855D2000526313 /* View.swift */; };
 		889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59DA1A4687E10062A36B /* QuickLook.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
-		88CA3AC21A81B7C400E14C1F /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88CA3AC11A81B7C400E14C1F /* SwiftBox.framework */; };
+		88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA371A1A86A03F002281F4 /* ScrollView.swift */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
 /* End PBXBuildFile section */
 
@@ -171,10 +171,8 @@
 		88995D6C1A855D2000526313 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = View.swift; path = ../FewCore/View.swift; sourceTree = "<group>"; };
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
-		88CA3AC11A81B7C400E14C1F /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftBox.framework; path = ../External/SwiftBox/build/Debug/SwiftBox.framework; sourceTree = "<group>"; };
+		88DA371A1A86A03F002281F4 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
-		88F140B319F0B231000A3CAC /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
-		88FC7EB019E242F4007AFBC8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,7 +187,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88CA3AC21A81B7C400E14C1F /* SwiftBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +256,7 @@
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
 				883CECA71A4532A600B8A510 /* Password.swift */,
-				88FC7EB019E242F4007AFBC8 /* List.swift */,
-				88F140B319F0B231000A3CAC /* ListCell.swift */,
+				88DA371A1A86A03F002281F4 /* ScrollView.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
 			path = "Few-Mac";
@@ -292,7 +288,6 @@
 		8897687319AED88000DD079B /* FewCore */ = {
 			isa = PBXGroup;
 			children = (
-				88CA3AC11A81B7C400E14C1F /* SwiftBox.framework */,
 				8897687619AED88000DD079B /* Few.h */,
 				8897688D19AED8AF00DD079B /* Element.swift */,
 				8897688B19AED8AF00DD079B /* Component.swift */,
@@ -617,6 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88995D6D1A855D2000526313 /* View.swift in Sources */,
+				88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */,
 				883CECA81A4532A600B8A510 /* Password.swift in Sources */,
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
@@ -766,7 +762,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -805,7 +801,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -822,10 +818,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/External/SwiftBox/build/Debug",
-				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Few-Mac/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -845,10 +837,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/External/SwiftBox/build/Debug",
-				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Few-Mac/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

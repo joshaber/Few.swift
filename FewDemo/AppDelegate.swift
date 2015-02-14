@@ -15,39 +15,39 @@ struct AppState {
 	let password: String = ""
 }
 
-func textChanged(component: Few.Component<AppState>)(text: String) {
-	component.updateState { AppState(username: text, password: $0.password) }
-}
-
 func renderInput(component: Few.Component<AppState>, label: String, secure: Bool, fn: (AppState, String) -> AppState) -> Element {
 	let action: String -> () = { str in
 		component.updateState { fn($0, str) }
 	}
-	let base: Element = {
-		if secure {
-			return Password(text: nil, fn: action)
-		} else {
-			return Input(text: nil, fn: action)
-		}
-	}()
+
+	let input: Element
+	if secure {
+		input = Password(text: nil, fn: action)
+	} else {
+		input = Input(text: nil, fn: action)
+	}
+
 	return View()
 		.direction(.Row)
+		.padding(Edges(bottom: 4))
 		.children([
 			Label(text: label).size(75, 19),
-			base.size(100, 23),
+			input.size(100, 23),
 		])
 }
 
 func renderLogin(component: Few.Component<AppState>, state: AppState) -> Element {
 	let loginEnabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
+	let items = (1...10).map { Label(text: "Item \($0)") }
 	return View()//backgroundColor: NSColor.blueColor())
 		.direction(.Column)
 		.children([
-			renderInput(component, "Username", true) { AppState(username: $1, password: $0.username) },
+			renderInput(component, "Username", true) { AppState(username: $1, password: $0.password) },
 			renderInput(component, "Password", true) { AppState(username: $0.username, password: $1) },
 			Button(title: "Login", enabled: loginEnabled) {}
 				.selfAlignment(.FlexEnd)
 				.margin(Edges(bottom: 4)),
+			ScrollView(items).size(100, 100),
 		])
 }
 
@@ -65,8 +65,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	private let appComponent = Few.Component(render: render, initialState: AppState())
 
-	func applicationDidFinishLaunching(notification: NSNotification?) {
-		let contentView = window.contentView as NSView
+	func applicationDidFinishLaunching(notification: NSNotification) {
+		let contentView = window.contentView as!NSView
 		appComponent.addToView(contentView)
 	}
 }

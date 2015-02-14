@@ -26,6 +26,8 @@ public class Component<S>: Element {
 
 	private var rootElement: Element?
 
+	private var realizedRoot: RealizedElement?
+
 	private let renderFn: ((Component, S) -> Element)?
 
 	private var renderQueued: Bool = false
@@ -35,6 +37,7 @@ public class Component<S>: Element {
 	/// represents that state.
 	public init(initialState: S) {
 		self.state = initialState
+		self.renderFn = nil
 		super.init()
 	}
 
@@ -56,18 +59,20 @@ public class Component<S>: Element {
 
 	final private func render() {
 		if let rootElement = rootElement {
-			applyDiff(self)
+			applyDiff(self, realizedSelf: nil)
 		}
 	}
 
 	final private func realizeNewRoot(newRoot: Element) {
-		newRoot.realize()
+		let realized = newRoot.realize()
 
-		configureViewToAutoresize(newRoot.view!)
-		view = newRoot.view!
+		configureViewToAutoresize(realized.view)
+
+		realizedRoot?.view.removeFromSuperview()
+		realizedRoot = realized
 	}
 
-	final private func renderWithOldRoot(root: Element?, defaultFrame: CGRect) {
+	final private func renderWithDefaultFrame(defaultFrame: CGRect) {
 		let newRoot = render(state)
 		newRoot.frame = defaultFrame
 
@@ -75,22 +80,18 @@ public class Component<S>: Element {
 		let layout = node.layout()
 		newRoot.applyLayout(layout)
 
-		if let root = root {
-			if newRoot.canDiff(root) {
-				newRoot.applyDiff(root)
+		if let rootElement = rootElement {
+			if newRoot.canDiff(rootElement) {
+				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				let superview = root.view!.superview
-				root.derealize()
+				let superview = realizedRoot!.view.superview!
+				rootElement.derealize()
 
 				realizeNewRoot(newRoot)
-				superview!.addSubview(newRoot.view!)
+				superview.addSubview(realizedRoot!.view)
 			}
 
 			componentDidRender()
-		} else {
-			componentWillRealize()
-			realizeNewRoot(newRoot)
-			componentDidRealize()
 		}
 
 		rootElement = newRoot
@@ -132,8 +133,9 @@ public class Component<S>: Element {
 	/// Add the component to the given view. A component can only be added to 
 	/// one view at a time.
 	public func addToView(hostView: ViewType) {
-		renderWithOldRoot(nil, defaultFrame: hostView.bounds)
-		hostView.addSubview(rootElement!.view!)
+		performInitialRenderIfNeeded(hostView.bounds)
+		realizeRootIfNeeded()
+		hostView.addSubview(realizedRoot!.view)
 	}
 
 	/// Remove the component from its host view.
@@ -172,19 +174,23 @@ public class Component<S>: Element {
 	
 	// MARK: Element
 	
-	public override func applyDiff(old: Element) {
-		super.applyDiff(old)
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let oldComponent = unsafeBitCast(old, Component.self)
+		let replacementComponent = unsafeBitCast(old, Component.self)
 
-		if let rootElement = oldComponent.rootElement {
-			renderWithOldRoot(rootElement, defaultFrame: rootElement.frame)
-		}
+		state = replacementComponent.state
+		rootElement = replacementComponent.rootElement
+		realizedRoot = replacementComponent.realizedRoot
+
+		renderWithDefaultFrame(rootElement?.frame ?? frame)
 	}
 	
-	public override func realize() {
-		performInitialRenderIfNeeded()
+	public override func realize() -> RealizedElement {
+		performInitialRenderIfNeeded(frame)
+		realizeRootIfNeeded()
+		return RealizedElement(element: self, view: realizedRoot!.view)
 	}
 
 	public override func derealize() {
@@ -193,17 +199,28 @@ public class Component<S>: Element {
 		rootElement?.derealize()
 		rootElement = nil
 
+		realizedRoot?.view.removeFromSuperview()
+		realizedRoot = nil
+
 		componentDidDerealize()
 	}
 
-	private func performInitialRenderIfNeeded() {
+	final private func performInitialRenderIfNeeded(defaultFrame: CGRect) {
 		if rootElement == nil {
-			renderWithOldRoot(nil, defaultFrame: frame)
+			renderWithDefaultFrame(defaultFrame)
+		}
+	}
+
+	final private func realizeRootIfNeeded() {
+		if realizedRoot == nil {
+			componentWillRealize()
+			realizeNewRoot(rootElement!)
+			componentDidRealize()
 		}
 	}
 
 	internal override func assembleLayoutNode() -> Node {
-		performInitialRenderIfNeeded()
+		performInitialRenderIfNeeded(frame)
 
 		return rootElement!.assembleLayoutNode()
 	}

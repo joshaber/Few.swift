@@ -13,7 +13,9 @@ private let DefaultLabelFont = NSFont.labelFontOfSize(NSFont.systemFontSizeForCo
 private let LabelFudge = CGSize(width: 4, height: 0)
 
 public class Label: Element {
-	private let attributedString: NSAttributedString
+	private var attributedString: NSAttributedString
+
+	public var text: String { return attributedString.string }
 
 	public convenience init(text: String) {
 		let attributedString = NSAttributedString(string: text, attributes: [NSFontAttributeName: DefaultLabelFont])
@@ -32,13 +34,13 @@ public class Label: Element {
 
 	// MARK: Element
 
-	public override func applyDiff(old: Element) {
-		super.applyDiff(old)
+	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		let textField = view as NSTextField
-
-		if attributedString != textField.attributedStringValue {
-			textField.attributedStringValue = attributedString
+		if let textField = realizedSelf?.view as? NSTextField {
+			if attributedString != textField.attributedStringValue {
+				textField.attributedStringValue = attributedString
+			}
 		}
 	}
 
