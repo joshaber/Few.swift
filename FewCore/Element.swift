@@ -12,46 +12,6 @@ import SwiftBox
 
 public var LogDiff = false
 
-private func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
-	for (i, e) in enumerate(array) {
-		// HAHA SWIFT WHY DOES POINTER EQUALITY NOT WORK
-		let ptr1 = Unmanaged<T>.passUnretained(element).toOpaque()
-		let ptr2 = Unmanaged<T>.passUnretained(e).toOpaque()
-		if ptr1 == ptr2 { return i }
-	}
-
-	return nil
-}
-
-public class RealizedElement {
-	public var element: Element
-	public let view: ViewType
-	private var children: [RealizedElement] = []
-
-	public init(element: Element, view: ViewType) {
-		self.element = element
-		self.view = view
-	}
-
-	public func addRealizedChild(child: RealizedElement, index: Int?) {
-		if let index = index {
-			children.insert(child, atIndex: index)
-		} else {
-			children.append(child)
-		}
-
-		element.addRealizedChildView(child.view, selfView: view)
-	}
-
-	public func removeRealizedChild(child: RealizedElement) {
-		child.view.removeFromSuperview()
-
-		if let index = indexOf(children, child) {
-			children.removeAtIndex(index)
-		}
-	}
-}
-
 /// Elements are the basic building block. They represent a visual thing which 
 /// can be diffed with other elements.
 public class Element {
@@ -187,7 +147,7 @@ public class Element {
 
 			for child in listDiff.add {
 				let realizedChild = child.realize()
-				realizedSelf.addRealizedChild(realizedChild, index: indexOf(children, child))
+				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
 			}
 
 			for child in listDiff.diff {
