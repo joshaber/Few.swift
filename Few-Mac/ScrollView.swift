@@ -75,19 +75,19 @@ private class ScrollViewElement: Element {
 	}
 }
 
-internal class ScrollViewContent: Element {
+private class ScrollViewContent: Element {
 	private let layoutChildren: [Element]
 
 	private init(layoutChildren: [Element]) {
 		self.layoutChildren = layoutChildren
 	}
 
-	internal override func assembleLayoutNode() -> Node {
+	private override func assembleLayoutNode() -> Node {
 		let childNodes = layoutChildren.map { $0.assembleLayoutNode() }
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
 	}
 
-	internal override func applyLayout(layout: Layout) {
+	private override func applyLayout(layout: Layout) {
 		frame = CGRectIntegral(layout.frame)
 
 		for (child, layout) in Zip2(layoutChildren, layout.children) {
