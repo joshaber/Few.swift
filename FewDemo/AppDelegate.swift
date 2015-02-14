@@ -39,10 +39,10 @@ func renderInput(component: Few.Component<AppState>, label: String, secure: Bool
 func renderLogin(component: Few.Component<AppState>, state: AppState) -> Element {
 	let loginEnabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
 	let items = (1...100).map { Label(text: "Item \($0)") }
-	return View()//backgroundColor: NSColor.blueColor())
+	return View()
 		.direction(.Column)
 		.children([
-			renderInput(component, "Username", true) { AppState(username: $1, password: $0.password) },
+			renderInput(component, "Username", false) { AppState(username: $1, password: $0.password) },
 			renderInput(component, "Password", true) { AppState(username: $0.username, password: $1) },
 			Button(title: "Login", enabled: loginEnabled) {}
 				.selfAlignment(.FlexEnd)
