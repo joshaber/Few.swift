@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 import SwiftBox
 
-public var LogDiff = true
+public var LogDiff = false
 
 private func indexOf<T: AnyObject>(array: [T], element: T) -> Int? {
 	for (i, e) in enumerate(array) {
