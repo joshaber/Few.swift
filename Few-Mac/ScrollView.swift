@@ -116,7 +116,7 @@ public class ScrollView_<LOL>: Component<[Element]> {
 			])
 	}
 
-	private func didScroll(visibleRect: CGRect) {
+	final private func didScroll(visibleRect: CGRect) {
 		let visibleElements = elements.filter { CGRectIntersectsRect(visibleRect, $0.frame) }
 		updateState { _ in visibleElements }
 	}
