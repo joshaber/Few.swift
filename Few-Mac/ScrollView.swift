@@ -37,7 +37,7 @@ private class FewScrollView: NSView {
 		fatalError("FewScrollView should not be used in a xib.")
 	}
 
-	@objc private func boundsChanged(notification: NSNotification) {
+	@objc final private func boundsChanged(notification: NSNotification) {
 		didScroll(scrollView.contentView.visibleRect)
 	}
 }

@@ -129,7 +129,7 @@ public class View: Element {
 		return view
 	}
 
-	private func configEventHandlers(view: FewView) {
+	private final func configEventHandlers(view: FewView) {
 		view.mouseDown = { [weak self] in
 			if let strongSelf = self {
 				strongSelf.mouseDown(strongSelf)
