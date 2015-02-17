@@ -12,7 +12,7 @@ import AppKit
 
 private class FewScrollView: NSView {
 	private let scrollView: NSScrollView
-	private let didScroll: CGRect -> ()
+	private var didScroll: CGRect -> ()
 
 	deinit {
 		NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -70,6 +70,13 @@ private class ScrollViewElement: Element {
 		documentView.scrollPoint(top)
 
 		return realizedElement
+	}
+
+	private override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
+		super.applyDiff(old, realizedSelf: realizedSelf)
+
+		let scrollView = realizedSelf?.view as! FewScrollView
+		scrollView.didScroll = didScroll
 	}
 }
 
