@@ -42,8 +42,6 @@ private class FewScrollView: NSView {
 	}
 }
 
-public typealias ScrollView = ScrollView_<[Element]>
-
 private class ScrollViewElement: Element {
 	private let didScroll: CGRect -> ()
 
@@ -96,18 +94,20 @@ private class ScrollViewContent: Element {
 	}
 }
 
-public class ScrollView_<LOL>: Component<[Element]> {
-	public let elements: [Element]
+public typealias ScrollView = ScrollView_<CGRect>
+public class ScrollView_<LOL>: Component<CGRect> {
+	public var elements: [Element]
 
 	public init(_ elements: [Element]) {
 		self.elements = elements.reverse()
-		super.init(render: ScrollView_.render, initialState: [])
+		super.init(render: ScrollView_.render, initialState: CGRectZero)
 	}
 
-	private class func render(c: Component<[Element]>, visibleElements: [Element]) -> Element {
+	private class func render(c: Component<CGRect>, visibleRect: CGRect) -> Element {
 		let component = c as! ScrollView_
 
-		return ScrollViewElement(component.didScroll)
+		let visibleElements = component.calculateVisibleElements(visibleRect)
+
 			.direction(.Column)
 			.children([
 				ScrollViewContent(layoutChildren: component.elements)
@@ -117,7 +117,11 @@ public class ScrollView_<LOL>: Component<[Element]> {
 	}
 
 	final private func didScroll(visibleRect: CGRect) {
-		let visibleElements = elements.filter { CGRectIntersectsRect(visibleRect, $0.frame) }
-		updateState { _ in visibleElements }
+		updateState { _ in visibleRect }
+	}
+
+	final private func calculateVisibleElements(visibleRect: CGRect) -> [Element] {
+		return elements.filter { CGRectIntersectsRect(visibleRect, $0.frame) }
+	}
 	}
 }
