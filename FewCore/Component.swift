@@ -178,11 +178,11 @@ public class Component<S>: Element {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let replacementComponent = unsafeBitCast(old, Component.self)
+		let oldComponent = unsafeBitCast(old, Component.self)
 
-		state = replacementComponent.state
-		rootElement = replacementComponent.rootElement
-		realizedRoot = replacementComponent.realizedRoot
+		state = oldComponent.state
+		rootElement = oldComponent.rootElement
+		realizedRoot = oldComponent.realizedRoot
 
 		renderWithDefaultFrame(rootElement?.frame ?? frame)
 	}
