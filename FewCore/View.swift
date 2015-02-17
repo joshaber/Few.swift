@@ -142,4 +142,8 @@ public class View: Element {
 			}
 		}
 	}
+
+	internal override var selfDescription: String {
+		return "\(self.dynamicType): \(backgroundColor)"
+	}
 }

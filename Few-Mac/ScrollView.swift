@@ -136,5 +136,8 @@ public class ScrollView_<LOL>: Component<CGRect> {
 	final private func calculateVisibleElements(visibleRect: CGRect) -> [Element] {
 		return elements.filter { CGRectIntersectsRect(visibleRect, $0.frame) }
 	}
+
+	internal override var selfDescription: String {
+		return "\(self.dynamicType): " + calculateVisibleElements(getState()).description
 	}
 }

@@ -201,6 +201,10 @@ public class Element {
 			child.applyLayout(layout)
 		}
 	}
+
+	internal var selfDescription: String {
+		return "\(self.dynamicType)"
+	}
 }
 
 extension Element {
@@ -268,5 +272,21 @@ extension Element {
 	public func alpha(a: CGFloat) -> Self {
 		alpha = a
 		return self
+	}
+}
+
+extension Element: Printable {
+	public var description: String {
+		return descriptionForDepth(0)
+	}
+
+	private func descriptionForDepth(depth: Int) -> String {
+		if children.count > 0 {
+			let indentation = reduce(0...depth, "\n") { accum, _ in accum + "\t" }
+			let childrenDescription = indentation.join(children.map { $0.descriptionForDepth(depth + 1) })
+			return "\(selfDescription)\(indentation)\(childrenDescription)"
+		} else {
+			return selfDescription
+		}
 	}
 }
