@@ -21,7 +21,6 @@ import SwiftBox
 /// by calling the `render` function passed in to its init. But subclasses can
 /// optimize this by implementing `componentShouldRender`.
 public class Component<S>: Element {
-	/// The state on which the component depends.
 	private var state: S
 
 	private var rootElement: Element?
@@ -170,6 +169,27 @@ public class Component<S>: Element {
 	/// Get the current state of the component.
 	final public func getState() -> S {
 		return state
+	}
+
+	/// Find the view with the given key. This will only find views for elements
+	/// which have been realized.
+	final public func findViewWithKey(key: String) -> ViewType? {
+		if let realizedElement = realizedRoot {
+			return findViewWithKeyRecursive(key, rootElement: realizedElement)
+		} else {
+			return nil
+		}
+	}
+
+	final private func findViewWithKeyRecursive(key: String, rootElement: RealizedElement) -> ViewType? {
+		if rootElement.element.key == key { return rootElement.view }
+
+		for element in rootElement.children {
+			let result = findViewWithKeyRecursive(key, rootElement: element)
+			if result != nil { return result }
+		}
+
+		return nil
 	}
 	
 	// MARK: Element
