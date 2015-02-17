@@ -34,6 +34,9 @@ private class FewView: NSView {
 		}
 	}
 
+	var mouseDown: (() -> ())?
+	var mouseUp: (() -> ())?
+
 	private override func drawRect(dirtyRect: NSRect) {
 		let path: NSBezierPath
 		if cornerRadius.isZero {
@@ -57,19 +60,37 @@ private class FewView: NSView {
 	@objc override var opaque: Bool {
 		return backgroundColor?.alphaComponent == 1
 	}
+
+	private override func mouseDown(event: NSEvent) {
+		super.mouseDown(event)
+
+		mouseDown?()
+	}
+
+	private override func mouseUp(event: NSEvent) {
+		super.mouseUp(event)
+
+		mouseUp?()
+	}
 }
 
 public class View: Element {
+	private static let doNothing: View -> () = { _ in }
+
 	public var backgroundColor: NSColor?
 	public var borderColor: NSColor?
 	public var borderWidth: CGFloat
 	public var cornerRadius: CGFloat
+	public var mouseDown: View -> ()
+	public var mouseUp: View -> ()
 
-	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0) {
+	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0, mouseDown: View -> () = doNothing, mouseUp: View -> () = doNothing) {
 		self.backgroundColor = backgroundColor
 		self.borderColor = borderColor
 		self.borderWidth = borderWidth
 		self.cornerRadius = cornerRadius
+		self.mouseDown = mouseDown
+		self.mouseUp = mouseUp
 	}
 
 	// MARK: Element
@@ -93,6 +114,8 @@ public class View: Element {
 			if fabs(cornerRadius - backgroundView.cornerRadius) > CGFloat(DBL_EPSILON) {
 				backgroundView.cornerRadius = cornerRadius
 			}
+
+			configEventHandlers(backgroundView)
 		}
 	}
 
@@ -102,6 +125,21 @@ public class View: Element {
 		view.borderColor = borderColor
 		view.borderWidth = borderWidth
 		view.cornerRadius = cornerRadius
+		configEventHandlers(view)
 		return view
+	}
+
+	private func configEventHandlers(view: FewView) {
+		view.mouseDown = { [weak self] in
+			if let strongSelf = self {
+				strongSelf.mouseDown(strongSelf)
+			}
+		}
+
+		view.mouseUp = { [weak self] in
+			if let strongSelf = self {
+				strongSelf.mouseUp(strongSelf)
+			}
+		}
 	}
 }
