@@ -115,6 +115,12 @@ public class ScrollView_<LOL>: Component<CGRect> {
 
 		let visibleElements = component.calculateVisibleElements(visibleRect)
 
+		let weakScroll: CGRect -> () = { [weak component] rect in
+			if let component = component {
+				component.didScroll(rect)
+			}
+		}
+		return ScrollViewElement(weakScroll)
 			.direction(.Column)
 			.children([
 				ScrollViewContent(layoutChildren: component.elements)
