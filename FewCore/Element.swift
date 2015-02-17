@@ -49,7 +49,7 @@ public class Element {
 #if os(OSX)
 	public var direction: Direction {
 		didSet {
-			if direction != oldValue && direction == .Column {
+			if direction != oldValue {
 				children = children.reverse()
 			}
 		}
@@ -122,38 +122,42 @@ public class Element {
 		realizedSelf?.element = self
 
 		if let realizedSelf = realizedSelf {
-			let listDiff = diffElementLists(realizedSelf.children, children)
+			let childrenDiff = diffElementLists(realizedSelf.children, children)
 
 			if LogDiff {
-				println("**** old: \(old.children)")
-				println("**** new: \(children)")
-
-				let diffs: [String] = listDiff.diff.map {
-					let existing = $0.existing.element
-					let replacement = $0.replacement
-					return "\(replacement) => \(existing)"
-				}
-				println("**** diffing \(diffs)")
-
-				println("**** removing \(listDiff.remove)")
-				println("**** adding \(listDiff.add)")
-				println()
+				printChildDiff(childrenDiff, old: old)
 			}
 
-			for child in listDiff.remove {
+			for child in childrenDiff.remove {
 				child.element.derealize()
 				realizedSelf.removeRealizedChild(child)
 			}
 
-			for child in listDiff.add {
+			for child in childrenDiff.add {
 				let realizedChild = child.realize()
 				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
 			}
 
-			for child in listDiff.diff {
+			for child in childrenDiff.diff {
 				child.replacement.applyDiff(child.existing.element, realizedSelf: child.existing)
 			}
 		}
+	}
+
+	private final func printChildDiff(diff: ElementListDiff, old: Element) {
+		println("**** old: \(old.children)")
+		println("**** new: \(children)")
+
+		let diffs: [String] = diff.diff.map {
+			let existing = $0.existing.element
+			let replacement = $0.replacement
+			return "\(replacement) => \(existing)"
+		}
+		println("**** diffing \(diffs)")
+
+		println("**** removing \(diff.remove)")
+		println("**** adding \(diff.add)")
+		println()
 	}
 
 	public func createView() -> ViewType {
