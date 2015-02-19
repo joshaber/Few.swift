@@ -9,9 +9,5 @@
 import Foundation
 import CoreGraphics
 
-/// An empty element. No view is created or added.
-public class Empty: Element {
-	public init() {
-		super.init()
-	}
-}
+/// An empty element.
+public class Empty: Element {}
