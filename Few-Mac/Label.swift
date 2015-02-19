@@ -17,9 +17,12 @@ public class Label: Element {
 
 	public var text: String { return attributedString.string }
 
-	public convenience init(text: String) {
-		let attributedString = NSAttributedString(string: text, attributes: [NSFontAttributeName: DefaultLabelFont])
-		self.init(attributedString: attributedString)
+	public convenience init(text: String, textColor: NSColor = .blackColor(), font: NSFont = DefaultLabelFont) {
+		let attributes = [
+			NSFontAttributeName: font,
+			NSForegroundColorAttributeName: textColor,
+		]
+		self.init(attributedString: NSAttributedString(string: text, attributes: attributes))
 	}
 
 	public init(attributedString: NSAttributedString) {
