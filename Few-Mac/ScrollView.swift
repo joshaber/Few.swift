@@ -107,7 +107,7 @@ public class ScrollView_<LOL>: Component<CGRect> {
 
 	public init(_ elements: [Element]) {
 		self.elements = elements.reverse()
-		super.init(render: ScrollView_.render, initialState: CGRectZero)
+		super.init(initialState: CGRectZero, render: ScrollView_.render)
 	}
 
 	private class func render(c: Component<CGRect>, visibleRect: CGRect) -> Element {

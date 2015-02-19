@@ -40,7 +40,7 @@ public class Component<S>: Element {
 		super.init()
 	}
 
-	public init(render: (Component, S) -> Element, initialState: S) {
+	public init(initialState: S, render: (Component, S) -> Element) {
 		self.renderFn = render
 		self.state = initialState
 		super.init()
