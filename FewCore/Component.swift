@@ -31,6 +31,9 @@ public class Component<S>: Element {
 
 	private var renderQueued: Bool = false
 
+	/// Is the component a root?
+	private var root = false
+
 	/// Initializes the component with its initial state. The render function
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
@@ -63,6 +66,12 @@ public class Component<S>: Element {
 	}
 
 	final private func realizeNewRoot(newRoot: Element) {
+		if root {
+			let node = newRoot.assembleLayoutNode()
+			let layout = node.layout()
+			newRoot.applyLayout(layout)
+		}
+
 		let realized = newRoot.realize()
 
 		configureViewToAutoresize(realized.view)
@@ -78,6 +87,10 @@ public class Component<S>: Element {
 		let node = newRoot.assembleLayoutNode()
 		let layout = node.layout()
 		newRoot.applyLayout(layout)
+
+		// If we're not a root then we'll use the default frame until our parent
+		// lays us out.
+		if !root { newRoot.frame = defaultFrame }
 
 		if let rootElement = rootElement {
 			if newRoot.canDiff(rootElement) {
@@ -132,6 +145,7 @@ public class Component<S>: Element {
 	/// Add the component to the given view. A component can only be added to 
 	/// one view at a time.
 	public func addToView(hostView: ViewType) {
+		root = true
 		performInitialRenderIfNeeded(hostView.bounds)
 		realizeRootIfNeeded()
 		hostView.addSubview(realizedRoot!.view)
@@ -140,6 +154,7 @@ public class Component<S>: Element {
 	/// Remove the component from its host view.
 	public func remove() {
 		derealize()
+		root = false
 	}
 	
 	/// Update the state using the given function.
@@ -200,6 +215,7 @@ public class Component<S>: Element {
 		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
 		let oldComponent = unsafeBitCast(old, Component.self)
 
+		root = oldComponent.root
 		state = oldComponent.state
 		rootElement = oldComponent.rootElement
 		realizedRoot = oldComponent.realizedRoot
@@ -243,5 +259,11 @@ public class Component<S>: Element {
 		performInitialRenderIfNeeded(frame)
 
 		return rootElement!.assembleLayoutNode()
+	}
+
+	override func applyLayout(layout: Layout) {
+		frame = CGRectIntegral(layout.frame)
+
+		rootElement?.applyLayout(layout)
 	}
 }
