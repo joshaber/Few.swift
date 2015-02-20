@@ -13,7 +13,6 @@ import SwiftBox
 struct AppState {
 	let username: String = ""
 	let password: String = ""
-	let selectedRow: Int? = nil
 }
 
 func renderInput(component: Few.Component<AppState>, label: String, secure: Bool, fn: (AppState, String) -> AppState) -> Element {
@@ -37,58 +36,72 @@ func renderInput(component: Few.Component<AppState>, label: String, secure: Bool
 		])
 }
 
-func renderRow(row: Int, selectedRow: Int?, component: Few.Component<AppState>) -> Element {
-	let selected: Bool
-	if let selectedRow = selectedRow {
-		selected = selectedRow == row
-	} else {
-		selected = false
+struct ScrollViewState {
+	let selectedRow: Int? = nil
+	let items: [Int] = Array(1...10)
+}
+
+func renderScrollView() -> Element {
+	return Few.Component(initialState: ScrollViewState()) { component, state in
+		let items = (0...10).map { row in renderRow(row, state.selectedRow, component) }
+		return ScrollView(items)
 	}
-	let color = (selected ? NSColor.redColor() : NSColor.greenColor())
+}
+
+func renderRow(row: Int, selectedRow: Int?, component: Few.Component<ScrollViewState>) -> Element {
+	let selected = selectedRow == row
+	let backgroundColor = (selected ? NSColor.redColor() : NSColor.greenColor())
+	let labelColor = (selected ? NSColor.whiteColor() : NSColor.blackColor())
 	return View(
-		backgroundColor: color,
+		backgroundColor: backgroundColor,
 		mouseDown: { _ in
-			component.updateState { AppState(username: $0.username, password: $0.password, selectedRow: row) }
+			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
 		})
 		.children([
-			Label(text: "Item \(row + 1)")
+			Label(text: "Item \(row + 1)", textColor: labelColor)
 		])
 }
 
-func renderLogin(component: Few.Component<AppState>, state: AppState) -> Element {
-	let loginEnabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
-	let items = (0...10).map { row in renderRow(row, state.selectedRow, component) }
-	return View()
-		.direction(.Column)
-		.children([
-			renderThingy(state.username.utf16Count),
-			renderInput(component, "Username", false) { AppState(username: $1, password: $0.password, selectedRow: $0.selectedRow) },
-			renderInput(component, "Password", true) { AppState(username: $0.username, password: $1, selectedRow: $0.selectedRow) },
-			Button(title: "Login", enabled: loginEnabled) {}
-				.selfAlignment(.FlexEnd)
-				.margin(Edges(bottom: 4)),
-			ScrollView(items).size(100, 100),
-		])
+func renderLogin() -> Element {
+	return Component(initialState: AppState()) { component, state in
+		let loginEnabled = (state.username.utf16Count > 0 && state.password.utf16Count > 0)
+		return Element()
+			.direction(.Column)
+			.children([
+				renderThingy(state.username.utf16Count),
+				renderInput(component, "Username", false) {
+					AppState(username: $1, password: $0.password)
+				},
+				renderInput(component, "Password", true) {
+					AppState(username: $0.username, password: $1)
+				},
+				Button(title: "Login", enabled: loginEnabled) {}
+					.selfAlignment(.FlexEnd)
+					.margin(Edges(bottom: 4)),
+			])
+	}
 }
 
 func renderThingy(count: Int) -> Element {
-	let color = (count % 2 == 0 ? NSColor.blueColor() : NSColor.yellowColor())
-	return View(backgroundColor: color).size(100, 50)
+	let even = count % 2 == 0
+	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
-func render(component: Few.Component<AppState>, state: AppState) -> Element {
+func renderApp(component: Few.Component<()>, state: ()) -> Element {
 	return View()
-		.childAlignment(.Center)
 		.justification(.Center)
+		.childAlignment(.Center)
+		.direction(.Column)
 		.children([
-			renderLogin(component, state)
+			renderLogin(),
+			renderScrollView().size(100, 100),
 		])
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = Few.Component(render: render, initialState: AppState())
+	private let appComponent = Few.Component(initialState: (), render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
 		let contentView = window.contentView as! NSView
