@@ -21,7 +21,7 @@ private class FewScrollView: NSView {
 	private init(frame: NSRect, didScroll: CGRect -> ()) {
 		self.didScroll = didScroll
 
-		scrollView = NSScrollView(frame: frame)
+		scrollView = NSScrollView(frame: CGRectMake(0, 0, frame.size.width, frame.size.height))
 		scrollView.borderType = .BezelBorder
 		scrollView.hasVerticalScroller = true
 		scrollView.contentView.postsBoundsChangedNotifications = true
@@ -39,6 +39,12 @@ private class FewScrollView: NSView {
 
 	@objc final private func boundsChanged(notification: NSNotification) {
 		didScroll(scrollView.contentView.visibleRect)
+	}
+
+	private override func setFrameSize(newSize: NSSize) {
+		super.setFrameSize(newSize)
+
+		scrollView.setFrameSize(newSize)
 	}
 }
 
