@@ -183,7 +183,7 @@ public class Component<S>: Element {
 			self.renderQueued = false
 			self.render()
 		}
-		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopDefaultMode)
+		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
 	}
 
 	/// Get the current state of the component.
