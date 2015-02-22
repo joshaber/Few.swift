@@ -25,9 +25,15 @@ public class Input: Element {
 	public var enabled: Bool
 	public var action: String -> ()
 
+	/// If true then the input will always force its value to be `text` even 
+	// while the input is being edited. If false, it will only set the value to
+	/// `text` when the input isn't being edited.
+	public var forceValueWhileEditing: Bool
+
+	/// Should the input make itself the focus after it's been realized?
+	public var autofocus: Bool
+
 	internal let inputDelegate = InputDelegate()
-
-
 
 	public init(text: String? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, autofocus: Bool = false, forceValueWhileEditing: Bool = false, action: String -> () = { _ in }) {
 		self.text = text
@@ -35,6 +41,8 @@ public class Input: Element {
 		self.placeholder = placeholder
 		self.action = action
 		self.enabled = enabled
+		self.autofocus = autofocus
+		self.forceValueWhileEditing = forceValueWhileEditing
 		super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 23))
 		
 		self.inputDelegate.action = { [unowned self] field in
@@ -54,7 +62,14 @@ public class Input: Element {
 			cell?.placeholderString = placeholder ?? ""
 
 			if let text = text {
-				if text != textField.stringValue {
+				let firstResponder: Bool
+				if let firstResponderTextView = textField.window?.firstResponder as? NSTextView {
+					firstResponder = firstResponderTextView.delegate === textField
+				} else {
+					firstResponder = false
+				}
+
+				if text != textField.stringValue && !firstResponder && !forceValueWhileEditing {
 					textField.stringValue = text
 				}
 			}
@@ -75,5 +90,23 @@ public class Input: Element {
 		let cell = field.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 		return field
+	}
+
+	public override func elementDidRealize(realizedSelf: RealizedElement) {
+		// Call super first so that we still end up grabbing focus even if a 
+		// child has autofocus as well.
+		super.elementDidRealize(realizedSelf)
+
+		if autofocus {
+			let window = realizedSelf.view.window!
+			window.makeFirstResponder(realizedSelf.view)
+		}
+	}
+}
+
+extension Input {
+	public func autofocus(f: Bool) -> Self {
+		autofocus = f
+		return self
 	}
 }
