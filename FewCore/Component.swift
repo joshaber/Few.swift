@@ -149,6 +149,7 @@ public class Component<S>: Element {
 		performInitialRenderIfNeeded(hostView.bounds)
 		realizeRootIfNeeded()
 		hostView.addSubview(realizedRoot!.view)
+		rootElement?.elementDidRealize(realizedRoot!)
 	}
 
 	/// Remove the component from its host view.
@@ -265,5 +266,11 @@ public class Component<S>: Element {
 		frame = CGRectIntegral(layout.frame)
 
 		rootElement?.applyLayout(layout)
+	}
+
+	public override func elementDidRealize(realizedSelf: RealizedElement) {
+		super.elementDidRealize(realizedSelf)
+
+		rootElement?.elementDidRealize(realizedRoot!)
 	}
 }

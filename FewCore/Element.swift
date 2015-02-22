@@ -205,6 +205,12 @@ public class Element {
 	internal var selfDescription: String {
 		return "\(self.dynamicType)"
 	}
+
+	public func elementDidRealize(realizedSelf: RealizedElement) {
+		for child in realizedSelf.children {
+			child.element.elementDidRealize(child)
+		}
+	}
 }
 
 extension Element {
