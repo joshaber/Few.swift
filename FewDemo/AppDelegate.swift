@@ -22,9 +22,9 @@ func renderInput(component: Few.Component<AppState>, label: String, secure: Bool
 
 	let input: Element
 	if secure {
-		input = Password(text: nil, fn: action)
+		input = Password(action: action)
 	} else {
-		input = Input(text: nil, fn: action)
+		input = Input(action: action)
 	}
 
 	return View()
