@@ -53,7 +53,10 @@ func renderScrollView() -> Element {
 func renderRow(row: Int, selectedRow: Int?, component: Few.Component<ScrollViewState>) -> Element {
 	let selected = selectedRow == row
 	let labelColor = (selected ? NSColor.whiteColor() : NSColor.blackColor())
-	return Label(text: "Item \(row + 1)")
+	return View()
+		.children([
+			Label(text: "Item \(row + 1)", textColor: labelColor)
+		])
 }
 
 func renderLogin() -> Element {
