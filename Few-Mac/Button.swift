@@ -15,11 +15,7 @@ public class Button: Element {
 
 	private let trampoline = TargetActionTrampoline()
 
-	public convenience init(title: String, action: () -> ()) {
-		self.init(title: title, enabled: true, action: action)
-	}
-
-	public init(title: String, enabled: Bool, action: () -> ()) {
+	public init(title: String, enabled: Bool = true, action: () -> () = { }) {
 		self.title = title
 		self.enabled = enabled
 		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))

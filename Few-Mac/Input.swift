@@ -27,15 +27,9 @@ public class Input: Element {
 
 	internal let inputDelegate = InputDelegate()
 
-	public convenience init(text: String?, fn: String -> ()) {
-		self.init(text: text, initialText: nil, placeholder: nil, enabled: true, action: fn)
-	}
 
-	public convenience init(initialText: String?, placeholder: String?, fn: String -> ()) {
-		self.init(text: nil, initialText: initialText, placeholder: placeholder, enabled: true, action: fn)
-	}
 
-	public init(text: String?, initialText: String?, placeholder: String?, enabled: Bool, action: String -> ()) {
+	public init(text: String? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, autofocus: Bool = false, forceValueWhileEditing: Bool = false, action: String -> () = { _ in }) {
 		self.text = text
 		self.initialText = initialText
 		self.placeholder = placeholder
