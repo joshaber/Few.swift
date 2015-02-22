@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		880A22B91A992167001D07E6 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880A22B81A992167001D07E6 /* TableView.swift */; };
 		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
 		883BEC111A8EF574007DAB20 /* RealizedElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883BEC101A8EF574007DAB20 /* RealizedElement.swift */; };
@@ -143,6 +144,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		880A22B81A992167001D07E6 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		883BEC101A8EF574007DAB20 /* RealizedElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealizedElement.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				8824A2F319B8957B00D5625A /* Input.swift */,
 				883CECA71A4532A600B8A510 /* Password.swift */,
 				88DA371A1A86A03F002281F4 /* ScrollView.swift */,
+				880A22B81A992167001D07E6 /* TableView.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
 			);
 			path = "Few-Mac";
@@ -629,6 +632,7 @@
 				8897689719AED8AF00DD079B /* Component.swift in Sources */,
 				88DF47351A42824100F3F497 /* Mac.swift in Sources */,
 				888E59DB1A4687E10062A36B /* QuickLook.swift in Sources */,
+				880A22B91A992167001D07E6 /* TableView.swift in Sources */,
 				88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */,
 				8824A2F419B8957B00D5625A /* Input.swift in Sources */,
 			);

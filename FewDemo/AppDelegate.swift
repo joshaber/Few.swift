@@ -44,22 +44,16 @@ struct ScrollViewState {
 func renderScrollView() -> Element {
 	return Few.Component(initialState: ScrollViewState()) { component, state in
 		let items = (0...10).map { row in renderRow(row, state.selectedRow, component) }
-		return ScrollView(items)
+		return TableView(items) { row in
+			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
+		}
 	}
 }
 
 func renderRow(row: Int, selectedRow: Int?, component: Few.Component<ScrollViewState>) -> Element {
 	let selected = selectedRow == row
-	let backgroundColor = (selected ? NSColor.redColor() : NSColor.greenColor())
 	let labelColor = (selected ? NSColor.whiteColor() : NSColor.blackColor())
-	return View(
-		backgroundColor: backgroundColor,
-		mouseDown: { _ in
-			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
-		})
-		.children([
-			Label(text: "Item \(row + 1)", textColor: labelColor)
-		])
+	return Label(text: "Item \(row + 1)")
 }
 
 func renderLogin() -> Element {
@@ -87,7 +81,7 @@ func renderThingy(count: Int) -> Element {
 	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
-func renderApp(component: Few.Component<()>, state: ()) -> Element {
+func renderDemo(component: Few.Component<()>, state: ()) -> Element {
 	return View()
 		.justification(.Center)
 		.childAlignment(.Center)
@@ -98,13 +92,69 @@ func renderApp(component: Few.Component<()>, state: ()) -> Element {
 		])
 }
 
+struct ConverterState {
+	static let defaultFahrenheit: CGFloat = 32
+
+	let fahrenheit: CGFloat = defaultFahrenheit
+	let celcius: CGFloat = f2c(defaultFahrenheit)
+}
+
+func c2f(c: CGFloat) -> CGFloat {
+	return (c * 9/5) + 32
+}
+
+func f2c(f: CGFloat) -> CGFloat {
+	return (f - 32) * 5/9
+}
+
+func renderLabeledInput(label: String, value: String, placeholder: String, autofocus: Bool, fn: String -> ()) -> Element {
+	return View()
+		.direction(.Row)
+		.padding(Edges(bottom: 4))
+		.children([
+			Label(text: label).size(75, 19),
+			Input(
+				text: value,
+				placeholder: placeholder,
+				enabled: true,
+				autofocus: autofocus,
+				action: fn)
+				.size(100, 23),
+		])
+}
+
+func renderTemperatureConverter(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+	let numberFormatter = NSNumberFormatter()
+	return View()
+		.justification(.Center)
+		.childAlignment(.Center)
+		.direction(.Column)
+		.children([
+			renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", "Fahrenheit", true) {
+				let f = (numberFormatter.numberFromString($0)?.doubleValue).map { CGFloat($0) }
+				if let f = f {
+					component.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
+				}
+			},
+			renderLabeledInput("Celcius", "\(state.celcius)", "Celcius", false) {
+				let c = (numberFormatter.numberFromString($0)?.doubleValue).map { CGFloat($0) }
+				if let c = c {
+					component.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
+				}
+			},
+		])
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = Few.Component(initialState: (), render: renderApp)
+	private let demoComponent = Few.Component(initialState: (), render: renderDemo)
+	private let converterComponent = Few.Component(initialState: ConverterState(), render: renderTemperatureConverter)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
+		let component = demoComponent
+
 		let contentView = window.contentView as! NSView
-		appComponent.addToView(contentView)
+		component.addToView(contentView)
 	}
 }
