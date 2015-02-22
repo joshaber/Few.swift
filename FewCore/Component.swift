@@ -110,8 +110,12 @@ public class Component<S>: Element {
 	}
 
 	/// Render the component without changing any state.
+	///
+	/// Note that unlike Component.updateState, this doesn't enqueue a render to 
+	/// be performed at the end of the runloop. Instead it immediately 
+	/// re-renders.
 	final public func forceRender() {
-		enqueueRender()
+		render()
 	}
 	
 	/// Called when the component will be realized and before the component is
