@@ -61,7 +61,7 @@ func renderRow(row: Int, selectedRow: Int?, component: Few.Component<ScrollViewS
 
 func renderLogin() -> Element {
 	return Component(initialState: AppState()) { component, state in
-		let loginEnabled = (count(state.username.utf16) > 0 && count(state.password.utf16) > 0)
+		let loginEnabled = !state.username.isEmpty && !state.password.isEmpty
 		return Element()
 			.direction(.Column)
 			.children([
