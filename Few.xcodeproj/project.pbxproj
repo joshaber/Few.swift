@@ -38,6 +38,7 @@
 		88995D6D1A855D2000526313 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88995D6C1A855D2000526313 /* View.swift */; };
 		889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59DA1A4687E10062A36B /* QuickLook.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
+		88D47F201A9BAE96006E007F /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D47F1F1A9BAE96006E007F /* SwiftBox.framework */; };
 		88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA371A1A86A03F002281F4 /* ScrollView.swift */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
 /* End PBXBuildFile section */
@@ -176,6 +177,7 @@
 		88995D6C1A855D2000526313 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = View.swift; path = ../FewCore/View.swift; sourceTree = "<group>"; };
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		88D47F1F1A9BAE96006E007F /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88DA371A1A86A03F002281F4 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88D47F201A9BAE96006E007F /* SwiftBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +279,7 @@
 				888E59AE1A4684850062A36B /* Few-iOS */,
 				8897687D19AED88000DD079B /* FewTests */,
 				889768A719AED92D00DD079B /* FewDemo */,
+				88E091DE1A9C2225003A5EDA /* Frameworks */,
 				8897687219AED88000DD079B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -353,6 +357,15 @@
 				889768AA19AED92D00DD079B /* main.swift */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		88E091DE1A9C2225003A5EDA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88D47F1F1A9BAE96006E007F /* SwiftBox.framework */,
+			);
+			name = Frameworks;
+			path = FewDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
