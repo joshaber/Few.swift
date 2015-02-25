@@ -40,13 +40,11 @@ public class Component<S>: Element {
 	public init(initialState: S) {
 		self.state = initialState
 		self.renderFn = nil
-		super.init()
 	}
 
 	public init(initialState: S, render: (Component, S) -> Element) {
 		self.renderFn = render
 		self.state = initialState
-		super.init()
 	}
 
 	// MARK: Lifecycle
