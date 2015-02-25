@@ -191,6 +191,25 @@ public class Component<S>: Element {
 		return state
 	}
 
+	final public func findView(element: Element) -> ViewType? {
+		if let realizedElement = realizedRoot {
+			return findViewRecursively(element, rootElement: realizedElement)
+		} else {
+			return nil
+		}
+	}
+
+	final private func findViewRecursively(element: Element, rootElement: RealizedElement) -> ViewType? {
+		if rootElement.element === element { return rootElement.view }
+
+		for child in rootElement.children {
+			let result = findViewRecursively(element, rootElement: child)
+			if result != nil { return result }
+		}
+
+		return nil
+	}
+
 	/// Find the view with the given key. This will only find views for elements
 	/// which have been realized.
 	final public func findViewWithKey(key: String) -> ViewType? {
