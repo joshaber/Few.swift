@@ -72,6 +72,18 @@ private class FewView: NSView {
 
 		mouseUp?()
 	}
+
+	@objc var backgroundStyle: NSBackgroundStyle = .Light {
+		didSet {
+			for view in subviews {
+				if let control = view as? NSControl, cell = control.cell() as? NSCell {
+					cell.backgroundStyle = backgroundStyle
+				} else if let fewView = view as? FewView {
+					fewView.backgroundStyle = backgroundStyle
+				}
+			}
+		}
+	}
 }
 
 public class View: Element {
