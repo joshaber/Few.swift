@@ -43,19 +43,17 @@ struct ScrollViewState {
 
 func renderScrollView() -> Element {
 	return Few.Component(initialState: ScrollViewState()) { component, state in
-		let items = (0...10).map { row in renderRow(row, state.selectedRow, component) }
+		let items = (0...10).map { row in renderRow(row) }
 		return TableView(items) { row in
 			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
 		}
 	}
 }
 
-func renderRow(row: Int, selectedRow: Int?, component: Few.Component<ScrollViewState>) -> Element {
-	let selected = selectedRow == row
-	let labelColor = (selected ? NSColor.whiteColor() : NSColor.blackColor())
+func renderRow(row: Int) -> Element {
 	return View()
 		.children([
-			Label(text: "Item \(row + 1)", textColor: labelColor)
+			Label(text: "Item \(row + 1)")
 		])
 }
 
