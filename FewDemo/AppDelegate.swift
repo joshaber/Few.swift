@@ -126,20 +126,21 @@ func renderLabeledInput(label: String, value: String, placeholder: String, autof
 
 func renderTemperatureConverter(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
 	let numberFormatter = NSNumberFormatter()
+	let parseNumber: String -> CGFloat? = { str in
+		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
+	}
 	return View()
 		.justification(.Center)
 		.childAlignment(.Center)
 		.direction(.Column)
 		.children([
 			renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", "Fahrenheit", true) {
-				let f = (numberFormatter.numberFromString($0)?.doubleValue).map { CGFloat($0) }
-				if let f = f {
+				if let f = parseNumber($0) {
 					component.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
 				}
 			},
 			renderLabeledInput("Celcius", "\(state.celcius)", "Celcius", false) {
-				let c = (numberFormatter.numberFromString($0)?.doubleValue).map { CGFloat($0) }
-				if let c = c {
+				if let c = parseNumber($0) {
 					component.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
 				}
 			},
@@ -153,7 +154,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	private let converterComponent = Few.Component(initialState: ConverterState(), render: renderTemperatureConverter)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
-		let component = demoComponent
+		let component = converterComponent
 
 		let contentView = window.contentView as! NSView
 		component.addToView(contentView)
