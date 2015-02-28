@@ -18,6 +18,7 @@ public class Button: Element {
 	public init(title: String, enabled: Bool = true, action: () -> () = { }) {
 		self.title = title
 		self.enabled = enabled
+		
 		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
 
 		self.trampoline.action = action
