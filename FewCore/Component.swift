@@ -64,12 +64,6 @@ public class Component<S>: Element {
 	}
 
 	final private func realizeNewRoot(newRoot: Element) {
-		if root {
-			let node = newRoot.assembleLayoutNode()
-			let layout = node.layout()
-			newRoot.applyLayout(layout)
-		}
-
 		let realized = newRoot.realize()
 
 		configureViewToAutoresize(realized.view)
@@ -78,17 +72,19 @@ public class Component<S>: Element {
 		realizedRoot = realized
 	}
 
-	final private func renderWithDefaultFrame(defaultFrame: CGRect) {
+	final private func renderNewRoot() {
 		let newRoot = render(state)
-		newRoot.frame = defaultFrame
+		newRoot.frame = frame
 
 		let node = newRoot.assembleLayoutNode()
 		let layout = node.layout()
 		newRoot.applyLayout(layout)
 
-		// If we're not a root then we'll use the default frame until our parent
-		// lays us out.
-		if !root { newRoot.frame = defaultFrame }
+		// If we're not the root then we should expect the root to set our 
+		// frame. We shouldn't size or position ourselves.
+		if !root {
+			newRoot.frame = frame
+		}
 
 		if let rootElement = rootElement {
 			if newRoot.canDiff(rootElement) {
@@ -148,7 +144,8 @@ public class Component<S>: Element {
 	/// one view at a time.
 	public func addToView(hostView: ViewType) {
 		root = true
-		performInitialRenderIfNeeded(hostView.bounds)
+		frame = hostView.bounds
+		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
 		hostView.addSubview(realizedRoot!.view)
 		rootElement?.elementDidRealize(realizedRoot!)
@@ -242,11 +239,11 @@ public class Component<S>: Element {
 		rootElement = oldComponent.rootElement
 		realizedRoot = oldComponent.realizedRoot
 
-		renderWithDefaultFrame(rootElement?.frame ?? frame)
+		renderNewRoot()
 	}
 	
 	public override func realize() -> RealizedElement {
-		performInitialRenderIfNeeded(frame)
+		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
 		return RealizedElement(element: self, view: realizedRoot!.view)
 	}
@@ -263,9 +260,9 @@ public class Component<S>: Element {
 		componentDidDerealize()
 	}
 
-	final private func performInitialRenderIfNeeded(defaultFrame: CGRect) {
+	final private func performInitialRenderIfNeeded() {
 		if rootElement == nil {
-			renderWithDefaultFrame(defaultFrame)
+			renderNewRoot()
 		}
 	}
 
@@ -278,7 +275,7 @@ public class Component<S>: Element {
 	}
 
 	internal override func assembleLayoutNode() -> Node {
-		performInitialRenderIfNeeded(frame)
+		performInitialRenderIfNeeded()
 
 		return rootElement!.assembleLayoutNode()
 	}
