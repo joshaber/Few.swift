@@ -10,7 +10,14 @@ import Foundation
 import AppKit
 
 private let DefaultLabelFont = NSFont.labelFontOfSize(NSFont.systemFontSizeForControlSize(.RegularControlSize))
-private let LabelFudge = CGSize(width: 4, height: 0)
+private let StringFudge = CGSize(width: 4, height: 0)
+
+internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: 1000, height: 1000)) -> CGSize {
+	let rect = string.boundingRectWithSize(maxSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
+	let width = ceil(rect.size.width) + StringFudge.width
+	let height = ceil(rect.size.height) + StringFudge.height
+	return CGSize(width: width, height: height)
+}
 
 public class Label: Element {
 	private var attributedString: NSAttributedString
@@ -28,11 +35,8 @@ public class Label: Element {
 	public init(attributedString: NSAttributedString) {
 		self.attributedString = attributedString
 
-		let capSize = CGSize(width: 1000, height: 1000)
-		let rect = self.attributedString.boundingRectWithSize(capSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
-		let width = ceil(rect.size.width) + LabelFudge.width
-		let height = ceil(rect.size.height) + LabelFudge.height
-		super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
+		let size = estimateStringSize(attributedString)
+		super.init(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
 	}
 
 	// MARK: Element
