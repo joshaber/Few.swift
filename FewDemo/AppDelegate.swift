@@ -15,7 +15,7 @@ struct AppState {
 	let password: String = ""
 }
 
-func renderInput(component: Few.Component<AppState>, label: String, secure: Bool, fn: (AppState, String) -> AppState) -> Element {
+func renderInput(component: Component<AppState>, label: String, secure: Bool, fn: (AppState, String) -> AppState) -> Element {
 	let action: String -> () = { str in
 		component.updateState { fn($0, str) }
 	}
@@ -42,7 +42,7 @@ struct ScrollViewState {
 }
 
 func renderScrollView() -> Element {
-	return Few.Component(initialState: ScrollViewState()) { component, state in
+	return Component(initialState: ScrollViewState()) { component, state in
 		let items = (0...10).map { row in renderRow(row) }
 		return TableView(items) { row in
 			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
@@ -72,7 +72,7 @@ func renderLogin() -> Element {
 				},
 				Button(title: "Login", enabled: loginEnabled) {}
 					.selfAlignment(.FlexEnd)
-					.margin(Edges(bottom: 4)),
+					.margin(Edges(top: 10)),
 			])
 	}
 }
@@ -82,7 +82,7 @@ func renderThingy(count: Int) -> Element {
 	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
-func renderDemo(component: Few.Component<()>, state: ()) -> Element {
+func renderDemo(component: Component<()>, state: ()) -> Element {
 	return View()
 		.justification(.Center)
 		.childAlignment(.Center)
@@ -124,7 +124,7 @@ func renderLabeledInput(label: String, value: String, placeholder: String, autof
 		])
 }
 
-func renderTemperatureConverter(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+func renderTemperatureConverter(component: Component<ConverterState>, state: ConverterState) -> Element {
 	let numberFormatter = NSNumberFormatter()
 	let parseNumber: String -> CGFloat? = { str in
 		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
@@ -147,16 +147,48 @@ func renderTemperatureConverter(component: Few.Component<ConverterState>, state:
 		])
 }
 
+enum Display {
+	case Demo
+	case Converter
+}
+
+func renderApp(component: Component<Display>, state: Display) -> Element {
+	let contentComponent: Element
+	switch state {
+	case .Demo:
+		contentComponent = Component(initialState: (), render: renderDemo)
+	case .Converter:
+		contentComponent = Component(initialState: ConverterState(), render: renderTemperatureConverter)
+	}
+
+	return Element()
+		.justification(.Center)
+		.childAlignment(.Center)
+		.direction(.Column)
+		.children([
+			contentComponent,
+			Button(title: "Switch!") { component.updateState(toggleDisplay) }
+				.width(100)
+				.margin(Edges(bottom: 20))
+		])
+}
+
+func toggleDisplay(display: Display) -> Display {
+	switch display {
+	case .Demo:
+		return .Converter
+	case .Converter:
+		return .Demo
+	}
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let demoComponent = Few.Component(initialState: (), render: renderDemo)
-	private let converterComponent = Few.Component(initialState: ConverterState(), render: renderTemperatureConverter)
+	private let appComponent = Component(initialState: .Demo, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
-		let component = converterComponent
-
 		let contentView = window.contentView as! NSView
-		component.addToView(contentView)
+		appComponent.addToView(contentView)
 	}
 }
