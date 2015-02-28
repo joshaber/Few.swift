@@ -220,6 +220,16 @@ extension Element {
 		return self
 	}
 
+	public func width(w: CGFloat) -> Self {
+		frame.size.width = w
+		return self
+	}
+
+	public func height(h: CGFloat) -> Self {
+		frame.size.height = h
+		return self
+	}
+
 	public func margin(edges: Edges) -> Self {
 		margin = edges
 		return self
