@@ -51,11 +51,15 @@ private class FewListCell: NSTableCellView {
 private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSource {
 	let tableView: NSTableView
 
+	var supressChangeNotification = false
+
 	var elements: [Element] {
 		didSet {
 			let selectedRows = tableView.selectedRowIndexes
 			tableView.reloadData()
+			supressChangeNotification = true
 			tableView.selectRowIndexes(selectedRows, byExtendingSelection: false)
+			supressChangeNotification = false
 		}
 	}
 
@@ -100,10 +104,14 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 	}
 
 	@objc func tableViewSelectionIsChanging(notification: NSNotification) {
+		if supressChangeNotification { return }
+
 		selectionChanged?(tableView.selectedRow)
 	}
 
 	@objc func tableViewSelectionDidChange(notification: NSNotification) {
+		if supressChangeNotification { return }
+
 		selectionChanged?(tableView.selectedRow)
 	}
 
