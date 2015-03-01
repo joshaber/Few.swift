@@ -136,6 +136,7 @@ public class Element {
 			for child in childrenDiff.add {
 				let realizedChild = child.realize()
 				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
+				child.elementDidRealize(realizedChild)
 			}
 
 			for child in childrenDiff.diff {

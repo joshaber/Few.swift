@@ -95,6 +95,8 @@ public class Component<S>: Element {
 
 				realizeNewRoot(newRoot)
 				superview.addSubview(realizedRoot!.view)
+
+				rootElement.elementDidRealize(realizedRoot!)
 			}
 
 			componentDidRender()
