@@ -147,12 +147,12 @@ func renderTemperatureConverter(component: Component<ConverterState>, state: Con
 		])
 }
 
-enum Display {
+enum ActiveComponent {
 	case Demo
 	case Converter
 }
 
-func renderApp(component: Component<Display>, state: Display) -> Element {
+func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) -> Element {
 	let contentComponent: Element
 	switch state {
 	case .Demo:
@@ -173,7 +173,7 @@ func renderApp(component: Component<Display>, state: Display) -> Element {
 		])
 }
 
-func toggleDisplay(display: Display) -> Display {
+func toggleDisplay(display: ActiveComponent) -> ActiveComponent {
 	switch display {
 	case .Demo:
 		return .Converter
