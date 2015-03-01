@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		880A22B91A992167001D07E6 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880A22B81A992167001D07E6 /* TableView.swift */; };
+		880E4AFD1AA2A4A40080F3BF /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880E4AFC1AA2A4A40080F3BF /* CustomButton.swift */; };
 		88173A1F1A131CF10076F5A7 /* Diffing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88173A1E1A131CF10076F5A7 /* Diffing.swift */; };
 		8824A2F419B8957B00D5625A /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8824A2F319B8957B00D5625A /* Input.swift */; };
 		883BEC111A8EF574007DAB20 /* RealizedElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883BEC101A8EF574007DAB20 /* RealizedElement.swift */; };
@@ -146,6 +147,7 @@
 
 /* Begin PBXFileReference section */
 		880A22B81A992167001D07E6 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		880E4AFC1AA2A4A40080F3BF /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		88173A1E1A131CF10076F5A7 /* Diffing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffing.swift; sourceTree = "<group>"; };
 		8824A2F319B8957B00D5625A /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		883BEC101A8EF574007DAB20 /* RealizedElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealizedElement.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			children = (
 				88BEF38D19AED9D5009197F0 /* MyPlayground.playground */,
 				889768AC19AED92D00DD079B /* AppDelegate.swift */,
+				880E4AFC1AA2A4A40080F3BF /* CustomButton.swift */,
 				889768AE19AED92D00DD079B /* Images.xcassets */,
 				889768B019AED92D00DD079B /* MainMenu.xib */,
 				889768A819AED92D00DD079B /* Supporting Files */,
@@ -665,6 +668,7 @@
 			files = (
 				889768AD19AED92D00DD079B /* AppDelegate.swift in Sources */,
 				889768AB19AED92D00DD079B /* main.swift in Sources */,
+				880E4AFD1AA2A4A40080F3BF /* CustomButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

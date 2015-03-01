@@ -167,9 +167,10 @@ func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) ->
 		.direction(.Column)
 		.children([
 			contentComponent,
-			Button(title: "Switch!") { component.updateState(toggleDisplay) }
-				.width(100)
-				.margin(Edges(bottom: 20))
+			CustomButton()
+//			Button(title: "Switch!") { component.updateState(toggleDisplay) }
+//				.width(100)
+//				.margin(Edges(bottom: 20))
 		])
 }
 
