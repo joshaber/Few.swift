@@ -155,7 +155,7 @@ public class View: Element {
 		}
 	}
 
-	internal override var selfDescription: String {
-		return "\(self.dynamicType): \(backgroundColor)"
+	public override func elementDidRealize(realizedSelf: RealizedElement) {
+		super.elementDidRealize(realizedSelf)
 	}
 }
