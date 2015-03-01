@@ -72,7 +72,7 @@ func renderLogin() -> Element {
 				},
 				Button(title: "Login", enabled: loginEnabled) {}
 					.selfAlignment(.FlexEnd)
-					.margin(Edges(top: 10)),
+					.margin(Edges(bottom: 10, top: 10)),
 			])
 	}
 }
