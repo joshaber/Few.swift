@@ -29,6 +29,8 @@ public class Component<S>: Element {
 
 	private let renderFn: ((Component, S) -> Element)?
 
+	private let didRealizeFn: (Component -> ())?
+
 	private var renderQueued: Bool = false
 
 	/// Is the component a root?
@@ -40,11 +42,19 @@ public class Component<S>: Element {
 	public init(initialState: S) {
 		self.state = initialState
 		self.renderFn = nil
+		self.didRealizeFn = nil
 	}
 
 	public init(initialState: S, render: (Component, S) -> Element) {
 		self.renderFn = render
 		self.state = initialState
+		self.didRealizeFn = nil
+	}
+
+	public init(initialState: S, didRealize: Component -> (), render: (Component, S) -> Element) {
+		self.renderFn = render
+		self.state = initialState
+		self.didRealizeFn = didRealize
 	}
 
 	// MARK: Lifecycle
@@ -274,6 +284,7 @@ public class Component<S>: Element {
 		if realizedRoot == nil {
 			componentWillRealize()
 			realizeNewRoot(rootElement!)
+			didRealizeFn?(self)
 			componentDidRealize()
 		}
 	}
