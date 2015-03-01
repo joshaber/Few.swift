@@ -42,7 +42,13 @@ private class FewView: NSView {
 		if cornerRadius.isZero {
 			path = NSBezierPath(rect: bounds)
 		} else {
-			path = NSBezierPath(roundedRect: bounds, xRadius: cornerRadius, yRadius: cornerRadius)
+			let pathBounds: CGRect
+			if borderWidth <= 1 {
+				pathBounds = CGRectInset(bounds, 0.5, 0.5)
+			} else {
+				pathBounds = bounds
+			}
+			path = NSBezierPath(roundedRect: pathBounds, xRadius: cornerRadius, yRadius: cornerRadius)
 		}
 
 		if let color = backgroundColor {
@@ -50,7 +56,7 @@ private class FewView: NSView {
 			path.fill()
 		}
 
-		if let color = borderColor {
+		if let color = borderColor where borderWidth > 0 {
 			color.set()
 			path.lineWidth = borderWidth
 			path.stroke()
