@@ -10,12 +10,12 @@ import Cocoa
 import Few
 import SwiftBox
 
-struct AppState {
+struct LoginState {
 	let username: String = ""
 	let password: String = ""
 }
 
-func renderInput(component: Component<AppState>, label: String, secure: Bool, fn: (AppState, String) -> AppState) -> Element {
+func renderInput(component: Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
 	let action: String -> () = { str in
 		component.updateState { fn($0, str) }
 	}
@@ -58,17 +58,17 @@ func renderRow(row: Int) -> Element {
 }
 
 func renderLogin() -> Element {
-	return Component(initialState: AppState()) { component, state in
+	return Component(initialState: LoginState()) { component, state in
 		let loginEnabled = !state.username.isEmpty && !state.password.isEmpty
 		return Element()
 			.direction(.Column)
 			.children([
 				renderThingy(count(state.username.utf16)),
 				renderInput(component, "Username", false) {
-					AppState(username: $1, password: $0.password)
+					LoginState(username: $1, password: $0.password)
 				},
 				renderInput(component, "Password", true) {
-					AppState(username: $0.username, password: $1)
+					LoginState(username: $0.username, password: $1)
 				},
 				Button(title: "Login", enabled: loginEnabled) {}
 					.selfAlignment(.FlexEnd)
