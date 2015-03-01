@@ -63,10 +63,6 @@ private class FewView: NSView {
 		}
 	}
 
-	@objc override var opaque: Bool {
-		return backgroundColor?.alphaComponent == 1
-	}
-
 	private override func mouseDown(event: NSEvent) {
 		super.mouseDown(event)
 
