@@ -20,11 +20,12 @@ class CustomButton_<LOL>: Component<Bool> {
 		return View(
 			borderColor: color,
 			cornerRadius: 4,
+			backgroundColor: .whiteColor(),
 			borderWidth: 1,
 			mouseDown: { _ in component.updateState(const(true)) },
 			mouseUp: { _ in component.updateState(const(false)) })
 			.children([
-				Label(text: "Click me!")
+				Label(text: "Click me!", textColor: color)
 			])
 	}
 }
