@@ -75,6 +75,8 @@ public class Component<S>: Element {
 	final private func renderNewRoot() {
 		let newRoot = render(state)
 		newRoot.frame = frame
+		newRoot.margin = margin
+		newRoot.padding = padding
 
 		let node = newRoot.assembleLayoutNode()
 		let layout = node.layout()
