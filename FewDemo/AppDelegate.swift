@@ -24,7 +24,7 @@ func renderInput(component: Component<AppState>, label: String, secure: Bool, fn
 	if secure {
 		input = Password(action: action)
 	} else {
-		input = Input(action: action)
+		input = Input(action: action, autofocus: true)
 	}
 
 	return View()
