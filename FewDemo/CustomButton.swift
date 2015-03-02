@@ -8,6 +8,7 @@
 
 import Cocoa
 import Few
+import SwiftBox
 
 typealias CustomButton = CustomButton_<Bool>
 class CustomButton_<LOL>: Component<Bool> {
@@ -35,7 +36,7 @@ class CustomButton_<LOL>: Component<Bool> {
 			},
 			mouseExited: { _ in component.updateState(const(false)) })
 			.children([
-				Label(text: component.title, textColor: color)
+				Label(text: component.title, textColor: color).margin(Edges(uniform: 4))
 			])
 	}
 }
