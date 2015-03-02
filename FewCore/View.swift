@@ -36,6 +36,9 @@ private class FewView: NSView {
 
 	var mouseDown: (() -> ())?
 	var mouseUp: (() -> ())?
+	var mouseExited: (() -> ())?
+
+	private var tracking = false
 
 	private override func drawRect(dirtyRect: NSRect) {
 		let path: NSBezierPath
@@ -66,13 +69,37 @@ private class FewView: NSView {
 	private override func mouseDown(event: NSEvent) {
 		super.mouseDown(event)
 
-		mouseDown?()
+		propagateMouseDown()
 	}
 
 	private override func mouseUp(event: NSEvent) {
 		super.mouseUp(event)
 
-		mouseUp?()
+		if tracking {
+			mouseUp?()
+
+			tracking = false
+		}
+	}
+
+	private final func propagateMouseDown() {
+		tracking = true
+
+		mouseDown?()
+	}
+
+	private override func mouseDragged(event: NSEvent) {
+		super.mouseDragged(event)
+
+		let loc = convertPoint(event.locationInWindow, fromView: nil)
+		let inView = NSMouseInRect(loc, bounds, flipped)
+		// If the drag exited our bounds then treat it as a mouse up.
+		if tracking && !inView {
+			mouseExited?()
+			tracking = false
+		} else if !tracking && inView {
+			propagateMouseDown()
+		}
 	}
 
 	@objc var backgroundStyle: NSBackgroundStyle = .Light {
@@ -97,14 +124,16 @@ public class View: Element {
 	public var cornerRadius: CGFloat
 	public var mouseDown: View -> ()
 	public var mouseUp: View -> ()
+	public var mouseExited: View -> ()
 
-	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0, mouseDown: View -> () = doNothing, mouseUp: View -> () = doNothing) {
+	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0, mouseDown: View -> () = doNothing, mouseUp: View -> () = doNothing, mouseExited: View -> () = doNothing) {
 		self.backgroundColor = backgroundColor
 		self.borderColor = borderColor
 		self.borderWidth = borderWidth
 		self.cornerRadius = cornerRadius
 		self.mouseDown = mouseDown
 		self.mouseUp = mouseUp
+		self.mouseExited = mouseExited
 	}
 
 	// MARK: Element
@@ -155,9 +184,11 @@ public class View: Element {
 				strongSelf.mouseUp(strongSelf)
 			}
 		}
-	}
 
-	public override func elementDidRealize(realizedSelf: RealizedElement) {
-		super.elementDidRealize(realizedSelf)
+		view.mouseExited = { [weak self] in
+			if let strongSelf = self {
+				strongSelf.mouseExited(strongSelf)
+			}
+		}
 	}
 }
