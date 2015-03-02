@@ -87,6 +87,10 @@ public class Component<S>: Element {
 		newRoot.frame = frame
 		newRoot.margin = margin
 		newRoot.padding = padding
+		newRoot.hidden = hidden
+		newRoot.alpha = alpha
+		newRoot.selfAlignment = selfAlignment
+		newRoot.flex = flex
 
 		let node = newRoot.assembleLayoutNode()
 		let layout = node.layout()
