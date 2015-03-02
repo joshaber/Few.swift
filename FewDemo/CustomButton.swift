@@ -11,11 +11,17 @@ import Few
 
 typealias CustomButton = CustomButton_<Bool>
 class CustomButton_<LOL>: Component<Bool> {
-	init() {
+	var title: String
+	var action: () -> ()
+
+	init(title: String, action: () -> () = { }) {
+		self.title = title
+		self.action = action
 		super.init(initialState: false, render: CustomButton_.render)
 	}
 
-	class func render(component: Component<Bool>, active: Bool) -> Element {
+	class func render(c: Component<Bool>, active: Bool) -> Element {
+		let component = c as! CustomButton
 		let color = (active ? NSColor.greenColor() : NSColor.blackColor())
 		return View(
 			borderColor: color,
@@ -23,9 +29,13 @@ class CustomButton_<LOL>: Component<Bool> {
 			backgroundColor: .whiteColor(),
 			borderWidth: 1,
 			mouseDown: { _ in component.updateState(const(true)) },
-			mouseUp: { _ in component.updateState(const(false)) })
+			mouseUp: { _ in
+				component.updateState(const(false))
+				component.action()
+			},
+			mouseExited: { _ in component.updateState(const(false)) })
 			.children([
-				Label(text: "Click me!", textColor: color)
+				Label(text: component.title, textColor: color)
 			])
 	}
 }
