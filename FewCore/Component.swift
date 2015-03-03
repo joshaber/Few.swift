@@ -187,6 +187,17 @@ public class Component<S>: Element {
 		}
 	}
 
+	final public func modifyState(fn: inout S -> ()) {
+		precondition(NSThread.isMainThread(), "Component.modifyState called on a background thread. Donut do that!")
+
+		let oldState = state
+		fn(&state)
+
+		if componentShouldRender(oldState, newState: state) {
+			enqueueRender()
+		}
+	}
+
 	final private func enqueueRender() {
 		if renderQueued { return }
 
