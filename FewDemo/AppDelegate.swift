@@ -52,8 +52,10 @@ func renderScrollView() -> Element {
 
 func renderRow(row: Int) -> Element {
 	return View()
+		.direction(.Column)
 		.children([
-			Label(text: "Item \(row + 1)")
+			Label(text: "I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
+			Label(text: "Item \(row)")
 		])
 }
 
