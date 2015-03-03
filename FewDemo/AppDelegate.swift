@@ -38,7 +38,7 @@ func renderInput(component: Component<LoginState>, label: String, secure: Bool, 
 
 struct ScrollViewState {
 	let selectedRow: Int? = nil
-	let items: [Int] = Array(1...10)
+	let items: [Int] = Array(1...100)
 }
 
 func renderScrollView() -> Element {
