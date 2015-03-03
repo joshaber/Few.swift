@@ -43,7 +43,7 @@ struct ScrollViewState {
 
 func renderScrollView() -> Element {
 	return Component(initialState: ScrollViewState()) { component, state in
-		let items = (0...10).map { row in renderRow(row) }
+		let items = state.items.map { row in renderRow(row) }
 		return TableView(items) { row in
 			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
 		}
