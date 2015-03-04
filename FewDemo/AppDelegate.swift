@@ -8,7 +8,6 @@
 
 import Cocoa
 import Few
-import SwiftBox
 
 struct LoginState {
 	let username: String = ""
@@ -55,7 +54,8 @@ func renderRow(row: Int) -> Element {
 		.direction(.Column)
 		.children([
 			Label(text: "I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
-			Label(text: "Item \(row)")
+			Label(text: "Item \(row)"),
+			Image(NSImage(named: NSImageNameApplicationIcon)).size(42, 42),
 		])
 }
 

@@ -8,7 +8,6 @@
 
 import Cocoa
 import Few
-import SwiftBox
 
 typealias CustomButton = CustomButton_<Bool>
 class CustomButton_<LOL>: Component<Bool> {
