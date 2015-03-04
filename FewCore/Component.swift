@@ -36,6 +36,8 @@ public class Component<S>: Element {
 	/// Is the component a root?
 	private var root = false
 
+	private var frameChangedTrampoline = TargetActionTrampoline()
+
 	/// Initializes the component with its initial state. The render function
 	/// takes the current state of the component and returns the element which 
 	/// represents that state.
@@ -167,10 +169,29 @@ public class Component<S>: Element {
 		realizeRootIfNeeded()
 		hostView.addSubview(realizedRoot!.view)
 		rootElement?.elementDidRealize(realizedRoot!)
+
+		hostView.postsFrameChangedNotifications = true
+		realizedRoot!.view.autoresizesSubviews = false
+
+		frameChangedTrampoline.action = { [weak self] in
+			if let strongSelf = self {
+				strongSelf.hostViewFrameChanged(hostView)
+			}
+		}
+		NSNotificationCenter.defaultCenter().addObserver(frameChangedTrampoline, selector: frameChangedTrampoline.selector, name: NSViewFrameDidChangeNotification, object: hostView)
+	}
+
+	final private func hostViewFrameChanged(hostView: ViewType) {
+		frame.size = hostView.frame.size
+		// A full re-render is less than ideal :|
+		renderNewRoot()
 	}
 
 	/// Remove the component from its host view.
 	public func remove() {
+		NSNotificationCenter.defaultCenter().removeObserver(frameChangedTrampoline, name: NSViewFrameDidChangeNotification, object: nil)
+		frameChangedTrampoline.action = nil
+
 		derealize()
 		root = false
 	}
