@@ -338,7 +338,7 @@ public class Component<S>: Element {
 	}
 
 	override func applyLayout(layout: Layout) {
-		frame = CGRectIntegral(layout.frame)
+		frame = layout.frame
 
 		rootElement?.applyLayout(layout)
 	}

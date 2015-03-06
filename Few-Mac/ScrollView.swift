@@ -99,7 +99,7 @@ private class ScrollViewContent: Element {
 	}
 
 	private override func applyLayout(layout: Layout) {
-		frame = CGRectIntegral(layout.frame)
+		frame = layout.frame
 
 		for (child, layout) in Zip2(layoutChildren, layout.children) {
 			child.applyLayout(layout)

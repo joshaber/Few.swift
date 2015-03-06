@@ -116,7 +116,7 @@ public class Element {
 		}
 
 		if frame != old.frame {
-			view?.frame = frame
+			view?.frame = frame.integerRect
 		}
 
 		realizedSelf?.element = self
@@ -168,7 +168,7 @@ public class Element {
 	/// Realize the element.
 	internal func realize() -> RealizedElement {
 		let view = createView()
-		view.frame = frame
+		view.frame = frame.integerRect
 
 		let realizedSelf = RealizedElement(element: self, view: view)
 		let realizedChildren = children.map { $0.realize() }
@@ -196,7 +196,7 @@ public class Element {
 	}
 
 	internal func applyLayout(layout: Layout) {
-		frame = CGRectIntegral(layout.frame)
+		frame = layout.frame
 
 		for (child, layout) in Zip2(children, layout.children) {
 			child.applyLayout(layout)
