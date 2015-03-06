@@ -12,7 +12,9 @@ import AppKit
 private let DefaultLabelFont = NSFont.labelFontOfSize(NSFont.systemFontSizeForControlSize(.RegularControlSize))
 private let StringFudge = CGSize(width: 4, height: 0)
 
-internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: 1000, height: 1000)) -> CGSize {
+private let ABigDimension: CGFloat = 10000
+
+internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension)) -> CGSize {
 	let rect = string.boundingRectWithSize(maxSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
 	let width = ceil(rect.size.width) + StringFudge.width
 	let height = ceil(rect.size.height) + StringFudge.height
@@ -34,9 +36,6 @@ public class Label: Element {
 
 	public init(attributedString: NSAttributedString) {
 		self.attributedString = attributedString
-
-		let size = estimateStringSize(attributedString)
-		super.init(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
 	}
 
 	// MARK: Element
@@ -59,5 +58,12 @@ public class Label: Element {
 		field.font = DefaultLabelFont
 		field.attributedStringValue = attributedString
 		return field
+	}
+
+	internal override func assembleLayoutNode() -> Node {
+		let childNodes = children.map { $0.assembleLayoutNode() }
+		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex) { w in
+			estimateStringSize(self.attributedString, maxSize: CGSize(width: w.isNaN ? ABigDimension : w, height: ABigDimension))
+		}
 	}
 }
