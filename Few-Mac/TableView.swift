@@ -135,12 +135,6 @@ public class TableView: Element {
 		self.elements = elements
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
-
-		for element in elements {
-			let node = element.assembleLayoutNode()
-			let layout = node.layout()
-			element.applyLayout(layout)
-		}
 	}
 
 	// MARK: -
@@ -150,6 +144,9 @@ public class TableView: Element {
 
 		if let scrollView = realizedSelf?.view as? FewScrollView {
 			let handler = scrollView.handler
+
+			layoutElements()
+
 			handler?.elements = elements
 
 			let tableView = scrollView.handler?.tableView
@@ -182,9 +179,19 @@ public class TableView: Element {
 
 		scrollView.documentView = tableView
 
+		layoutElements()
+
 		scrollView.handler = TableViewHandler(tableView: tableView, elements: elements)
 		scrollView.handler?.selectionChanged = selectionChanged
 		
 		return scrollView
+	}
+
+	private final func layoutElements() {
+		for element in elements {
+			let node = element.assembleLayoutNode()
+			let layout = node.layout(maxWidth: frame.size.width)
+			element.applyLayout(layout)
+		}
 	}
 }
