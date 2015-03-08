@@ -91,7 +91,13 @@ func renderDemo(component: Component<()>, state: ()) -> Element {
 		.direction(.Column)
 		.children([
 			renderLogin(),
-			renderScrollView().size(100, 100),
+			View(keyUp: { _, event in
+					println(event)
+					return true
+				})
+				.children([
+					renderScrollView().size(100, 100),
+				]),
 		])
 }
 

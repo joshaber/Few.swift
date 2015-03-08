@@ -37,6 +37,8 @@ private class FewView: NSView {
 	var mouseDown: (() -> ())?
 	var mouseUp: (() -> ())?
 	var mouseExited: (() -> ())?
+	var keyDown: (NSEvent -> Bool)?
+	var keyUp: (NSEvent -> Bool)?
 
 	private var tracking = false
 
@@ -88,6 +90,26 @@ private class FewView: NSView {
 		mouseDown?()
 	}
 
+	private override func keyUp(event: NSEvent) {
+		if let keyUp = keyUp {
+			if !keyUp(event) {
+				super.keyUp(event)
+			}
+		} else {
+			super.keyUp(event)
+		}
+	}
+
+	private override func keyDown(event: NSEvent) {
+		if let keyDown = keyDown {
+			if !keyDown(event) {
+				super.keyDown(event)
+			}
+		} else {
+			super.keyDown(event)
+		}
+	}
+
 	private override func mouseDragged(event: NSEvent) {
 		super.mouseDragged(event)
 
@@ -117,6 +139,7 @@ private class FewView: NSView {
 
 public class View: Element {
 	private static let doNothing: View -> () = { _ in }
+	private static let doNothingKeyEvent: (View, NSEvent) -> Bool = { _, _ in false }
 
 	public var backgroundColor: NSColor?
 	public var borderColor: NSColor?
@@ -125,8 +148,10 @@ public class View: Element {
 	public var mouseDown: View -> ()
 	public var mouseUp: View -> ()
 	public var mouseExited: View -> ()
+	public var keyDown: (View, NSEvent) -> Bool
+	public var keyUp: (View, NSEvent) -> Bool
 
-	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0, mouseDown: View -> () = doNothing, mouseUp: View -> () = doNothing, mouseExited: View -> () = doNothing) {
+	public init(backgroundColor: NSColor? = nil, borderColor: NSColor? = nil, borderWidth: CGFloat = 0, cornerRadius: CGFloat = 0, mouseDown: View -> () = doNothing, mouseUp: View -> () = doNothing, mouseExited: View -> () = doNothing, keyDown: (View, NSEvent) -> Bool = doNothingKeyEvent, keyUp: (View, NSEvent) -> Bool = doNothingKeyEvent) {
 		self.backgroundColor = backgroundColor
 		self.borderColor = borderColor
 		self.borderWidth = borderWidth
@@ -134,6 +159,8 @@ public class View: Element {
 		self.mouseDown = mouseDown
 		self.mouseUp = mouseUp
 		self.mouseExited = mouseExited
+		self.keyDown = keyDown
+		self.keyUp = keyUp
 	}
 
 	// MARK: Element
@@ -188,6 +215,22 @@ public class View: Element {
 		view.mouseExited = { [weak self] in
 			if let strongSelf = self {
 				strongSelf.mouseExited(strongSelf)
+			}
+		}
+
+		view.keyUp = { [weak self] event in
+			if let strongSelf = self {
+				return strongSelf.keyUp(strongSelf, event)
+			} else {
+				return false
+			}
+		}
+
+		view.keyDown = { [weak self] event in
+			if let strongSelf = self {
+				return strongSelf.keyDown(strongSelf, event)
+			} else {
+				return false
 			}
 		}
 	}
