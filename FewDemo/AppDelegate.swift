@@ -23,7 +23,7 @@ func renderInput(component: Component<LoginState>, label: String, secure: Bool, 
 	if secure {
 		input = Password(action: action)
 	} else {
-		input = Input(action: action, autofocus: true)
+		input = Input(action: action).autofocus(true)
 	}
 
 	return View()
@@ -126,8 +126,8 @@ func renderLabeledInput(label: String, value: String, placeholder: String, autof
 				text: value,
 				placeholder: placeholder,
 				enabled: true,
-				autofocus: autofocus,
 				action: fn)
+				.autofocus(autofocus)
 				.size(100, 23),
 		])
 }

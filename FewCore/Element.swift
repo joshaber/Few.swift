@@ -66,11 +66,15 @@ public class Element {
 	public var childAlignment: ChildAlignment
 	public var flex: CGFloat
 
-	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
+	/// Should the input make itself the focus after it's been realized?
+	public var autofocus: Bool
+
+	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, autofocus: Bool = false, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
 		self.key = key
 		self.hidden = hidden
 		self.alpha = alpha
+		self.autofocus = autofocus
 		self.children = children
 		self.direction = direction
 		self.margin = margin
@@ -208,8 +212,15 @@ public class Element {
 	}
 
 	public func elementDidRealize(realizedSelf: RealizedElement) {
+		// Tell our children first so that we still end up grabbing focus even 
+		// if a child also has autofocus.
 		for child in realizedSelf.children {
 			child.element.elementDidRealize(child)
+		}
+
+		if autofocus {
+			let window = realizedSelf.view.window!
+			window.makeFirstResponder(realizedSelf.view)
 		}
 	}
 }
@@ -288,6 +299,11 @@ extension Element {
 
 	public func alpha(a: CGFloat) -> Self {
 		alpha = a
+		return self
+	}
+
+	public func autofocus(f: Bool) -> Self {
+		autofocus = f
 		return self
 	}
 }

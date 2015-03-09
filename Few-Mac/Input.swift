@@ -30,18 +30,14 @@ public class Input: Element {
 	/// `text` when the input isn't being edited.
 	public var forceValueWhileEditing: Bool
 
-	/// Should the input make itself the focus after it's been realized?
-	public var autofocus: Bool
-
 	internal let inputDelegate = InputDelegate()
 
-	public init(text: String? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, autofocus: Bool = false, forceValueWhileEditing: Bool = false, action: String -> () = { _ in }) {
+	public init(text: String? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, forceValueWhileEditing: Bool = false, action: String -> () = { _ in }) {
 		self.text = text
 		self.initialText = initialText
 		self.placeholder = placeholder
 		self.action = action
 		self.enabled = enabled
-		self.autofocus = autofocus
 		self.forceValueWhileEditing = forceValueWhileEditing
 		super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 23))
 		
@@ -90,23 +86,5 @@ public class Input: Element {
 		let cell = field.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 		return field
-	}
-
-	public override func elementDidRealize(realizedSelf: RealizedElement) {
-		// Call super first so that we still end up grabbing focus even if a 
-		// child has autofocus as well.
-		super.elementDidRealize(realizedSelf)
-
-		if autofocus {
-			let window = realizedSelf.view.window!
-			window.makeFirstResponder(realizedSelf.view)
-		}
-	}
-}
-
-extension Input {
-	public func autofocus(f: Bool) -> Self {
-		autofocus = f
-		return self
 	}
 }
