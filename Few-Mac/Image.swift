@@ -11,9 +11,11 @@ import AppKit
 
 public class Image: Element {
 	public var image: NSImage?
+	public var scaling: NSImageScaling
 
-	public init(_ image: NSImage?) {
+	public init(_ image: NSImage?, scaling: NSImageScaling = .ImageScaleProportionallyUpOrDown) {
 		self.image = image
+		self.scaling = scaling
 
 		let size = image?.size ?? CGSize(width: Node.Undefined, height: Node.Undefined)
 		super.init(frame: CGRect(origin: CGPointZero, size: size))
@@ -25,6 +27,10 @@ public class Image: Element {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
 		if let view = realizedSelf?.view as? NSImageView {
+			if view.imageScaling != scaling {
+				view.imageScaling = scaling
+			}
+
 			if view.image != image {
 				view.image = image
 			}
@@ -38,7 +44,7 @@ public class Image: Element {
 		view.allowsCutCopyPaste = false
 		view.animates = true
 		view.imageFrameStyle = .None
-		view.imageScaling = .ImageScaleProportionallyUpOrDown
+		view.imageScaling = scaling
 		return view
 	}
 }
