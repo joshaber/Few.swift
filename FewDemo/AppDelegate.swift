@@ -40,12 +40,37 @@ struct ScrollViewState {
 	let items: [Int] = Array(1...100)
 }
 
+func keyDown(event: NSEvent, component: Component<ScrollViewState>) -> Bool {
+	let characters = event.charactersIgnoringModifiers!.utf16
+	let firstCharacter = first(characters)
+	if firstCharacter == UInt16(NSDeleteCharacter) {
+		component.updateState { state in
+			var items = state.items
+			items.removeAtIndex <^> state.selectedRow
+			return ScrollViewState(selectedRow: state.selectedRow, items: items)
+		}
+		return true
+	} else {
+		return false
+	}
+}
+
 func renderScrollView() -> Element {
 	return Component(initialState: ScrollViewState()) { component, state in
 		let items = state.items.map { row in renderRow(row) }
-		return TableView(items) { row in
-			component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
-		}
+		let itemPlurality = (items.count == 1 ? "item" : "items")
+		return View(
+			keyDown: { _, event in
+				return keyDown(event, component)
+			})
+			.direction(.Column)
+			.children([
+				Label("\(items.count) \(itemPlurality)"),
+				TableView(items) { row in
+					component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
+				}
+				.flex(1)
+			])
 	}
 }
 
@@ -91,13 +116,7 @@ func renderDemo(component: Component<()>, state: ()) -> Element {
 		.direction(.Column)
 		.children([
 			renderLogin(),
-			View(keyUp: { _, event in
-					println(event)
-					return true
-				})
-				.children([
-					renderScrollView().size(100, 100),
-				]),
+			renderScrollView().size(100, 100),
 		])
 }
 
