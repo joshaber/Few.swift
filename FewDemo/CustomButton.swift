@@ -35,7 +35,7 @@ class CustomButton_<LOL>: Component<Bool> {
 			},
 			mouseExited: { _ in component.updateState(const(false)) })
 			.children([
-				Label(text: component.title, textColor: color).margin(Edges(uniform: 4))
+				Label(component.title, textColor: color).margin(Edges(uniform: 4))
 			])
 	}
 }

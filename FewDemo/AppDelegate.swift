@@ -30,7 +30,7 @@ func renderInput(component: Component<LoginState>, label: String, secure: Bool, 
 		.direction(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
-			Label(text: label).size(75, 19),
+			Label(label).size(75, 19),
 			input.size(100, 23),
 		])
 }
@@ -53,8 +53,8 @@ func renderRow(row: Int) -> Element {
 	return View()
 		.direction(.Column)
 		.children([
-			Label(text: "I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
-			Label(text: "Item \(row)"),
+			Label("I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
+			Label("\(row)"),
 			Image(NSImage(named: NSImageNameApplicationIcon)).size(42, 42),
 		])
 }
@@ -121,7 +121,7 @@ func renderLabeledInput(label: String, value: String, placeholder: String, autof
 		.direction(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
-			Label(text: label).size(75, 19),
+			Label(label).size(75, 19),
 			Input(
 				text: value,
 				placeholder: placeholder,
