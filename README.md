@@ -64,6 +64,11 @@ shipped apps. Few.swift has not.
 Swift's pretty buggy with concrete subclasses of generic superclasses: https://gist.github.com/joshaber/0978209efef7774393e0.
 This hurts.
 
+## Should I use this?
+
+Probably :doughnut:. See above about how it's not battle-tested yet. It's also
+currently mostly OS X-only. iOS support pull requests welcome :sparkling_heart:.
+
 --
 
 <a name="lol"><sup>1.</sup></a> React, but for Cocoa. A reactive Cocoa, one might say.
