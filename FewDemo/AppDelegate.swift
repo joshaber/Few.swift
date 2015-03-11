@@ -29,7 +29,7 @@ func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) ->
 		.direction(.Column)
 		.children([
 			contentComponent,
-			CustomButton(title: "Go team go!") {
+			CustomButton(title: "Show me more!") {
 					component.updateState(toggleDisplay)
 				}
 				.margin(Edges(bottom: 20))
@@ -48,7 +48,7 @@ func toggleDisplay(display: ActiveComponent) -> ActiveComponent {
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = Component(initialState: .Demo, render: renderApp)
+	private let appComponent = Component(initialState: .Converter, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
 		let contentView = window.contentView as! NSView
