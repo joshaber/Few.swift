@@ -5,15 +5,14 @@ UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
 
 ## Why
 
-[UIs are big, messy, mutable, stateful bags of sadness.](http://joshaber.github.io/2015/01/30/why-react-native-matters/).
+[UIs are big, messy, mutable, stateful bags of sadness.](http://joshaber.github.io/2015/01/30/why-react-native-matters/)
 
 Few.swift lets us express UIs as stateless, composable, immutable-ish values of
-their state. When their state changes, Few.swift calls the `render` function and
-intelligently applies any changes.
+their state. When their state changes, Few.swift calls a designated render
+function and intelligently applies any changes.
 
-The state is the necessary complexity of the view, and the view itself is a
-function of it. State becomes explicit and controlled, and the UI becomes a
-mapping from state to its representation.
+The state is the necessary complexity of the view. The view is a mapping from
+state to its representation.
 
 ## Example
 
