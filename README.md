@@ -61,6 +61,8 @@ shipped apps. Few.swift has not.
 
 ## Quirks
 
+Currently requires Swift 1.3.
+
 Swift's pretty buggy with concrete subclasses of generic superclasses: https://gist.github.com/joshaber/0978209efef7774393e0.
 This hurts.
 
