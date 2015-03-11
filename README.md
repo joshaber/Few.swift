@@ -67,4 +67,4 @@ This hurts.
 
 --
 
-<p name="#lol"><sup>1.</sup>React, but for Cocoa. A reactive Cocoa, one might say.</p>
+<a name="#lol"><sup>1.</sup></a> React, but for Cocoa. A reactive Cocoa, one might say.
