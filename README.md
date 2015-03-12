@@ -19,8 +19,11 @@ state to its representation.
 ```swift
 func renderApp(component: Component<Int>, count: Int) -> Element {
 	return View()
+		// The view itself should be centered.
 		.justification(.Center)
+		// The children should be centered in the view.
 		.childAlignment(.Center)
+		// Layout children in a column.
 		.direction(.Column)
 		.children([
 			Label("You've clicked \(count) times!"),
