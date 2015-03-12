@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Josh Abernathy. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+@import Foundation;
 
 //! Project version number for Few.
 FOUNDATION_EXPORT double FewVersionNumber;
