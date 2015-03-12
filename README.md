@@ -57,8 +57,8 @@ This is pure conjecture since neither are open source yet, but a few
 differences I know of:
 
 1. Few.swift is written in... Swift. Type safety is cool.
-2. Single-threaded. React-Native and Components both purport to do layout on a
-non-main thread. Few.swift keeps everything on the main thread currently.
+2. Single-threaded. React-Native and Components both do layout on a non-main
+thread. Few.swift keeps everything on the main thread currently.
 3. Both React-Native and Components are battle-tested. They've been used in
 shipped apps. Few.swift has not.
 
