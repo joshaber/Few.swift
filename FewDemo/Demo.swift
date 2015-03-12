@@ -8,6 +8,7 @@
 
 import Foundation
 import Few
+import AppKit
 
 struct LoginState {
 	let username: String = ""
