@@ -10,6 +10,10 @@ import Foundation
 import CoreGraphics
 import SwiftBox
 
+#if os(OSX)
+import AppKit
+#endif
+
 /// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
 ///
@@ -176,6 +180,7 @@ public class Component<S>: Element {
 		hostView.addSubview(realizedRoot!.view)
 		rootElement?.elementDidRealize(realizedRoot!)
 
+#if os(OSX)
 		hostView.postsFrameChangedNotifications = true
 		realizedRoot!.view.autoresizesSubviews = false
 
@@ -185,6 +190,7 @@ public class Component<S>: Element {
 			}
 		}
 		NSNotificationCenter.defaultCenter().addObserver(frameChangedTrampoline, selector: frameChangedTrampoline.selector, name: NSViewFrameDidChangeNotification, object: hostView)
+#endif
 	}
 
 	final private func hostViewFrameChanged(hostView: ViewType) {
@@ -195,8 +201,10 @@ public class Component<S>: Element {
 
 	/// Remove the component from its host view.
 	public func remove() {
+#if os(OSX)
 		NSNotificationCenter.defaultCenter().removeObserver(frameChangedTrampoline, name: NSViewFrameDidChangeNotification, object: nil)
 		frameChangedTrampoline.action = nil
+#endif
 
 		derealize()
 		root = false

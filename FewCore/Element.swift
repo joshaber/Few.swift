@@ -115,8 +115,8 @@ public class Element {
 			view?.hidden = hidden
 		}
 
-		if fabs(alpha - old.alpha) > CGFloat(DBL_EPSILON) {
-			view?.alphaValue = alpha
+		if let view = view {
+			compareAndSetAlpha(view, alpha)
 		}
 
 		if frame != old.frame {
@@ -220,7 +220,11 @@ public class Element {
 
 		if autofocus {
 			let window = realizedSelf.view.window!
+#if os(OSX)
 			window.makeFirstResponder(realizedSelf.view)
+#else
+			realizedSelf.view.becomeFirstResponder()
+#endif
 		}
 	}
 }
