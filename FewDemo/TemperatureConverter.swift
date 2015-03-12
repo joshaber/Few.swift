@@ -29,14 +29,14 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		.direction(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
-			Label(label).size(75, 19),
+			Label(label).width(75),
 			Input(
 				text: value,
 				placeholder: label,
 				enabled: true,
 				action: fn)
 				.autofocus(autofocus)
-				.size(100, 23),
+				.width(100),
 		])
 }
 
