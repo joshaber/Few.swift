@@ -19,8 +19,11 @@ state to its representation.
 ```swift
 func renderApp(component: Component<Int>, count: Int) -> Element {
 	return View()
+		// The view itself should be centered.
 		.justification(.Center)
+		// The children should be centered in the view.
 		.childAlignment(.Center)
+		// Layout children in a column.
 		.direction(.Column)
 		.children([
 			Label("You've clicked \(count) times!"),
@@ -54,14 +57,15 @@ This is pure conjecture since neither are open source yet, but a few
 differences I know of:
 
 1. Few.swift is written in... Swift. Type safety is cool.
-2. Single-threaded. React-Native and Components both purport to do layout on a
-non-main thread. Few.swift keeps everything on the main thread currently.
+2. Single-threaded. React-Native and Components both do layout on a non-main
+thread. Few.swift keeps everything on the main thread currently.
 3. Both React-Native and Components are battle-tested. They've been used in
-shipped apps. Few.swift has not.
+shipping apps. Few.swift has not.
+4. React-Native has an awesome live reload feature.
 
 ## Quirks
 
-Currently requires Swift 1.3.
+Currently requires Swift 1.2.
 
 Swift's pretty buggy with concrete subclasses of generic superclasses: https://gist.github.com/joshaber/0978209efef7774393e0.
 This hurts.
@@ -69,7 +73,7 @@ This hurts.
 ## Should I use this?
 
 Probably :doughnut:. See above about how it's not battle-tested yet. It's also
-currently mostly OS X-only. iOS support pull requests welcome :sparkling_heart:.
+currently mostly OS X-only. iOS support is really basic. Pull requests welcome :sparkling_heart:.
 
 --
 
