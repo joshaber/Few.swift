@@ -20,7 +20,7 @@ func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent
 	case .Demo:
 		contentComponent = Demo()
 	case .Converter:
-		contentComponent = CurrencyConverter()
+		contentComponent = TemperatureConverter()
 	}
 
 	return Element()

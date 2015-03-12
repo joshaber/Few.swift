@@ -3,6 +3,8 @@
 [React](http://facebook.github.io/react/)-inspired library in Swift for writing
 UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
 
+[SwiftBox](https://github.com/joshaber/SwiftBox) is used for layout.
+
 ## Why
 
 [UIs are big, messy, mutable, stateful bags of sadness.](http://joshaber.github.io/2015/01/30/why-react-native-matters/)
@@ -16,7 +18,10 @@ state to its representation.
 
 ## Example
 
+Here's a simple example which counts the number of times a button is clicked:
+
 ```swift
+// This function is called every time `component.updateState` is called.
 func renderApp(component: Component<Int>, count: Int) -> Element {
 	return View()
 		// The view itself should be centered.
@@ -47,7 +52,70 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 ```
 
-[SwiftBox](https://github.com/joshaber/SwiftBox) is used for layout.
+Or a slightly more involved example, a temperature converter:
+
+```swift
+struct ConverterState {
+	static let defaultFahrenheit: CGFloat = 32
+
+	let fahrenheit = defaultFahrenheit
+	let celcius = f2c(defaultFahrenheit)
+}
+
+private func c2f(c: CGFloat) -> CGFloat {
+	return (c * 9/5) + 32
+}
+
+private func f2c(f: CGFloat) -> CGFloat {
+	return (f - 32) * 5/9
+}
+
+private func renderLabeledInput(label: String, value: String, autofocus: Bool, fn: String -> ()) -> Element {
+	return View()
+		// Layout children in a row.
+		.direction(.Row)
+		.padding(Edges(bottom: 4))
+		.children([
+			Label(label).width(75),
+			Input(
+				text: value,
+				placeholder: label,
+				enabled: true,
+				action: fn)
+				// Autofocus means that the Input will become the first responder when
+				// it is first added to the window.
+				.autofocus(autofocus)
+				.width(100),
+		])
+}
+
+private func render(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+	let numberFormatter = NSNumberFormatter()
+	let parseNumber: String -> CGFloat? = { str in
+		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
+	}
+	return View()
+		// Center the view.
+		.justification(.Center)
+		// Center the children.
+		.childAlignment(.Center)
+		.direction(.Column)
+		.children([
+			// Each time the text fields change, we re-render. But note that Few.swift
+			// is smart enough not to interrupt the user's editing or selection.
+			renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", true) {
+				if let f = parseNumber($0) {
+					component.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
+				}
+			},
+			renderLabeledInput("Celcius", "\(state.celcius)", false) {
+				if let c = parseNumber($0) {
+					component.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
+				}
+			},
+		])
+}
+```
 
 See [FewDemo](FewDemo) for some more involved examples.
 

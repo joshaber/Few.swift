@@ -1,5 +1,5 @@
 //
-//  CurrencyConverter.swift
+//  TemperatureConverter.swift
 //  Few
 //
 //  Created by Josh Abernathy on 3/10/15.
@@ -12,8 +12,8 @@ import Few
 struct ConverterState {
 	static let defaultFahrenheit: CGFloat = 32
 
-	let fahrenheit: CGFloat = defaultFahrenheit
-	let celcius: CGFloat = f2c(defaultFahrenheit)
+	let fahrenheit = defaultFahrenheit
+	let celcius = f2c(defaultFahrenheit)
 }
 
 private func c2f(c: CGFloat) -> CGFloat {
@@ -29,14 +29,14 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		.direction(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
-			Label(label).size(75, 19),
+			Label(label).width(75),
 			Input(
 				text: value,
 				placeholder: label,
 				enabled: true,
 				action: fn)
 				.autofocus(autofocus)
-				.size(100, 23),
+				.width(100),
 		])
 }
 
@@ -63,4 +63,4 @@ private func render(component: Few.Component<ConverterState>, state: ConverterSt
 		])
 }
 
-let CurrencyConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
+let TemperatureConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
