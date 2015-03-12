@@ -67,9 +67,9 @@ private func renderScrollView() -> Element {
 			.children([
 				Label("\(items.count) \(itemPlurality)"),
 				TableView(items, selectionChanged: { row in
-						component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
-					})
-					.flex(1)
+					component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
+				})
+				.flex(1)
 			])
 	}
 }
