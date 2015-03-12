@@ -73,7 +73,7 @@ This hurts.
 ## Should I use this?
 
 Probably :doughnut:. See above about how it's not battle-tested yet. It's also
-currently mostly OS X-only. iOS support pull requests welcome :sparkling_heart:.
+currently mostly OS X-only. iOS support is really basic. Pull requests welcome :sparkling_heart:.
 
 --
 
