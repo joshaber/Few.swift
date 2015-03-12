@@ -43,15 +43,13 @@ private class FewView: NSView {
 	private var tracking = false
 
 	private override func drawRect(dirtyRect: NSRect) {
-		let path: NSBezierPath
+		var path: NSBezierPath!
 		if cornerRadius.isZero {
 			path = NSBezierPath(rect: bounds)
 		} else {
-			let pathBounds: CGRect
+			var pathBounds = bounds
 			if borderWidth <= 1 {
 				pathBounds = CGRectInset(bounds, 0.5, 0.5)
-			} else {
-				pathBounds = bounds
 			}
 			path = NSBezierPath(roundedRect: pathBounds, xRadius: cornerRadius, yRadius: cornerRadius)
 		}
@@ -61,10 +59,12 @@ private class FewView: NSView {
 			path.fill()
 		}
 
-		if let color = borderColor where borderWidth > 0 {
-			color.set()
-			path.lineWidth = borderWidth
-			path.stroke()
+		if let color = borderColor {
+			if borderWidth > 0 {
+				color.set()
+				path.lineWidth = borderWidth
+				path.stroke()
+			}
 		}
 	}
 
@@ -127,8 +127,10 @@ private class FewView: NSView {
 	@objc var backgroundStyle: NSBackgroundStyle = .Light {
 		didSet {
 			for view in subviews {
-				if let control = view as? NSControl, cell = control.cell() as? NSCell {
-					cell.backgroundStyle = backgroundStyle
+				if let control = view as? NSControl {
+					if let cell = control.cell() as? NSCell {
+						cell.backgroundStyle = backgroundStyle
+					}
 				} else if let fewView = view as? FewView {
 					fewView.backgroundStyle = backgroundStyle
 				}
@@ -137,10 +139,10 @@ private class FewView: NSView {
 	}
 }
 
-public class View: Element {
-	private static let doNothing: View -> () = { _ in }
-	private static let doNothingKeyEvent: (View, NSEvent) -> Bool = { _, _ in false }
+private let doNothing: View -> () = { _ in }
+private let doNothingKeyEvent: (View, NSEvent) -> Bool = { _, _ in false }
 
+public class View: Element {
 	public var backgroundColor: NSColor?
 	public var borderColor: NSColor?
 	public var borderWidth: CGFloat

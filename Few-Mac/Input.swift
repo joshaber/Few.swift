@@ -13,7 +13,7 @@ internal class InputDelegate: NSObject, NSTextFieldDelegate {
 	var action: (NSTextField -> ())?
 
 	override func controlTextDidChange(notification: NSNotification) {
-		let field = notification.object as! NSTextField
+		let field = notification.object as NSTextField
 		action?(field)
 	}
 }
@@ -58,7 +58,7 @@ public class Input: Element {
 			cell?.placeholderString = placeholder ?? ""
 
 			if let text = text {
-				let firstResponder: Bool
+				var firstResponder = false
 				if let firstResponderTextView = textField.window?.firstResponder as? NSTextView {
 					firstResponder = firstResponderTextView.delegate === textField
 				} else {

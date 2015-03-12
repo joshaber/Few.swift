@@ -42,7 +42,7 @@ public class Button: Element {
 				button.enabled = enabled
 			}
 
-			let oldButton = old as! Button
+			let oldButton = old as Button
 			if isDefault != oldButton.isDefault {
 				if isDefault {
 					button.keyEquivalent = "\r"
