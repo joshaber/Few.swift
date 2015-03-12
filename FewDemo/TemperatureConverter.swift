@@ -1,5 +1,5 @@
 //
-//  CurrencyConverter.swift
+//  TemperatureConverter.swift
 //  Few
 //
 //  Created by Josh Abernathy on 3/10/15.
@@ -63,4 +63,4 @@ private func render(component: Few.Component<ConverterState>, state: ConverterSt
 		])
 }
 
-let CurrencyConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
+let TemperatureConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
