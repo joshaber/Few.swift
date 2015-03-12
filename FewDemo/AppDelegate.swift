@@ -14,8 +14,8 @@ enum ActiveComponent {
 	case Converter
 }
 
-func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) -> Element {
-	let contentComponent: Element
+func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent) -> Element {
+	var contentComponent: Element!
 	switch state {
 	case .Demo:
 		contentComponent = Demo()
@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	private let appComponent = Component(initialState: .Converter, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
-		let contentView = window.contentView as! NSView
+		let contentView = window.contentView as NSView
 		appComponent.addToView(contentView)
 	}
 }

@@ -40,7 +40,7 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		])
 }
 
-private func render(component: Component<ConverterState>, state: ConverterState) -> Element {
+private func render(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
 	let numberFormatter = NSNumberFormatter()
 	let parseNumber: String -> CGFloat? = { str in
 		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
@@ -63,4 +63,4 @@ private func render(component: Component<ConverterState>, state: ConverterState)
 		])
 }
 
-let CurrencyConverter: () -> Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
+let CurrencyConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }

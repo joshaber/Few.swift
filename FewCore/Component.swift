@@ -95,7 +95,7 @@ public class Component<S>: Element {
 		newRoot.flex = flex
 
 		let node = newRoot.assembleLayoutNode()
-		let layout: Layout
+		var layout: Layout!
 		if root {
 			layout = node.layout(maxWidth: frame.size.width)
 		} else {

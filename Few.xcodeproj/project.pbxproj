@@ -19,6 +19,8 @@
 		883CECA81A4532A600B8A510 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CECA71A4532A600B8A510 /* Password.swift */; };
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		885C04F21AB1155300ACBAB1 /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D47F1F1A9BAE96006E007F /* SwiftBox.framework */; };
+		885C04F91AB1156300ACBAB1 /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		888E59CD1A4684AF0062A36B /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59CC1A4684AF0062A36B /* iOS.swift */; };
 		888E59CF1A4687330062A36B /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688D19AED8AF00DD079B /* Element.swift */; };
 		888E59D01A4687330062A36B /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688B19AED8AF00DD079B /* Component.swift */; };
@@ -195,6 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885C04F21AB1155300ACBAB1 /* SwiftBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +390,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885C04F91AB1156300ACBAB1 /* Few.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

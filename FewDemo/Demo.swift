@@ -14,12 +14,12 @@ struct LoginState {
 	let password: String = ""
 }
 
-private func renderInput(component: Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
+private func renderInput(component: Few.Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
 	let action: String -> () = { str in
 		component.updateState { fn($0, str) }
 	}
 
-	let input: Element
+	var input: Element!
 	if secure {
 		input = Password(action: action)
 	} else {
@@ -40,7 +40,7 @@ struct ScrollViewState {
 	let items: [Int] = Array(1...100)
 }
 
-private func keyDown(event: NSEvent, component: Component<ScrollViewState>) -> Bool {
+private func keyDown(event: NSEvent, component: Few.Component<ScrollViewState>) -> Bool {
 	let characters = event.charactersIgnoringModifiers!.utf16
 	let firstCharacter = first(characters)
 	if firstCharacter == UInt16(NSDeleteCharacter) {
@@ -66,9 +66,9 @@ private func renderScrollView() -> Element {
 			.direction(.Column)
 			.children([
 				Label("\(items.count) \(itemPlurality)"),
-				TableView(items) { row in
+				TableView(items, selectionChanged: { row in
 					component.updateState { ScrollViewState(selectedRow: row, items: $0.items) }
-				}
+				})
 				.flex(1)
 			])
 	}
@@ -90,14 +90,14 @@ private func renderLogin() -> Element {
 		return Element()
 			.direction(.Column)
 			.children([
-				renderThingy(count(state.username.utf16)),
+				renderThingy(state.username.utf16Count),
 				renderInput(component, "Username", false) {
 					LoginState(username: $1, password: $0.password)
 				},
 				renderInput(component, "Password", true) {
 					LoginState(username: $0.username, password: $1)
 				},
-				Button(title: "Login", enabled: loginEnabled) {}
+				Button(title: "Login", enabled: loginEnabled, action: {})
 					.selfAlignment(.FlexEnd)
 					.margin(Edges(bottom: 10, top: 10)),
 			])
@@ -109,7 +109,7 @@ private func renderThingy(count: Int) -> Element {
 	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
-private func render(component: Component<()>, state: ()) -> Element {
+private func render(component: Few.Component<()>, state: ()) -> Element {
 	return View()
 		.justification(.Center)
 		.childAlignment(.Center)
@@ -120,4 +120,4 @@ private func render(component: Component<()>, state: ()) -> Element {
 		])
 }
 
-let Demo: () -> Component<()> = { Component(initialState: (), render: render) }
+let Demo: () -> Few.Component<()> = { Component(initialState: (), render: render) }
