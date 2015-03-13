@@ -37,7 +37,7 @@ func renderApp(component: Few.Component<Int>, count: Int) -> Element {
 				})
 				.margin(Edges(uniform: 10))
 				.width(100),
-			])
+		])
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
