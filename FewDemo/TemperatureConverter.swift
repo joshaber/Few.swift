@@ -33,7 +33,6 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 			Input(
 				text: value,
 				placeholder: label,
-				enabled: true,
 				action: fn)
 				.autofocus(autofocus)
 				.width(100),

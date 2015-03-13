@@ -1,7 +1,7 @@
 # Few.swift
 
-[React](http://facebook.github.io/react/)-inspired library in Swift for writing
-UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
+[React](http://facebook.github.io/react/)-inspired library for writing
+AppKit/UIKit UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
 
 [SwiftBox](https://github.com/joshaber/SwiftBox) is used for layout.
 
@@ -10,11 +10,11 @@ UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
 [UIs are big, messy, mutable, stateful bags of sadness.](http://joshaber.github.io/2015/01/30/why-react-native-matters/)
 
 Few.swift lets us express UIs as stateless, composable, immutable-ish values of
-their state. When their state changes, Few.swift calls a designated render
-function and intelligently applies any changes.
+their state. When their state changes, Few.swift calls a function to render the
+UI for that state, and then intelligently applies any changes.
 
-The state is the necessary complexity of the view. The view is a mapping from
-state to its representation.
+To put it another way, the state is the necessary complexity of the app. The
+view is a mapping from state to its representation.
 
 ## Example
 
@@ -46,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	private let appComponent = Component(initialState: 0, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
-		let contentView = window.contentView as! NSView
+		let contentView = window.contentView as NSView
 		appComponent.addToView(contentView)
 	}
 }
@@ -80,7 +80,6 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 			Input(
 				text: value,
 				placeholder: label,
-				enabled: true,
 				action: fn)
 				// Autofocus means that the Input will become the first responder when
 				// it is first added to the window.
@@ -116,6 +115,9 @@ private func render(component: Few.Component<ConverterState>, state: ConverterSt
 		])
 }
 ```
+
+This is super cool because the only thing that's mutating is the state. Few.swift
+is in charge of making an in-place changes to the UI when the state changes.
 
 See [FewDemo](FewDemo) for some more involved examples.
 
