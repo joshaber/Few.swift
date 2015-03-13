@@ -4,5 +4,5 @@ import Cocoa
 import Few
 import XCPlayground
 
-let view = View(backgroundColor: NSColor.redColor())
+let view = View(backgroundColor: NSColor.redColor()).size(100, 100)
 view.ql
