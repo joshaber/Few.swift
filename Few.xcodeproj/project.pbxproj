@@ -47,6 +47,11 @@
 		88D47F201A9BAE96006E007F /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D47F1F1A9BAE96006E007F /* SwiftBox.framework */; };
 		88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA371A1A86A03F002281F4 /* ScrollView.swift */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
+		A2B9C7481AB387F7002648DA /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7471AB387F7002648DA /* TableView.swift */; };
+		A2B9C7501AB390B3002648DA /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C74F1AB390B3002648DA /* Image.swift */; };
+		A2B9C7521AB3924D002648DA /* Apple_Swift_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */; };
+		A2B9C7541AB43D0A002648DA /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7531AB43D0A002648DA /* Input.swift */; };
+		A2B9C7581AB45868002648DA /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7571AB45868002648DA /* ScrollView.swift */; };
 		A2FA88E51AB33B4000561FBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA88E41AB33B4000561FBF /* AppDelegate.swift */; };
 		A2FA88E71AB33B4000561FBF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA88E61AB33B4000561FBF /* ViewController.swift */; };
 		A2FA88EA1AB33B4000561FBF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2FA88E81AB33B4000561FBF /* Main.storyboard */; };
@@ -218,6 +223,11 @@
 		88D47F1F1A9BAE96006E007F /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88DA371A1A86A03F002281F4 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
+		A2B9C7471AB387F7002648DA /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		A2B9C74F1AB390B3002648DA /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Apple_Swift_Logo.png; sourceTree = "<group>"; };
+		A2B9C7531AB43D0A002648DA /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		A2B9C7571AB45868002648DA /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		A2FA88E01AB33B4000561FBF /* FewDemo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FewDemo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2FA88E31AB33B4000561FBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2FA88E41AB33B4000561FBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -302,6 +312,10 @@
 				A2FA89121AB33C1F00561FBF /* View.swift */,
 				A2FA89141AB33E0800561FBF /* Button.swift */,
 				A2FA89161AB33EDA00561FBF /* Label.swift */,
+				A2B9C7471AB387F7002648DA /* TableView.swift */,
+				A2B9C74F1AB390B3002648DA /* Image.swift */,
+				A2B9C7531AB43D0A002648DA /* Input.swift */,
+				A2B9C7571AB45868002648DA /* ScrollView.swift */,
 				888E59AF1A4684850062A36B /* Supporting Files */,
 			);
 			path = "Few-iOS";
@@ -437,6 +451,7 @@
 		A2FA88E11AB33B4000561FBF /* FewDemo-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */,
 				A2FA88E41AB33B4000561FBF /* AppDelegate.swift */,
 				A2FA88E61AB33B4000561FBF /* ViewController.swift */,
 				A2FA88E81AB33B4000561FBF /* Main.storyboard */,
@@ -724,6 +739,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2FA88EA1AB33B4000561FBF /* Main.storyboard in Resources */,
+				A2B9C7521AB3924D002648DA /* Apple_Swift_Logo.png in Resources */,
 				A2FA88EF1AB33B4000561FBF /* LaunchScreen.xib in Resources */,
 				A2FA88EC1AB33B4000561FBF /* Images.xcassets in Resources */,
 			);
@@ -736,14 +752,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2B9C7541AB43D0A002648DA /* Input.swift in Sources */,
 				888E59D81A4687330062A36B /* Util.swift in Sources */,
 				888E59CF1A4687330062A36B /* Element.swift in Sources */,
 				A2FA89171AB33EDA00561FBF /* Label.swift in Sources */,
 				A2FA89131AB33C1F00561FBF /* View.swift in Sources */,
+				A2B9C7581AB45868002648DA /* ScrollView.swift in Sources */,
 				888E59D01A4687330062A36B /* Component.swift in Sources */,
 				888E59D91A4687330062A36B /* TargetActionTrampoline.swift in Sources */,
 				888E59CD1A4684AF0062A36B /* iOS.swift in Sources */,
+				A2B9C7501AB390B3002648DA /* Image.swift in Sources */,
 				888E59D41A4687330062A36B /* Empty.swift in Sources */,
+				A2B9C7481AB387F7002648DA /* TableView.swift in Sources */,
 				889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */,
 				883BEC121A8EF574007DAB20 /* RealizedElement.swift in Sources */,
 				888E59D11A4687330062A36B /* Diffing.swift in Sources */,
@@ -1090,7 +1110,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1110,7 +1130,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;

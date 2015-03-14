@@ -14,7 +14,7 @@ private let StringFudge = CGSize(width: 4, height: 0)
 private let ABigDimension: CGFloat = 10000
 
 internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension)) -> CGSize {
-    let options: NSStringDrawingOptions = NSStringDrawingOptions.UsesLineFragmentOrigin// | NSStringDrawingOptions.UsesFontLeading
+    let options: NSStringDrawingOptions = NSStringDrawingOptions.UsesLineFragmentOrigin// | NSStringDrawingOptions.UsesFontLeading // Currently this is an enum(so it does not support multiple values). But this is fixed in iOS 8.3 SDK Beta 1
     let rect = string.boundingRectWithSize(maxSize, options: options, context: nil)
     let width = ceil(rect.size.width) + StringFudge.width
     let height = ceil(rect.size.height) + StringFudge.height
