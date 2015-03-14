@@ -52,6 +52,9 @@ func renderInput(component: Component<String>, state: String) -> Element {
     return View(backgroundColor: UIColor.greenColor())
         .direction(.Column)
         .children([
+            View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
+                .margin(Edges(uniform: 10))
+                .size(100, 100),
             Input(placeholder: "Username")
                 .margin(Edges(uniform: 10)),
             Input(placeholder: "Password", secure: true)
