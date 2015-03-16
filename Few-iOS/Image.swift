@@ -38,6 +38,8 @@ public class Image: Element {
     
     public override func createView() -> ViewType {
         let view = UIImageView(frame: frame)
+        view.alpha = alpha
+        view.hidden = hidden
         view.image = image
         return view
     }

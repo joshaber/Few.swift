@@ -50,6 +50,8 @@ public class View: Element {
     
     public override func createView() -> ViewType {
         let view = UIView(frame: frame)
+        view.alpha = alpha
+        view.hidden = hidden
         view.backgroundColor = backgroundColor
         if let borderColor = borderColor?.CGColor {
             view.layer.borderColor = borderColor

@@ -127,6 +127,8 @@ public class TableView: Element {
         layoutElements()
         tableView.handler = TableViewHandler(tableView: tableView, elements: elements)
         tableView.handler?.selectionChanged = selectionChanged
+        tableView.alpha = alpha
+        tableView.hidden = hidden
         
         return tableView
     }

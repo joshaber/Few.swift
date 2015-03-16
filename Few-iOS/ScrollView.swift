@@ -38,7 +38,10 @@ private class ScrollViewElement: Element {
     // MARK: Element
     
     private override func createView() -> ViewType {
-        return FewScrollView(frame: frame, didScroll: didScroll)
+        let scrollView = FewScrollView(frame: frame, didScroll: didScroll)
+        scrollView.alpha = alpha
+        scrollView.hidden = hidden
+        return scrollView
     }
     
     private override func addRealizedChildView(childView: ViewType, selfView: ViewType) {

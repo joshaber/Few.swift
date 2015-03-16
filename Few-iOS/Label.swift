@@ -54,6 +54,8 @@ public class Label: Element {
         let field = UILabel(frame: frame)
         field.font = DefaultLabelFont
         field.attributedText = attributedString
+        field.alpha = alpha
+        field.hidden = hidden
         return field
     }
     

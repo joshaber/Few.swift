@@ -73,6 +73,8 @@ public class Input: Element {
     
     public override func createView() -> ViewType {
         let field = FewTextField(frame: frame, textChangedAction: action)
+        field.alpha = alpha
+        field.hidden = hidden
         field.enabled = enabled
         field.placeholder = placeholder
         field.secureTextEntry = secure

@@ -59,6 +59,8 @@ public class Button: Element {
     
     public override func createView() -> ViewType {
         let button = FewButton(frame: frame, touchUpInsideAction: action)
+        button.alpha = alpha
+        button.hidden = hidden
         button.setAttributedTitle(title, forState: .Normal)
         button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         button.enabled = enabled

@@ -30,15 +30,20 @@ func renderCounter(component: Component<Int>, count: Int) -> Element {
 let Counter = { Component(initialState: 0, render: renderCounter) }
 
 private func renderRow(row: Int) -> Element {
-    return View()
+    return Element()
         .direction(.Row)
         .padding(Edges(uniform: 10))
         .children([
             Image(UIImage(named: "Apple_Swift_Logo.png"))
                 .size(42, 42)
                 .selfAlignment(.FlexStart),
-            Label("I am a banana.", textColor: UIColor.yellowColor(), font: UIFont.systemFontOfSize(18)),
-            Label("\(row)")
+            Element()
+                .margin(Edges(left: 10))
+                .direction(.Column)
+                .children([
+                    Label("I am a banana.", textColor: UIColor.blackColor(), font: UIFont.systemFontOfSize(18)),
+                    Label("\(row)", textColor: UIColor.greenColor())
+                    ])
             ])
 }
 
@@ -59,7 +64,7 @@ func renderInput(component: Component<String>, state: String) -> Element {
                 .margin(Edges(uniform: 10)),
             Input(placeholder: "Password", secure: true)
                 .margin(Edges(uniform: 10))
-        ])
+            ])
 }
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
@@ -100,8 +105,9 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
                 .margin(Edges(top: 20))
                 .flex(1),
             Button(title: "Show me more!", action: showMore)
-                .selfAlignment(.Stretch)
+                .width(200)
                 .margin(Edges(uniform: 10))
+                .selfAlignment(.Center)
             ])
 }
 
@@ -113,23 +119,6 @@ func toggleDisplay(var state: AppState) -> AppState {
         return state.updateActiveComponent(.Input)
     case .Input:
         return state.updateActiveComponent(.TableView)
-    }
-}
-
-class ViewController: UIViewController {
-    private let appComponent = Component(
-        initialState: AppState(
-            tableViewComponent: TableViewDemo(),
-            counterComponent: Counter(),
-            inputComponent: InputDemo(),
-            activeComponent: .TableView
-        ),
-        render: renderApp
-    )
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        appComponent.addToView(view)
     }
 }
 
