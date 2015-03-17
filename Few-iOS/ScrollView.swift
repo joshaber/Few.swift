@@ -24,7 +24,8 @@ private class FewScrollView: UIScrollView, UIScrollViewDelegate {
     }
     
     private func scrollViewDidScroll(scrollView: UIScrollView) {
-        didScroll(CGRect(origin: contentOffset, size: frame.size))
+        let visibleRect = CGRect(x: contentOffset.x, y: contentOffset.y, width: contentOffset.x + bounds.size.width, height: contentOffset.y + bounds.size.height)
+        didScroll(visibleRect)
     }
 }
 
@@ -38,25 +39,22 @@ private class ScrollViewElement: Element {
     // MARK: Element
     
     private override func createView() -> ViewType {
-        let scrollView = FewScrollView(frame: frame, didScroll: didScroll)
-        scrollView.alpha = alpha
-        scrollView.hidden = hidden
-        return scrollView
+        return FewScrollView(frame: frame, didScroll: didScroll)
     }
     
     private override func addRealizedChildView(childView: ViewType, selfView: ViewType) {
-        let scrollVew = selfView as FewScrollView
-        scrollVew.addSubview(childView)
+        let scrollView = selfView as FewScrollView
+        scrollView.subviews.first?.removeFromSuperview()
+        scrollView.addSubview(childView)
     }
     
     private override func realize() -> RealizedElement {
         let realizedElement = super.realize()
         
         let scrollView = realizedElement.view as FewScrollView
-        let documentView = scrollView.subviews.first! as UIView
-        
-        let top = CGPointMake(0, documentView.bounds.size.height);
-        scrollView.contentOffset = top
+        if let element = children.first {
+            scrollView.contentSize = element.frame.size
+        }
         
         return realizedElement
     }
@@ -96,7 +94,7 @@ public class ScrollView_<LOL>: Component<CGRect> {
     public var elements: [Element]
     
     public init(_ elements: [Element]) {
-        self.elements = elements.reverse()
+        self.elements = elements
         super.init(initialState: CGRectZero, render: ScrollView_.render)
     }
     
