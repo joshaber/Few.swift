@@ -10,19 +10,25 @@ import UIKit
 
 public class Input: Element {
     public var text: String?
+    public var textColor: UIColor?
+    public var font: UIFont?
     public var initialText: String?
     public var placeholder: String?
     public var enabled: Bool
     public var secure: Bool
+    public var borderStyle: UITextBorderStyle
     
     private var trampoline = TargetActionTrampolineWithSender<UITextField>()
     
-    public init(text: String? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, action: String -> () = { _ in }) {
+    public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, action: String -> () = { _ in }, borderStyle: UITextBorderStyle = .None) {
         self.text = text
+        self.textColor = textColor
+        self.font = font
         self.initialText = initialText
         self.placeholder = placeholder
         self.enabled = enabled
         self.secure = secure
+        self.borderStyle = borderStyle
         trampoline.action = { textField in
             action(textField.text)
         }
@@ -59,17 +65,41 @@ public class Input: Element {
             if secure != textField.secureTextEntry {
                 textField.secureTextEntry = secure
             }
+            
+            if let font = font {
+                if font != textField.font {
+                    textField.font = font
+                }
+            }
+            
+            if let color = textColor {
+                if color != textField.textColor {
+                    textField.textColor = color
+                }
+            }
+            
+            if borderStyle != textField.borderStyle {
+                textField.borderStyle = borderStyle
+            }
         }
     }
     
     public override func createView() -> ViewType {
         let field = UITextField(frame: frame)
-        field.addTarget(trampoline.target, action: trampoline.selector, forControlEvents: UIControlEvents.EditingChanged)
+        field.addTarget(trampoline.target, action: trampoline.selector, forControlEvents: .EditingChanged)
         field.alpha = alpha
         field.hidden = hidden
         field.enabled = enabled
         field.placeholder = placeholder
         field.secureTextEntry = secure
+        field.text = text ?? initialText ?? ""
+        field.borderStyle = borderStyle
+        if let font = font {
+            field.font = font
+        }
+        if let color = textColor {
+            field.textColor = color
+        }
         return field
     }
 }
