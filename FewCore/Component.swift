@@ -234,19 +234,14 @@ public class Component<S>: Element {
 	}
 
 	final private func enqueueRender() {
-#if os(iOS)
-        render()
-#else
         if renderQueued { return }
     
         renderQueued = true
-    
-        let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
+        
+        atEndOfRunLoop {
             self.renderQueued = false
             self.render()
         }
-        CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
-#endif
 	}
 
 	/// Get the current state of the component.
