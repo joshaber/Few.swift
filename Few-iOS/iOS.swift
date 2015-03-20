@@ -20,5 +20,3 @@ internal func compareAndSetAlpha(view: UIView, alpha: CGFloat) {
 internal func configureViewToAutoresize(view: ViewType) {
 	view.autoresizingMask = .FlexibleWidth | .FlexibleHeight
 }
-
-internal let atEndOfRunLoop = NSOperationQueue.mainQueue().addOperationWithBlock
