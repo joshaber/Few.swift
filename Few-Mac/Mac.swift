@@ -24,3 +24,10 @@ internal func markNeedsDisplay(view: ViewType) {
 internal func configureViewToAutoresize(view: ViewType) {
 	view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 }
+
+internal func atEndOfRunLoop(f: () -> ()) {
+    let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
+        f()
+    }
+    CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
+}

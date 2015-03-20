@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0600"
+   LastUpgradeVersion = "0620"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,23 +14,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "889768A519AED92D00DD079B"
-               BuildableName = "FewDemo.app"
-               BlueprintName = "FewDemo"
+               BlueprintIdentifier = "888E59AC1A4684850062A36B"
+               BuildableName = "Few.framework"
+               BlueprintName = "Few-iOS"
                ReferencedContainer = "container:Few.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "889768B619AED92D00DD079B"
-               BuildableName = "FewDemoTests.xctest"
-               BlueprintName = "FewDemoTests"
+               BlueprintIdentifier = "A2FA88DF1AB33B4000561FBF"
+               BuildableName = "FewDemo-iOS.app"
+               BlueprintName = "FewDemo-iOS"
+               ReferencedContainer = "container:Few.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A2FA88F31AB33B4000561FBF"
+               BuildableName = "FewDemo-iOSTests.xctest"
+               BlueprintName = "FewDemo-iOSTests"
                ReferencedContainer = "container:Few.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +60,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "889768B619AED92D00DD079B"
-               BuildableName = "FewDemoTests.xctest"
-               BlueprintName = "FewDemoTests"
+               BlueprintIdentifier = "A2FA88F31AB33B4000561FBF"
+               BuildableName = "FewDemo-iOSTests.xctest"
+               BlueprintName = "FewDemo-iOSTests"
                ReferencedContainer = "container:Few.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -56,9 +70,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "889768A519AED92D00DD079B"
-            BuildableName = "FewDemo.app"
-            BlueprintName = "FewDemo"
+            BlueprintIdentifier = "A2FA88DF1AB33B4000561FBF"
+            BuildableName = "FewDemo-iOS.app"
+            BlueprintName = "FewDemo-iOS"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,13 +90,18 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "889768A519AED92D00DD079B"
-            BuildableName = "FewDemo.app"
-            BlueprintName = "FewDemo"
+            BlueprintIdentifier = "A2FA88DF1AB33B4000561FBF"
+            BuildableName = "FewDemo-iOS.app"
+            BlueprintName = "FewDemo-iOS"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
@@ -95,9 +114,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "889768A519AED92D00DD079B"
-            BuildableName = "FewDemo.app"
-            BlueprintName = "FewDemo"
+            BlueprintIdentifier = "A2FA88DF1AB33B4000561FBF"
+            BuildableName = "FewDemo-iOS.app"
+            BlueprintName = "FewDemo-iOS"
             ReferencedContainer = "container:Few.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

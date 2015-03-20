@@ -12,6 +12,29 @@ import Few
 enum ActiveComponent {
 	case Demo
 	case Converter
+    case Counter
+}
+
+let Counter: () -> Few.Component<Int> = {
+    return Component(initialState: 0) { component, count in
+        return View(
+            backgroundColor: NSColor.blueColor()
+            )
+            // The view itself should be centered.
+            .justification(.Center)
+            // The children should be centered in the view.
+            .childAlignment(.Center)
+            // Layout children in a column.
+            .direction(.Column)
+            .children([
+                Label("You've clicked \(count) times!"),
+                Button(title: "Click me!", action: {
+                    component.updateState { $0 + 1 }
+                })
+                    .margin(Edges(uniform: 10))
+                    .width(100),
+                ])
+    }
 }
 
 func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent) -> Element {
@@ -21,6 +44,8 @@ func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent
 		contentComponent = Demo()
 	case .Converter:
 		contentComponent = TemperatureConverter()
+    case .Counter:
+        contentComponent = Counter()
 	}
 
 	return Element()
@@ -41,7 +66,9 @@ func toggleDisplay(display: ActiveComponent) -> ActiveComponent {
 	case .Demo:
 		return .Converter
 	case .Converter:
-		return .Demo
+		return .Counter
+    case .Counter:
+        return .Demo
 	}
 }
 

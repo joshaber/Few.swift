@@ -97,7 +97,7 @@ public class Component<S>: Element {
 		newRoot.alpha = alpha
 		newRoot.selfAlignment = selfAlignment
 		newRoot.flex = flex
-
+        
 		let node = newRoot.assembleLayoutNode()
 		var layout: Layout!
 		if root {
@@ -234,15 +234,14 @@ public class Component<S>: Element {
 	}
 
 	final private func enqueueRender() {
-		if renderQueued { return }
-
-		renderQueued = true
-
-		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.Exit.rawValue, 0, 0) { _, _ in
-			self.renderQueued = false
-			self.render()
-		}
-		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
+        if renderQueued { return }
+    
+        renderQueued = true
+        
+        atEndOfRunLoop {
+            self.renderQueued = false
+            self.render()
+        }
 	}
 
 	/// Get the current state of the component.
