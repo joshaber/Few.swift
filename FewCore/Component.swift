@@ -237,11 +237,12 @@ public class Component<S>: Element {
         if renderQueued { return }
     
         renderQueued = true
-        
-        atEndOfRunLoop {
-            self.renderQueued = false
-            self.render()
-        }
+
+		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.BeforeWaiting.rawValue, 0, 0) { _, activity in
+			self.renderQueued = false
+			self.render()
+		}
+		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
 	}
 
 	/// Get the current state of the component.
