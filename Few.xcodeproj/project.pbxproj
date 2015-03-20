@@ -357,6 +357,7 @@
 				8897687219AED88000DD079B /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		8897687219AED88000DD079B /* Products */ = {
 			isa = PBXGroup;

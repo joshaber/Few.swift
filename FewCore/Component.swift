@@ -97,7 +97,7 @@ public class Component<S>: Element {
 		newRoot.alpha = alpha
 		newRoot.selfAlignment = selfAlignment
 		newRoot.flex = flex
-        
+
 		let node = newRoot.assembleLayoutNode()
 		var layout: Layout!
 		if root {
