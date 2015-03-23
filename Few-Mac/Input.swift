@@ -82,6 +82,8 @@ public class Input: Element {
 		field.stringValue = text ?? initialText ?? ""
 		field.delegate = inputDelegate
 		field.enabled = enabled
+		field.alphaValue = alpha
+		field.hidden = hidden
 
 		let cell = field.cell() as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
