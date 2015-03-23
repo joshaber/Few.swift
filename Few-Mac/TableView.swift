@@ -168,6 +168,8 @@ public class TableView: Element {
 		let scrollView = FewScrollView(frame: frame)
 		scrollView.hasVerticalScroller = true
 		scrollView.borderType = .BezelBorder
+		scrollView.alphaValue = alpha
+		scrollView.hidden = hidden
 
 		let tableView = NSTableView(frame: scrollView.bounds)
 

@@ -45,6 +45,8 @@ public class Image: Element {
 		view.animates = true
 		view.imageFrameStyle = .None
 		view.imageScaling = scaling
+		view.alphaValue = alpha
+		view.hidden = hidden
 		return view
 	}
 }

@@ -57,6 +57,8 @@ public class Label: Element {
 		field.bordered = false
 		field.font = DefaultLabelFont
 		field.attributedStringValue = attributedString
+		field.alphaValue = alpha
+		field.hidden = hidden
 		return field
 	}
 

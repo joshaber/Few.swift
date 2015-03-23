@@ -197,6 +197,8 @@ public class View: Element {
 		view.borderColor = borderColor
 		view.borderWidth = borderWidth
 		view.cornerRadius = cornerRadius
+		view.alphaValue = alpha
+		view.hidden = hidden
 		configEventHandlers(view)
 		return view
 	}

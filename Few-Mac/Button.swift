@@ -66,6 +66,8 @@ public class Button: Element {
 		button.target = trampoline
 		button.action = trampoline.selector
 		button.enabled = enabled
+		button.alphaValue = alpha
+		button.hidden = hidden
 		if isDefault { button.keyEquivalent = "\r" }
 		return button
 	}
