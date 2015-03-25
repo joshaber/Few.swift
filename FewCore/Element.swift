@@ -200,9 +200,13 @@ public class Element {
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
 	}
 
+	private final func verticallyFlippedEdges(edges: Edges) -> Edges {
+		return Edges(left: edges.left, right: edges.right, top: edges.bottom, bottom: edges.top)
+	}
+
 	internal var marginWithPlatformSpecificAdjustments: Edges {
 #if os(OSX)
-		return Edges(left: margin.left, right: margin.right, top: margin.bottom, bottom: margin.top)
+		return verticallyFlippedEdges(margin)
 #else
 		return margin
 #endif
@@ -210,7 +214,7 @@ public class Element {
 
 	internal var paddingWithPlatformSpecificAdjustments: Edges {
 #if os(OSX)
-		return Edges(left: padding.left, right: padding.right, top: padding.bottom, bottom: padding.top)
+		return verticallyFlippedEdges(padding)
 #else
 		return padding
 #endif
