@@ -91,12 +91,6 @@ public class Component<S>: Element {
 	final private func renderNewRoot() {
 		let newRoot = render(state)
 		newRoot.frame = frame
-		newRoot.margin = margin
-		newRoot.padding = padding
-		newRoot.hidden = hidden
-		newRoot.alpha = alpha
-		newRoot.selfAlignment = selfAlignment
-		newRoot.flex = flex
 
 		let node = newRoot.assembleLayoutNode()
 		var layout: Layout!

@@ -37,5 +37,7 @@ class CustomButton_<LOL>: Few.Component<Bool> {
 			.children([
 				Label(component.title, textColor: color).margin(Edges(uniform: 4))
 			])
+			.margin(c.margin)
+			.padding(c.padding)
 	}
 }
