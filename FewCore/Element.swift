@@ -196,7 +196,28 @@ public class Element {
 
 	internal func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
-		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
+
+		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
+	}
+
+	private final func verticallyFlippedEdges(edges: Edges) -> Edges {
+		return Edges(left: edges.left, right: edges.right, top: edges.bottom, bottom: edges.top)
+	}
+
+	internal var marginWithPlatformSpecificAdjustments: Edges {
+#if os(OSX)
+		return verticallyFlippedEdges(margin)
+#else
+		return margin
+#endif
+	}
+
+	internal var paddingWithPlatformSpecificAdjustments: Edges {
+#if os(OSX)
+		return verticallyFlippedEdges(padding)
+#else
+		return padding
+#endif
 	}
 
 	internal func applyLayout(layout: Layout) {

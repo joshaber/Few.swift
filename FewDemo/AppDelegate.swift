@@ -56,7 +56,7 @@ func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent
 			CustomButton(title: "Show me more!") {
 					component.updateState(toggleDisplay)
 				}
-				.margin(Edges(bottom: 20))
+				.margin(Edges(top: 20))
 		])
 }
 
