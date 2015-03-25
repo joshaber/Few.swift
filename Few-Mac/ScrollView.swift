@@ -98,7 +98,7 @@ private class ScrollViewContent: Element {
 
 	private override func assembleLayoutNode() -> Node {
 		let childNodes = layoutChildren.map { $0.assembleLayoutNode() }
-		return Node(size: frame.size, children: childNodes, direction: direction, margin: margin, padding: padding, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
+		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
 	}
 
 	private override func applyLayout(layout: Layout) {
