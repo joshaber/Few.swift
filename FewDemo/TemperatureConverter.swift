@@ -39,27 +39,34 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		])
 }
 
-private func render(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+private func parseFloat(str: String) -> CGFloat? {
 	let numberFormatter = NSNumberFormatter()
-	let parseNumber: String -> CGFloat? = { str in
-		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
-	}
-	return View()
-		.justification(.Center)
-		.childAlignment(.Center)
-		.direction(.Column)
-		.children([
-			renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", true) {
-				if let f = parseNumber($0) {
-					component.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
-				}
-			},
-			renderLabeledInput("Celcius", "\(state.celcius)", false) {
-				if let c = parseNumber($0) {
-					component.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
-				}
-			},
-		])
+	return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
 }
 
-let TemperatureConverter: () -> Few.Component<ConverterState> = { Component(initialState: ConverterState(), render: render) }
+typealias TemperatureConverter = TemperatureConverter_<ConverterState>
+class TemperatureConverter_<LOL>: Few.Component<ConverterState> {
+	init() {
+		super.init(initialState: ConverterState());
+	}
+
+	override func render() -> Element {
+		let state = getState()
+		return View()
+			.justification(.Center)
+			.childAlignment(.Center)
+			.direction(.Column)
+			.children([
+				renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", true) {
+					if let f = parseFloat($0) {
+						self.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
+					}
+				},
+				renderLabeledInput("Celcius", "\(state.celcius)", false) {
+					if let c = parseFloat($0) {
+						self.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
+					}
+				},
+			])
+	}
+}

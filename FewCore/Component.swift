@@ -65,7 +65,7 @@ public class Component<S>: Element {
 
 	// MARK: Lifecycle
 
-	public func render(state: S) -> Element {
+	public func render() -> Element {
 		if let renderFn = renderFn {
 			return renderFn(self, state)
 		} else {
@@ -73,7 +73,7 @@ public class Component<S>: Element {
 		}
 	}
 
-	final private func render() {
+	final private func renderSelf() {
 		if let rootElement = rootElement {
 			applyDiff(self, realizedSelf: nil)
 		}
@@ -89,7 +89,7 @@ public class Component<S>: Element {
 	}
 
 	final private func renderNewRoot() {
-		let newRoot = render(state)
+		let newRoot = render()
 		newRoot.frame = frame
 
 		let node = newRoot.assembleLayoutNode()
@@ -133,7 +133,7 @@ public class Component<S>: Element {
 	/// be performed at the end of the runloop. Instead it immediately 
 	/// re-renders.
 	final public func forceRender() {
-		render()
+		renderSelf()
 	}
 	
 	/// Called when the component will be realized and before the component is
@@ -237,7 +237,7 @@ public class Component<S>: Element {
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.BeforeWaiting.rawValue, 0, 0) { _, activity in
 			self.renderQueued = false
-			self.render()
+			self.renderSelf()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
 	}
