@@ -50,10 +50,6 @@ class TemperatureConverter_<LOL>: Few.Component<ConverterState> {
 		super.init(initialState: ConverterState());
 	}
 
-	deinit {
-		println()
-	}
-
 	override func render() -> Element {
 		let state = getState()
 		return View()
