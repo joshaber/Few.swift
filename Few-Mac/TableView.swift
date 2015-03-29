@@ -22,18 +22,18 @@ private class FewListCell: NSTableCellView {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
 				realizedElement.element.derealize()
-				realizedElement.view.removeFromSuperview()
+				realizedElement.view?.removeFromSuperview()
 
 				let newRealizedElement = element.realize()
-				newRealizedElement.view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-				newRealizedElement.view.frame = bounds
-				addSubview(newRealizedElement.view)
+				newRealizedElement.view?.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+				newRealizedElement.view?.frame = bounds
+				addSubview <^> newRealizedElement.view
 			}
 		} else {
 			let newRealizedElement = element.realize()
-			newRealizedElement.view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-			newRealizedElement.view.frame = bounds
-			addSubview(newRealizedElement.view)
+			newRealizedElement.view?.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+			newRealizedElement.view?.frame = bounds
+			addSubview <^> newRealizedElement.view
 
 			realizedElement = newRealizedElement
 		}

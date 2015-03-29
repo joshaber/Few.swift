@@ -34,17 +34,19 @@ public class Element {
 
 	// On OS X we have to reverse our children since the default coordinate 
 	// system is flipped.
-#if os(OSX)
 	public var children: [Element] {
 		didSet {
+#if os(OSX)
 			if direction == .Column {
 				children = children.reverse()
 			}
+#endif
+
+			for child in children {
+				child.parent = self
+			}
 		}
 	}
-#else
-	public var children: [Element]
-#endif
 
 #if os(OSX)
 	public var direction: Direction {
@@ -68,6 +70,8 @@ public class Element {
 
 	/// Should the input make itself the focus after it's been realized?
 	public var autofocus: Bool
+
+	public weak var parent: Element?
 
 	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, autofocus: Bool = false, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
@@ -165,14 +169,14 @@ public class Element {
 		println()
 	}
 
-	public func createView() -> ViewType {
-		return ViewType(frame: frame)
+	public func createView() -> ViewType? {
+		return nil
 	}
 
 	/// Realize the element.
 	internal func realize() -> RealizedElement {
 		let view = createView()
-		view.frame = frame.integerRect
+		view?.frame = frame.integerRect
 
 		let realizedSelf = RealizedElement(element: self, view: view)
 		let realizedChildren = children.map { $0.realize() }
@@ -183,8 +187,10 @@ public class Element {
 		return realizedSelf
 	}
 
-	internal func addRealizedChildView(childView: ViewType, selfView: ViewType) {
-		selfView.addSubview(childView)
+	internal func addRealizedChildView(childView: ViewType?, selfView: ViewType?) {
+		if let childView = childView {
+			selfView?.addSubview(childView)
+		}
 	}
 
 	/// Derealize the element.
@@ -240,9 +246,9 @@ public class Element {
 		}
 
 		if autofocus {
-			let window = realizedSelf.view.window!
+			let window = realizedSelf.view?.window!
 #if os(OSX)
-			window.makeFirstResponder(realizedSelf.view)
+			window?.makeFirstResponder(realizedSelf.view)
 #else
 			realizedSelf.view.becomeFirstResponder()
 #endif

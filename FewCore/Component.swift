@@ -84,7 +84,7 @@ public class Component<S>: Element {
 
 		configureViewToAutoresize(realized.view)
 
-		realizedRoot?.view.removeFromSuperview()
+		realizedRoot?.view?.removeFromSuperview()
 		realizedRoot = realized
 	}
 
@@ -112,11 +112,11 @@ public class Component<S>: Element {
 			if newRoot.canDiff(rootElement) {
 				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				let superview = realizedRoot!.view.superview!
+				let superview = realizedRoot!.view!.superview!
 				rootElement.derealize()
 
 				realizeNewRoot(newRoot)
-				superview.addSubview(realizedRoot!.view)
+				superview.addSubview(realizedRoot!.view!)
 
 				newRoot.elementDidRealize(realizedRoot!)
 			}
@@ -171,12 +171,15 @@ public class Component<S>: Element {
 		frame = hostView.bounds
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		hostView.addSubview(realizedRoot!.view)
+
+		assert(realizedRoot!.view != nil, "\(self) doesn't realize to a view!")
+		hostView.addSubview(realizedRoot!.view!)
+
 		rootElement?.elementDidRealize(realizedRoot!)
 
 #if os(OSX)
 		hostView.postsFrameChangedNotifications = true
-		realizedRoot!.view.autoresizesSubviews = false
+		realizedRoot!.view?.autoresizesSubviews = false
 
 		frameChangedTrampoline.action = { [weak self] in
 			if let strongSelf = self {
@@ -312,7 +315,7 @@ public class Component<S>: Element {
 		rootElement?.derealize()
 		rootElement = nil
 
-		realizedRoot?.view.removeFromSuperview()
+		realizedRoot?.view?.removeFromSuperview()
 		realizedRoot = nil
 
 		componentDidDerealize()

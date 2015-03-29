@@ -64,7 +64,7 @@ private class ScrollViewElement: Element {
 		return view
 	}
 
-	private override func addRealizedChildView(childView: ViewType, selfView: ViewType) {
+	private override func addRealizedChildView(childView: ViewType?, selfView: ViewType?) {
 		let scrollVew = selfView as FewScrollView
 		scrollVew.scrollView.documentView = childView
 	}
