@@ -15,27 +15,6 @@ enum ActiveComponent {
 	case Counter
 }
 
-let Counter: () -> Few.Component<Int> = {
-	return Component(initialState: 0) { component, count in
-		return View(
-			backgroundColor: NSColor.blueColor())
-			// The view itself should be centered.
-			.justification(.Center)
-			// The children should be centered in the view.
-			.childAlignment(.Center)
-			// Layout children in a column.
-			.direction(.Column)
-			.children([
-				Label("You've clicked \(count) times!"),
-				Button(title: "Click me!", action: {
-						component.updateState { $0 + 1 }
-					})
-					.margin(Edges(uniform: 10))
-					.width(100),
-				])
-    }
-}
-
 func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent) -> Element {
 	var contentComponent: Element!
 	switch state {

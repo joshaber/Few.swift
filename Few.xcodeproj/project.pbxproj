@@ -47,6 +47,7 @@
 		88D47F201A9BAE96006E007F /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D47F1F1A9BAE96006E007F /* SwiftBox.framework */; };
 		88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA371A1A86A03F002281F4 /* ScrollView.swift */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
+		88E4F88B1AC79707006FED1F /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E4F88A1AC79707006FED1F /* Counter.swift */; };
 		A2B9C7481AB387F7002648DA /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7471AB387F7002648DA /* TableView.swift */; };
 		A2B9C7501AB390B3002648DA /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C74F1AB390B3002648DA /* Image.swift */; };
 		A2B9C7521AB3924D002648DA /* Apple_Swift_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */; };
@@ -222,6 +223,7 @@
 		88D47F1F1A9BAE96006E007F /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwiftBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88DA371A1A86A03F002281F4 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
+		88E4F88A1AC79707006FED1F /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		A2B9C7471AB387F7002648DA /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		A2B9C74F1AB390B3002648DA /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Apple_Swift_Logo.png; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 			children = (
 				88BEF38D19AED9D5009197F0 /* MyPlayground.playground */,
 				889768AC19AED92D00DD079B /* AppDelegate.swift */,
+				88E4F88A1AC79707006FED1F /* Counter.swift */,
 				88102D3E1AAFD2AF003C8B7F /* TemperatureConverter.swift */,
 				88102D461AAFD3C9003C8B7F /* Demo.swift */,
 				880E4AFC1AA2A4A40080F3BF /* CustomButton.swift */,
@@ -806,6 +809,7 @@
 			files = (
 				889768AD19AED92D00DD079B /* AppDelegate.swift in Sources */,
 				88102D471AAFD3C9003C8B7F /* Demo.swift in Sources */,
+				88E4F88B1AC79707006FED1F /* Counter.swift in Sources */,
 				88102D3F1AAFD2AF003C8B7F /* TemperatureConverter.swift in Sources */,
 				889768AB19AED92D00DD079B /* main.swift in Sources */,
 				880E4AFD1AA2A4A40080F3BF /* CustomButton.swift in Sources */,
