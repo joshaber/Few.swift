@@ -110,15 +110,20 @@ private func renderThingy(count: Int) -> Element {
 	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
-private func render(component: Few.Component<()>, state: ()) -> Element {
-	return View()
-		.justification(.Center)
-		.childAlignment(.Center)
-		.direction(.Column)
-		.children([
-			renderLogin(),
-			renderScrollView().size(100, 100),
-		])
-}
+typealias Demo = Demo_<()>
+class Demo_<LOL>: Few.Component<()> {
+	init() {
+		super.init(initialState: ())
+	}
 
-let Demo: () -> Few.Component<()> = { Component(initialState: (), render: render) }
+	override func render() -> Element {
+		return View()
+			.justification(.Center)
+			.childAlignment(.Center)
+			.direction(.Column)
+			.children([
+				renderLogin(),
+				renderScrollView().size(100, 100),
+			])
+	}
+}

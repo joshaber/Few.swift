@@ -17,27 +17,27 @@ class CustomButton_<LOL>: Few.Component<Bool> {
 	init(title: String, action: () -> () = { }) {
 		self.title = title
 		self.action = action
-		super.init(initialState: false, render: CustomButton_.render)
+		super.init(initialState: false)
 	}
 
-	class func render(c: Few.Component<Bool>, active: Bool) -> Element {
-		let component = c as CustomButton
+	override func render() -> Element {
+		let active = getState()
 		let color = (active ? NSColor.greenColor() : NSColor.blackColor())
 		return View(
 			borderColor: color,
 			cornerRadius: 4,
 			backgroundColor: .whiteColor(),
 			borderWidth: 1,
-			mouseDown: { _ in component.updateState(const(true)) },
+			mouseDown: { _ in self.updateState(const(true)) },
 			mouseUp: { _ in
-				component.updateState(const(false))
-				component.action()
+				self.updateState(const(false))
+				self.action()
 			},
-			mouseExited: { _ in component.updateState(const(false)) })
+			mouseExited: { _ in self.updateState(const(false)) })
 			.children([
-				Label(component.title, textColor: color).margin(Edges(uniform: 4))
+				Label(title, textColor: color).margin(Edges(uniform: 4))
 			])
-			.margin(c.margin)
-			.padding(c.padding)
+			.margin(margin)
+			.padding(padding)
 	}
 }
