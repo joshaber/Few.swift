@@ -12,8 +12,12 @@ import Few
 struct ConverterState {
 	static let defaultFahrenheit: CGFloat = 32
 
-	let fahrenheit = defaultFahrenheit
-	let celcius = f2c(defaultFahrenheit)
+	let fahrenheit: CGFloat
+	let celcius: CGFloat
+	init(fahrenheit: CGFloat = defaultFahrenheit, celcius: CGFloat = f2c(defaultFahrenheit)) {
+		self.fahrenheit = fahrenheit
+		self.celcius = celcius
+	}
 }
 
 private func c2f(c: CGFloat) -> CGFloat {

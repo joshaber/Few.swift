@@ -15,6 +15,6 @@ extension Element {
 	}
 
 	public var ql: ViewType {
-		return debugQuickLookObject()! as ViewType
+		return debugQuickLookObject()! as! ViewType
 	}
 }
