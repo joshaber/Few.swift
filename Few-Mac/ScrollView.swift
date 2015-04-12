@@ -65,15 +65,15 @@ private class ScrollViewElement: Element {
 	}
 
 	private override func addRealizedChildView(childView: ViewType, selfView: ViewType) {
-		let scrollVew = selfView as FewScrollView
+		let scrollVew = selfView as! FewScrollView
 		scrollVew.scrollView.documentView = childView
 	}
 
 	private override func realize() -> RealizedElement {
 		let realizedElement = super.realize()
 
-		let scrollView = realizedElement.view as FewScrollView
-		let documentView = scrollView.scrollView.documentView as NSView
+		let scrollView = realizedElement.view as! FewScrollView
+		let documentView = scrollView.scrollView.documentView as! NSView
 
 		let top = CGPointMake(0, documentView.bounds.size.height);
 		documentView.scrollPoint(top)
@@ -84,7 +84,7 @@ private class ScrollViewElement: Element {
 	private override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		let scrollView = realizedSelf?.view as FewScrollView
+		let scrollView = realizedSelf?.view as! FewScrollView
 		scrollView.didScroll = didScroll
 	}
 }
@@ -120,7 +120,7 @@ public class ScrollView_<LOL>: Component<CGRect> {
 	}
 
 	private class func render(c: Component<CGRect>, visibleRect: CGRect) -> Element {
-		let component = c as ScrollView_
+		let component = c as! ScrollView_
 
 		let visibleElements = component.calculateVisibleElements(visibleRect)
 

@@ -11,8 +11,12 @@ import Few
 import AppKit
 
 struct LoginState {
-	let username: String = ""
-	let password: String = ""
+	let username: String
+	let password: String
+	init(username: String = "", password: String = "") {
+		self.username = username
+		self.password = password
+	}
 }
 
 private func renderInput(component: Few.Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
@@ -37,8 +41,12 @@ private func renderInput(component: Few.Component<LoginState>, label: String, se
 }
 
 struct ScrollViewState {
-	let selectedRow: Int? = nil
-	let items: [Int] = Array(1...100)
+	let selectedRow: Int?
+	let items: [Int]
+	init(items: [Int] = Array(1...100), selectedRow: Int? = nil) {
+		self.items = items
+		self.selectedRow = selectedRow
+	}
 }
 
 private func keyDown(event: NSEvent, component: Few.Component<ScrollViewState>) -> Bool {
@@ -91,7 +99,7 @@ private func renderLogin() -> Element {
 		return Element()
 			.direction(.Column)
 			.children([
-				renderThingy(state.username.utf16Count),
+				renderThingy(count(state.username.utf16)),
 				renderInput(component, "Username", false) {
 					LoginState(username: $1, password: $0.password)
 				},

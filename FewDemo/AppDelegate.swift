@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	private let appComponent = Component(initialState: .Converter, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
-		let contentView = window.contentView as NSView
+		let contentView = window.contentView as! NSView
 		appComponent.addToView(contentView)
 	}
 }

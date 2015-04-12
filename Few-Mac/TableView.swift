@@ -85,7 +85,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		let element = elements[row]
 
 		let key = "ListCell"
-		var listCell = tableView.makeViewWithIdentifier(key, owner: nil) as FewListCell?
+		var listCell = tableView.makeViewWithIdentifier(key, owner: nil) as! FewListCell?
 		if listCell == nil {
 			let newListCell = FewListCell(frame: CGRectZero)
 			newListCell.identifier = key
