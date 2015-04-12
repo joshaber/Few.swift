@@ -17,7 +17,7 @@ class DiffTests: QuickSpec {
 			let view = button.realize()
 			let realizedButton = RealizedElement(element: button, children: [], view: view)
 
-			let label = Label(text: "Hey")
+			let label = Label("Hey")
 
 			it("should detect simple diffing") {
 				let diff = diffElementLists([realizedButton], [button])
@@ -51,8 +51,8 @@ class DiffTests: QuickSpec {
 				let labelView = label.realize()
 				let realizedLabel = RealizedElement(element: label, children: [], view: labelView)
 
-				let newLabel = Label(text: "No.").key("key")
-
+				let newLabel = Label("No.")
+				newLabel.key = "key"
 				let diff = diffElementLists([realizedButton, realizedLabel], [button, newLabel, label])
 				expect(diff.add.count).to(equal(1))
 				expect(diff.remove.count).to(equal(0))

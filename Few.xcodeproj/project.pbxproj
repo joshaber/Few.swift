@@ -149,6 +149,20 @@
 			remoteGlobalIDString = 8897687019AED88000DD079B;
 			remoteInfo = Few;
 		};
+		88B91F6B1ADA1D09003923C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DA5663E81A4C8D8500193C88;
+			remoteInfo = "QuickFocused-OSXTests";
+		};
+		88B91F6D1ADA1D09003923C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 884CBA031A263BF400EDE9B2 /* Quick.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DA9876B21A4C70EB0004AA17;
+			remoteInfo = "QuickFocused-iOSTests";
+		};
 		A2FA890F1AB33BA500561FBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8897686819AED88000DD079B /* Project object */;
@@ -288,8 +302,10 @@
 			children = (
 				884CBA0B1A263BF400EDE9B2 /* Quick.framework */,
 				884CBA0D1A263BF400EDE9B2 /* Quick-OSXTests.xctest */,
+				88B91F6C1ADA1D09003923C9 /* QuickFocused-OSXTests.xctest */,
 				884CBA0F1A263BF400EDE9B2 /* Quick.framework */,
 				884CBA111A263BF400EDE9B2 /* Quick-iOSTests.xctest */,
+				88B91F6E1ADA1D09003923C9 /* QuickFocused-iOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -300,7 +316,7 @@
 				884CBA1A1A263C0600EDE9B2 /* Nimble.framework */,
 				884CBA1C1A263C0600EDE9B2 /* NimbleTests.xctest */,
 				884CBA1E1A263C0600EDE9B2 /* Nimble.framework */,
-				884CBA201A263C0600EDE9B2 /* Nimble-OSXTests.xctest */,
+				884CBA201A263C0600EDE9B2 /* NimbleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -695,11 +711,25 @@
 			remoteRef = 884CBA1D1A263C0600EDE9B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		884CBA201A263C0600EDE9B2 /* Nimble-OSXTests.xctest */ = {
+		884CBA201A263C0600EDE9B2 /* NimbleTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Nimble-OSXTests.xctest";
+			path = NimbleTests.xctest;
 			remoteRef = 884CBA1F1A263C0600EDE9B2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		88B91F6C1ADA1D09003923C9 /* QuickFocused-OSXTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "QuickFocused-OSXTests.xctest";
+			remoteRef = 88B91F6B1ADA1D09003923C9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		88B91F6E1ADA1D09003923C9 /* QuickFocused-iOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "QuickFocused-iOSTests.xctest";
+			remoteRef = 88B91F6D1ADA1D09003923C9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -890,7 +920,6 @@
 				);
 				INFOPLIST_FILE = "Few-iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = Few;
 				SDKROOT = iphoneos;
@@ -911,7 +940,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Few-iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = Few;
 				SDKROOT = iphoneos;
@@ -955,6 +983,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -993,6 +1022,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1111,7 +1141,6 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "FewDemo-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1128,7 +1157,6 @@
 				COPY_PHASE_STRIP = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "FewDemo-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

@@ -59,7 +59,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
     
     // MARK: NSTableViewDelegate
     
-    private func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let element = elements[indexPath.row]
         
         let key = "ListCell"
@@ -71,20 +71,20 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
         return listCell ?? UITableViewCell()
     }
     
-    private func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    @objc func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let height = elements[indexPath.row].frame.height
         return height > CGFloat(0) ? height : defaultRowHeight
     }
     
-    private func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    private func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return elements.count
     }
-    
-    private func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+	
+	@objc func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         selectionChanged?(indexPath.row)
     }
 }
