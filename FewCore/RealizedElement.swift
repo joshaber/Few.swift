@@ -21,9 +21,9 @@ internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 
 public class RealizedElement {
 	public var element: Element
-	public let view: ViewType?
-	public weak var parent: RealizedElement?
+	public var view: ViewType?
 	internal var children: [RealizedElement] = []
+	public weak var parent: RealizedElement?
 
 	public init(element: Element, view: ViewType?) {
 		self.element = element
@@ -39,44 +39,33 @@ public class RealizedElement {
 			children.append(child)
 		}
 
-		var hostView = view
-		if hostView == nil {
-			hostView = findParentWithView()?.view
-			if let childView = child.view {
-				child.view?.frame = frameRelativeToParent(self, frame: childView.frame)
-			}
-		}
-
-		element.addRealizedChildView(child.view, selfView: hostView)
+		addRealizedViewForChild(child)
 	}
 
-	public func removeRealizedChild(child: RealizedElement) {
-		child.parent = nil
-		child.view?.removeFromSuperview()
+	public func addRealizedViewForChild(child: RealizedElement) {
+		if let childView = child.view {
+			view?.addSubview(childView)
+		}
+	}
 
+	public func remove() {
+		for child in children {
+			child.remove()
+		}
+
+		view?.removeFromSuperview()
+		element.derealize()
+
+		if let parent = parent {
+			parent.removeRealizedChild(self)
+		}
+
+		parent = nil
+	}
+
+	private func removeRealizedChild(child: RealizedElement) {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
 		}
-	}
-
-	public func findParentWithView() -> RealizedElement? {
-		var currentParent = parent
-		while currentParent != nil {
-			if currentParent?.view != nil { return currentParent }
-			currentParent = currentParent?.parent
-		}
-
-		return nil
-	}
-
-	public func frameRelativeToParent(destinationParent: RealizedElement, frame: CGRect) -> CGRect {
-		var currentParent = parent
-		var translatedFrame = frame
-		while currentParent !== destinationParent {
-			translatedFrame.origin.x += currentParent?.element.frame.origin.x ?? 0
-			translatedFrame.origin.y += currentParent?.element.frame.origin.y ?? 0
-		}
-
-		return translatedFrame
 	}
 }

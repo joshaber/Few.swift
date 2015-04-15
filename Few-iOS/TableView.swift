@@ -21,16 +21,16 @@ private class FewListCell: UITableViewCell {
                 element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
             } else {
                 realizedElement.element.derealize()
-                realizedElement.view.removeFromSuperview()
+                realizedElement.view?.removeFromSuperview()
                 
                 let newRealizedElement = element.realize()
-                newRealizedElement.view.frame = bounds
-                addSubview(newRealizedElement.view)
+                newRealizedElement.view?.frame = bounds
+                addSubview <^> newRealizedElement.view
             }
         } else {
             let newRealizedElement = element.realize()
-            newRealizedElement.view.frame = bounds
-            addSubview(newRealizedElement.view)
+            newRealizedElement.view?.frame = bounds
+            addSubview <^> newRealizedElement.view
             
             realizedElement = newRealizedElement
         }

@@ -48,6 +48,13 @@ private class FewScrollView: NSView {
 	}
 }
 
+private class RealizedScrollViewElement: RealizedElement {
+	private override func addRealizedViewForChild(child: RealizedElement) {
+		let scrollVew = view as! FewScrollView
+		scrollVew.scrollView.documentView = child.view
+	}
+}
+
 private class ScrollViewElement: Element {
 	private let didScroll: CGRect -> ()
 
@@ -64,13 +71,12 @@ private class ScrollViewElement: Element {
 		return view
 	}
 
-	private override func addRealizedChildView(childView: ViewType?, selfView: ViewType?) {
-		let scrollVew = selfView as! FewScrollView
-		scrollVew.scrollView.documentView = childView
+	private override func createRealizedElement(view: ViewType?) -> RealizedElement {
+		return RealizedScrollViewElement(element: self, view: view)
 	}
 
-	private override func realize() -> RealizedElement {
-		let realizedElement = super.realize()
+	private override func realize(parent: RealizedElement?) -> RealizedElement {
+		let realizedElement = super.realize(parent)
 
 		let scrollView = realizedElement.view as! FewScrollView
 		let documentView = scrollView.scrollView.documentView as! NSView

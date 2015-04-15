@@ -29,6 +29,14 @@ private class FewScrollView: UIScrollView, UIScrollViewDelegate {
     }
 }
 
+private class RealizedScrollViewElement: RealizedElement {
+	private override func addRealizedViewForChild(child: RealizedElement) {
+		let scrollView = view as! FewScrollView
+		scrollView.subviews.first?.removeFromSuperview()
+		scrollView.addSubview <^> child.view
+	}
+}
+
 private class ScrollViewElement: Element {
     private let didScroll: CGRect -> ()
     
@@ -41,12 +49,10 @@ private class ScrollViewElement: Element {
     private override func createView() -> ViewType {
         return FewScrollView(frame: frame, didScroll: didScroll)
     }
-    
-    private override func addRealizedChildView(childView: ViewType, selfView: ViewType) {
-        let scrollView = selfView as! FewScrollView
-        scrollView.subviews.first?.removeFromSuperview()
-        scrollView.addSubview(childView)
-    }
+
+	private override func createRealizedElement(view: ViewType?) -> RealizedElement {
+		return RealizedScrollViewElement(element: self, view: view)
+	}
     
     private override func realize() -> RealizedElement {
         let realizedElement = super.realize()

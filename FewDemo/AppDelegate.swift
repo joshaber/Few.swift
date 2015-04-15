@@ -26,7 +26,7 @@ func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent
 		contentComponent = Counter()
 	}
 
-	return Element()
+	return View()
 		.justification(.Center)
 		.childAlignment(.Center)
 		.direction(.Column)

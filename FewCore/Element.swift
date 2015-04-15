@@ -41,10 +41,6 @@ public class Element {
 				children = children.reverse()
 			}
 #endif
-
-			for child in children {
-				child.parent = self
-			}
 		}
 	}
 
@@ -70,8 +66,6 @@ public class Element {
 
 	/// Should the input make itself the focus after it's been realized?
 	public var autofocus: Bool
-
-	public weak var parent: Element?
 
 	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, autofocus: Bool = false, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
 		self.frame = frame
@@ -123,8 +117,8 @@ public class Element {
 			compareAndSetAlpha(view, alpha)
 		}
 
-		if frame != old.frame {
-			view?.frame = frame.integerRect
+		if viewFrame != old.viewFrame {
+			view?.frame = viewFrame
 		}
 
 		realizedSelf?.element = self
@@ -137,14 +131,13 @@ public class Element {
 			}
 
 			for child in childrenDiff.remove {
-				child.element.derealize()
-				realizedSelf.removeRealizedChild(child)
+				child.remove()
 			}
 
 			for child in childrenDiff.add {
-				let realizedChild = child.realize()
+				let realizedChild = child.realize(realizedSelf)
 				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
-				child.elementDidRealize(realizedChild)
+//				child.elementDidRealize(realizedChild)
 			}
 
 			for child in childrenDiff.diff {
@@ -154,6 +147,8 @@ public class Element {
 	}
 
 	private final func printChildDiff(diff: ElementListDiff, old: Element) {
+		if old.children.count == 0 && children.count == 0 { return }
+
 		println("**** old: \(old.children)")
 		println("**** new: \(children)")
 
@@ -164,7 +159,7 @@ public class Element {
 		}
 		println("**** diffing \(diffs)")
 
-		println("**** removing \(diff.remove)")
+		println("**** removing \(diff.remove.map { $0.element })")
 		println("**** adding \(diff.add)")
 		println()
 	}
@@ -173,24 +168,26 @@ public class Element {
 		return nil
 	}
 
-	/// Realize the element.
-	internal func realize() -> RealizedElement {
-		let view = createView()
-		view?.frame = frame.integerRect
+	var viewFrame: CGRect {
+		return frame.integerRect
+	}
 
-		let realizedSelf = RealizedElement(element: self, view: view)
-		let realizedChildren = children.map { $0.realize() }
+	public func createRealizedElement(view: ViewType?) -> RealizedElement {
+		return RealizedElement(element: self, view: view)
+	}
+
+	/// Realize the element.
+	internal func realize(parent: RealizedElement?) -> RealizedElement {
+		let view = createView()
+		view?.frame = viewFrame
+
+		let realizedSelf = createRealizedElement(view)
+		let realizedChildren = children.map { $0.realize(realizedSelf) }
 		for child in realizedChildren {
 			realizedSelf.addRealizedChild(child, index: nil)
 		}
 
 		return realizedSelf
-	}
-
-	internal func addRealizedChildView(childView: ViewType?, selfView: ViewType?) {
-		if let childView = childView {
-			selfView?.addSubview(childView)
-		}
 	}
 
 	/// Derealize the element.
@@ -250,7 +247,7 @@ public class Element {
 #if os(OSX)
 			window?.makeFirstResponder(realizedSelf.view)
 #else
-			realizedSelf.view.becomeFirstResponder()
+			realizedSelf.view?.becomeFirstResponder()
 #endif
 		}
 	}

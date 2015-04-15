@@ -40,6 +40,8 @@ public class Component<S>: Element {
 	/// Is the component a root?
 	private var root = false
 
+	private var parent: RealizedElement?
+
 	private var frameChangedTrampoline = TargetActionTrampoline()
 
 	/// Initializes the component with its initial state. The render function
@@ -79,13 +81,35 @@ public class Component<S>: Element {
 		}
 	}
 
+	final private func assembleNewViewHierarchy(root: RealizedElement, parentView: ViewType?, offset: CGPoint = CGPointZero) {
+		if parentView == nil && root.view == nil {
+			println("creating view for \(self)")
+			root.view = ViewType(frame: root.element.viewFrame)
+		} else if parentView != nil {
+			root.view?.frame.origin.x += offset.x
+			root.view?.frame.origin.y += offset.y
+			parentView!.addSubview <^> root.view
+		}
+
+		for child in root.children {
+			var parentViewForChild = root.view ?? parentView
+			var offset = (root.view != nil ? CGPointZero : CGPoint(x: offset.x + root.element.frame.origin.x, y: offset.y + root.element.frame.origin.y))
+			assembleNewViewHierarchy(child, parentView: parentViewForChild, offset: offset)
+		}
+	}
+
+	final private func assembleViewHierarchy(parent: RealizedElement?) {
+		assembleNewViewHierarchy(realizedRoot!, parentView: parent?.view)
+	}
+
 	final private func realizeNewRoot(newRoot: Element) {
-		let realized = newRoot.realize()
+		let realized = newRoot.realize(parent)
 
 		configureViewToAutoresize(realized.view)
 
-		realizedRoot?.view?.removeFromSuperview()
 		realizedRoot = realized
+
+		assembleViewHierarchy(parent)
 	}
 
 	final private func renderNewRoot() {
@@ -112,13 +136,13 @@ public class Component<S>: Element {
 			if newRoot.canDiff(rootElement) {
 				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				let superview = realizedRoot!.view!.superview!
-				rootElement.derealize()
+				let hostView = realizedRoot!.view!.superview!
+				realizedRoot?.remove()
 
 				realizeNewRoot(newRoot)
-				superview.addSubview(realizedRoot!.view!)
+				hostView.addSubview(realizedRoot!.view!)
 
-				newRoot.elementDidRealize(realizedRoot!)
+//				newRoot.elementDidRealize(realizedRoot!)
 			}
 
 			componentDidRender()
@@ -175,7 +199,7 @@ public class Component<S>: Element {
 		assert(realizedRoot!.view != nil, "\(self) doesn't realize to a view!")
 		hostView.addSubview(realizedRoot!.view!)
 
-		rootElement?.elementDidRealize(realizedRoot!)
+//		rootElement?.elementDidRealize(realizedRoot!)
 
 #if os(OSX)
 		hostView.postsFrameChangedNotifications = true
@@ -303,9 +327,12 @@ public class Component<S>: Element {
 		renderNewRoot()
 	}
 	
-	public override func realize() -> RealizedElement {
+	public override func realize(parent: RealizedElement?) -> RealizedElement {
+		self.parent = parent
+
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
+		// TODO: What if we use a nil view here?
 		return RealizedElement(element: self, view: realizedRoot!.view)
 	}
 
@@ -315,8 +342,10 @@ public class Component<S>: Element {
 		rootElement?.derealize()
 		rootElement = nil
 
-		realizedRoot?.view?.removeFromSuperview()
+		realizedRoot?.remove()
 		realizedRoot = nil
+
+		parent = nil
 
 		componentDidDerealize()
 	}

@@ -24,13 +24,13 @@ private class FewListCell: NSTableCellView {
 				realizedElement.element.derealize()
 				realizedElement.view?.removeFromSuperview()
 
-				let newRealizedElement = element.realize()
+				let newRealizedElement = element.realize(nil)
 				newRealizedElement.view?.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 				newRealizedElement.view?.frame = bounds
 				addSubview <^> newRealizedElement.view
 			}
 		} else {
-			let newRealizedElement = element.realize()
+			let newRealizedElement = element.realize(nil)
 			newRealizedElement.view?.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
 			newRealizedElement.view?.frame = bounds
 			addSubview <^> newRealizedElement.view
