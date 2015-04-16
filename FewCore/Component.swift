@@ -14,6 +14,17 @@ import SwiftBox
 import AppKit
 #endif
 
+public class RealizedComponent<S>: RealizedElement {
+	public init(component: Component<S>, view: ViewType?) {
+		super.init(element: component, view: view)
+	}
+
+	public override func assembleNewViewHierarchy(parentView: ViewType?, offset: CGPoint) {
+		let c = element as! Component<S>
+		c.realizedRoot?.assembleNewViewHierarchy(parentView, offset: offset)
+	}
+}
+
 /// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
 ///
@@ -81,35 +92,12 @@ public class Component<S>: Element {
 		}
 	}
 
-	final private func assembleNewViewHierarchy(root: RealizedElement, parentView: ViewType?, offset: CGPoint = CGPointZero) {
-		if parentView == nil && root.view == nil {
-			println("creating view for \(self)")
-			root.view = ViewType(frame: root.element.viewFrame)
-		} else if parentView != nil {
-			root.view?.frame.origin.x += offset.x
-			root.view?.frame.origin.y += offset.y
-			parentView!.addSubview <^> root.view
-		}
-
-		for child in root.children {
-			var parentViewForChild = root.view ?? parentView
-			var offset = (root.view != nil ? CGPointZero : CGPoint(x: offset.x + root.element.frame.origin.x, y: offset.y + root.element.frame.origin.y))
-			assembleNewViewHierarchy(child, parentView: parentViewForChild, offset: offset)
-		}
-	}
-
-	final private func assembleViewHierarchy(parent: RealizedElement?) {
-		assembleNewViewHierarchy(realizedRoot!, parentView: parent?.view)
-	}
-
 	final private func realizeNewRoot(newRoot: Element) {
 		let realized = newRoot.realize(parent)
 
 		configureViewToAutoresize(realized.view)
 
 		realizedRoot = realized
-
-		assembleViewHierarchy(parent)
 	}
 
 	final private func renderNewRoot() {
@@ -195,6 +183,7 @@ public class Component<S>: Element {
 		frame = hostView.bounds
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
+		realizedRoot?.assembleNewViewHierarchy(hostView)
 
 		assert(realizedRoot!.view != nil, "\(self) doesn't realize to a view!")
 		hostView.addSubview(realizedRoot!.view!)
@@ -332,8 +321,7 @@ public class Component<S>: Element {
 
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		// TODO: What if we use a nil view here?
-		return RealizedElement(element: self, view: realizedRoot!.view)
+		return RealizedComponent(component: self, view: nil)
 	}
 
 	public override func derealize() {

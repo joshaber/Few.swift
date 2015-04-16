@@ -42,9 +42,15 @@ public class RealizedElement {
 		addRealizedViewForChild(child)
 	}
 
+	public func parentViewWithView() -> ViewType? {
+		if view != nil { return view }
+
+		return parent?.parentViewWithView()
+	}
+
 	public func addRealizedViewForChild(child: RealizedElement) {
 		if let childView = child.view {
-			view?.addSubview(childView)
+			child.assembleNewViewHierarchy(parentViewWithView())
 		}
 	}
 
@@ -66,6 +72,23 @@ public class RealizedElement {
 	private func removeRealizedChild(child: RealizedElement) {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
+		}
+	}
+
+	public func assembleNewViewHierarchy(parentView: ViewType?, offset: CGPoint = CGPointZero) {
+		if parentView == nil && view == nil {
+			println("creating view for \(element)")
+			view = ViewType(frame: element.viewFrame)
+		} else if parentView != nil {
+			view?.frame.origin.x += offset.x
+			view?.frame.origin.y += offset.y
+			parentView!.addSubview <^> view
+		}
+
+		for child in children {
+			var parentViewForChild = view ?? parentView
+			var offset = (view != nil ? CGPointZero : CGPoint(x: offset.x + element.frame.origin.x, y: offset.y + element.frame.origin.y))
+			child.assembleNewViewHierarchy(parentViewForChild, offset: offset)
 		}
 	}
 }
