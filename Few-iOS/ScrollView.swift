@@ -54,8 +54,8 @@ private class ScrollViewElement: Element {
 		return RealizedScrollViewElement(element: self, view: view)
 	}
     
-    private override func realize() -> RealizedElement {
-        let realizedElement = super.realize()
+	private override func realize(parent: RealizedElement?) -> RealizedElement {
+        let realizedElement = super.realize(parent)
         
         let scrollView = realizedElement.view as! FewScrollView
         if let element = children.first {

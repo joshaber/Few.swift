@@ -23,12 +23,12 @@ private class FewListCell: UITableViewCell {
                 realizedElement.element.derealize()
                 realizedElement.view?.removeFromSuperview()
                 
-                let newRealizedElement = element.realize()
+                let newRealizedElement = element.realize(nil)
                 newRealizedElement.view?.frame = bounds
                 addSubview <^> newRealizedElement.view
             }
         } else {
-            let newRealizedElement = element.realize()
+            let newRealizedElement = element.realize(nil)
             newRealizedElement.view?.frame = bounds
             addSubview <^> newRealizedElement.view
             
