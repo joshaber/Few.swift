@@ -174,8 +174,7 @@ public class Component<S>: Element {
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
 
-		assert(realizedRoot!.view != nil, "\(self) doesn't realize to a view!")
-		hostView.addSubview(realizedRoot!.view!)
+		hostView.addSubview <^> realizedRoot?.view
 
 //		rootElement?.elementDidRealize(realizedRoot!)
 
