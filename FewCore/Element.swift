@@ -177,7 +177,7 @@ public class Element {
 	}
 
 	/// Realize the element.
-	internal func realize(parent: RealizedElement?) -> RealizedElement {
+	public func realize(parent: RealizedElement?) -> RealizedElement {
 		let view = createView()
 		view?.frame = viewFrame
 
