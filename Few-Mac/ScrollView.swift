@@ -71,8 +71,8 @@ private class ScrollViewElement: Element {
 		return view
 	}
 
-	private override func createRealizedElement(view: ViewType?) -> RealizedElement {
-		return RealizedScrollViewElement(element: self, view: view)
+	private override func createRealizedElement(view: ViewType?, parent: RealizedElement?) -> RealizedElement {
+		return RealizedScrollViewElement(element: self, view: view, parent: parent)
 	}
 
 	private override func realize(parent: RealizedElement?) -> RealizedElement {

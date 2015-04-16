@@ -21,18 +21,18 @@ internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 
 public class RealizedElement {
 	public var element: Element
-	public var view: ViewType?
+	public let view: ViewType?
 	internal var children: [RealizedElement] = []
 	public weak var parent: RealizedElement?
+	internal var frameOffset = CGPointZero
 
-	public init(element: Element, view: ViewType?) {
+	public init(element: Element, view: ViewType?, parent: RealizedElement?) {
 		self.element = element
 		self.view = view
+		self.parent = parent
 	}
 
 	public func addRealizedChild(child: RealizedElement, index: Int?) {
-		child.parent = self
-
 		if let index = index {
 			children.insert(child, atIndex: index)
 		} else {
@@ -42,16 +42,23 @@ public class RealizedElement {
 		addRealizedViewForChild(child)
 	}
 
-	public func parentViewWithView() -> ViewType? {
-		if view != nil { return view }
-
-		return parent?.parentViewWithView()
-	}
-
 	public func addRealizedViewForChild(child: RealizedElement) {
-		if let childView = child.view {
-			child.assembleNewViewHierarchy(parentViewWithView())
+		if child.view == nil { return }
+
+		var parent: RealizedElement? = self
+		var offset = CGPointZero
+		while let currentParent = parent {
+			if currentParent.view != nil { break }
+
+			offset.x += currentParent.element.frame.origin.x + currentParent.frameOffset.x
+			offset.y += currentParent.element.frame.origin.y + currentParent.frameOffset.y
+			parent = currentParent.parent
 		}
+
+		child.view?.frame.origin.x += offset.x
+		child.view?.frame.origin.y += offset.y
+		child.frameOffset = offset
+		parent?.view?.addSubview(child.view!)
 	}
 
 	public func remove() {
@@ -62,33 +69,13 @@ public class RealizedElement {
 		view?.removeFromSuperview()
 		element.derealize()
 
-		if let parent = parent {
-			parent.removeRealizedChild(self)
-		}
-
+		parent?.removeRealizedChild(self)
 		parent = nil
 	}
 
 	private func removeRealizedChild(child: RealizedElement) {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
-		}
-	}
-
-	public func assembleNewViewHierarchy(parentView: ViewType?, offset: CGPoint = CGPointZero) {
-		if parentView == nil && view == nil {
-			println("creating view for \(element)")
-			view = ViewType(frame: element.viewFrame)
-		} else if parentView != nil {
-			view?.frame.origin.x += offset.x
-			view?.frame.origin.y += offset.y
-			parentView!.addSubview <^> view
-		}
-
-		for child in children {
-			var parentViewForChild = view ?? parentView
-			var offset = (view != nil ? CGPointZero : CGPoint(x: offset.x + element.frame.origin.x, y: offset.y + element.frame.origin.y))
-			child.assembleNewViewHierarchy(parentViewForChild, offset: offset)
 		}
 	}
 }

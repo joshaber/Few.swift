@@ -15,13 +15,8 @@ import AppKit
 #endif
 
 public class RealizedComponent<S>: RealizedElement {
-	public init(component: Component<S>, view: ViewType?) {
-		super.init(element: component, view: view)
-	}
-
-	public override func assembleNewViewHierarchy(parentView: ViewType?, offset: CGPoint) {
-		let c = element as! Component<S>
-		c.realizedRoot?.assembleNewViewHierarchy(parentView, offset: offset)
+	public init(component: Component<S>, view: ViewType?, parent: RealizedElement?) {
+		super.init(element: component, view: view, parent: parent)
 	}
 }
 
@@ -181,9 +176,9 @@ public class Component<S>: Element {
 	public func addToView(hostView: ViewType) {
 		root = true
 		frame = hostView.bounds
+		parent = RealizedElement(element: self, view: hostView, parent: nil)
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		realizedRoot?.assembleNewViewHierarchy(hostView)
 
 		assert(realizedRoot!.view != nil, "\(self) doesn't realize to a view!")
 		hostView.addSubview(realizedRoot!.view!)
@@ -321,7 +316,7 @@ public class Component<S>: Element {
 
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		return RealizedComponent(component: self, view: nil)
+		return RealizedComponent(component: self, view: nil, parent: parent)
 	}
 
 	public override func derealize() {

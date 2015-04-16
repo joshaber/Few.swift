@@ -172,8 +172,8 @@ public class Element {
 		return frame.integerRect
 	}
 
-	public func createRealizedElement(view: ViewType?) -> RealizedElement {
-		return RealizedElement(element: self, view: view)
+	public func createRealizedElement(view: ViewType?, parent: RealizedElement?) -> RealizedElement {
+		return RealizedElement(element: self, view: view, parent: parent)
 	}
 
 	/// Realize the element.
@@ -181,11 +181,10 @@ public class Element {
 		let view = createView()
 		view?.frame = viewFrame
 
-		let realizedSelf = createRealizedElement(view)
-		let realizedChildren = children.map { $0.realize(realizedSelf) }
-		for child in realizedChildren {
-			realizedSelf.addRealizedChild(child, index: nil)
-		}
+		let realizedSelf = createRealizedElement(view, parent: parent)
+		parent?.addRealizedChild(realizedSelf, index: nil)
+
+		realizedSelf.children = children.map { $0.realize(realizedSelf) }
 
 		return realizedSelf
 	}
