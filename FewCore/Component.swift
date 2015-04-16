@@ -14,12 +14,6 @@ import SwiftBox
 import AppKit
 #endif
 
-public class RealizedComponent<S>: RealizedElement {
-	public init(component: Component<S>, view: ViewType?, parent: RealizedElement?) {
-		super.init(element: component, view: view, parent: parent)
-	}
-}
-
 /// Components are stateful elements and the bridge between Few and
 /// AppKit/UIKit.
 ///
@@ -316,7 +310,7 @@ public class Component<S>: Element {
 
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		return RealizedComponent(component: self, view: nil, parent: parent)
+		return RealizedElement(element: self, view: nil, parent: parent)
 	}
 
 	public override func derealize() {
