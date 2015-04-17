@@ -10,10 +10,7 @@ import Foundation
 
 internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 	for (i, e) in enumerate(array) {
-		// HAHA SWIFT WHY DOES POINTER EQUALITY NOT WORK
-		let ptr1 = Unmanaged<T>.passUnretained(element).toOpaque()
-		let ptr2 = Unmanaged<T>.passUnretained(e).toOpaque()
-		if ptr1 == ptr2 { return i }
+		if element === e { return i }
 	}
 
 	return nil
@@ -22,9 +19,10 @@ internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 public class RealizedElement {
 	public var element: Element
 	public let view: ViewType?
-	internal var children: [RealizedElement] = []
 	public weak var parent: RealizedElement?
-	internal var frameOffset = CGPointZero
+
+	internal var children: [RealizedElement] = []
+	private var frameOffset = CGPointZero
 
 	public init(element: Element, view: ViewType?, parent: RealizedElement?) {
 		self.element = element
@@ -43,7 +41,10 @@ public class RealizedElement {
 	}
 
 	public func addRealizedViewForChild(child: RealizedElement) {
-		if child.view == nil { return }
+		if child.view == nil {
+			child.element.elementDidRealize(child)
+			return
+		}
 
 		var parent: RealizedElement? = self
 		var offset = CGPointZero
@@ -59,6 +60,7 @@ public class RealizedElement {
 		child.view?.frame.origin.y += offset.y
 		child.frameOffset = offset
 		parent?.view?.addSubview(child.view!)
+		child.element.elementDidRealize(child)
 	}
 
 	public func remove() {
@@ -73,7 +75,7 @@ public class RealizedElement {
 		parent = nil
 	}
 
-	private func removeRealizedChild(child: RealizedElement) {
+	private final func removeRealizedChild(child: RealizedElement) {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
 		}

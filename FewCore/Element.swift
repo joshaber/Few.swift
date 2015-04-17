@@ -136,8 +136,6 @@ public class Element {
 
 			for child in childrenDiff.add {
 				let realizedChild = child.realize(realizedSelf)
-				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
-//				child.elementDidRealize(realizedChild)
 			}
 
 			for child in childrenDiff.diff {
@@ -182,7 +180,7 @@ public class Element {
 		view?.frame = viewFrame
 
 		let realizedSelf = createRealizedElement(view, parent: parent)
-		parent?.addRealizedChild(realizedSelf, index: nil)
+		parent?.addRealizedChild(realizedSelf, index: indexOfObject(children, self))
 
 		realizedSelf.children = children.map { $0.realize(realizedSelf) }
 
@@ -190,11 +188,7 @@ public class Element {
 	}
 
 	/// Derealize the element.
-	public func derealize() {
-		for child in children {
-			child.derealize()
-		}
-	}
+	public func derealize() {}
 
 	internal func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }

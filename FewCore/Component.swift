@@ -113,13 +113,8 @@ public class Component<S>: Element {
 			if newRoot.canDiff(rootElement) {
 				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				let hostView = realizedRoot!.view!.superview!
 				realizedRoot?.remove()
-
 				realizeNewRoot(newRoot)
-				hostView.addSubview(realizedRoot!.view!)
-
-//				newRoot.elementDidRealize(realizedRoot!)
 			}
 
 			componentDidRender()
@@ -173,10 +168,6 @@ public class Component<S>: Element {
 		parent = RealizedElement(element: self, view: hostView, parent: nil)
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-
-		hostView.addSubview <^> realizedRoot?.view
-
-//		rootElement?.elementDidRealize(realizedRoot!)
 
 #if os(OSX)
 		hostView.postsFrameChangedNotifications = true
@@ -315,11 +306,9 @@ public class Component<S>: Element {
 	public override func derealize() {
 		componentWillDerealize()
 
-		rootElement?.derealize()
-		rootElement = nil
-
 		realizedRoot?.remove()
 		realizedRoot = nil
+		rootElement = nil
 
 		parent = nil
 
