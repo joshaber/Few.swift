@@ -94,7 +94,7 @@ public class Component<S>: Element {
 		newRoot.frame = frame
 
 		let node = newRoot.assembleLayoutNode()
-		var layout: Layout!
+		let layout: Layout
 		if root {
 			layout = node.layout(maxWidth: frame.size.width)
 		} else {
@@ -165,9 +165,8 @@ public class Component<S>: Element {
 	public func addToView(hostView: ViewType) {
 		root = true
 		frame = hostView.bounds
-		parent = RealizedElement(element: self, view: hostView, parent: nil)
-		performInitialRenderIfNeeded()
-		realizeRootIfNeeded()
+		let parent = RealizedElement(element: self, view: hostView, parent: nil)
+		realize(parent)
 
 #if os(OSX)
 		hostView.postsFrameChangedNotifications = true
@@ -284,9 +283,9 @@ public class Component<S>: Element {
 	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let oldComponent = unsafeBitCast(old, Component.self)
+		let oldComponent = old as! Component
 
+		parent = oldComponent.parent
 		root = oldComponent.root
 		state = oldComponent.state
 		rootElement = oldComponent.rootElement
@@ -300,7 +299,7 @@ public class Component<S>: Element {
 
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		return RealizedElement(element: self, view: nil, parent: parent)
+		return super.realize(parent)
 	}
 
 	public override func derealize() {
