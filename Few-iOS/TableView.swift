@@ -20,19 +20,14 @@ private class FewListCell: UITableViewCell {
             if element.canDiff(realizedElement.element) {
                 element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
             } else {
-                realizedElement.element.derealize()
-                realizedElement.view?.removeFromSuperview()
-                
-                let newRealizedElement = element.realize(nil)
-                newRealizedElement.view?.frame = bounds
-                addSubview <^> newRealizedElement.view
+				realizedElement.remove()
+
+				let parent = RealizedElement(element: Element(), view: self, parent: nil)
+				self.realizedElement = element.realize(parent)
             }
         } else {
-            let newRealizedElement = element.realize(nil)
-            newRealizedElement.view?.frame = bounds
-            addSubview <^> newRealizedElement.view
-            
-            realizedElement = newRealizedElement
+			let parent = RealizedElement(element: Element(), view: self, parent: nil)
+			realizedElement = element.realize(parent)
         }
     }
 }
