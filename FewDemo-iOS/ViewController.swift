@@ -12,7 +12,7 @@ import Few
 func renderCounter(component: Component<Int>, count: Int) -> Element {
     let updateCounter = { component.updateState { $0 + 1 } }
     
-    return View()
+    return Element()
         // The view itself should be centered.
         .justification(.Center)
         // The children should be centered in the view.
@@ -48,7 +48,9 @@ private func renderRow(row: Int) -> Element {
 }
 
 func renderTableView(component: Component<()>, state: ()) -> Element {
-    return TableView((1...100).map(renderRow), selectionChanged: println)
+	return TableView((1...100).map(renderRow), selectionChanged: println)
+		.flex(1)
+		.selfAlignment(.Stretch)
 }
 
 let TableViewDemo = { Component(initialState: (), render: renderTableView) }
@@ -101,14 +103,18 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
     return Element()
         .direction(.Column)
         .children([
-            contentComponent
-                .margin(Edges(top: 20))
-                .flex(1),
+			Element()
+				.children([
+					contentComponent
+				])
+				.childAlignment(.Center)
+				.justification(.Center)
+				.flex(1),
             Button(title: "Show me more!", action: showMore)
                 .width(200)
                 .margin(Edges(uniform: 10))
                 .selfAlignment(.Center)
-            ])
+		])
 }
 
 func toggleDisplay(var state: AppState) -> AppState {

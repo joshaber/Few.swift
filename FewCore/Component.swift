@@ -40,6 +40,8 @@ public class Component<S>: Element {
 	/// Is the component a root?
 	private var root = false
 
+	private var parent: RealizedElement?
+
 	private var frameChangedTrampoline = TargetActionTrampoline()
 
 	/// Initializes the component with its initial state. The render function
@@ -80,11 +82,10 @@ public class Component<S>: Element {
 	}
 
 	final private func realizeNewRoot(newRoot: Element) {
-		let realized = newRoot.realize()
+		let realized = newRoot.realize(parent)
 
 		configureViewToAutoresize(realized.view)
 
-		realizedRoot?.view.removeFromSuperview()
 		realizedRoot = realized
 	}
 
@@ -93,7 +94,7 @@ public class Component<S>: Element {
 		newRoot.frame = frame
 
 		let node = newRoot.assembleLayoutNode()
-		var layout: Layout!
+		let layout: Layout
 		if root {
 			layout = node.layout(maxWidth: frame.size.width)
 		} else {
@@ -112,13 +113,8 @@ public class Component<S>: Element {
 			if newRoot.canDiff(rootElement) {
 				newRoot.applyDiff(rootElement, realizedSelf: realizedRoot)
 			} else {
-				let superview = realizedRoot!.view.superview!
-				rootElement.derealize()
-
+				realizedRoot?.remove()
 				realizeNewRoot(newRoot)
-				superview.addSubview(realizedRoot!.view)
-
-				newRoot.elementDidRealize(realizedRoot!)
 			}
 
 			componentDidRender()
@@ -169,14 +165,12 @@ public class Component<S>: Element {
 	public func addToView(hostView: ViewType) {
 		root = true
 		frame = hostView.bounds
-		performInitialRenderIfNeeded()
-		realizeRootIfNeeded()
-		hostView.addSubview(realizedRoot!.view)
-		rootElement?.elementDidRealize(realizedRoot!)
+		let parent = RealizedElement(element: self, view: hostView, parent: nil)
+		realize(parent)
 
 #if os(OSX)
 		hostView.postsFrameChangedNotifications = true
-		realizedRoot!.view.autoresizesSubviews = false
+		realizedRoot!.view?.autoresizesSubviews = false
 
 		frameChangedTrampoline.action = { [weak self] in
 			if let strongSelf = self {
@@ -289,9 +283,9 @@ public class Component<S>: Element {
 	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		// Use `unsafeBitCast` instead of `as` to avoid a runtime crash.
-		let oldComponent = unsafeBitCast(old, Component.self)
+		let oldComponent = old as! Component
 
+		parent = oldComponent.parent
 		root = oldComponent.root
 		state = oldComponent.state
 		rootElement = oldComponent.rootElement
@@ -300,20 +294,22 @@ public class Component<S>: Element {
 		renderNewRoot()
 	}
 	
-	public override func realize() -> RealizedElement {
+	public override func realize(parent: RealizedElement?) -> RealizedElement {
+		self.parent = parent
+
 		performInitialRenderIfNeeded()
 		realizeRootIfNeeded()
-		return RealizedElement(element: self, view: realizedRoot!.view)
+		return super.realize(parent)
 	}
 
 	public override func derealize() {
 		componentWillDerealize()
 
-		rootElement?.derealize()
+		realizedRoot?.remove()
+		realizedRoot = nil
 		rootElement = nil
 
-		realizedRoot?.view.removeFromSuperview()
-		realizedRoot = nil
+		parent = nil
 
 		componentDidDerealize()
 	}

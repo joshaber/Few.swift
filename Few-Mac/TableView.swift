@@ -21,21 +21,14 @@ private class FewListCell: NSTableCellView {
 			if element.canDiff(realizedElement.element) {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
-				realizedElement.element.derealize()
-				realizedElement.view.removeFromSuperview()
+				realizedElement.remove()
 
-				let newRealizedElement = element.realize()
-				newRealizedElement.view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-				newRealizedElement.view.frame = bounds
-				addSubview(newRealizedElement.view)
+				let parent = RealizedElement(element: Element(), view: self, parent: nil)
+				self.realizedElement = element.realize(parent)
 			}
 		} else {
-			let newRealizedElement = element.realize()
-			newRealizedElement.view.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-			newRealizedElement.view.frame = bounds
-			addSubview(newRealizedElement.view)
-
-			realizedElement = newRealizedElement
+			let parent = RealizedElement(element: Element(), view: self, parent: nil)
+			realizedElement = element.realize(parent)
 		}
 	}
 

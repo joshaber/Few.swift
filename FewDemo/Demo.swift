@@ -31,7 +31,7 @@ private func renderInput(component: Few.Component<LoginState>, label: String, se
 		input = Input(action: action).autofocus(true)
 	}
 
-	return View()
+	return Element()
 		.direction(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
@@ -84,7 +84,7 @@ private func renderScrollView() -> Element {
 }
 
 private func renderRow(row: Int) -> Element {
-	return View()
+	return Element()
 		.direction(.Column)
 		.children([
 			Label("I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
@@ -115,7 +115,7 @@ private func renderLogin() -> Element {
 
 private func renderThingy(count: Int) -> Element {
 	let even = count % 2 == 0
-	return (even ? Empty() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
+	return (even ? Element() : View(backgroundColor: NSColor.blueColor())).size(100, 50)
 }
 
 typealias Demo = Demo_<()>
@@ -125,7 +125,7 @@ class Demo_<LOL>: Few.Component<()> {
 	}
 
 	override func render() -> Element {
-		return View()
+		return Element()
 			.justification(.Center)
 			.childAlignment(.Center)
 			.direction(.Column)

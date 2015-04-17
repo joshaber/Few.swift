@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreGraphics
-import SwiftBox
 
 public var LogDiff = false
 
@@ -34,17 +33,15 @@ public class Element {
 
 	// On OS X we have to reverse our children since the default coordinate 
 	// system is flipped.
-#if os(OSX)
 	public var children: [Element] {
 		didSet {
+#if os(OSX)
 			if direction == .Column {
 				children = children.reverse()
 			}
+#endif
 		}
 	}
-#else
-	public var children: [Element]
-#endif
 
 #if os(OSX)
 	public var direction: Direction {
@@ -107,7 +104,7 @@ public class Element {
 	/// should call super before doing their own diffing.
 	public func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		if LogDiff {
-			println("*** Diffing \(reflect(self).summary)")
+			println("*** Diffing \(self)")
 		}
 
 		let view = realizedSelf?.view
@@ -119,8 +116,8 @@ public class Element {
 			compareAndSetAlpha(view, alpha)
 		}
 
-		if frame != old.frame {
-			view?.frame = frame.integerRect
+		if viewFrame != old.viewFrame {
+			view?.frame = viewFrame
 		}
 
 		realizedSelf?.element = self
@@ -133,14 +130,11 @@ public class Element {
 			}
 
 			for child in childrenDiff.remove {
-				child.element.derealize()
-				realizedSelf.removeRealizedChild(child)
+				child.remove()
 			}
 
 			for child in childrenDiff.add {
-				let realizedChild = child.realize()
-				realizedSelf.addRealizedChild(realizedChild, index: indexOfObject(children, child))
-				child.elementDidRealize(realizedChild)
+				let realizedChild = child.realize(realizedSelf)
 			}
 
 			for child in childrenDiff.diff {
@@ -150,49 +144,55 @@ public class Element {
 	}
 
 	private final func printChildDiff(diff: ElementListDiff, old: Element) {
-		println("**** old: \(old.children)")
-		println("**** new: \(children)")
+		if old.children.count == 0 && children.count == 0 { return }
 
-		let diffs: [String] = diff.diff.map {
-			let existing = $0.existing.element
-			let replacement = $0.replacement
-			return "\(replacement) => \(existing)"
+		let oldChildren = old.children.map { "\($0.dynamicType)" }
+		println("**** old: \(oldChildren)")
+
+		let newChildren = children.map { "\($0.dynamicType)" }
+		println("**** new: \(newChildren)")
+
+		for d in diff.diff {
+			println("**** applying \(d.replacement.dynamicType) => \(d.existing.element.dynamicType)")
 		}
-		println("**** diffing \(diffs)")
 
-		println("**** removing \(diff.remove)")
-		println("**** adding \(diff.add)")
+		let removing = diff.remove.map { "\($0.element.dynamicType)" }
+		println("**** removing \(removing)")
+
+		let adding = diff.add.map { "\($0.dynamicType)" }
+		println("**** adding \(adding)")
 		println()
 	}
 
-	public func createView() -> ViewType {
-		return ViewType(frame: frame)
+	public func createView() -> ViewType? {
+		return nil
+	}
+
+	var viewFrame: CGRect {
+		return frame.integerRect
+	}
+
+	public func createRealizedElement(view: ViewType?, parent: RealizedElement?) -> RealizedElement {
+		return RealizedElement(element: self, view: view, parent: parent)
 	}
 
 	/// Realize the element.
-	internal func realize() -> RealizedElement {
+	public func realize(parent: RealizedElement?) -> RealizedElement {
 		let view = createView()
-		view.frame = frame.integerRect
+		view?.frame = viewFrame
 
-		let realizedSelf = RealizedElement(element: self, view: view)
-		let realizedChildren = children.map { $0.realize() }
-		for child in realizedChildren {
-			realizedSelf.addRealizedChild(child, index: nil)
+		let realizedSelf = createRealizedElement(view, parent: parent)
+		parent?.addRealizedChild(realizedSelf, index: indexOfObject(children, self))
+
+		for child in children {
+			child.realize(realizedSelf)
 		}
 
 		return realizedSelf
 	}
 
-	internal func addRealizedChildView(childView: ViewType, selfView: ViewType) {
-		selfView.addSubview(childView)
-	}
-
 	/// Derealize the element.
-	public func derealize() {
-		for child in children {
-			child.derealize()
-		}
-	}
+	public func derealize() {}
 
 	internal func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
@@ -233,18 +233,12 @@ public class Element {
 	}
 
 	public func elementDidRealize(realizedSelf: RealizedElement) {
-		// Tell our children first so that we still end up grabbing focus even 
-		// if a child also has autofocus.
-		for child in realizedSelf.children {
-			child.element.elementDidRealize(child)
-		}
-
 		if autofocus {
-			let window = realizedSelf.view.window!
+			let window = realizedSelf.view?.window!
 #if os(OSX)
-			window.makeFirstResponder(realizedSelf.view)
+			window?.makeFirstResponder(realizedSelf.view)
 #else
-			realizedSelf.view.becomeFirstResponder()
+			realizedSelf.view?.becomeFirstResponder()
 #endif
 		}
 	}

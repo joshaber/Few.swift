@@ -10,10 +10,7 @@ import Foundation
 
 internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 	for (i, e) in enumerate(array) {
-		// HAHA SWIFT WHY DOES POINTER EQUALITY NOT WORK
-		let ptr1 = Unmanaged<T>.passUnretained(element).toOpaque()
-		let ptr2 = Unmanaged<T>.passUnretained(e).toOpaque()
-		if ptr1 == ptr2 { return i }
+		if element === e { return i }
 	}
 
 	return nil
@@ -21,12 +18,16 @@ internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
 
 public class RealizedElement {
 	public var element: Element
-	public let view: ViewType
-	internal var children: [RealizedElement] = []
+	public let view: ViewType?
+	public weak var parent: RealizedElement?
 
-	public init(element: Element, view: ViewType) {
+	internal var children: [RealizedElement] = []
+	private var frameOffset = CGPointZero
+
+	public init(element: Element, view: ViewType?, parent: RealizedElement?) {
 		self.element = element
 		self.view = view
+		self.parent = parent
 	}
 
 	public func addRealizedChild(child: RealizedElement, index: Int?) {
@@ -36,12 +37,45 @@ public class RealizedElement {
 			children.append(child)
 		}
 
-		element.addRealizedChildView(child.view, selfView: view)
+		addRealizedViewForChild(child)
 	}
 
-	public func removeRealizedChild(child: RealizedElement) {
-		child.view.removeFromSuperview()
+	public func addRealizedViewForChild(child: RealizedElement) {
+		if child.view == nil {
+			child.element.elementDidRealize(child)
+			return
+		}
 
+		var parent: RealizedElement? = self
+		var offset = CGPointZero
+		while let currentParent = parent {
+			if currentParent.view != nil { break }
+
+			offset.x += currentParent.element.frame.origin.x + currentParent.frameOffset.x
+			offset.y += currentParent.element.frame.origin.y + currentParent.frameOffset.y
+			parent = currentParent.parent
+		}
+
+		child.view?.frame.origin.x += offset.x
+		child.view?.frame.origin.y += offset.y
+		child.frameOffset = offset
+		parent?.view?.addSubview(child.view!)
+		child.element.elementDidRealize(child)
+	}
+
+	public func remove() {
+		for child in children {
+			child.remove()
+		}
+
+		view?.removeFromSuperview()
+		element.derealize()
+
+		parent?.removeRealizedChild(self)
+		parent = nil
+	}
+
+	private final func removeRealizedChild(child: RealizedElement) {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
 		}
