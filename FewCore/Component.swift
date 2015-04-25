@@ -154,7 +154,7 @@ public class Component<S>: Element {
 	/// *should* based on the new state.
 	///
 	/// The default implementation always returns true.
-	public func componentShouldRender(previousState: S, newState: S) -> Bool {
+	public func componentShouldRender(previousSelf: Component, previousState: S) -> Bool {
 		return true
 	}
 	
@@ -202,23 +202,17 @@ public class Component<S>: Element {
 	final public func updateState(fn: S -> S) {
 		precondition(NSThread.isMainThread(), "Component.updateState called on a background thread. Donut do that!")
 
-		let oldState = state
-		state = fn(oldState)
+		state = fn(state)
 		
-		if componentShouldRender(oldState, newState: state) {
-			enqueueRender()
-		}
+		enqueueRender()
 	}
 
 	final public func modifyState(fn: inout S -> ()) {
 		precondition(NSThread.isMainThread(), "Component.modifyState called on a background thread. Donut do that!")
 
-		let oldState = state
 		fn(&state)
 
-		if componentShouldRender(oldState, newState: state) {
-			enqueueRender()
-		}
+		enqueueRender()
 	}
 
 	final private func enqueueRender() {
@@ -285,13 +279,17 @@ public class Component<S>: Element {
 
 		let oldComponent = old as! Component
 
+		let shouldRender = componentShouldRender(oldComponent, previousState: oldComponent.state)
+
 		parent = oldComponent.parent
 		root = oldComponent.root
 		state = oldComponent.state
 		rootElement = oldComponent.rootElement
 		realizedRoot = oldComponent.realizedRoot
 
-		renderNewRoot()
+		if shouldRender {
+			renderNewRoot()
+		}
 	}
 	
 	public override func realize(parent: RealizedElement?) -> RealizedElement {
