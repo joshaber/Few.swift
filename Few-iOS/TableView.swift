@@ -104,14 +104,14 @@ public class TableView: Element {
     public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
         super.applyDiff(old, realizedSelf: realizedSelf)
         
-        if let scrollView = realizedSelf?.view as? FewTableView {
-            let handler = scrollView.handler
+        if let tableView = realizedSelf?.view as? FewTableView {
+            let handler = tableView.handler
             
             layoutElements()
-            
+			
             handler?.elements = elements
             
-            let tableView = scrollView.handler?.tableView
+            let tableView = tableView.handler?.tableView
             
             handler?.selectionChanged = selectionChanged
         }
