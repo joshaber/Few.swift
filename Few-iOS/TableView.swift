@@ -122,7 +122,7 @@ public class TableView: Element {
             }
             if needsUpdate {
                 tableView.tableHeaderView = newHeaderView
-				/// if you don't do this, the table view may compute the wrong header height
+                /// if you don't do this, the table view may compute the wrong header height
                 UIView.performWithoutAnimation {
                     tableView.beginUpdates()
                     tableView.endUpdates()
