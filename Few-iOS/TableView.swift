@@ -98,7 +98,7 @@ public class TableView: Element {
         self.elements = elements
         self.selectionChanged = selectionChanged
         self.selectedRow = selectedRow
-		self.header = header
+        self.header = header
     }
     
     // MARK: -
