@@ -92,9 +92,9 @@ public class TableView: Element {
     private let elements: [Element]
     private let selectionChanged: (Int -> ())?
     private let selectedRow: Int?
-	private let header: Element?
+    private let header: Element?
 	
-	public init(_ elements: [Element], selectedRow: Int? = nil, header: Element? = nil, selectionChanged: (Int -> ())? = nil) {
+    public init(_ elements: [Element], selectedRow: Int? = nil, header: Element? = nil, selectionChanged: (Int -> ())? = nil) {
         self.elements = elements
         self.selectionChanged = selectionChanged
         self.selectedRow = selectedRow
