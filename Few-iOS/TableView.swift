@@ -92,11 +92,13 @@ public class TableView: Element {
     private let elements: [Element]
     private let selectionChanged: (Int -> ())?
     private let selectedRow: Int?
-    
-    public init(_ elements: [Element], selectedRow: Int? = nil, selectionChanged: (Int -> ())? = nil) {
+    private let header: Element?
+	
+    public init(_ elements: [Element], selectedRow: Int? = nil, header: Element? = nil, selectionChanged: (Int -> ())? = nil) {
         self.elements = elements
         self.selectionChanged = selectionChanged
         self.selectedRow = selectedRow
+        self.header = header
     }
     
     // MARK: -
@@ -104,16 +106,37 @@ public class TableView: Element {
     public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
         super.applyDiff(old, realizedSelf: realizedSelf)
         
-        if let scrollView = realizedSelf?.view as? FewTableView {
-            let handler = scrollView.handler
+        if let tableView = realizedSelf?.view as? FewTableView {
+            let handler = tableView.handler
             
             layoutElements()
             
             handler?.elements = elements
             
-            let tableView = scrollView.handler?.tableView
-            
+            let newHeaderView = header?.realize(realizedSelf).view
+            var needsUpdate = false
+            if newHeaderView != tableView.tableHeaderView {
+                needsUpdate = true
+            } else if let newHeight = newHeaderView?.frame.height where newHeight != tableView.rectForSection(0).minY {
+                needsUpdate = true
+            }
+            if needsUpdate {
+                tableView.tableHeaderView = newHeaderView
+                /// if you don't do this, the table view may compute the wrong header height
+                UIView.performWithoutAnimation {
+                    tableView.beginUpdates()
+                    tableView.endUpdates()
+                }
+            }
+
             handler?.selectionChanged = selectionChanged
+        }
+    }
+    
+    public override func elementDidRealize(realizedSelf: RealizedElement) {
+        super.elementDidRealize(realizedSelf)
+        if let tableView = realizedSelf.view as! FewTableView? {
+            tableView.tableHeaderView = header?.realize(realizedSelf).view
         }
     }
     
