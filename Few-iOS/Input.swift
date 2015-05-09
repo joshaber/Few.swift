@@ -17,10 +17,14 @@ public class Input: Element {
     public var enabled: Bool
     public var secure: Bool
     public var borderStyle: UITextBorderStyle
-    
+	public var keyboardType: UIKeyboardType
+	public var returnKeyType: UIReturnKeyType
+	public var autocorrectionType: UITextAutocorrectionType
+	public var autocapitalizationType: UITextAutocapitalizationType
+	
     private var trampoline = TargetActionTrampolineWithSender<UITextField>()
     
-    public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, action: String -> () = { _ in }, borderStyle: UITextBorderStyle = .None) {
+	public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, borderStyle: UITextBorderStyle = .None, keyboardType: UIKeyboardType = .Default, returnKeyType: UIReturnKeyType = .Default, autocorrectionType: UITextAutocorrectionType = .Default, autocapitalizationType: UITextAutocapitalizationType = .Sentences, action: String -> () = { _ in }) {
         self.text = text
         self.textColor = textColor
         self.font = font
@@ -29,6 +33,10 @@ public class Input: Element {
         self.enabled = enabled
         self.secure = secure
         self.borderStyle = borderStyle
+		self.keyboardType = keyboardType
+		self.returnKeyType = returnKeyType
+		self.autocorrectionType = autocorrectionType
+		self.autocapitalizationType = autocapitalizationType
         trampoline.action = { textField in
             action(textField.text)
         }
@@ -52,10 +60,8 @@ public class Input: Element {
                 textField.placeholder = placeholder
             }
             
-            if let text = text {
-                if text != textField.text {
-                    textField.text = text
-                }
+            if let text = text where text != textField.text {
+				textField.text = text
             }
             
             if enabled != textField.enabled {
@@ -66,21 +72,33 @@ public class Input: Element {
                 textField.secureTextEntry = secure
             }
             
-            if let font = font {
-                if font != textField.font {
-                    textField.font = font
-                }
+            if let font = font where font != textField.font {
+				textField.font = font
             }
             
-            if let color = textColor {
-                if color != textField.textColor {
-                    textField.textColor = color
-                }
+            if let color = textColor where color != textField.textColor {
+				textField.textColor = color
             }
             
             if borderStyle != textField.borderStyle {
                 textField.borderStyle = borderStyle
             }
+			
+			if keyboardType != textField.keyboardType {
+				textField.keyboardType = keyboardType
+			}
+			
+			if returnKeyType != textField.returnKeyType {
+				textField.returnKeyType = returnKeyType
+			}
+			
+			if autocorrectionType != textField.autocorrectionType {
+				textField.autocorrectionType = autocorrectionType
+			}
+			
+			if autocapitalizationType != textField.autocapitalizationType {
+				textField.autocapitalizationType = autocapitalizationType
+			}
         }
     }
     
@@ -94,6 +112,10 @@ public class Input: Element {
         field.secureTextEntry = secure
         field.text = text ?? initialText ?? ""
         field.borderStyle = borderStyle
+		field.keyboardType = keyboardType
+		field.returnKeyType = returnKeyType
+		field.autocorrectionType = autocorrectionType
+		field.autocapitalizationType = autocapitalizationType
         if let font = font {
             field.font = font
         }
