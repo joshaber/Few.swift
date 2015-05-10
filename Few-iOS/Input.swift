@@ -86,7 +86,7 @@ public class Input: Element {
                 textField.secureTextEntry = secure
             }
             
-			if let font = font where font != textField.font {
+            if let font = font where font != textField.font {
                 textField.font = font
             }
             
