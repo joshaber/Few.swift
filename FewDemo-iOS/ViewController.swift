@@ -62,11 +62,16 @@ func renderInput(component: Component<String>, state: String) -> Element {
             View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
                 .margin(Edges(uniform: 10))
                 .size(100, 100),
-            Input(placeholder: "Username")
+			Input(placeholder: "Email", keyboardType: .EmailAddress, autocorrectionType: .No, returnKeyType: .Next)
                 .margin(Edges(uniform: 10)),
-            Input(placeholder: "Password", secure: true)
-                .margin(Edges(uniform: 10))
-            ])
+			Input(placeholder: "Password", secure: true, returnKeyType: .Go, shouldReturn: {text in
+					println("Password return.")
+					return false
+				}, textChanged: { text in
+					println("Password action: \(text)")
+				})
+				.margin(Edges(uniform: 10))
+		])
 }
 let InputDemo = { Component(initialState: "", render: renderInput) }
 

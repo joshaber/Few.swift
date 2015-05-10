@@ -8,6 +8,14 @@
 
 import UIKit
 
+final internal class InputDelegate: NSObject, UITextFieldDelegate {
+	var shouldReturn: (UITextField -> Bool)?
+	
+	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		return shouldReturn?(textField) ?? true
+	}
+}
+
 public class Input: Element {
     public var text: String?
     public var textColor: UIColor?
@@ -22,9 +30,10 @@ public class Input: Element {
 	public var autocorrectionType: UITextAutocorrectionType
 	public var autocapitalizationType: UITextAutocapitalizationType
 	
-    private var trampoline = TargetActionTrampolineWithSender<UITextField>()
-    
-	public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, borderStyle: UITextBorderStyle = .None, keyboardType: UIKeyboardType = .Default, returnKeyType: UIReturnKeyType = .Default, autocorrectionType: UITextAutocorrectionType = .Default, autocapitalizationType: UITextAutocapitalizationType = .Sentences, action: String -> () = { _ in }) {
+    private var actionTrampoline = TargetActionTrampolineWithSender<UITextField>()
+	private var inputDelegate = InputDelegate()
+	
+	public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, borderStyle: UITextBorderStyle = .None, keyboardType: UIKeyboardType = .Default, returnKeyType: UIReturnKeyType = .Default, autocorrectionType: UITextAutocorrectionType = .Default, autocapitalizationType: UITextAutocapitalizationType = .Sentences, shouldReturn: String -> Bool = { _ in true }, textChanged: String -> () = { _ in }) {
         self.text = text
         self.textColor = textColor
         self.font = font
@@ -37,10 +46,13 @@ public class Input: Element {
 		self.returnKeyType = returnKeyType
 		self.autocorrectionType = autocorrectionType
 		self.autocapitalizationType = autocapitalizationType
-        trampoline.action = { textField in
-            action(textField.text)
+        actionTrampoline.action = { textField in
+            textChanged(textField.text)
         }
-        
+		inputDelegate.shouldReturn = { textField in
+			shouldReturn(textField.text)
+		}
+		
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 23))
     }
     
@@ -51,11 +63,13 @@ public class Input: Element {
         
         if let textField = realizedSelf?.view as? UITextField {
             if let oldInput = old as? Input {
-                let newTrampoline = oldInput.trampoline
-                newTrampoline.action = trampoline.action // Make sure the newest action is used
-                trampoline = newTrampoline
+                let newTrampoline = oldInput.actionTrampoline
+                newTrampoline.action = actionTrampoline.action // Make sure the newest action is used
+                actionTrampoline = newTrampoline
             }
-            
+			
+			textField.delegate = self.inputDelegate
+			
             if placeholder != textField.placeholder {
                 textField.placeholder = placeholder
             }
@@ -104,7 +118,8 @@ public class Input: Element {
     
     public override func createView() -> ViewType {
         let field = UITextField(frame: frame)
-        field.addTarget(trampoline.target, action: trampoline.selector, forControlEvents: .EditingChanged)
+        field.addTarget(actionTrampoline.target, action: actionTrampoline.selector, forControlEvents: .EditingChanged)
+		field.delegate = inputDelegate
         field.alpha = alpha
         field.hidden = hidden
         field.enabled = enabled
