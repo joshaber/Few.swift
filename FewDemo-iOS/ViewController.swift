@@ -48,9 +48,9 @@ private func renderRow(row: Int) -> Element {
 }
 
 func renderTableView(component: Component<()>, state: ()) -> Element {
-    return TableView((1...100).map(renderRow), selectionChanged: println)
-        .flex(1)
-        .selfAlignment(.Stretch)
+	return TableView((1...100).map(renderRow), selectionChanged: println)
+		.flex(1)
+		.selfAlignment(.Stretch)
 }
 
 let TableViewDemo = { Component(initialState: (), render: renderTableView) }
@@ -62,16 +62,11 @@ func renderInput(component: Component<String>, state: String) -> Element {
             View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
                 .margin(Edges(uniform: 10))
                 .size(100, 100),
-            Input(placeholder: "Email", keyboardType: .EmailAddress, autocorrectionType: .No, returnKeyType: .Next)
+            Input(placeholder: "Username")
                 .margin(Edges(uniform: 10)),
-            Input(placeholder: "Password", secure: true, returnKeyType: .Go, shouldReturn: {text in
-                    println("Password return.")
-                    return false
-                }, textChanged: { text in
-                    println("Password action: \(text)")
-                })
+            Input(placeholder: "Password", secure: true)
                 .margin(Edges(uniform: 10))
-        ])
+            ])
 }
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
@@ -108,18 +103,18 @@ func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
     return Element()
         .direction(.Column)
         .children([
-            Element()
-                .children([
-                    contentComponent
-                ])
-                .childAlignment(.Center)
-                .justification(.Center)
-                .flex(1),
+			Element()
+				.children([
+					contentComponent
+				])
+				.childAlignment(.Center)
+				.justification(.Center)
+				.flex(1),
             Button(title: "Show me more!", action: showMore)
                 .width(200)
                 .margin(Edges(uniform: 10))
                 .selfAlignment(.Center)
-        ])
+		])
 }
 
 func toggleDisplay(var state: AppState) -> AppState {
