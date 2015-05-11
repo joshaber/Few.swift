@@ -22,11 +22,11 @@ private class FewListCell: UITableViewCell {
             } else {
 				realizedElement.remove()
 
-				let parent = RealizedElement(element: Element(), view: self, parent: nil)
+				let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 				self.realizedElement = element.realize(parent)
             }
         } else {
-			let parent = RealizedElement(element: Element(), view: self, parent: nil)
+			let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 			realizedElement = element.realize(parent)
         }
     }
