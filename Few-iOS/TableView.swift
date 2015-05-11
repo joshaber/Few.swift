@@ -32,6 +32,8 @@ private class FewListCell: UITableViewCell {
     }
 }
 
+private let cellKey = "ListCell"
+
 private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSource {
     let tableView: UITableView
     
@@ -47,23 +49,18 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
         self.tableView = tableView
         self.elements = elements
         super.init()
-        
+        tableView.registerClass(FewListCell.self, forCellReuseIdentifier: cellKey)
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    // MARK: NSTableViewDelegate
+    // MARK: UITableViewDelegate
     
     @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let element = elements[indexPath.row]
-        
-        let key = "ListCell"
-        var listCell = tableView.dequeueReusableCellWithIdentifier(key) as? FewListCell
-        if listCell == nil {
-            listCell = FewListCell(style: .Default, reuseIdentifier: key)
-        }
-        listCell?.updateWithElement(element)
-        return listCell ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellKey, forIndexPath: indexPath) as! FewListCell
+        cell.updateWithElement(element)
+        return cell
     }
     
     @objc func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
