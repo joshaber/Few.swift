@@ -101,16 +101,21 @@ public class TableView: Element {
     public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
         super.applyDiff(old, realizedSelf: realizedSelf)
         
-        if let scrollView = realizedSelf?.view as? FewTableView {
-            let handler = scrollView.handler
+        if let tableView = realizedSelf?.view as? FewTableView {
+            let handler = tableView.handler
             
             layoutElements()
             
             handler?.elements = elements
-            
-            let tableView = scrollView.handler?.tableView
-            
             handler?.selectionChanged = selectionChanged
+			if tableView.indexPathForSelectedRow()?.row != selectedRow {
+				if let selectedRow = selectedRow {
+					let indexPath = NSIndexPath(forRow: selectedRow, inSection: 0)
+					tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+				} else if let tableSelected = tableView.indexPathForSelectedRow() {
+					tableView.deselectRowAtIndexPath(tableSelected, animated: false)
+				}
+			}
         }
     }
     
