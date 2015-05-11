@@ -23,9 +23,8 @@ private class FewScrollView: UIScrollView, UIScrollViewDelegate {
         fatalError("FewScrollView should not be used in a xib.")
     }
     
-    private func scrollViewDidScroll(scrollView: UIScrollView) {
-        let visibleRect = CGRect(x: contentOffset.x, y: contentOffset.y, width: contentOffset.x + bounds.size.width, height: contentOffset.y + bounds.size.height)
-        didScroll(visibleRect)
+    @objc func scrollViewDidScroll(scrollView: UIScrollView) {
+        didScroll(bounds)
     }
 }
 
