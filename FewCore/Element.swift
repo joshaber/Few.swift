@@ -234,9 +234,8 @@ public class Element {
 
 	public func elementDidRealize(realizedSelf: RealizedElement) {
 		if autofocus {
-			let window = realizedSelf.view?.window!
 #if os(OSX)
-			window?.makeFirstResponder(realizedSelf.view)
+			realizedSelf.view?.window!.makeFirstResponder(realizedSelf.view)
 #else
 			realizedSelf.view?.becomeFirstResponder()
 #endif

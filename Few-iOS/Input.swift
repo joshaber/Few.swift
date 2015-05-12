@@ -17,7 +17,6 @@ final internal class InputDelegate: NSObject, UITextFieldDelegate {
 }
 
 public class Input: Element {
-
 	public var text: String?
 	public var textColor: UIColor?
 	public var font: UIFont?
