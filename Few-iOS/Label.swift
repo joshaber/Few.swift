@@ -50,12 +50,13 @@ public class Label: Element {
 	}
 
 	public override func createView() -> ViewType {
-		let field = UILabel(frame: frame)
-		field.font = DefaultLabelFont
-		field.attributedText = attributedString
-		field.alpha = alpha
-		field.hidden = hidden
-		return field
+		let label = UILabel(frame: frame)
+		label.numberOfLines = 0
+		label.font = DefaultLabelFont
+		label.attributedText = attributedString
+		label.alpha = alpha
+		label.hidden = hidden
+		return label
 	}
 
 	internal override func assembleLayoutNode() -> Node {
