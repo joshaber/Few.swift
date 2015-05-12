@@ -329,13 +329,13 @@ public class Component<S>: Element {
 		}
 	}
 
-	internal override func assembleLayoutNode() -> Node {
+	public override func assembleLayoutNode() -> Node {
 		performInitialRenderIfNeeded()
 
 		return rootElement!.assembleLayoutNode()
 	}
 
-	override func applyLayout(layout: Layout) {
+	public override func applyLayout(layout: Layout) {
 		frame = layout.frame
 
 		rootElement?.applyLayout(layout)
