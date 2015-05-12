@@ -41,6 +41,7 @@ public class Image: Element {
 		view.alpha = alpha
 		view.hidden = hidden
 		view.image = image
+		view.contentMode = scaling
 		return view
 	}
 }
