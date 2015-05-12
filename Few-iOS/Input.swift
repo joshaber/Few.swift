@@ -68,7 +68,7 @@ public class Input: Element {
                 actionTrampoline = newTrampoline
             }
             
-            textField.delegate = self.inputDelegate
+            textField.delegate = inputDelegate
             
             if placeholder != textField.placeholder {
                 textField.placeholder = placeholder
