@@ -4,7 +4,4 @@
    <FileRef
       location = "container:Few.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:External/SwiftBox/SwiftBox.xcodeproj">
-   </FileRef>
 </Workspace>
