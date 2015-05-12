@@ -108,11 +108,12 @@ public class TableView: Element {
             
             handler?.elements = elements
             handler?.selectionChanged = selectionChanged
-            if tableView.indexPathForSelectedRow()?.row != selectedRow {
+            let tableSelected = tableView.indexPathForSelectedRow()
+            if tableSelected?.row != selectedRow {
                 if let selectedRow = selectedRow {
                     let indexPath = NSIndexPath(forRow: selectedRow, inSection: 0)
                     tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
-                } else if let tableSelected = tableView.indexPathForSelectedRow() {
+                } else if let tableSelected = tableSelected {
                     tableView.deselectRowAtIndexPath(tableSelected, animated: false)
                 }
             }
