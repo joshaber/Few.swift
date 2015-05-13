@@ -11,10 +11,12 @@ import UIKit
 public class Image: Element {
 	public var image: UIImage?
 	public var scaling: UIViewContentMode
+	public var clipsToBounds: Bool
 	
-	public init(_ image: UIImage?, scaling: UIViewContentMode = .ScaleAspectFit) {
+	public init(_ image: UIImage?, scaling: UIViewContentMode = .ScaleAspectFit, clipsToBounds: Bool = false) {
 		self.image = image
 		self.scaling = scaling
+		self.clipsToBounds = clipsToBounds
 		
 		let size = image?.size ?? CGSize(width: Node.Undefined, height: Node.Undefined)
 		super.init(frame: CGRect(origin: CGPointZero, size: size))
@@ -33,6 +35,10 @@ public class Image: Element {
 			if view.image != image {
 				view.image = image
 			}
+			
+			if view.clipsToBounds != clipsToBounds {
+				view.clipsToBounds = clipsToBounds
+			}
 		}
 	}
 	
@@ -41,6 +47,8 @@ public class Image: Element {
 		view.alpha = alpha
 		view.hidden = hidden
 		view.image = image
+		view.contentMode = scaling
+		view.clipsToBounds = clipsToBounds
 		return view
 	}
 }
