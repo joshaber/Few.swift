@@ -153,6 +153,6 @@ public class ScrollView_<LOL>: Component<CGRect> {
 	}
 
 	internal override var selfDescription: String {
-		return "\(self.dynamicType): " + calculateVisibleElements(getState()).description
+		return "\(self.dynamicType): " + calculateVisibleElements(state).description
 	}
 }

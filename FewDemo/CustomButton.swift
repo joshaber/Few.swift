@@ -21,7 +21,7 @@ class CustomButton_<LOL>: Few.Component<Bool> {
 	}
 
 	override func render() -> Element {
-		let active = getState()
+		let active = state
 		let color = (active ? NSColor.greenColor() : NSColor.blackColor())
 		return View(
 			borderColor: color,
