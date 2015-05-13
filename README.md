@@ -121,17 +121,16 @@ is in charge of making an in-place changes to the UI when the state changes.
 
 See [FewDemo](FewDemo) for some more involved examples.
 
-## How does this compare to React-Native/Components?
+## How does this compare to React Native/ComponentKit?
 
-This is pure conjecture since neither are open source yet, but a few
-differences I know of:
+A few of the most notable differences:
 
 1. Few.swift is written in... Swift. Type safety is cool.
-2. Single-threaded. React-Native and Components both do layout on a non-main
+2. Single-threaded. React Native and ComponentKit both do layout on a non-main
 thread. Few.swift keeps everything on the main thread currently.
-3. Both React-Native and Components are battle-tested. They've been used in
+3. Both React Native and ComponentKit are battle-tested. They've been used in
 shipping apps. Few.swift has not.
-4. React-Native has an awesome live reload feature.
+4. React Native has an awesome live reload feature.
 
 ## Quirks
 
