@@ -144,4 +144,4 @@ requests welcome :sparkling_heart:.
 
 --
 
-<a name="lol"><sup>1.</sup></a> React, but for Cocoa. A reactive Cocoa, one might say.
+<a name="lol"><sup>1.</sup></a> React, but for Cocoa. A [reactive Cocoa](https://github.com/ReactiveCocoa/ReactiveCocoa), one might say.
