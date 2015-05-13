@@ -25,7 +25,7 @@ import AppKit
 /// by calling the `render` function passed in to its init. But subclasses can
 /// optimize this by implementing `componentShouldRender`.
 public class Component<S>: Element {
-	private var state: S
+	public private(set) var state: S
 
 	private var rootElement: Element?
 
@@ -231,11 +231,6 @@ public class Component<S>: Element {
 			self.renderSelf()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
-	}
-
-	/// Get the current state of the component.
-	final public func getState() -> S {
-		return state
 	}
 
 	final public func findView(element: Element) -> ViewType? {
