@@ -9,25 +9,21 @@
 import Foundation
 import AppKit
 
-private var ElementKey = "ElementKey"
-
 private let defaultRowHeight: CGFloat = 42
 
 private class FewListCell: NSTableCellView {
 	private var realizedElement: RealizedElement?
 
-	func updateWithElement(element: Element) {
+	func updateWithElement(element: Element, parent: RealizedElement) {
 		if let realizedElement = realizedElement {
 			if element.canDiff(realizedElement.element) {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
 				realizedElement.remove()
 
-				let parent = RealizedElement(element: Element(), view: self, parent: nil)
 				self.realizedElement = element.realize(parent)
 			}
 		} else {
-			let parent = RealizedElement(element: Element(), view: self, parent: nil)
 			realizedElement = element.realize(parent)
 		}
 	}
@@ -45,6 +41,8 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 	let tableView: NSTableView
 
 	var supressChangeNotification = false
+
+	var parents: [String: RealizedElement] = [:]
 
 	var elements: [Element] {
 		didSet {
@@ -83,12 +81,21 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 			let newListCell = FewListCell(frame: CGRectZero)
 			newListCell.identifier = key
 
+			let parent = RealizedElement(element: Element(), view: newListCell, parent: nil)
+			parents[parentKeyForCell(newListCell)] = parent
+
 			listCell = newListCell
 		}
 
-		listCell?.updateWithElement(element)
+		let parent = parents[parentKeyForCell(listCell!)]!
+		listCell?.updateWithElement(element, parent: parent)
 
 		return listCell
+	}
+
+	func parentKeyForCell(cell: FewListCell) -> String {
+		let ptr = Unmanaged<AnyObject>.passUnretained(cell).toOpaque()
+		return "\(ptr)"
 	}
 
 	@objc func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
