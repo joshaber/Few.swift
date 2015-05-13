@@ -10,7 +10,7 @@ import AppKit
 import Few
 
 typealias Counter = Counter_<Int>
-class Counter_<LOL>: Few.Component<Int> {
+class Counter_<LOL>: Component<Int> {
 	init() {
 		super.init(initialState: 0)
 	}

@@ -19,7 +19,7 @@ struct LoginState {
 	}
 }
 
-private func renderInput(component: Few.Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
+private func renderInput(component: Component<LoginState>, label: String, secure: Bool, fn: (LoginState, String) -> LoginState) -> Element {
 	let action: String -> () = { str in
 		component.updateState { fn($0, str) }
 	}
@@ -49,7 +49,7 @@ struct ScrollViewState {
 	}
 }
 
-private func keyDown(event: NSEvent, component: Few.Component<ScrollViewState>) -> Bool {
+private func keyDown(event: NSEvent, component: Component<ScrollViewState>) -> Bool {
 	let characters = event.charactersIgnoringModifiers!.utf16
 	let firstCharacter = first(characters)
 	if firstCharacter == UInt16(NSDeleteCharacter) {
@@ -119,7 +119,7 @@ private func renderThingy(count: Int) -> Element {
 }
 
 typealias Demo = Demo_<()>
-class Demo_<LOL>: Few.Component<()> {
+class Demo_<LOL>: Component<()> {
 	init() {
 		super.init(initialState: ())
 	}
