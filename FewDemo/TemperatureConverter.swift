@@ -55,7 +55,6 @@ class TemperatureConverter_<LOL>: Few.Component<ConverterState> {
 	}
 
 	override func render() -> Element {
-		let state = getState()
 		return Element()
 			.justification(.Center)
 			.childAlignment(.Center)

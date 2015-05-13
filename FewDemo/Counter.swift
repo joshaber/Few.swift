@@ -16,7 +16,7 @@ class Counter_<LOL>: Few.Component<Int> {
 	}
 
 	override func render() -> Element {
-		let count = getState()
+		let count = state
 		return View(
 			backgroundColor: NSColor.blueColor())
 			// The view itself should be centered.
