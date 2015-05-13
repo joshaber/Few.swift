@@ -88,7 +88,7 @@ enum ActiveComponent {
 	case Input
 }
 
-func renderApp(component: Few.Component<AppState>, state: AppState) -> Element {
+func renderApp(component: Component<AppState>, state: AppState) -> Element {
 	var contentComponent: Element!
 	switch state.activeComponent {
 	case .TableView:
