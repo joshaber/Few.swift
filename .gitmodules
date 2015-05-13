@@ -1,6 +1,0 @@
-[submodule "External/Quick"]
-	path = External/Quick
-	url = https://github.com/Quick/Quick.git
-[submodule "External/SwiftBox"]
-	path = External/SwiftBox
-	url = https://github.com/joshaber/SwiftBox.git

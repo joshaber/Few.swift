@@ -1,4 +1,4 @@
-# Few.swift
+# Few.swift [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 [React](http://facebook.github.io/react/)-inspired library for writing
 AppKit/UIKit UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
