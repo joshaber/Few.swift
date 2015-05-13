@@ -66,7 +66,13 @@ private func keyDown(event: NSEvent, component: Few.Component<ScrollViewState>) 
 
 private func renderScrollView() -> Element {
 	return Component(initialState: ScrollViewState()) { component, state in
-		let items = state.items.map { row in renderRow(row) }
+		let items = state.items.map { row -> Element in
+			if row % 2 == 0 {
+				return renderRow1(row)
+			} else {
+				return renderRow2(row)
+			}
+		}
 		let itemPlurality = (items.count == 1 ? "item" : "items")
 		return View(
 			keyDown: { _, event in
@@ -83,13 +89,22 @@ private func renderScrollView() -> Element {
 	}
 }
 
-private func renderRow(row: Int) -> Element {
+private func renderRow1(row: Int) -> Element {
 	return Element()
 		.direction(.Column)
 		.children([
-			Label("I am a banana.", textColor: NSColor.yellowColor(), font: NSFont.systemFontOfSize(18)),
 			Label("\(row)"),
+			Label("I am a banana.", textColor: .blackColor(), font: .systemFontOfSize(18)),
 			Image(NSImage(named: NSImageNameApplicationIcon)).size(42, 42),
+		])
+}
+
+private func renderRow2(row: Int) -> Element {
+	return Element()
+		.direction(.Row)
+		.children([
+			Image(NSImage(named: NSImageNameApplicationIcon)).size(14, 14),
+			Label("I am a banana.", textColor: .redColor(), font: .systemFontOfSize(11)),
 		])
 }
 
@@ -131,7 +146,7 @@ class Demo_<LOL>: Few.Component<()> {
 			.direction(.Column)
 			.children([
 				renderLogin(),
-				renderScrollView().size(100, 100),
+				renderScrollView().size(100, 200),
 			])
 	}
 }

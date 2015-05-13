@@ -15,19 +15,22 @@ private let defaultRowHeight: CGFloat = 42
 
 private class FewListCell: NSTableCellView {
 	private var realizedElement: RealizedElement?
+	private var parent: RealizedElement!
 
 	func updateWithElement(element: Element) {
+		if parent == nil {
+			parent = RealizedElement(element: Element(), view: self, parent: nil)
+		}
+
 		if let realizedElement = realizedElement {
 			if element.canDiff(realizedElement.element) {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
 				realizedElement.remove()
 
-				let parent = RealizedElement(element: Element(), view: self, parent: nil)
 				self.realizedElement = element.realize(parent)
 			}
 		} else {
-			let parent = RealizedElement(element: Element(), view: self, parent: nil)
 			realizedElement = element.realize(parent)
 		}
 	}
