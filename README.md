@@ -22,7 +22,7 @@ Here's a simple example which counts the number of times a button is clicked:
 
 ```swift
 // This function is called every time `component.updateState` is called.
-func renderApp(component: Few.Component<Int>, count: Int) -> Element {
+func renderApp(component: Component<Int>, count: Int) -> Element {
 	return View()
 		// The view itself should be centered.
 		.justification(.Center)
@@ -43,7 +43,7 @@ func renderApp(component: Few.Component<Int>, count: Int) -> Element {
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = Few.Component(initialState: 0, render: renderApp)
+	private let appComponent = Component(initialState: 0, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
 		let contentView = window.contentView as NSView
@@ -88,7 +88,7 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		])
 }
 
-private func render(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+private func render(component: Component<ConverterState>, state: ConverterState) -> Element {
 	let numberFormatter = NSNumberFormatter()
 	let parseNumber: String -> CGFloat? = { str in
 		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
