@@ -25,7 +25,7 @@ import AppKit
 /// by calling the `render` function passed in to its init. But subclasses can
 /// optimize this by implementing `componentShouldRender`.
 public class Component<S>: Element {
-	private(set) var state: S
+	public private(set) var state: S
 
 	private var rootElement: Element?
 
