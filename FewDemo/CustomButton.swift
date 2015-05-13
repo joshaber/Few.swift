@@ -10,7 +10,7 @@ import Cocoa
 import Few
 
 typealias CustomButton = CustomButton_<Bool>
-class CustomButton_<LOL>: Few.Component<Bool> {
+class CustomButton_<LOL>: Component<Bool> {
 	var title: String
 	var action: () -> ()
 
@@ -21,7 +21,7 @@ class CustomButton_<LOL>: Few.Component<Bool> {
 	}
 
 	override func render() -> Element {
-		let active = getState()
+		let active = state
 		let color = (active ? NSColor.greenColor() : NSColor.blackColor())
 		return View(
 			borderColor: color,

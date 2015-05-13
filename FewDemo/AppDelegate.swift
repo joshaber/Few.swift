@@ -15,7 +15,7 @@ enum ActiveComponent {
 	case Counter
 }
 
-func renderApp(component: Few.Component<ActiveComponent>, state: ActiveComponent) -> Element {
+func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) -> Element {
 	var contentComponent: Element!
 	switch state {
 	case .Demo:

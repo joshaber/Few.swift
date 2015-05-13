@@ -194,7 +194,7 @@ public class Element {
 	/// Derealize the element.
 	public func derealize() {}
 
-	internal func assembleLayoutNode() -> Node {
+	public func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
 
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
@@ -220,7 +220,7 @@ public class Element {
 #endif
 	}
 
-	internal func applyLayout(layout: Layout) {
+	public func applyLayout(layout: Layout) {
 		frame = layout.frame
 
 		for (child, layout) in Zip2(children, layout.children) {
@@ -234,9 +234,8 @@ public class Element {
 
 	public func elementDidRealize(realizedSelf: RealizedElement) {
 		if autofocus {
-			let window = realizedSelf.view?.window!
 #if os(OSX)
-			window?.makeFirstResponder(realizedSelf.view)
+			realizedSelf.view?.window!.makeFirstResponder(realizedSelf.view)
 #else
 			realizedSelf.view?.becomeFirstResponder()
 #endif

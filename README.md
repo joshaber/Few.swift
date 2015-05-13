@@ -1,4 +1,4 @@
-# Few.swift
+# Few.swift [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 [React](http://facebook.github.io/react/)-inspired library for writing
 AppKit/UIKit UIs which are functions of their state.<sup><a href="#lol">1</a></sup>
@@ -22,7 +22,7 @@ Here's a simple example which counts the number of times a button is clicked:
 
 ```swift
 // This function is called every time `component.updateState` is called.
-func renderApp(component: Few.Component<Int>, count: Int) -> Element {
+func renderApp(component: Component<Int>, count: Int) -> Element {
 	return View()
 		// The view itself should be centered.
 		.justification(.Center)
@@ -43,7 +43,7 @@ func renderApp(component: Few.Component<Int>, count: Int) -> Element {
 class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var window: NSWindow!
 
-	private let appComponent = Few.Component(initialState: 0, render: renderApp)
+	private let appComponent = Component(initialState: 0, render: renderApp)
 
 	func applicationDidFinishLaunching(notification: NSNotification) {
 		let contentView = window.contentView as NSView
@@ -88,7 +88,7 @@ private func renderLabeledInput(label: String, value: String, autofocus: Bool, f
 		])
 }
 
-private func render(component: Few.Component<ConverterState>, state: ConverterState) -> Element {
+private func render(component: Component<ConverterState>, state: ConverterState) -> Element {
 	let numberFormatter = NSNumberFormatter()
 	let parseNumber: String -> CGFloat? = { str in
 		return (numberFormatter.numberFromString(str)?.doubleValue).map { CGFloat($0) }
@@ -121,17 +121,16 @@ is in charge of making an in-place changes to the UI when the state changes.
 
 See [FewDemo](FewDemo) for some more involved examples.
 
-## How does this compare to React-Native/Components?
+## How does this compare to React Native/ComponentKit?
 
-This is pure conjecture since neither are open source yet, but a few
-differences I know of:
+A few of the most notable differences:
 
 1. Few.swift is written in... Swift. Type safety is cool.
-2. Single-threaded. React-Native and Components both do layout on a non-main
+2. Single-threaded. React Native and ComponentKit both do layout on a non-main
 thread. Few.swift keeps everything on the main thread currently.
-3. Both React-Native and Components are battle-tested. They've been used in
+3. Both React Native and ComponentKit are battle-tested. They've been used in
 shipping apps. Few.swift has not.
-4. React-Native has an awesome live reload feature.
+4. React Native has an awesome live reload feature.
 
 ## Quirks
 
@@ -140,9 +139,9 @@ This hurts.
 
 ## Should I use this?
 
-Probably :doughnut:. See above about how it's not battle-tested yet. It's also
-currently mostly OS X-only. iOS support is really basic. Pull requests welcome :sparkling_heart:.
+Probably :doughnut:. See above about how it's not battle-tested yet. Pull
+requests welcome :sparkling_heart:.
 
 --
 
-<a name="lol"><sup>1.</sup></a> React, but for Cocoa. A reactive Cocoa, one might say.
+<a name="lol"><sup>1.</sup></a> React, but for Cocoa. A [reactive Cocoa](https://github.com/ReactiveCocoa/ReactiveCocoa), one might say.

@@ -49,13 +49,12 @@ private func parseFloat(str: String) -> CGFloat? {
 }
 
 typealias TemperatureConverter = TemperatureConverter_<ConverterState>
-class TemperatureConverter_<LOL>: Few.Component<ConverterState> {
+class TemperatureConverter_<LOL>: Component<ConverterState> {
 	init() {
 		super.init(initialState: ConverterState());
 	}
 
 	override func render() -> Element {
-		let state = getState()
 		return Element()
 			.justification(.Center)
 			.childAlignment(.Center)

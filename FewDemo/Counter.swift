@@ -10,13 +10,13 @@ import AppKit
 import Few
 
 typealias Counter = Counter_<Int>
-class Counter_<LOL>: Few.Component<Int> {
+class Counter_<LOL>: Component<Int> {
 	init() {
 		super.init(initialState: 0)
 	}
 
 	override func render() -> Element {
-		let count = getState()
+		let count = state
 		return View(
 			backgroundColor: NSColor.blueColor())
 			// The view itself should be centered.
