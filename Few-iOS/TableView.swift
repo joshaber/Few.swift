@@ -37,15 +37,15 @@ private let cellKey = "ListCell"
 private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSource {
 	let tableView: UITableView
 	
-	var elements: [Element] {
+	var elements: [[Element]] {
 		didSet {
 			tableView.reloadData()
 		}
 	}
 	
-	var selectionChanged: (Int -> ())?
+	var selectionChanged: (NSIndexPath -> ())?
 	
-	init(tableView: UITableView, elements: [Element]) {
+	init(tableView: UITableView, elements: [[Element]]) {
 		self.tableView = tableView
 		self.elements = elements
 		super.init()
@@ -57,27 +57,27 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	// MARK: UITableViewDelegate
 	
 	@objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let element = elements[indexPath.row]
+		let element = elements[indexPath.section][indexPath.row]
 		let cell = tableView.dequeueReusableCellWithIdentifier(cellKey, forIndexPath: indexPath) as! FewListCell
 		cell.updateWithElement(element)
 		return cell
 	}
 	
 	@objc func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		let height = elements[indexPath.row].frame.height
+		let height = elements[indexPath.section][indexPath.row].frame.height
 		return height > CGFloat(0) ? height : defaultRowHeight
 	}
 	
 	@objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		return 1
-	}
-	
-	@objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return elements.count
 	}
 	
+	@objc func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return elements[section].count
+	}
+	
 	@objc func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		selectionChanged?(indexPath.row)
+		selectionChanged?(indexPath)
 	}
 }
 
@@ -86,11 +86,11 @@ private class FewTableView: UITableView {
 }
 
 public class TableView: Element {
-	private let elements: [Element]
-	private let selectionChanged: (Int -> ())?
-	private let selectedRow: Int?
+	private let elements: [[Element]]
+	private let selectionChanged: (NSIndexPath -> ())?
+	private let selectedRow: NSIndexPath?
 	
-	public init(_ elements: [Element], selectedRow: Int? = nil, selectionChanged: (Int -> ())? = nil) {
+	public init(_ elements: [[Element]], selectedRow: NSIndexPath? = nil, selectionChanged: (NSIndexPath -> ())? = nil) {
 		self.elements = elements
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
@@ -111,8 +111,7 @@ public class TableView: Element {
 			let tableSelected = tableView.indexPathForSelectedRow()
 			if tableSelected?.row != selectedRow {
 				if let selectedRow = selectedRow {
-					let indexPath = NSIndexPath(forRow: selectedRow, inSection: 0)
-					tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+					tableView.selectRowAtIndexPath(selectedRow, animated: false, scrollPosition: .None)
 				} else if let tableSelected = tableSelected {
 					tableView.deselectRowAtIndexPath(tableSelected, animated: false)
 				}
@@ -132,10 +131,12 @@ public class TableView: Element {
 	}
 	
 	private final func layoutElements() {
-		for element in elements {
-			let node = element.assembleLayoutNode()
-			let layout = node.layout(maxWidth: frame.size.width)
-			element.applyLayout(layout)
+		for section in elements {
+			for element in section {
+				let node = element.assembleLayoutNode()
+				let layout = node.layout(maxWidth: frame.width)
+				element.applyLayout(layout)
+			}
 		}
 	}
 }

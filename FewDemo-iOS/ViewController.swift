@@ -48,7 +48,7 @@ private func renderRow(row: Int) -> Element {
 }
 
 func renderTableView(component: Component<()>, state: ()) -> Element {
-	return TableView((1...100).map(renderRow), selectionChanged: println)
+	return TableView([(1...100).map(renderRow)], selectionChanged: println)
 		.flex(1)
 		.selfAlignment(.Stretch)
 }
