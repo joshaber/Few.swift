@@ -13,18 +13,16 @@ private let defaultRowHeight: CGFloat = 42
 private class FewListHeaderFooter: UITableViewHeaderFooterView {
 	private var realizedElement: RealizedElement?
 	
-	func updateWithElement(element: Element) {
+	func updateWithElement(element: Element, parent: RealizedElement) {
 		if let realizedElement = realizedElement {
 			if element.canDiff(realizedElement.element) {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
 				realizedElement.remove()
 				
-				let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 				self.realizedElement = element.realize(parent)
 			}
 		} else {
-			let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 			realizedElement = element.realize(parent)
 		}
 	}
@@ -97,6 +95,19 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		return result
 	}
 	
+	func parentForHeaderFooter(view: FewListHeaderFooter) -> RealizedElement {
+		let ptr = Unmanaged<AnyObject>.passUnretained(view).toOpaque()
+		let key = "\(ptr)"
+		let result: RealizedElement
+		if let existing = parents[key] {
+			result = existing
+		} else {
+			result = RealizedElement(element: Element(), view: view.contentView, parent: nil)
+			parents[key] = result
+		}
+		return result
+	}
+	
 	// MARK: UITableViewDelegate
 	
 	@objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -136,7 +147,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		if section < headers.count {
 			if let header = headers[section] {
 				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerKey) as! FewListHeaderFooter
-				view.updateWithElement(header)
+				view.updateWithElement(header, parent: parentForHeaderFooter(view))
 				return view
 			}
 		}
@@ -156,7 +167,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		if section < footers.count {
 			if let footer = footers[section] {
 				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(footerKey) as! FewListHeaderFooter
-				view.updateWithElement(footer)
+				view.updateWithElement(footer, parent: parentForHeaderFooter(view))
 				return view
 			}
 		}
