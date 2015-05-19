@@ -73,7 +73,7 @@ func renderTableView(component: Component<()>, state: ()) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView(elements, selectionChanged: println)
+	return TableView([elements], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
 		.flex(1)
 		.selfAlignment(.Stretch)
 }
