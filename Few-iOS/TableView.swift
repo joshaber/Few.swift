@@ -8,25 +8,21 @@
 
 import UIKit
 
-private var ElementKey = "ElementKey"
-
 private let defaultRowHeight: CGFloat = 42
 
 private class FewListCell: UITableViewCell {
 	private var realizedElement: RealizedElement?
 	
-	func updateWithElement(element: Element) {
+	func updateWithElement(element: Element, parent: RealizedElement) {
 		if let realizedElement = realizedElement {
 			if element.canDiff(realizedElement.element) {
 				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
 			} else {
 				realizedElement.remove()
 
-				let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 				self.realizedElement = element.realize(parent)
 			}
 		} else {
-			let parent = RealizedElement(element: Element(), view: contentView, parent: nil)
 			realizedElement = element.realize(parent)
 		}
 	}
@@ -36,6 +32,8 @@ private let cellKey = "ListCell"
 
 private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSource {
 	let tableView: UITableView
+	
+	var parents = [String: RealizedElement]()
 	
 	var elements: [Element] {
 		didSet {
@@ -54,12 +52,25 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		tableView.dataSource = self
 	}
 	
+	func parentForCell(cell: FewListCell) -> RealizedElement {
+		let ptr = Unmanaged<AnyObject>.passUnretained(cell).toOpaque()
+		let key = "\(ptr)"
+		let result: RealizedElement
+		if let existing = parents[key] {
+			result = existing
+		} else {
+			result = RealizedElement(element: Element(), view: cell.contentView, parent: nil)
+			parents[key] = result
+		}
+		return result
+	}
+	
 	// MARK: UITableViewDelegate
 	
 	@objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let element = elements[indexPath.row]
 		let cell = tableView.dequeueReusableCellWithIdentifier(cellKey, forIndexPath: indexPath) as! FewListCell
-		cell.updateWithElement(element)
+		cell.updateWithElement(element, parent: parentForCell(cell))
 		return cell
 	}
 	
