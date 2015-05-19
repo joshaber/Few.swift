@@ -46,6 +46,7 @@ public class Label: Element {
 		if let textField = realizedSelf?.view as? NSTextField {
 			if attributedString != textField.attributedStringValue {
 				textField.attributedStringValue = attributedString
+				realizedSelf?.markNeedsLayout()
 			}
 		}
 	}

@@ -24,6 +24,8 @@ public class RealizedElement {
 	internal var children: [RealizedElement] = []
 	private var frameOffset = CGPointZero
 
+	internal var needsLayout = true
+
 	public init(element: Element, view: ViewType?, parent: RealizedElement?) {
 		self.element = element
 		self.view = view
@@ -79,5 +81,20 @@ public class RealizedElement {
 		if let index = indexOfObject(children, child) {
 			children.removeAtIndex(index)
 		}
+	}
+
+	public final func markNeedsLayout() {
+		needsLayout = true
+
+		parent?.markNeedsLayout()
+	}
+
+	public final func layoutIfNeeded(maxWidth: CGFloat) {
+		if !needsLayout { return }
+
+		let node = element.assembleLayoutNode()
+		let layout = node.layout(maxWidth: maxWidth)
+
+		element.applyLayout(layout)
 	}
 }
