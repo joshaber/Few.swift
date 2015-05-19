@@ -29,7 +29,7 @@ func renderCounter(component: Component<Int>, count: Int) -> Element {
 
 let Counter = { Component(initialState: 0, render: renderCounter) }
 
-private func renderRow(row: Int) -> Element {
+private func renderRow1(row: Int) -> Element {
 	return Element()
 		.direction(.Row)
 		.padding(Edges(uniform: 10))
@@ -47,8 +47,33 @@ private func renderRow(row: Int) -> Element {
 			])
 }
 
+private func renderRow2(row: Int) -> Element {
+	return Element()
+		.direction(.Row)
+		.padding(Edges(uniform: 10))
+		.children([
+			Image(UIImage(named: "Apple_Swift_Logo.png"))
+				.size(42, 42)
+				.selfAlignment(.FlexStart),
+			Element()
+				.margin(Edges(left: 10))
+				.direction(.Column)
+				.children([
+					Label("I am a banana.", textColor: UIColor.redColor(), font: UIFont.systemFontOfSize(18)),
+					Label("\(row)", textColor: UIColor.greenColor())
+					])
+			])
+}
+
 func renderTableView(component: Component<()>, state: ()) -> Element {
-	return TableView([(1...100).map(renderRow)], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
+	let elements: [Element] = Array(1...100).map { rowNum in
+		if rowNum % 2 == 0 {
+			return renderRow1(rowNum)
+		} else {
+			return renderRow2(rowNum)
+		}
+	}
+	return TableView([elements], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
 		.flex(1)
 		.selfAlignment(.Stretch)
 }
