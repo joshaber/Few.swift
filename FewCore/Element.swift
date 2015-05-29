@@ -234,6 +234,10 @@ public class Element {
 	internal var isRendering: Bool {
 		return false
 	}
+
+	internal var isRenderQueued: Bool {
+		return false
+	}
 }
 
 extension Element {

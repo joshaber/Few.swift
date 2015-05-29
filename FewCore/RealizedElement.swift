@@ -117,7 +117,7 @@ public class RealizedElement {
 		}
 	}
 
-	private final func findRoot() -> RealizedElement? {
+	internal final func findRoot() -> RealizedElement? {
 		if element.isRoot {
 			return self
 		} else {

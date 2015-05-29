@@ -181,6 +181,10 @@ public class Component<S>: Element {
 	final private func enqueueRender() {
 		if renderQueued { return }
 
+		if let root = realizedSelf?.findRoot() where root.element.isRenderQueued {
+			return
+		}
+
 		renderQueued = true
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.BeforeWaiting.rawValue, 0, 0) { _, activity in
@@ -225,6 +229,10 @@ public class Component<S>: Element {
 
 	internal override var isRendering: Bool {
 		return rendering
+	}
+
+	internal override var isRenderQueued: Bool {
+		return renderQueued
 	}
 
 	private func updateChildren() {
