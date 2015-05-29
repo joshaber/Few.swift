@@ -26,6 +26,8 @@ private class FewListCell: NSTableCellView {
 		} else {
 			realizedElement = element.realize(parent)
 		}
+
+		realizedElement?.layoutFromRoot()
 	}
 
 	override init(frame: CGRect) {

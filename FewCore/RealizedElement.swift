@@ -114,6 +114,8 @@ public class RealizedElement {
 			if root.element.isRendering && root !== self { return }
 
 			root.layoutIfNeeded(root.element.frame.size.width)
+		} else {
+			layoutIfNeeded(element.frame.size.width)
 		}
 	}
 
