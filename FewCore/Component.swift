@@ -36,6 +36,7 @@ public class Component<S>: Element {
 	/// Is the component a root?
 	private var root = false
 
+	/// Is the component currently rendering?
 	private var rendering = false
 
 	private var parent: RealizedElement?
@@ -76,7 +77,7 @@ public class Component<S>: Element {
 	/// Render the component without changing any state.
 	///
 	/// Note that unlike Component.updateState, this doesn't enqueue a render to 
-	/// be performed at the end of the runloop. Instead it immediately 
+	/// be performed at the end of the runloop. Instead it immediately
 	/// re-renders.
 	final public func forceRender() {
 		applyDiff(self, realizedSelf: realizedSelf)
@@ -125,6 +126,11 @@ public class Component<S>: Element {
 		layout()
 
 #if os(OSX)
+		configureViewForFrameChangedEvent(hostView)
+#endif
+	}
+
+	final private func configureViewForFrameChangedEvent(hostView: ViewType) {
 		hostView.postsFrameChangedNotifications = true
 		hostView.autoresizesSubviews = false
 
@@ -133,8 +139,8 @@ public class Component<S>: Element {
 				strongSelf.hostViewFrameChanged(hostView)
 			}
 		}
+
 		NSNotificationCenter.defaultCenter().addObserver(frameChangedTrampoline, selector: frameChangedTrampoline.selector, name: NSViewFrameDidChangeNotification, object: hostView)
-#endif
 	}
 
 	final private func hostViewFrameChanged(hostView: ViewType) {
@@ -205,6 +211,8 @@ public class Component<S>: Element {
 		realizedSelf?.layoutFromRootish()
 
 		rendering = false
+
+		componentDidRender()
 	}
 
 	internal override var isRoot: Bool {
@@ -229,11 +237,17 @@ public class Component<S>: Element {
 	}
 	
 	public override func realize(parent: RealizedElement?) -> RealizedElement {
+		componentWillRealize()
+
 		self.parent = parent
 
 		renderSelf()
 
-		return super.realize(parent)
+		let realizedElement = super.realize(parent)
+
+		componentDidRealize()
+
+		return realizedElement
 	}
 
 	public override func derealize() {

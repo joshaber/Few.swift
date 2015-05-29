@@ -197,7 +197,7 @@ public class Element {
 		return Edges(left: edges.left, right: edges.right, top: edges.bottom, bottom: edges.top)
 	}
 
-	internal var marginWithPlatformSpecificAdjustments: Edges {
+	internal final var marginWithPlatformSpecificAdjustments: Edges {
 #if os(OSX)
 		return verticallyFlippedEdges(margin)
 #else
@@ -205,7 +205,7 @@ public class Element {
 #endif
 	}
 
-	internal var paddingWithPlatformSpecificAdjustments: Edges {
+	internal final var paddingWithPlatformSpecificAdjustments: Edges {
 #if os(OSX)
 		return verticallyFlippedEdges(padding)
 #else
