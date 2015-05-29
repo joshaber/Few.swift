@@ -273,27 +273,20 @@ public class Component<S>: Element {
 
 extension Component {
 	final public func findView(element: Element) -> ViewType? {
-		if let realizedElement = realizedSelf {
-			return findViewRecursively(realizedElement) { $0.element === element }
-		} else {
-			return nil
-		}
+		return findViewRecursively(realizedSelf) { $0.element === element }
 	}
 
 	/// Find the view with the given key. This will only find views for elements
 	/// which have been realized.
 	final public func findViewWithKey(key: String) -> ViewType? {
-		if let realizedElement = realizedSelf {
-			return findViewRecursively(realizedElement) { $0.element.key == key }
-		} else {
-			return nil
-		}
+		return findViewRecursively(realizedSelf) { $0.element.key == key }
 	}
 
-	final private func findViewRecursively(rootElement: RealizedElement, predicate: RealizedElement -> Bool) -> ViewType? {
-		if predicate(rootElement) { return rootElement.view }
+	final private func findViewRecursively(rootElement: RealizedElement?, predicate: RealizedElement -> Bool) -> ViewType? {
+		if rootElement == nil { return nil }
+		if predicate(rootElement!) { return rootElement!.view }
 
-		for element in rootElement.children {
+		for element in rootElement!.children {
 			let result = findViewRecursively(element, predicate: predicate)
 			if result != nil { return result }
 		}
