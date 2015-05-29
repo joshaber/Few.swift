@@ -99,7 +99,7 @@ public class RealizedElement {
 		applyLayout(layout, offset: CGPointZero)
 	}
 
-	func realizedElementForElement(element: Element) -> RealizedElement? {
+	internal func realizedElementForElement(element: Element) -> RealizedElement? {
 		for child in children {
 			if child.element === element {
 				return child
@@ -109,7 +109,7 @@ public class RealizedElement {
 		return nil
 	}
 
-	func layoutFromRootish() {
+	internal func layoutFromRoot() {
 		if let root = findRoot() {
 			if root.element.isRendering && root !== self { return }
 
@@ -117,7 +117,7 @@ public class RealizedElement {
 		}
 	}
 
-	func findRoot() -> RealizedElement? {
+	private final func findRoot() -> RealizedElement? {
 		if element.isRoot {
 			return self
 		} else {

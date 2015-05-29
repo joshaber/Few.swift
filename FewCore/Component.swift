@@ -80,7 +80,7 @@ public class Component<S>: Element {
 	/// be performed at the end of the runloop. Instead it immediately
 	/// re-renders.
 	final public func forceRender() {
-		applyDiff(self, realizedSelf: realizedSelf)
+		rerender()
 	}
 	
 	/// Called when the component will be realized and before the component is
@@ -185,9 +185,13 @@ public class Component<S>: Element {
 
 		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.BeforeWaiting.rawValue, 0, 0) { _, activity in
 			self.renderQueued = false
-			self.applyDiff(self, realizedSelf: self.realizedSelf)
+			self.rerender()
 		}
 		CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes)
+	}
+
+	final private func rerender() {
+		applyDiff(self, realizedSelf: realizedSelf)
 	}
 
 	// MARK: Element
@@ -204,11 +208,11 @@ public class Component<S>: Element {
 		rendering = true
 
 		if shouldRender {
-			renderSelf()
+			updateChildren()
 			super.applyDiff(old, realizedSelf: realizedSelf)
 		}
 
-		realizedSelf?.layoutFromRootish()
+		realizedSelf?.layoutFromRoot()
 
 		rendering = false
 
@@ -223,7 +227,7 @@ public class Component<S>: Element {
 		return rendering
 	}
 
-	private func renderSelf() {
+	private func updateChildren() {
 		let element = render()
 		if root {
 			// The root element should flex to fill its container.
@@ -233,7 +237,7 @@ public class Component<S>: Element {
 	}
 
 	private func layout() {
-		realizedSelf?.layoutFromRootish()
+		realizedSelf?.layoutFromRoot()
 	}
 	
 	public override func realize(parent: RealizedElement?) -> RealizedElement {
@@ -241,7 +245,7 @@ public class Component<S>: Element {
 
 		self.parent = parent
 
-		renderSelf()
+		updateChildren()
 
 		let realizedElement = super.realize(parent)
 
