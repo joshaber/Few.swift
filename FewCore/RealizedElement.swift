@@ -22,14 +22,15 @@ public class RealizedElement {
 	public weak var parent: RealizedElement?
 
 	internal var children: [RealizedElement] = []
-	private var frameOffset = CGPointZero
 
-	internal var needsLayout = true
+	private var layoutFrame: CGRect
+	private var needsLayout = true
 
 	public init(element: Element, view: ViewType?, parent: RealizedElement?) {
 		self.element = element
 		self.view = view
 		self.parent = parent
+		layoutFrame = element.frame
 	}
 
 	public func addRealizedChild(child: RealizedElement, index: Int?) {
@@ -48,21 +49,19 @@ public class RealizedElement {
 			return
 		}
 
-		var parent: RealizedElement? = self
-		var offset = CGPointZero
-		while let currentParent = parent {
-			if currentParent.view != nil { break }
+		let viewParent = child.findViewParent()
+		viewParent?.view?.addSubview(child.view!)
+		child.element.elementDidRealize(child)
+	}
 
-			offset.x += currentParent.element.frame.origin.x + currentParent.frameOffset.x
-			offset.y += currentParent.element.frame.origin.y + currentParent.frameOffset.y
-			parent = currentParent.parent
+	private func findViewParent() -> RealizedElement? {
+		var currentParent: RealizedElement? = parent
+		while let p = currentParent {
+			if p.view != nil { return p }
+			currentParent = p.parent
 		}
 
-		child.view?.frame.origin.x += offset.x
-		child.view?.frame.origin.y += offset.y
-		child.frameOffset = offset
-		parent?.view?.addSubview(child.view!)
-		child.element.elementDidRealize(child)
+		return nil
 	}
 
 	public func remove() {
@@ -86,15 +85,65 @@ public class RealizedElement {
 	public final func markNeedsLayout() {
 		needsLayout = true
 
-		parent?.markNeedsLayout()
+		if let parent = parent where !parent.needsLayout {
+			parent.markNeedsLayout()
+		}
 	}
 
-	public final func layoutIfNeeded(maxWidth: CGFloat) {
+	private final func layoutIfNeeded(maxWidth: CGFloat) {
 		if !needsLayout { return }
 
 		let node = element.assembleLayoutNode()
 		let layout = node.layout(maxWidth: maxWidth)
 
-		element.applyLayout(layout)
+		applyLayout(layout, offset: CGPointZero)
+	}
+
+	func realizedElementForElement(element: Element) -> RealizedElement? {
+		for child in children {
+			if child.element === element {
+				return child
+			}
+		}
+
+		return nil
+	}
+
+	func layoutFromRootish() {
+		if let root = findRoot() {
+			if root.element.isRendering && root !== self { return }
+
+			root.layoutIfNeeded(root.element.frame.size.width)
+		}
+	}
+
+	func findRoot() -> RealizedElement? {
+		if element.isRoot {
+			return self
+		} else {
+			return parent?.findRoot()
+		}
+	}
+
+	private final func applyLayout(layout: Layout, offset: CGPoint) {
+		var transformedFrame = layout.frame
+		transformedFrame.origin.x += offset.x
+		transformedFrame.origin.y += offset.y
+		layoutFrame = transformedFrame
+
+		let childOffset: CGPoint
+		if let view = view {
+			// If we have a view then children won't need to be offset at all.
+			childOffset = CGPointZero
+			view.frame = layoutFrame.integerRect
+		} else {
+			childOffset = layoutFrame.origin
+		}
+
+		for (child, layout) in Zip2(children, layout.children) {
+			child.applyLayout(layout, offset: childOffset)
+		}
+
+		needsLayout = false
 	}
 }

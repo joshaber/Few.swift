@@ -116,10 +116,6 @@ public class Element {
 			compareAndSetAlpha(view, alpha)
 		}
 
-		if viewFrame != old.viewFrame {
-			view?.frame = viewFrame
-		}
-
 		realizedSelf?.element = self
 
 		if let realizedSelf = realizedSelf {
@@ -131,10 +127,12 @@ public class Element {
 
 			for child in childrenDiff.remove {
 				child.remove()
+				realizedSelf.markNeedsLayout()
 			}
 
 			for child in childrenDiff.add {
 				let realizedChild = child.realize(realizedSelf)
+				realizedSelf.markNeedsLayout()
 			}
 
 			for child in childrenDiff.diff {
@@ -168,10 +166,6 @@ public class Element {
 		return nil
 	}
 
-	var viewFrame: CGRect {
-		return frame.integerRect
-	}
-
 	public func createRealizedElement(view: ViewType?, parent: RealizedElement?) -> RealizedElement {
 		return RealizedElement(element: self, view: view, parent: parent)
 	}
@@ -179,7 +173,6 @@ public class Element {
 	/// Realize the element.
 	public func realize(parent: RealizedElement?) -> RealizedElement {
 		let view = createView()
-		view?.frame = viewFrame
 
 		let realizedSelf = createRealizedElement(view, parent: parent)
 		parent?.addRealizedChild(realizedSelf, index: indexOfObject(children, self))
@@ -220,14 +213,6 @@ public class Element {
 #endif
 	}
 
-	public func applyLayout(layout: Layout) {
-		frame = layout.frame
-
-		for (child, layout) in Zip2(children, layout.children) {
-			child.applyLayout(layout)
-		}
-	}
-
 	internal var selfDescription: String {
 		return "\(self.dynamicType)"
 	}
@@ -240,6 +225,14 @@ public class Element {
 			realizedSelf.view?.becomeFirstResponder()
 #endif
 		}
+	}
+
+	internal var isRoot: Bool {
+		return false
+	}
+
+	internal var isRendering: Bool {
+		return false
 	}
 }
 
