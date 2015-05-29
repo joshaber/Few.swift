@@ -165,7 +165,7 @@ public class TableView: Element {
 	}
 
 	public override func createView() -> ViewType {
-		let scrollView = FewScrollView(frame: frame)
+		let scrollView = FewScrollView(frame: CGRectZero)
 		scrollView.hasVerticalScroller = true
 		scrollView.borderType = .BezelBorder
 		scrollView.alphaValue = alpha
@@ -193,7 +193,7 @@ public class TableView: Element {
 		for element in elements {
 			let node = element.assembleLayoutNode()
 			let layout = node.layout(maxWidth: frame.size.width)
-			element.applyLayout(layout)
+//			element.applyLayout(layout)
 		}
 	}
 }

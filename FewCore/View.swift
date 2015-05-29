@@ -192,7 +192,7 @@ public class View: Element {
 	}
 
 	public override func createView() -> ViewType {
-		let view = FewView(frame: frame)
+		let view = FewView(frame: CGRectZero)
 		view.backgroundColor = backgroundColor
 		view.borderColor = borderColor
 		view.borderWidth = borderWidth

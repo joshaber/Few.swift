@@ -121,7 +121,7 @@ public class TableView: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let tableView = FewTableView(frame: frame)
+		let tableView = FewTableView(frame: CGRectZero)
 		layoutElements()
 		tableView.handler = TableViewHandler(tableView: tableView, elements: elements)
 		tableView.handler?.selectionChanged = selectionChanged

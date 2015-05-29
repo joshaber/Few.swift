@@ -52,7 +52,7 @@ public class Label: Element {
 	}
 
 	public override func createView() -> ViewType {
-		let field = NSTextField(frame: frame)
+		let field = NSTextField(frame: CGRectZero)
 		field.editable = false
 		field.drawsBackground = false
 		field.bordered = false

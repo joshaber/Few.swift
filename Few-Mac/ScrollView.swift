@@ -65,7 +65,7 @@ private class ScrollViewElement: Element {
 	// MARK: Element
 
 	private override func createView() -> ViewType {
-		let view = FewScrollView(frame: frame, didScroll: didScroll)
+		let view = FewScrollView(frame: CGRectZero, didScroll: didScroll)
 		view.alphaValue = alpha
 		view.hidden = hidden
 		return view
@@ -96,23 +96,10 @@ private class ScrollViewElement: Element {
 }
 
 private class ScrollViewContent: Element {
-	private let layoutChildren: [Element]
+	private let layoutChildren_: [Element]
 
 	private init(layoutChildren: [Element]) {
-		self.layoutChildren = layoutChildren
-	}
-
-	private override func assembleLayoutNode() -> Node {
-		let childNodes = layoutChildren.map { $0.assembleLayoutNode() }
-		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
-	}
-
-	private override func applyLayout(layout: Layout) {
-		frame = layout.frame
-
-		for (child, layout) in Zip2(layoutChildren, layout.children) {
-			child.applyLayout(layout)
-		}
+		self.layoutChildren_ = layoutChildren
 	}
 }
 
