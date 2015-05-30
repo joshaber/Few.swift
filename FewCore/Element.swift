@@ -238,6 +238,9 @@ public class Element {
 	internal var isRenderQueued: Bool {
 		return false
 	}
+
+	/// Called after the element and all its children have been layed out.
+	public func elementDidLayout(realizedSelf: RealizedElement?) {}
 }
 
 extension Element {

@@ -146,6 +146,8 @@ public class RealizedElement {
 			child.applyLayout(layout, offset: childOffset)
 		}
 
+		element.elementDidLayout(self)
+
 		needsLayout = false
 	}
 }
