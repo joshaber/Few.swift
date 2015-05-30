@@ -130,6 +130,7 @@ public class Component<S>: Element {
 #endif
 	}
 
+#if os(OSX)
 	final private func configureViewForFrameChangedEvent(hostView: ViewType) {
 		hostView.postsFrameChangedNotifications = true
 		hostView.autoresizesSubviews = false
@@ -149,6 +150,7 @@ public class Component<S>: Element {
 		// A full re-render is less than ideal :|
 		forceRender()
 	}
+#endif
 
 	/// Remove the component from its host view.
 	public func remove() {
