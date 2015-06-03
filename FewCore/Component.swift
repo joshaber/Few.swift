@@ -285,14 +285,18 @@ extension Component {
 	}
 
 	final private func findViewRecursively(rootElement: RealizedElement?, predicate: RealizedElement -> Bool) -> ViewType? {
-		if rootElement == nil { return nil }
-		if predicate(rootElement!) { return rootElement!.view }
-
-		for element in rootElement!.children {
-			let result = findViewRecursively(element, predicate: predicate)
-			if result != nil { return result }
+		if let rootElement = rootElement {
+			if predicate(rootElement) {
+				return rootElement.view
+			} else {
+				for element in rootElement.children {
+					if let result = findViewRecursively(rootElement, predicate: predicate) {
+						return result
+					}
+				}
+			}
+		} else {
+			return nil
 		}
-
-		return nil
 	}
 }
