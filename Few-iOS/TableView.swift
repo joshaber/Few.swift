@@ -108,7 +108,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	}
 	
 	func parentForHeaderFooter(view: FewListHeaderFooter) -> RealizedElement {
-		let key = memoryAddress(cell)
+		let key = memoryAddress(view)
 		let result: RealizedElement
 		if let existing = parents[key] {
 			result = existing

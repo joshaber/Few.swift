@@ -294,8 +294,8 @@ extension Component {
 					}
 				}
 			}
-		} else {
-			return nil
 		}
+
+		return nil
 	}
 }
