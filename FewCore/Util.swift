@@ -89,3 +89,8 @@ public func maybe<A, B>(value: A?, @autoclosure none: () -> B, some: A -> B) -> 
 		return none()
 	}
 }
+
+internal func memoryAddress(object: AnyObject) -> String {
+	let ptr = Unmanaged<AnyObject>.passUnretained(object).toOpaque()
+	return "\(ptr)"
+}

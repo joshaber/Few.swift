@@ -8,11 +8,6 @@
 
 import UIKit
 
-private func memoryAddress(object: AnyObject) -> String {
-	let ptr = Unmanaged<AnyObject>.passUnretained(object).toOpaque()
-	return "\(ptr)"
-}
-
 private let defaultRowHeight: CGFloat = 42
 
 private class FewListHeaderFooter: UITableViewHeaderFooterView {
