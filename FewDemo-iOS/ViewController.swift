@@ -11,7 +11,7 @@ import Few
 
 func renderCounter(component: Component<Int>, count: Int) -> Element {
 	let updateCounter = { component.updateState { $0 + 1 } }
-	
+
 	return Element()
 		// The view itself should be centered.
 		.justification(.Center)
@@ -19,6 +19,7 @@ func renderCounter(component: Component<Int>, count: Int) -> Element {
 		.childAlignment(.Center)
 		// Layout children in a column.
 		.direction(.Column)
+		.flex(1)
 		.children([
 			Label("You've clicked \(count) times!"),
 			Button(title: "Click me!", action: updateCounter)
@@ -75,25 +76,28 @@ func renderTableView(component: Component<()>, state: ()) -> Element {
 	}
 	return TableView([elements], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
 		.flex(1)
-		.width(200)
-		.height(200)
-		.selfAlignment(.Stretch)
 }
 
 let TableViewDemo = { Component(initialState: (), render: renderTableView) }
 
 func renderInput(component: Component<String>, state: String) -> Element {
-	return View(backgroundColor: UIColor.greenColor())
-		.direction(.Column)
+	return Element()
+		.justification(.Center)
+		.childAlignment(.Center)
+		.flex(1)
 		.children([
-			View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
-				.margin(Edges(uniform: 10))
-				.size(100, 100),
-			Input(placeholder: "Username")
-				.margin(Edges(uniform: 10)),
-			Input(placeholder: "Password", secure: true)
-				.margin(Edges(uniform: 10))
-			])
+			View(backgroundColor: UIColor.greenColor())
+				.direction(.Column)
+				.children([
+					View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
+						.margin(Edges(uniform: 10))
+						.size(100, 100),
+					Input(placeholder: "Username")
+						.margin(Edges(uniform: 10)),
+					Input(placeholder: "Password", secure: true)
+						.margin(Edges(uniform: 10))
+				])
+		])
 }
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
@@ -132,10 +136,8 @@ func renderApp(component: Component<AppState>, state: AppState) -> Element {
 		.children([
 			Element()
 				.children([
-					contentComponent
+					contentComponent.flex(1)
 				])
-				.childAlignment(.Center)
-				.justification(.Center)
 				.flex(1),
 			Button(title: "Show me more!", action: showMore)
 				.width(200)
