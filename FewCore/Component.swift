@@ -165,7 +165,7 @@ public class Component<S>: Element {
 	
 	/// Update the state using the given function.
 	final public func updateState(fn: S -> S) {
-		precondition(NSThread.isMainThread(), "Component.updateState called on a background thread. Donut do that!")
+		precondition(NSThread.isMainThread(), "Updating component state on a background thread. Donut do that!")
 
 		state = fn(state)
 		
@@ -173,11 +173,10 @@ public class Component<S>: Element {
 	}
 
 	final public func modifyState(fn: inout S -> ()) {
-		precondition(NSThread.isMainThread(), "Component.modifyState called on a background thread. Donut do that!")
-
-		fn(&state)
-
-		enqueueRender()
+		updateState { (var s) in
+			fn(&s)
+			return s
+		}
 	}
 
 	final private func enqueueRender() {
