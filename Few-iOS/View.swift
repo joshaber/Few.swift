@@ -49,7 +49,7 @@ public class View: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let view = UIView(frame: frame)
+		let view = UIView(frame: CGRectZero)
 		view.alpha = alpha
 		view.hidden = hidden
 		view.backgroundColor = backgroundColor

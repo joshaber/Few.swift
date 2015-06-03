@@ -45,12 +45,13 @@ public class Label: Element {
 		if let label = realizedSelf?.view as? UILabel {
 			if attributedString != label.attributedText {
 				label.attributedText = attributedString
+				realizedSelf?.markNeedsLayout()
 			}
 		}
 	}
 
 	public override func createView() -> ViewType {
-		let label = UILabel(frame: frame)
+		let label = UILabel(frame: CGRectZero)
 		label.numberOfLines = 0
 		label.font = DefaultLabelFont
 		label.attributedText = attributedString

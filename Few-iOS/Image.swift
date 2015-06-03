@@ -34,6 +34,7 @@ public class Image: Element {
 			
 			if view.image != image {
 				view.image = image
+				realizedSelf?.markNeedsLayout()
 			}
 			
 			if view.clipsToBounds != clipsToBounds {

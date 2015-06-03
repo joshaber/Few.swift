@@ -43,14 +43,12 @@
 		88995D6D1A855D2000526313 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88995D6C1A855D2000526313 /* View.swift */; };
 		889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59DA1A4687E10062A36B /* QuickLook.swift */; };
 		88BAF29319DE3094004241BA /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BAF29219DE3094004241BA /* Empty.swift */; };
-		88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DA371A1A86A03F002281F4 /* ScrollView.swift */; };
 		88DF47351A42824100F3F497 /* Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DF47341A42824100F3F497 /* Mac.swift */; };
 		88E4F88B1AC79707006FED1F /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E4F88A1AC79707006FED1F /* Counter.swift */; };
 		A2B9C7481AB387F7002648DA /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7471AB387F7002648DA /* TableView.swift */; };
 		A2B9C7501AB390B3002648DA /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C74F1AB390B3002648DA /* Image.swift */; };
 		A2B9C7521AB3924D002648DA /* Apple_Swift_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */; };
 		A2B9C7541AB43D0A002648DA /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7531AB43D0A002648DA /* Input.swift */; };
-		A2B9C7581AB45868002648DA /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B9C7571AB45868002648DA /* ScrollView.swift */; };
 		A2FA88E51AB33B4000561FBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA88E41AB33B4000561FBF /* AppDelegate.swift */; };
 		A2FA88E71AB33B4000561FBF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA88E61AB33B4000561FBF /* ViewController.swift */; };
 		A2FA88EC1AB33B4000561FBF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2FA88EB1AB33B4000561FBF /* Images.xcassets */; };
@@ -173,14 +171,12 @@
 		88995D6C1A855D2000526313 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = View.swift; path = ../FewCore/View.swift; sourceTree = "<group>"; };
 		88BAF29219DE3094004241BA /* Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		88BEF38D19AED9D5009197F0 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
-		88DA371A1A86A03F002281F4 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		88DF47341A42824100F3F497 /* Mac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mac.swift; sourceTree = "<group>"; };
 		88E4F88A1AC79707006FED1F /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		A2B9C7471AB387F7002648DA /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		A2B9C74F1AB390B3002648DA /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		A2B9C7511AB3924D002648DA /* Apple_Swift_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Apple_Swift_Logo.png; sourceTree = "<group>"; };
 		A2B9C7531AB43D0A002648DA /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
-		A2B9C7571AB45868002648DA /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		A2FA88E01AB33B4000561FBF /* FewDemo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FewDemo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2FA88E31AB33B4000561FBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2FA88E41AB33B4000561FBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -254,7 +250,6 @@
 				A2B9C7471AB387F7002648DA /* TableView.swift */,
 				A2B9C74F1AB390B3002648DA /* Image.swift */,
 				A2B9C7531AB43D0A002648DA /* Input.swift */,
-				A2B9C7571AB45868002648DA /* ScrollView.swift */,
 				888E59AF1A4684850062A36B /* Supporting Files */,
 			);
 			path = "Few-iOS";
@@ -277,7 +272,6 @@
 				8897689019AED8AF00DD079B /* Label.swift */,
 				8824A2F319B8957B00D5625A /* Input.swift */,
 				883CECA71A4532A600B8A510 /* Password.swift */,
-				88DA371A1A86A03F002281F4 /* ScrollView.swift */,
 				880A22B81A992167001D07E6 /* TableView.swift */,
 				8809AC691AA60B1200D5A518 /* Image.swift */,
 				8897687419AED88000DD079B /* Supporting Files */,
@@ -634,7 +628,6 @@
 				888E59CF1A4687330062A36B /* Element.swift in Sources */,
 				A2FA89171AB33EDA00561FBF /* Label.swift in Sources */,
 				A2FA89131AB33C1F00561FBF /* View.swift in Sources */,
-				A2B9C7581AB45868002648DA /* ScrollView.swift in Sources */,
 				888E59D01A4687330062A36B /* Component.swift in Sources */,
 				888E59D91A4687330062A36B /* TargetActionTrampoline.swift in Sources */,
 				888E59CD1A4684AF0062A36B /* iOS.swift in Sources */,
@@ -653,7 +646,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				88995D6D1A855D2000526313 /* View.swift in Sources */,
-				88DA371B1A86A03F002281F4 /* ScrollView.swift in Sources */,
 				883CECA81A4532A600B8A510 /* Password.swift in Sources */,
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,

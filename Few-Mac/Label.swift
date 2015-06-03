@@ -46,12 +46,13 @@ public class Label: Element {
 		if let textField = realizedSelf?.view as? NSTextField {
 			if attributedString != textField.attributedStringValue {
 				textField.attributedStringValue = attributedString
+				realizedSelf?.markNeedsLayout()
 			}
 		}
 	}
 
 	public override func createView() -> ViewType {
-		let field = NSTextField(frame: frame)
+		let field = NSTextField(frame: CGRectZero)
 		field.editable = false
 		field.drawsBackground = false
 		field.bordered = false

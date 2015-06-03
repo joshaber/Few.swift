@@ -25,6 +25,8 @@ private class FewListHeaderFooter: UITableViewHeaderFooterView {
 		} else {
 			realizedElement = element.realize(parent)
 		}
+
+		realizedElement?.layoutFromRoot()
 	}
 }
 
@@ -43,6 +45,8 @@ private class FewListCell: UITableViewCell {
 		} else {
 			realizedElement = element.realize(parent)
 		}
+
+		realizedElement?.layoutFromRoot()
 	}
 }
 
@@ -52,14 +56,16 @@ private let footerKey = "ListFooter"
 
 private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSource {
 	let tableView: UITableView
-	
+
+	var cachedHeights: [String: CGFloat] = [:]
+
 	// Call `update` rather than setting these directly
 	var elements: [[Element]]
 	var headers: [Element?]
 	var footers: [Element?]
 
 	var parents = [String: RealizedElement]()
-	
+
 	var selectionChanged: (NSIndexPath -> ())?
 	
 	init(tableView: UITableView, elements: [[Element]], headers: [Element?], footers: [Element?]) {
@@ -79,12 +85,13 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		self.elements = elements
 		self.headers = headers
 		self.footers = footers
+
+		updateCachedHeights()
 		tableView.reloadData()
 	}
 	
 	func parentForCell(cell: FewListCell) -> RealizedElement {
-		let ptr = Unmanaged<AnyObject>.passUnretained(cell).toOpaque()
-		let key = "\(ptr)"
+		let key = memoryAddress(cell)
 		let result: RealizedElement
 		if let existing = parents[key] {
 			result = existing
@@ -96,8 +103,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	}
 	
 	func parentForHeaderFooter(view: FewListHeaderFooter) -> RealizedElement {
-		let ptr = Unmanaged<AnyObject>.passUnretained(view).toOpaque()
-		let key = "\(ptr)"
+		let key = memoryAddress(view)
 		let result: RealizedElement
 		if let existing = parents[key] {
 			result = existing
@@ -118,8 +124,8 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	}
 	
 	@objc func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		let height = elements[indexPath.section][indexPath.row].frame.height
-		return height > CGFloat(0) ? height : defaultRowHeight
+		let element = elements[indexPath.section][indexPath.row]
+		return cachedHeights[memoryAddress(element)] ?? defaultRowHeight
 	}
 	
 	@objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -137,7 +143,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	@objc func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		if section < headers.count {
 			if let header = headers[section] {
-				return header.frame.height
+				return cachedHeights[memoryAddress(header)] ?? 0
 			}
 		}
 		return 0
@@ -157,7 +163,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	@objc func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		if section < footers.count {
 			if let footer = footers[section] {
-				return footer.frame.height
+				return cachedHeights[memoryAddress(footer)] ?? 0
 			}
 		}
 		return 0
@@ -172,6 +178,24 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 			}
 		}
 		return nil
+	}
+
+	func updateCachedHeights() {
+		var allElements = [Element?]()
+		for section in elements {
+			allElements += section.map { row in Optional(row) }
+		}
+		allElements += headers
+		allElements += footers
+
+		cachedHeights.removeAll(keepCapacity: true)
+		for element in allElements {
+			if let element = element {
+				let node = element.assembleLayoutNode()
+				let layout = node.layout(maxWidth: tableView.frame.size.width)
+				cachedHeights[memoryAddress(element)] = layout.frame.size.height
+			}
+		}
 	}
 }
 
@@ -202,7 +226,6 @@ public class TableView: Element {
 		if let tableView = realizedSelf?.view as? FewTableView {
 			let handler = tableView.handler
 			
-			layoutElements()
 			handler?.update(elements, headers: headers, footers: footers)
 			handler?.selectionChanged = selectionChanged
 			let tableSelected = tableView.indexPathForSelectedRow()
@@ -217,8 +240,7 @@ public class TableView: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let tableView = FewTableView(frame: frame)
-		layoutElements()
+		let tableView = FewTableView(frame: CGRectZero)
 		tableView.handler = TableViewHandler(tableView: tableView, elements: elements, headers: headers, footers: footers)
 		tableView.handler?.selectionChanged = selectionChanged
 		tableView.alpha = alpha
@@ -226,21 +248,14 @@ public class TableView: Element {
 		
 		return tableView
 	}
-	
-	private final func layoutElements() {
-		var allElements = [Element?]()
-		for section in elements {
-			allElements += section.map { row in Optional(row) }
-		}
-		allElements += headers
-		allElements += footers
-		
-		for element in allElements {
-			if let element = element {
-				let node = element.assembleLayoutNode()
-				let layout = node.layout(maxWidth: frame.width)
-				element.applyLayout(layout)
-			}
+
+	public override func elementDidLayout(realizedSelf: RealizedElement?) {
+		super.elementDidLayout(realizedSelf)
+
+		if let scrollView = realizedSelf?.view as? FewTableView {
+			let handler = scrollView.handler
+
+			handler?.update(elements, headers: headers, footers: footers)
 		}
 	}
 }
