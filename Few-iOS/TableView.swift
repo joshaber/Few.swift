@@ -96,8 +96,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	}
 	
 	func parentForCell(cell: FewListCell) -> RealizedElement {
-		let ptr = Unmanaged<AnyObject>.passUnretained(cell).toOpaque()
-		let key = "\(ptr)"
+		let key = memoryAddress(cell)
 		let result: RealizedElement
 		if let existing = parents[key] {
 			result = existing
@@ -109,8 +108,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	}
 	
 	func parentForHeaderFooter(view: FewListHeaderFooter) -> RealizedElement {
-		let ptr = Unmanaged<AnyObject>.passUnretained(view).toOpaque()
-		let key = "\(ptr)"
+		let key = memoryAddress(cell)
 		let result: RealizedElement
 		if let existing = parents[key] {
 			result = existing
