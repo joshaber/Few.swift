@@ -229,7 +229,7 @@ public class TableView: Element {
 			handler?.update(elements, headers: headers, footers: footers)
 			handler?.selectionChanged = selectionChanged
 			let tableSelected = tableView.indexPathForSelectedRow()
-			if tableSelected?.row != selectedRow {
+			if tableSelected != selectedRow {
 				if let selectedRow = selectedRow {
 					tableView.selectRowAtIndexPath(selectedRow, animated: false, scrollPosition: .None)
 				} else if let tableSelected = tableSelected {
