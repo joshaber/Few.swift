@@ -74,7 +74,7 @@ func renderTableView(component: Component<()>, state: ()) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView([elements], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
+	return TableView([elements], headers: [Label("Section Header!")], header: Label("Table Header"), footer: Label("Table Footer"), footers: [Label("Section Footer!")], selectionChanged: println)
 		.flex(1)
 }
 
