@@ -325,7 +325,7 @@ public class TableView: Element {
 		}
 		return tableView
 	}
-	
+
 	public override func elementDidLayout(realizedSelf: RealizedElement?) {
 		super.elementDidLayout(realizedSelf)
 
