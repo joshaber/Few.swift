@@ -289,7 +289,7 @@ extension Component {
 				return rootElement.view
 			} else {
 				for element in rootElement.children {
-					if let result = findViewRecursively(rootElement, predicate: predicate) {
+					if let result = findViewRecursively(element, predicate: predicate) {
 						return result
 					}
 				}
