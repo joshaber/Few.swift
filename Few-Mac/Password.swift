@@ -11,7 +11,7 @@ import AppKit
 
 public class Password: Input {
 	public override func createView() -> ViewType {
-		let field = NSSecureTextField(frame: frame)
+		let field = NSSecureTextField(frame: CGRectZero)
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""
 		field.delegate = inputDelegate
