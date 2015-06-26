@@ -117,7 +117,7 @@ public class Input: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let field = UITextField(frame: frame)
+		let field = UITextField(frame: CGRectZero)
 		field.addTarget(actionTrampoline.target, action: actionTrampoline.selector, forControlEvents: .EditingChanged)
 		field.delegate = inputDelegate
 		field.alpha = alpha

@@ -44,7 +44,7 @@ public class Image: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let view = UIImageView(frame: frame)
+		let view = UIImageView(frame: CGRectZero)
 		view.alpha = alpha
 		view.hidden = hidden
 		view.image = image
