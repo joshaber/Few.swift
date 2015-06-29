@@ -20,6 +20,8 @@
 		884634EA19B7C55200896264 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; };
 		884634EC19B7C56900896264 /* Few.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8897687119AED88000DD079B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		885C04F91AB1156300ACBAB1 /* Few.h in Headers */ = {isa = PBXBuildFile; fileRef = 8897687619AED88000DD079B /* Few.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8872DFF71B41F64500A6DEE1 /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888E59AD1A4684850062A36B /* Few.framework */; };
+		8872DFF81B41F64500A6DEE1 /* Few.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 888E59AD1A4684850062A36B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		888E59CD1A4684AF0062A36B /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888E59CC1A4684AF0062A36B /* iOS.swift */; };
 		888E59CF1A4687330062A36B /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688D19AED8AF00DD079B /* Element.swift */; };
 		888E59D01A4687330062A36B /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8897688B19AED8AF00DD079B /* Component.swift */; };
@@ -53,8 +55,6 @@
 		A2FA88E71AB33B4000561FBF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA88E61AB33B4000561FBF /* ViewController.swift */; };
 		A2FA88EC1AB33B4000561FBF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2FA88EB1AB33B4000561FBF /* Images.xcassets */; };
 		A2FA88EF1AB33B4000561FBF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2FA88ED1AB33B4000561FBF /* LaunchScreen.xib */; };
-		A2FA890D1AB33BA500561FBF /* Few.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888E59AD1A4684850062A36B /* Few.framework */; };
-		A2FA890E1AB33BA500561FBF /* Few.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 888E59AD1A4684850062A36B /* Few.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2FA89131AB33C1F00561FBF /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA89121AB33C1F00561FBF /* View.swift */; };
 		A2FA89151AB33E0800561FBF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA89141AB33E0800561FBF /* Button.swift */; };
 		A2FA89171AB33EDA00561FBF /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FA89161AB33EDA00561FBF /* Label.swift */; };
@@ -87,7 +87,7 @@
 			remoteGlobalIDString = 8897687019AED88000DD079B;
 			remoteInfo = Few;
 		};
-		A2FA890F1AB33BA500561FBF /* PBXContainerItemProxy */ = {
+		8872DFF91B41F64500A6DEE1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8897686819AED88000DD079B /* Project object */;
 			proxyType = 1;
@@ -116,7 +116,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				CC2C508D1AFECB0B00019685 /* SwiftBox.framework in Embed Frameworks */,
-				A2FA890E1AB33BA500561FBF /* Few.framework in Embed Frameworks */,
+				8872DFF81B41F64500A6DEE1 /* Few.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,7 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC2C508C1AFECB0B00019685 /* SwiftBox.framework in Frameworks */,
-				A2FA890D1AB33BA500561FBF /* Few.framework in Frameworks */,
+				8872DFF71B41F64500A6DEE1 /* Few.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +520,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A2FA89101AB33BA500561FBF /* PBXTargetDependency */,
+				8872DFFA1B41F64500A6DEE1 /* PBXTargetDependency */,
 			);
 			name = "FewDemo-iOS";
 			productName = "FewDemo-iOS";
@@ -707,10 +707,10 @@
 			target = 8897687019AED88000DD079B /* Few-Mac */;
 			targetProxy = 884CBA251A28284100EDE9B2 /* PBXContainerItemProxy */;
 		};
-		A2FA89101AB33BA500561FBF /* PBXTargetDependency */ = {
+		8872DFFA1B41F64500A6DEE1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 888E59AC1A4684850062A36B /* Few-iOS */;
-			targetProxy = A2FA890F1AB33BA500561FBF /* PBXContainerItemProxy */;
+			targetProxy = 8872DFF91B41F64500A6DEE1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -738,7 +738,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -766,7 +768,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -992,7 +996,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1016,7 +1019,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
