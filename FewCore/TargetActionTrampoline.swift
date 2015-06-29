@@ -8,23 +8,23 @@
 
 import Foundation
 
-internal class TargetActionTrampoline: NSObject {
-	internal var action: (() -> ())?
+public class TargetActionTrampoline: NSObject {
+	public var action: (() -> ())?
 
-	internal let selector = Selector("performAction:")
+	public let selector = Selector("performAction:")
 
-	internal func performAction(sender: AnyObject?) {
+	public func performAction(sender: AnyObject?) {
 		action?()
 	}
 }
 
-internal class TargetActionTrampolineWithSender<T: AnyObject> {
-	internal var target = TargetActionTrampolineProxy()
-	internal var selector: Selector {
+public class TargetActionTrampolineWithSender<T: AnyObject> {
+	public var target = TargetActionTrampolineProxy()
+	public var selector: Selector {
 		return target.selector
 	}
 
-	internal var action: (T -> ())? {
+	public var action: (T -> ())? {
 		get {
 			return target.action
 		}
@@ -38,12 +38,12 @@ internal class TargetActionTrampolineWithSender<T: AnyObject> {
 	}
 }
 
-internal class TargetActionTrampolineProxy: NSObject {
-	internal var action: (AnyObject? -> ())?
+public class TargetActionTrampolineProxy: NSObject {
+	public var action: (AnyObject? -> ())?
 
 	private let selector = Selector("performAction:")
 
-	internal func performAction(sender: AnyObject?) {
+	public func performAction(sender: AnyObject?) {
 		action?(sender)
 	}
 }
