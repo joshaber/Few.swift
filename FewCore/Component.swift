@@ -164,7 +164,7 @@ public class Component<S>: Element {
 	}
 	
 	/// Update the state using the given function.
-	final public func updateState(fn: S -> S) {
+	final public func updateState(@noescape fn: S -> S) {
 		precondition(NSThread.isMainThread(), "Updating component state on a background thread. Donut do that!")
 
 		state = fn(state)
@@ -172,7 +172,7 @@ public class Component<S>: Element {
 		enqueueRender()
 	}
 
-	final public func modifyState(fn: inout S -> ()) {
+	final public func modifyState(@noescape fn: inout S -> ()) {
 		updateState { (var s) in
 			fn(&s)
 			return s
