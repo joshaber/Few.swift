@@ -9,32 +9,38 @@
 import UIKit
 
 private let DefaultLabelFont = UIFont.systemFontOfSize(UIFont.systemFontSize())
-private let StringFudge = CGSize(width: 4, height: 0)
 
 private let ABigDimension: CGFloat = 10000
 
-internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension)) -> CGSize {
-	let rect = string.boundingRectWithSize(maxSize, options: .UsesLineFragmentOrigin | .UsesFontLeading, context: nil)
-	let width = ceil(rect.size.width) + StringFudge.width
-	let height = ceil(rect.size.height) + StringFudge.height
-	return CGSize(width: width, height: height)
+internal let sizingLabel = UILabel()
+
+internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension), numberOfLines: Int) -> CGSize {
+	sizingLabel.attributedText = string
+	sizingLabel.numberOfLines = numberOfLines
+	let size = sizingLabel.sizeThatFits(maxSize)
+//	println("Size of \(string): \(size)")
+	return size
 }
 
 public class Label: Element {
-	private var attributedString: NSAttributedString
-
+	public var attributedString: NSAttributedString
+	
+	/// Same behavior as UILabel, also defaults to 1.
+	public var numberOfLines: Int
+	
 	public var text: String { return attributedString.string }
 
-	public convenience init(_ text: String, textColor: UIColor = .blackColor(), font: UIFont = DefaultLabelFont) {
+	public convenience init(_ text: String, textColor: UIColor = .blackColor(), font: UIFont = DefaultLabelFont, numberOfLines: Int = 1) {
 		let attributes = [
 			NSFontAttributeName: font,
 			NSForegroundColorAttributeName: textColor,
 		]
-		self.init(attributedString: NSAttributedString(string: text, attributes: attributes))
+		self.init(attributedString: NSAttributedString(string: text, attributes: attributes), numberOfLines: numberOfLines)
 	}
 
-	public init(attributedString: NSAttributedString) {
+	public init(attributedString: NSAttributedString, numberOfLines: Int = 1) {
 		self.attributedString = attributedString
+		self.numberOfLines = numberOfLines
 	}
 
 	// MARK: Element
@@ -42,17 +48,23 @@ public class Label: Element {
 	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 
-		if let label = realizedSelf?.view as? UILabel {
+		if let realizedSelf = realizedSelf, label = realizedSelf.view as? UILabel {
+			
 			if attributedString != label.attributedText {
 				label.attributedText = attributedString
-				realizedSelf?.markNeedsLayout()
+				realizedSelf.markNeedsLayout()
+			}
+			
+			if numberOfLines != label.numberOfLines {
+				label.numberOfLines = numberOfLines
+				realizedSelf.markNeedsLayout()
 			}
 		}
 	}
 
 	public override func createView() -> ViewType {
 		let label = UILabel(frame: CGRectZero)
-		label.numberOfLines = 0
+		label.numberOfLines = numberOfLines
 		label.font = DefaultLabelFont
 		label.attributedText = attributedString
 		label.alpha = alpha
@@ -63,7 +75,7 @@ public class Label: Element {
 	public override func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
 		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex) { w in
-			estimateStringSize(self.attributedString, maxSize: CGSize(width: w.isNaN ? ABigDimension : w, height: ABigDimension))
+			estimateStringSize(self.attributedString, maxSize: CGSize(width: w.isNaN ? ABigDimension : w, height: ABigDimension), self.numberOfLines)
 		}
 	}
 }
