@@ -17,9 +17,7 @@ internal let sizingLabel = UILabel()
 internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension), numberOfLines: Int) -> CGSize {
 	sizingLabel.attributedText = string
 	sizingLabel.numberOfLines = numberOfLines
-	let size = sizingLabel.sizeThatFits(maxSize)
-//	println("Size of \(string): \(size)")
-	return size
+	return sizingLabel.sizeThatFits(maxSize)
 }
 
 public class Label: Element {
