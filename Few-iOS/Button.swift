@@ -17,18 +17,20 @@ public class Button: Element {
 	public var imageForState: (UIControlState -> UIImage?)
 	public var enabled: Bool
 	public var selected: Bool
+	public var highlighted: Bool
 	
 	private var trampoline = TargetActionTrampoline()
 
-	public convenience init(attributedTitle: NSAttributedString, image: UIImage? = nil, enabled: Bool = true, selected: Bool = false, action: (() -> Void) = { }) {
-		self.init(attributedTitleForState: {_ in attributedTitle}, imageForState: {_ in image}, enabled: enabled, selected: selected, action: {_ in action() })
+	public convenience init(attributedTitle: NSAttributedString, image: UIImage? = nil, action: (() -> Void) = { }) {
+		self.init(attributedTitleForState: {_ in attributedTitle}, imageForState: {_ in image}, action: {_ in action() })
 	}
 	
-	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, action: (() -> Void) = { }) {
+	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
 		self.imageForState = imageForState
 		self.attributedTitleForState = attributedTitleForState
 		self.selected = selected
 		self.enabled = enabled
+		self.highlighted = highlighted
 		trampoline.action = action
 		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
 	}
@@ -51,6 +53,10 @@ public class Button: Element {
 			
 			if selected != button.selected {
 				button.selected = selected
+			}
+
+			if highlighted != button.highlighted {
+				button.highlighted = highlighted
 			}
 			
 			for state in UIControlState.all {
@@ -77,6 +83,7 @@ public class Button: Element {
 		button.hidden = hidden
 		button.enabled = enabled
 		button.selected = selected
+		button.highlighted = highlighted
 		button.addTarget(trampoline, action: trampoline.selector, forControlEvents: .TouchUpInside)
 		return button
 	}
