@@ -12,7 +12,7 @@ private let DefaultLabelFont = UIFont.systemFontOfSize(UIFont.systemFontSize())
 
 private let ABigDimension: CGFloat = 10000
 
-internal let sizingLabel = UILabel()
+private let sizingLabel = UILabel()
 
 internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension), numberOfLines: Int) -> CGSize {
 	sizingLabel.attributedText = string
