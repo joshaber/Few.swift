@@ -12,19 +12,22 @@ import AppKit
 private let defaultRowHeight: CGFloat = 42
 
 private class FewListCell: NSTableCellView {
+	private lazy var parentElement: RealizedElement = {[unowned self] in
+		return RealizedElement(element: Element(), view: self, parent: nil)
+	}()
 	private var realizedElement: RealizedElement?
 
-	func updateWithElement(element: Element, parent: RealizedElement) {
-		if let realizedElement = realizedElement {
-			if element.canDiff(realizedElement.element) {
-				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
+	func updateWithElement(element: Element) {
+		if let oldRealizedElement = realizedElement {
+			if element.canDiff(oldRealizedElement.element) {
+				element.applyDiff(oldRealizedElement.element, realizedSelf: oldRealizedElement)
 			} else {
-				realizedElement.remove()
+				oldRealizedElement.remove()
 
-				self.realizedElement = element.realize(parent)
+				self.realizedElement = element.realize(parentElement)
 			}
 		} else {
-			realizedElement = element.realize(parent)
+			realizedElement = element.realize(parentElement)
 		}
 
 		realizedElement?.layoutFromRoot()
@@ -43,8 +46,6 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 	let tableView: NSTableView
 
 	var supressChangeNotification = false
-
-	var parents: [String: RealizedElement] = [:]
 
 	var elements: [Element] {
 		didSet {
@@ -87,20 +88,12 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 			let newListCell = FewListCell(frame: CGRectZero)
 			newListCell.identifier = key
 
-			let parent = RealizedElement(element: Element(), view: newListCell, parent: nil)
-			parents[parentKeyForCell(newListCell)] = parent
-
 			listCell = newListCell
 		}
 
-		let parent = parents[parentKeyForCell(listCell!)]!
-		listCell?.updateWithElement(element, parent: parent)
+		listCell?.updateWithElement(element)
 
 		return listCell
-	}
-
-	func parentKeyForCell(cell: FewListCell) -> String {
-		return memoryAddress(cell)
 	}
 
 	@objc func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {

@@ -11,19 +11,22 @@ import UIKit
 private let defaultRowHeight: CGFloat = 42
 
 private class FewListHeaderFooter: UITableViewHeaderFooterView {
+	private lazy var parentElement: RealizedElement = {[unowned self] in
+		return RealizedElement(element: Element(), view: self.contentView, parent: nil)
+	}()
 	private var realizedElement: RealizedElement?
 	
-	func updateWithElement(element: Element, parent: RealizedElement) {
-		if let realizedElement = realizedElement {
-			if element.canDiff(realizedElement.element) {
-				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
+	func updateWithElement(element: Element) {
+		if let oldRealizedElement = realizedElement {
+			if element.canDiff(oldRealizedElement.element) {
+				element.applyDiff(oldRealizedElement.element, realizedSelf: oldRealizedElement)
 			} else {
-				realizedElement.remove()
+				oldRealizedElement.remove()
 				
-				self.realizedElement = element.realize(parent)
+				realizedElement = element.realize(parentElement)
 			}
 		} else {
-			realizedElement = element.realize(parent)
+			realizedElement = element.realize(parentElement)
 		}
 
 		realizedElement?.layoutFromRoot()
@@ -31,19 +34,22 @@ private class FewListHeaderFooter: UITableViewHeaderFooterView {
 }
 
 private class FewListCell: UITableViewCell {
+	private lazy var parentElement: RealizedElement = {[unowned self] in
+		return RealizedElement(element: Element(), view: self.contentView, parent: nil)
+	}()
 	private var realizedElement: RealizedElement?
 	
-	func updateWithElement(element: Element, parent: RealizedElement) {
-		if let realizedElement = realizedElement {
-			if element.canDiff(realizedElement.element) {
-				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
+	func updateWithElement(element: Element) {
+		if let oldRealizedElement = realizedElement {
+			if element.canDiff(oldRealizedElement.element) {
+				element.applyDiff(oldRealizedElement.element, realizedSelf: oldRealizedElement)
 			} else {
-				realizedElement.remove()
+				oldRealizedElement.remove()
 
-				self.realizedElement = element.realize(parent)
+				realizedElement = element.realize(parentElement)
 			}
 		} else {
-			realizedElement = element.realize(parent)
+			realizedElement = element.realize(parentElement)
 		}
 
 		realizedElement?.layoutFromRoot()
@@ -63,8 +69,6 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	var elements: [[Element]]
 	var headers: [Element?]
 	var footers: [Element?]
-
-	var parents = [String: RealizedElement]()
 
 	var selectionChanged: (NSIndexPath -> ())?
 	
@@ -90,36 +94,12 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		tableView.reloadData()
 	}
 	
-	func parentForCell(cell: FewListCell) -> RealizedElement {
-		let key = memoryAddress(cell)
-		let result: RealizedElement
-		if let existing = parents[key] {
-			result = existing
-		} else {
-			result = RealizedElement(element: Element(), view: cell.contentView, parent: nil)
-			parents[key] = result
-		}
-		return result
-	}
-	
-	func parentForHeaderFooter(view: FewListHeaderFooter) -> RealizedElement {
-		let key = memoryAddress(view)
-		let result: RealizedElement
-		if let existing = parents[key] {
-			result = existing
-		} else {
-			result = RealizedElement(element: Element(), view: view.contentView, parent: nil)
-			parents[key] = result
-		}
-		return result
-	}
-	
 	// MARK: UITableViewDelegate
 	
 	@objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let element = elements[indexPath.section][indexPath.row]
 		let cell = tableView.dequeueReusableCellWithIdentifier(cellKey, forIndexPath: indexPath) as! FewListCell
-		cell.updateWithElement(element, parent: parentForCell(cell))
+		cell.updateWithElement(element)
 		return cell
 	}
 	
@@ -153,7 +133,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		if section < headers.count {
 			if let header = headers[section] {
 				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerKey) as! FewListHeaderFooter
-				view.updateWithElement(header, parent: parentForHeaderFooter(view))
+				view.updateWithElement(header)
 				return view
 			}
 		}
@@ -173,7 +153,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		if section < footers.count {
 			if let footer = footers[section] {
 				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(footerKey) as! FewListHeaderFooter
-				view.updateWithElement(footer, parent: parentForHeaderFooter(view))
+				view.updateWithElement(footer)
 				return view
 			}
 		}
