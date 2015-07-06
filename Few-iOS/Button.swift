@@ -9,9 +9,7 @@
 import UIKit
 
 private extension UIControlState {
-	static var all: [UIControlState] {
-		return [.Normal, .Selected, .Disabled, .Highlighted]
-	}
+	static let all: [UIControlState] = [.Normal, .Selected, .Disabled, .Highlighted]
 }
 
 public class Button: Element {
