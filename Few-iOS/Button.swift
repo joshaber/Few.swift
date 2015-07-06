@@ -8,14 +8,28 @@
 
 import UIKit
 
+private extension UIControlState {
+	static var all: [UIControlState] {
+		return [.Normal, .Selected, .Disabled, .Highlighted]
+	}
+}
+
 public class Button: Element {
-	public var title: NSAttributedString
+	public var attributedTitleForState: (UIControlState -> NSAttributedString?)
+	public var imageForState: (UIControlState -> UIImage?)
 	public var enabled: Bool
+	public var selected: Bool
 	
 	private var trampoline = TargetActionTrampoline()
+
+	public convenience init(attributedTitle: NSAttributedString, image: UIImage? = nil, enabled: Bool = true, selected: Bool = false, action: (() -> Void) = { }) {
+		self.init(attributedTitleForState: {_ in attributedTitle}, imageForState: {_ in image}, enabled: enabled, selected: selected, action: {_ in action() })
+	}
 	
-	public init(title: String, enabled: Bool = true, action: () -> () = { }) {
-		self.title = NSAttributedString(string: title)
+	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, action: (() -> Void) = { }) {
+		self.imageForState = imageForState
+		self.attributedTitleForState = attributedTitleForState
+		self.selected = selected
 		self.enabled = enabled
 		trampoline.action = action
 		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
@@ -33,23 +47,38 @@ public class Button: Element {
 				trampoline = newTrampoline
 			}
 			
-			if title != button.titleLabel?.attributedText {
-				button.setAttributedTitle(title, forState: .Normal)
-			}
-			
 			if enabled != button.enabled {
 				button.enabled = enabled
+			}
+			
+			if selected != button.selected {
+				button.selected = selected
+			}
+			
+			for state in UIControlState.all {
+				let newImage = imageForState(state)
+				if button.imageForState(state) != newImage {
+					button.setImage(newImage, forState: state)
+				}
+				
+				let newTitle = attributedTitleForState(state)
+				if button.attributedTitleForState(state) != newTitle {
+					button.setAttributedTitle(newTitle, forState: state)
+				}
 			}
 		}
 	}
 	
 	public override func createView() -> ViewType {
-		let button = UIButton(frame: CGRectZero)
+		let button = UIButton()
+		for state in UIControlState.all {
+			button.setAttributedTitle(attributedTitleForState(state), forState: state)
+			button.setImage(imageForState(state), forState: state)
+		}
 		button.alpha = alpha
 		button.hidden = hidden
-		button.setAttributedTitle(title, forState: .Normal)
-		button.setTitleColor(UIColor.blackColor(), forState: .Normal)
 		button.enabled = enabled
+		button.selected = selected
 		button.addTarget(trampoline, action: trampoline.selector, forControlEvents: .TouchUpInside)
 		return button
 	}
