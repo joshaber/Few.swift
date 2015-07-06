@@ -116,6 +116,8 @@ public class Element {
 				compareAndSetAlpha(view, alpha)
 			}
 			
+			realizedSelf.element = self
+			
 			let childrenDiff = diffElementLists(realizedSelf.children, children)
 
 			if LogDiff {
