@@ -15,6 +15,7 @@ private extension UIControlState {
 public class Button: Element {
 	public var attributedTitleForState: (UIControlState -> NSAttributedString?)
 	public var imageForState: (UIControlState -> UIImage?)
+	public var backgroundImageForState: (UIControlState -> UIImage?)
 	public var enabled: Bool
 	public var selected: Bool
 	public var highlighted: Bool
@@ -25,9 +26,10 @@ public class Button: Element {
 		self.init(attributedTitleForState: {_ in attributedTitle}, imageForState: {_ in image}, action: {_ in action() })
 	}
 	
-	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
+	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, backgroundImageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
 		self.imageForState = imageForState
 		self.attributedTitleForState = attributedTitleForState
+		self.backgroundImageForState = backgroundImageForState
 		self.selected = selected
 		self.enabled = enabled
 		self.highlighted = highlighted
@@ -65,6 +67,11 @@ public class Button: Element {
 					button.setImage(newImage, forState: state)
 				}
 				
+				let newBG = backgroundImageForState(state)
+				if button.backgroundImageForState(state) != newBG {
+					button.setBackgroundImage(newBG, forState: state)
+				}
+				
 				let newTitle = attributedTitleForState(state)
 				if button.attributedTitleForState(state) != newTitle {
 					button.setAttributedTitle(newTitle, forState: state)
@@ -78,6 +85,7 @@ public class Button: Element {
 		for state in UIControlState.all {
 			button.setAttributedTitle(attributedTitleForState(state), forState: state)
 			button.setImage(imageForState(state), forState: state)
+			button.setBackgroundImage(backgroundImageForState(state), forState: state)
 		}
 		button.alpha = alpha
 		button.hidden = hidden
