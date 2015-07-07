@@ -8,28 +8,27 @@
 
 import UIKit
 
-private extension UIControlState {
+extension UIControlState: Hashable {
 	static let all: [UIControlState] = [.Normal, .Selected, .Disabled, .Highlighted]
+	public var hashValue: Int {
+		return Int(rawValue)
+	}
 }
 
 public class Button: Element {
-	public var attributedTitleForState: (UIControlState -> NSAttributedString?)
-	public var imageForState: (UIControlState -> UIImage?)
-	public var backgroundImageForState: (UIControlState -> UIImage?)
+	public var attributedTitles: [UIControlState: NSAttributedString]
+	public var images: [UIControlState: UIImage]
+	public var backgroundImages: [UIControlState: UIImage]
 	public var enabled: Bool
 	public var selected: Bool
 	public var highlighted: Bool
 	
 	private var trampoline = TargetActionTrampoline()
 
-	public convenience init(attributedTitle: NSAttributedString, image: UIImage? = nil, action: (() -> Void) = { }) {
-		self.init(attributedTitleForState: {_ in attributedTitle}, imageForState: {_ in image}, action: {_ in action() })
-	}
-	
-	public init(attributedTitleForState: (UIControlState -> NSAttributedString?), imageForState: (UIControlState -> UIImage?) = {_ in nil}, backgroundImageForState: (UIControlState -> UIImage?) = {_ in nil}, enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
-		self.imageForState = imageForState
-		self.attributedTitleForState = attributedTitleForState
-		self.backgroundImageForState = backgroundImageForState
+	public init(attributedTitles: [UIControlState: NSAttributedString] = [:], images: [UIControlState: UIImage] = [:], backgroundImages: [UIControlState: UIImage] = [:], enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
+		self.images = images
+		self.attributedTitles = attributedTitles
+		self.backgroundImages = backgroundImages
 		self.selected = selected
 		self.enabled = enabled
 		self.highlighted = highlighted
@@ -62,19 +61,19 @@ public class Button: Element {
 			}
 			
 			for state in UIControlState.all {
-				let newImage = imageForState(state)
-				if button.imageForState(state) != newImage {
-					button.setImage(newImage, forState: state)
+				let image = images[state]
+				if image != button.imageForState(state) {
+					button.setImage(image, forState: state)
 				}
 				
-				let newBG = backgroundImageForState(state)
-				if button.backgroundImageForState(state) != newBG {
-					button.setBackgroundImage(newBG, forState: state)
+				let title = attributedTitles[state]
+				if title != button.attributedTitleForState(state) {
+					button.setAttributedTitle(title, forState: state)
 				}
 				
-				let newTitle = attributedTitleForState(state)
-				if button.attributedTitleForState(state) != newTitle {
-					button.setAttributedTitle(newTitle, forState: state)
+				let bg = backgroundImages[state]
+				if bg != button.backgroundImageForState(state) {
+					button.setBackgroundImage(bg, forState: state)
 				}
 			}
 		}
@@ -82,10 +81,14 @@ public class Button: Element {
 	
 	public override func createView() -> ViewType {
 		let button = UIButton()
-		for state in UIControlState.all {
-			button.setAttributedTitle(attributedTitleForState(state), forState: state)
-			button.setImage(imageForState(state), forState: state)
-			button.setBackgroundImage(backgroundImageForState(state), forState: state)
+		for (state, image) in images {
+			button.setImage(image, forState: state)
+		}
+		for (state, title) in attributedTitles {
+			button.setAttributedTitle(title, forState: state)
+		}
+		for (state, backgroundImage) in backgroundImages {
+			button.setBackgroundImage(backgroundImage, forState: state)
 		}
 		button.alpha = alpha
 		button.hidden = hidden
