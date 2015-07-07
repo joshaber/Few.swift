@@ -77,7 +77,7 @@ public class Input: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let field = NSTextField(frame: frame)
+		let field = NSTextField(frame: CGRectZero)
 		field.editable = true
 		field.stringValue = text ?? initialText ?? ""
 		field.delegate = inputDelegate

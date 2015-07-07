@@ -39,7 +39,7 @@ public class Image: Element {
 	}
 
 	public override func createView() -> ViewType {
-		let view = NSImageView(frame: frame)
+		let view = NSImageView(frame: CGRectZero)
 		view.image = image
 		view.editable = false
 		view.allowsCutCopyPaste = false

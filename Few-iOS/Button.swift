@@ -44,7 +44,7 @@ public class Button: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let button = UIButton(frame: frame)
+		let button = UIButton(frame: CGRectZero)
 		button.alpha = alpha
 		button.hidden = hidden
 		button.setAttributedTitle(title, forState: .Normal)
