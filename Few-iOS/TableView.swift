@@ -277,11 +277,17 @@ public class TableView: Element {
 			}
 			if let header = header {
 				handler.headerView.updateWithElement(header)
+				if tableView.tableHeaderView != handler.headerView {
+					tableView.tableHeaderView = handler.headerView
+				}
 			} else if tableView.tableHeaderView == handler.headerView {
 				tableView.tableHeaderView = nil
 			}
 			if let footer = footer {
 				handler.footerView.updateWithElement(footer)
+				if tableView.tableFooterView != handler.footerView {
+					tableView.tableFooterView = handler.footerView
+				}
 			} else if tableView.tableFooterView == handler.footerView {
 				tableView.tableFooterView = nil
 			}
