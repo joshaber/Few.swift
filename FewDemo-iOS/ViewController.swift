@@ -22,7 +22,7 @@ func renderCounter(component: Component<Int>, count: Int) -> Element {
 		.flex(1)
 		.children([
 			Label("You've clicked \(count) times!"),
-			Button(title: "Click me!", action: updateCounter)
+			Button(attributedTitle: NSAttributedString(string: "Click me!"), action: updateCounter)
 				.margin(Edges(uniform: 10))
 				.width(100),
 			])
@@ -144,7 +144,7 @@ func renderApp(component: Component<AppState>, state: AppState) -> Element {
 					contentComponent.flex(1)
 				])
 				.flex(1),
-			Button(title: "Show me more!", action: showMore)
+			Button(attributedTitle: NSAttributedString(string: "Show me more!"), action: showMore)
 				.width(200)
 				.margin(Edges(uniform: 10))
 				.selfAlignment(.Center)
