@@ -10,14 +10,14 @@ import UIKit
 
 private let defaultRowHeight: CGFloat = 42
 
-private class FewContainerView: UIView {
+private class FewTableHeaderFooter: UIView {
+	var didChangeHeight: (FewTableHeaderFooter -> Void)?
 	private lazy var parentElement: RealizedElement = {[unowned self] in
 		return RealizedElement(element: Element(), view: self.contentView, parent: nil)
 	}()
 	
 	private(set) lazy var contentView: UIView = {[unowned self] in
-		let v = UIView()
-		v.frame = self.bounds
+		let v = UIView(frame: self.bounds)
 		configureViewToAutoresize(v)
 		self.addSubview(v)
 		return v
@@ -26,24 +26,31 @@ private class FewContainerView: UIView {
 	private var realizedElement: RealizedElement?
 	
 	func updateWithElement(element: Element) {
-		if let realizedElement = realizedElement {
-			if element.canDiff(realizedElement.element) {
-				element.applyDiff(realizedElement.element, realizedSelf: realizedElement)
+		if let oldRealizedElement = realizedElement {
+			if element.canDiff(oldRealizedElement.element) {
+				element.applyDiff(oldRealizedElement.element, realizedSelf: oldRealizedElement)
 			} else {
-				realizedElement.remove()
+				oldRealizedElement.remove()
 				
-				self.realizedElement = element.realize(parentElement)
+				realizedElement = element.realize(parentElement)
 			}
 		} else {
 			realizedElement = element.realize(parentElement)
 		}
 		
 		realizedElement?.layoutFromRoot()
+		let layout = element.assembleLayoutNode().layout(maxWidth: bounds.width)
+		let oldHeight = bounds.height
+		layout.apply(contentView)
+
+		if contentView.frame.height != oldHeight {
+			bounds.size.height = contentView.frame.height
+			didChangeHeight?(self)
+		}
 	}
 }
 
-/// this is used as a container for section header/footers
-private class FewListHeaderFooter: UITableViewHeaderFooterView {
+private class FewSectionHeaderFooter: UITableViewHeaderFooterView {
 	private lazy var parentElement: RealizedElement = {[unowned self] in
 		return RealizedElement(element: Element(), view: self.contentView, parent: nil)
 	}()
@@ -102,8 +109,8 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	var elements: [[Element]]
 	var headers: [Element?]
 	var footers: [Element?]
-	let headerView = FewContainerView()
-	let footerView = FewContainerView()
+	let headerView = FewTableHeaderFooter()
+	let footerView = FewTableHeaderFooter()
 
 	var selectionChanged: (NSIndexPath -> ())?
 	
@@ -113,17 +120,31 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		self.headers = headers
 		self.footers = footers
 		super.init()
-		tableView.registerClass(FewListHeaderFooter.self, forHeaderFooterViewReuseIdentifier: headerKey)
-		tableView.registerClass(FewListHeaderFooter.self, forHeaderFooterViewReuseIdentifier: footerKey)
+		headerView.didChangeHeight = {[weak tableView] view in
+			if let tableView = tableView where tableView.tableHeaderView == view {
+				tableView.tableHeaderView = view
+				UIView.performWithoutAnimation {
+					tableView.beginUpdates()
+					tableView.endUpdates()
+				}
+			}
+		}
+		footerView.didChangeHeight = {[weak tableView] view in
+			if tableView?.tableFooterView == view {
+				tableView?.tableFooterView = view
+			}
+		}
+		tableView.registerClass(FewSectionHeaderFooter.self, forHeaderFooterViewReuseIdentifier: headerKey)
+		tableView.registerClass(FewSectionHeaderFooter.self, forHeaderFooterViewReuseIdentifier: footerKey)
 		tableView.registerClass(FewListCell.self, forCellReuseIdentifier: cellKey)
 		tableView.delegate = self
 		tableView.dataSource = self
 	}
 	
-	func update(elements: [[Element]], headers: [Element?], footers: [Element?]) {
+	func update(elements: [[Element]], sectionHeaders: [Element?], sectionFooters: [Element?]) {
 		self.elements = elements
-		self.headers = headers
-		self.footers = footers
+		self.headers = sectionHeaders
+		self.footers = sectionFooters
 
 		updateCachedHeights()
 		tableView.reloadData()
@@ -167,7 +188,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	@objc func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		if section < headers.count {
 			if let header = headers[section] {
-				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerKey) as! FewListHeaderFooter
+				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerKey) as! FewSectionHeaderFooter
 				view.updateWithElement(header)
 				return view
 			}
@@ -187,7 +208,7 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 	@objc func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 		if section < footers.count {
 			if let footer = footers[section] {
-				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(footerKey) as! FewListHeaderFooter
+				let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(footerKey) as! FewSectionHeaderFooter
 				view.updateWithElement(footer)
 				return view
 			}
@@ -222,17 +243,17 @@ public class TableView: Element {
 	private let elements: [[Element]]
 	private let selectionChanged: (NSIndexPath -> ())?
 	private let selectedRow: NSIndexPath?
-	private let headers: [Element?]
-	private let footers: [Element?]
+	private let sectionHeaders: [Element?]
+	private let sectionFooters: [Element?]
 	private let header: Element?
 	private let footer: Element?
 	
-	public init(_ elements: [[Element]], headers: [Element?] = [], footers: [Element?] = [], header: Element? = nil, footer: Element? = nil, selectedRow: NSIndexPath? = nil, selectionChanged: (NSIndexPath -> ())? = nil) {
+	public init(_ elements: [[Element]], sectionHeaders: [Element?] = [], sectionFooters: [Element?] = [], header: Element? = nil, footer: Element? = nil, selectedRow: NSIndexPath? = nil, selectionChanged: (NSIndexPath -> ())? = nil) {
 		self.elements = elements
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
-		self.headers = headers
-		self.footers = footers
+		self.sectionHeaders = sectionHeaders
+		self.sectionFooters = sectionFooters
 		self.header = header
 		self.footer = footer
 	}
@@ -244,7 +265,7 @@ public class TableView: Element {
 		
 		if let tableView = realizedSelf?.view as? FewTableView, handler = tableView.handler, oldSelf = old as? TableView {
 			
-			handler.update(elements, headers: headers, footers: footers)
+			handler.update(elements, sectionHeaders: sectionHeaders, sectionFooters: sectionFooters)
 			handler.selectionChanged = selectionChanged
 			let tableSelected = tableView.indexPathForSelectedRow()
 			if tableSelected != selectedRow {
@@ -256,30 +277,11 @@ public class TableView: Element {
 			}
 			if let header = header {
 				handler.headerView.updateWithElement(header)
-				let layout = header.assembleLayoutNode().layout(maxWidth: tableView.frame.width)
-				let oldHeight = handler.headerView.frame.height
-				layout.apply(handler.headerView.contentView)
-				if oldHeight != handler.headerView.contentView.frame.height {
-					handler.headerView.frame.size.height = handler.headerView.contentView.frame.height
-					tableView.tableHeaderView = handler.headerView
-					// required or else table view may put rows in the wrong spot
-					UIView.performWithoutAnimation {
-						tableView.beginUpdates()
-						tableView.endUpdates()
-					}
-				}
 			} else if tableView.tableHeaderView == handler.headerView {
 				tableView.tableHeaderView = nil
 			}
 			if let footer = footer {
 				handler.footerView.updateWithElement(footer)
-				let layout = footer.assembleLayoutNode().layout(maxWidth: tableView.frame.width)
-				let oldHeight = handler.footerView.frame.height
-				layout.apply(handler.footerView.contentView)
-				if oldHeight != handler.footerView.contentView.frame.height {
-					handler.footerView.frame.size.height = handler.footerView.contentView.frame.height
-					tableView.tableFooterView = handler.footerView
-				}
 			} else if tableView.tableFooterView == handler.footerView {
 				tableView.tableFooterView = nil
 			}
@@ -290,7 +292,7 @@ public class TableView: Element {
 	
 	public override func createView() -> ViewType {
 		let tableView = FewTableView(frame: UIScreen.mainScreen().bounds)
-		let handler = TableViewHandler(tableView: tableView, elements: elements, headers: headers, footers: footers)
+		let handler = TableViewHandler(tableView: tableView, elements: elements, headers: sectionHeaders, footers: sectionFooters)
 		tableView.handler = handler
 		tableView.handler?.selectionChanged = selectionChanged
 		tableView.alpha = alpha

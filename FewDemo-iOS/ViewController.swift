@@ -74,7 +74,7 @@ func renderTableView(component: Component<CGFloat>, state: CGFloat) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView([elements], headers: [Label("Section Header!")], header: Button(title: "Table Header", action: {
+	return TableView([elements], headers: [Label("Section Header!")], header: Button(attributedTitles: [.Normal: NSAttributedString(string: "Table Header")], action: {
 		component.updateState { $0 + 10 }
 	}).height(state).width(200), footer: Label("Table Footer"), footers: [Label("Section Footer!")], selectionChanged: println)
 		.flex(1)
