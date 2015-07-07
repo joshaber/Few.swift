@@ -80,14 +80,14 @@ func renderTableView(component: Component<TableViewDemoState>, state: TableViewD
 		}
 	}
 	return TableView([elements], sectionHeaders: [Label("Section Header!")],
-		header: Button(attributedTitles: [.Normal: NSAttributedString(string: "Increase Header Height")],
+		header: Button(attributedTitle: NSAttributedString(string: "Increase Header Height"),
 			action: {
 				component.updateState { (var state) in
 					state.headerHeight += 10
 					return state
 				}
 			}).height(state.headerHeight).width(200),
-		footer: Button(attributedTitles: [.Normal: NSAttributedString(string: "Increase Footer Height")],
+		footer: Button(attributedTitle: NSAttributedString(string: "Increase Footer Height"),
 			action: {
 				component.updateState { (var state) in
 					state.footerHeight += 10
