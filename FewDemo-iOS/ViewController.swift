@@ -99,10 +99,7 @@ func renderTableView(component: Component<TableViewDemoState>, state: TableViewD
 		.flex(1)
 }
 
-let TableViewDemo: () -> Component<TableViewDemoState> = {
-	let comp = Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60), render: renderTableView)
-	return comp
-}
+let TableViewDemo = { Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60), render: renderTableView) }
 
 func renderInput(component: Component<String>, state: String) -> Element {
 	return Element()
