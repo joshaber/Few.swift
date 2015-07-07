@@ -66,7 +66,7 @@ private func renderRow2(row: Int) -> Element {
 			])
 }
 
-func renderTableView(component: Component<()>, state: ()) -> Element {
+func renderTableView(component: Component<CGFloat>, state: CGFloat) -> Element {
 	let elements: [Element] = Array(1...100).map { rowNum in
 		if rowNum % 2 == 0 {
 			return renderRow1(rowNum)
@@ -74,11 +74,16 @@ func renderTableView(component: Component<()>, state: ()) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView([elements], headers: [Label("Section Header!")], header: Label("Table Header"), footer: Label("Table Footer"), footers: [Label("Section Footer!")], selectionChanged: println)
+	return TableView([elements], headers: [Label("Section Header!")], header: Button(title: "Table Header", action: {
+		component.updateState { $0 + 10 }
+	}).height(state).width(200), footer: Label("Table Footer"), footers: [Label("Section Footer!")], selectionChanged: println)
 		.flex(1)
 }
 
-let TableViewDemo = { Component(initialState: (), render: renderTableView) }
+let TableViewDemo: () -> Component<CGFloat> = {
+	let comp = Component(initialState: CGFloat(80), render: renderTableView)
+	return comp
+}
 
 func renderInput(component: Component<String>, state: String) -> Element {
 	return Element()
@@ -102,7 +107,7 @@ func renderInput(component: Component<String>, state: String) -> Element {
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
 struct AppState {
-	let tableViewComponent: Component<()>
+	let tableViewComponent: Component<CGFloat>
 	let counterComponent: Component<Int>
 	let inputComponent: Component<String>
 	
