@@ -25,6 +25,16 @@ public class Button: Element {
 	
 	private var trampoline = TargetActionTrampoline()
 
+	public convenience init(attributedTitle: NSAttributedString = NSAttributedString(), image: UIImage? = nil, action: (() -> Void) = { }) {
+		let images: [UIControlState: UIImage]
+		if let image = image {
+			images = [.Normal: image]
+		} else {
+			images = [:]
+		}
+		self.init(attributedTitles: [.Normal: attributedTitle], images: images, action: action)
+	}
+	
 	public init(attributedTitles: [UIControlState: NSAttributedString] = [:], images: [UIControlState: UIImage] = [:], backgroundImages: [UIControlState: UIImage] = [:], enabled: Bool = true, selected: Bool = false, highlighted: Bool = false, action: (() -> Void) = { }) {
 		self.images = images
 		self.attributedTitles = attributedTitles
