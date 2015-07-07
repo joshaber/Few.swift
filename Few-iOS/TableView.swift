@@ -318,7 +318,7 @@ public class TableView: Element {
 		if let scrollView = realizedSelf?.view as? FewTableView {
 			let handler = scrollView.handler
 
-			handler?.update(elements, headers: headers, footers: footers)
+			handler?.update(elements, sectionHeaders: sectionHeaders, sectionFooters: sectionFooters)
 		}
 	}
 }

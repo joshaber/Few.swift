@@ -66,7 +66,12 @@ private func renderRow2(row: Int) -> Element {
 			])
 }
 
-func renderTableView(component: Component<CGFloat>, state: CGFloat) -> Element {
+struct TableViewDemoState {
+	var headerHeight: CGFloat
+	var footerHeight: CGFloat
+}
+
+func renderTableView(component: Component<TableViewDemoState>, state: TableViewDemoState) -> Element {
 	let elements: [Element] = Array(1...100).map { rowNum in
 		if rowNum % 2 == 0 {
 			return renderRow1(rowNum)
@@ -74,14 +79,28 @@ func renderTableView(component: Component<CGFloat>, state: CGFloat) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView([elements], headers: [Label("Section Header!")], header: Button(attributedTitles: [.Normal: NSAttributedString(string: "Table Header")], action: {
-		component.updateState { $0 + 10 }
-	}).height(state).width(200), footer: Label("Table Footer"), footers: [Label("Section Footer!")], selectionChanged: println)
+	return TableView([elements], sectionHeaders: [Label("Section Header!")],
+		header: Button(attributedTitles: [.Normal: NSAttributedString(string: "Increase Header Height")],
+			action: {
+				component.updateState { (var state) in
+					state.headerHeight += 10
+					return state
+				}
+			}).height(state.headerHeight).width(200),
+		footer: Button(attributedTitles: [.Normal: NSAttributedString(string: "Increase Footer Height")],
+			action: {
+				component.updateState { (var state) in
+					state.footerHeight += 10
+					return state
+				}
+			}).height(state.footerHeight).width(200),
+		sectionFooters: [Label("Section Footer!")],
+		selectionChanged: println)
 		.flex(1)
 }
 
-let TableViewDemo: () -> Component<CGFloat> = {
-	let comp = Component(initialState: CGFloat(80), render: renderTableView)
+let TableViewDemo: () -> Component<TableViewDemoState> = {
+	let comp = Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60), render: renderTableView)
 	return comp
 }
 
@@ -107,7 +126,7 @@ func renderInput(component: Component<String>, state: String) -> Element {
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
 struct AppState {
-	let tableViewComponent: Component<CGFloat>
+	let tableViewComponent: Component<TableViewDemoState>
 	let counterComponent: Component<Int>
 	let inputComponent: Component<String>
 	
