@@ -90,7 +90,7 @@ public class RealizedElement {
 		}
 	}
 
-	private final func layoutIfNeeded(maxWidth: CGFloat) {
+	public final func layoutIfNeeded(maxWidth: CGFloat) {
 		if !needsLayout { return }
 
 		let node = element.assembleLayoutNode()
