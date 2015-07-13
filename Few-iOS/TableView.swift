@@ -297,7 +297,7 @@ public class TableView: Element {
 	}
 	
 	public override func createView() -> ViewType {
-		let tableView = FewTableView(frame: UIScreen.mainScreen().bounds)
+		let tableView = FewTableView()
 		let handler = TableViewHandler(tableView: tableView, elements: elements, headers: sectionHeaders, footers: sectionFooters)
 		tableView.handler = handler
 		tableView.handler?.selectionChanged = selectionChanged
