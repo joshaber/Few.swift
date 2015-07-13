@@ -122,7 +122,10 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		super.init()
 		headerView.didChangeHeight = {[weak tableView] view in
 			if let tableView = tableView where tableView.tableHeaderView == view {
+				// set header again to force table view to update contentSize & row offset
 				tableView.tableHeaderView = view
+				// begin/end updates because otherwise table view
+				// randomly miscomputes its row offset after header height change
 				UIView.performWithoutAnimation {
 					tableView.beginUpdates()
 					tableView.endUpdates()
@@ -130,8 +133,9 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 			}
 		}
 		footerView.didChangeHeight = {[weak tableView] view in
-			if tableView?.tableFooterView == view {
-				tableView?.tableFooterView = view
+			// set footer again to force table view to update contentSize
+			if let tableView = tableView where tableView.tableFooterView == view {
+				tableView.tableFooterView = view
 			}
 		}
 		tableView.registerClass(FewSectionHeaderFooter.self, forHeaderFooterViewReuseIdentifier: headerKey)
