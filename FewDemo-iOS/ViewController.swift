@@ -66,7 +66,12 @@ private func renderRow2(row: Int) -> Element {
 			])
 }
 
-func renderTableView(component: Component<()>, state: ()) -> Element {
+struct TableViewDemoState {
+	var headerHeight: CGFloat
+	var footerHeight: CGFloat
+}
+
+func renderTableView(component: Component<TableViewDemoState>, state: TableViewDemoState) -> Element {
 	let elements: [Element] = Array(1...100).map { rowNum in
 		if rowNum % 2 == 0 {
 			return renderRow1(rowNum)
@@ -74,11 +79,27 @@ func renderTableView(component: Component<()>, state: ()) -> Element {
 			return renderRow2(rowNum)
 		}
 	}
-	return TableView([elements], headers: [Label("Hello Header!")], footers: [Label("Hello Footer!")], selectionChanged: println)
+	return TableView([elements], sectionHeaders: [Label("Section Header!")],
+		header: Button(attributedTitle: NSAttributedString(string: "Increase Header Height"),
+			action: {
+				component.updateState { (var state) in
+					state.headerHeight += 10
+					return state
+				}
+			}).height(state.headerHeight).width(200),
+		footer: Button(attributedTitle: NSAttributedString(string: "Increase Footer Height"),
+			action: {
+				component.updateState { (var state) in
+					state.footerHeight += 10
+					return state
+				}
+			}).height(state.footerHeight).width(200),
+		sectionFooters: [Label("Section Footer!")],
+		selectionChanged: println)
 		.flex(1)
 }
 
-let TableViewDemo = { Component(initialState: (), render: renderTableView) }
+let TableViewDemo = { Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60), render: renderTableView) }
 
 func renderInput(component: Component<String>, state: String) -> Element {
 	return Element()
@@ -102,7 +123,7 @@ func renderInput(component: Component<String>, state: String) -> Element {
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
 struct AppState {
-	let tableViewComponent: Component<()>
+	let tableViewComponent: Component<TableViewDemoState>
 	let counterComponent: Component<Int>
 	let inputComponent: Component<String>
 	

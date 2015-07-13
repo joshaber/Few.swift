@@ -108,6 +108,8 @@ public class Element {
 		}
 
 		if let realizedSelf = realizedSelf {
+			realizedSelf.element = self
+			
 			if let view = realizedSelf.view {
 				if hidden != view.hidden {
 					view.hidden = hidden
@@ -116,7 +118,9 @@ public class Element {
 				compareAndSetAlpha(view, alpha)
 			}
 			
-			realizedSelf.element = self
+			if old.frame.size != frame.size && !frame.size.isUndefined {
+				realizedSelf.markNeedsLayout()
+			}
 			
 			let childrenDiff = diffElementLists(realizedSelf.children, children)
 
