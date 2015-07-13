@@ -118,7 +118,7 @@ public class Element {
 				compareAndSetAlpha(view, alpha)
 			}
 			
-			if old.frame.size != frame.size {
+			if old.frame.size != frame.size && !frame.size.isUndefined {
 				realizedSelf.markNeedsLayout()
 			}
 			
