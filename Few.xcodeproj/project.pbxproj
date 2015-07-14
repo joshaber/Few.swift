@@ -70,6 +70,11 @@
 		CC2C508B1AFECB0600019685 /* SwiftBox.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = CC2C507D1AFEC95900019685 /* SwiftBox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CC2C508C1AFECB0B00019685 /* SwiftBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC2C507A1AFEC93D00019685 /* SwiftBox.framework */; };
 		CC2C508D1AFECB0B00019685 /* SwiftBox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CC2C507A1AFEC93D00019685 /* SwiftBox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CC8A32361B54AEB700626C4D /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A32351B54AEB700626C4D /* Switch.swift */; };
+		CC95B32B1B54BD8B00F7D83C /* AttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC95B32A1B54BD8B00F7D83C /* AttributedStringExtensions.swift */; };
+		CC95B32C1B54BD8B00F7D83C /* AttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC95B32A1B54BD8B00F7D83C /* AttributedStringExtensions.swift */; };
+		CC95B32E1B54BE3C00F7D83C /* UIControlStateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC95B32D1B54BE3C00F7D83C /* UIControlStateExtensions.swift */; };
+		CC95B3311B54C1D100F7D83C /* UIGeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC95B3301B54C1D100F7D83C /* UIGeometryExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +195,10 @@
 		CC2C507D1AFEC95900019685 /* SwiftBox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftBox.framework; path = Carthage/Build/Mac/SwiftBox.framework; sourceTree = "<group>"; };
 		CC2C50801AFEC99700019685 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = SOURCE_ROOT; };
 		CC2C50841AFECA8100019685 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = SOURCE_ROOT; };
+		CC8A32351B54AEB700626C4D /* Switch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Switch.swift; sourceTree = "<group>"; };
+		CC95B32A1B54BD8B00F7D83C /* AttributedStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedStringExtensions.swift; sourceTree = "<group>"; };
+		CC95B32D1B54BE3C00F7D83C /* UIControlStateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControlStateExtensions.swift; sourceTree = "<group>"; };
+		CC95B3301B54C1D100F7D83C /* UIGeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGeometryExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,9 +252,11 @@
 		888E59AE1A4684850062A36B /* Few-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				CC95B32F1B54BE4400F7D83C /* Extensions */,
 				888E59CC1A4684AF0062A36B /* iOS.swift */,
 				A2FA89121AB33C1F00561FBF /* View.swift */,
 				A2FA89141AB33E0800561FBF /* Button.swift */,
+				CC8A32351B54AEB700626C4D /* Switch.swift */,
 				A2FA89161AB33EDA00561FBF /* Label.swift */,
 				A2B9C7471AB387F7002648DA /* TableView.swift */,
 				A2B9C74F1AB390B3002648DA /* Image.swift */,
@@ -319,6 +330,7 @@
 				8897689419AED8AF00DD079B /* Util.swift */,
 				8897689319AED8AF00DD079B /* TargetActionTrampoline.swift */,
 				888E59DA1A4687E10062A36B /* QuickLook.swift */,
+				CC95B32A1B54BD8B00F7D83C /* AttributedStringExtensions.swift */,
 			);
 			path = FewCore;
 			sourceTree = "<group>";
@@ -410,6 +422,15 @@
 				CC2C507D1AFEC95900019685 /* SwiftBox.framework */,
 			);
 			name = "Frameworks-Mac";
+			sourceTree = "<group>";
+		};
+		CC95B32F1B54BE4400F7D83C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CC95B32D1B54BE3C00F7D83C /* UIControlStateExtensions.swift */,
+				CC95B3301B54C1D100F7D83C /* UIGeometryExtensions.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -624,14 +645,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2B9C7541AB43D0A002648DA /* Input.swift in Sources */,
+				CC95B32E1B54BE3C00F7D83C /* UIControlStateExtensions.swift in Sources */,
 				888E59D81A4687330062A36B /* Util.swift in Sources */,
 				888E59CF1A4687330062A36B /* Element.swift in Sources */,
+				CC95B32C1B54BD8B00F7D83C /* AttributedStringExtensions.swift in Sources */,
 				A2FA89171AB33EDA00561FBF /* Label.swift in Sources */,
 				A2FA89131AB33C1F00561FBF /* View.swift in Sources */,
+				CC95B3311B54C1D100F7D83C /* UIGeometryExtensions.swift in Sources */,
 				888E59D01A4687330062A36B /* Component.swift in Sources */,
 				888E59D91A4687330062A36B /* TargetActionTrampoline.swift in Sources */,
 				888E59CD1A4684AF0062A36B /* iOS.swift in Sources */,
 				A2B9C7501AB390B3002648DA /* Image.swift in Sources */,
+				CC8A32361B54AEB700626C4D /* Switch.swift in Sources */,
 				888E59D41A4687330062A36B /* Empty.swift in Sources */,
 				A2B9C7481AB387F7002648DA /* TableView.swift in Sources */,
 				889FE1BE1A4E11F000D53F3E /* QuickLook.swift in Sources */,
@@ -648,6 +673,7 @@
 				88995D6D1A855D2000526313 /* View.swift in Sources */,
 				883CECA81A4532A600B8A510 /* Password.swift in Sources */,
 				889768A019AED8AF00DD079B /* Util.swift in Sources */,
+				CC95B32B1B54BD8B00F7D83C /* AttributedStringExtensions.swift in Sources */,
 				8897689619AED8AF00DD079B /* Button.swift in Sources */,
 				8897689919AED8AF00DD079B /* Element.swift in Sources */,
 				8897689C19AED8AF00DD079B /* Label.swift in Sources */,

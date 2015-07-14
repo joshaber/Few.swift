@@ -10,7 +10,7 @@ import UIKit
 
 private let DefaultLabelFont = UIFont.systemFontOfSize(UIFont.systemFontSize())
 
-private let ABigDimension: CGFloat = 10000
+internal let ABigDimension: CGFloat = 10000
 
 private let sizingLabel = UILabel()
 

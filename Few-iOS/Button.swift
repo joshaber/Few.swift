@@ -8,13 +8,6 @@
 
 import UIKit
 
-extension UIControlState: Hashable {
-	static let all: [UIControlState] = [.Normal, .Selected, .Disabled, .Highlighted]
-	public var hashValue: Int {
-		return Int(rawValue)
-	}
-}
-
 public class Button: Element {
 	public var attributedTitles: [UIControlState: NSAttributedString]
 	public var images: [UIControlState: UIImage]
@@ -22,6 +15,8 @@ public class Button: Element {
 	public var enabled: Bool
 	public var selected: Bool
 	public var highlighted: Bool
+	
+	private static let layoutButton = UIButton()
 	
 	private var trampoline = TargetActionTrampoline()
 
@@ -43,7 +38,37 @@ public class Button: Element {
 		self.enabled = enabled
 		self.highlighted = highlighted
 		trampoline.action = action
-		super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 23))
+		super.init()
+	}
+	
+	public var controlState: UIControlState {
+		return UIControlState(enabled: enabled, selected: selected, highlighted: highlighted)
+	}
+	
+	public override func assembleLayoutNode() -> Node {
+		let childNodes = children.map { $0.assembleLayoutNode() }
+		
+		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex) { w in
+			let controlState = self.controlState
+			
+			let layoutButton = Button.layoutButton
+			layoutButton.enabled = self.enabled
+			layoutButton.highlighted = self.highlighted
+			layoutButton.selected = self.selected
+			
+			let attributedTitle = self.attributedTitles[controlState] ?? self.attributedTitles[.Normal]
+			if layoutButton.attributedTitleForState(controlState) != attributedTitle {
+				layoutButton.setAttributedTitle(attributedTitle, forState: controlState)
+			}
+			
+			let image = self.images[controlState] ?? self.images[.Normal]
+			if image != layoutButton.imageForState(controlState) {
+				layoutButton.setImage(image, forState: controlState)
+			}
+			
+			let fittingSize = CGSize(width: w.isNaN ? ABigDimension : w, height: ABigDimension)
+			return layoutButton.sizeThatFits(fittingSize)
+		}
 	}
 	
 	// MARK: Element
