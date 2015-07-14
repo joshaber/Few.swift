@@ -69,6 +69,7 @@ private func renderRow2(row: Int) -> Element {
 struct TableViewDemoState {
 	var headerHeight: CGFloat
 	var footerHeight: CGFloat
+	var headerSwitchIsOn: Bool
 }
 
 func renderTableView(component: Component<TableViewDemoState>, state: TableViewDemoState) -> Element {
@@ -79,27 +80,41 @@ func renderTableView(component: Component<TableViewDemoState>, state: TableViewD
 			return renderRow2(rowNum)
 		}
 	}
+	let headerTitle = "Increase Header Height" + (state.headerSwitchIsOn ? " (on)" : " (off)")
 	return TableView([elements], sectionHeaders: [Label("Section Header!")],
-		header: Button(attributedTitle: NSAttributedString(string: "Increase Header Height"),
-			action: {
+		header: Element(direction: .Row,
+			justification: Justification.SpaceAround,
+			childAlignment: ChildAlignment.Center,
+			children: [
+			Button(attributedTitle: NSAttributedString(string: headerTitle),
+				action: {
+					component.updateState { (var state) in
+						state.headerHeight += 10
+						return state
+					}
+			}),
+			Switch(on: state.headerSwitchIsOn, enabled: true, animatesOnSetting: true, onTintColor: UIColor.purpleColor(), action: { on in
 				component.updateState { (var state) in
-					state.headerHeight += 10
+					state.headerSwitchIsOn = on
 					return state
 				}
-			}).height(state.headerHeight).width(200),
+			})
+		]).height(state.headerHeight).width(UIScreen.mainScreen().bounds.width),
 		footer: Button(attributedTitle: NSAttributedString(string: "Increase Footer Height"),
 			action: {
 				component.updateState { (var state) in
 					state.footerHeight += 10
 					return state
 				}
-			}).height(state.footerHeight).width(200),
+			}).height(state.footerHeight).width(UIScreen.mainScreen().bounds.width),
 		sectionFooters: [Label("Section Footer!")],
+		contentInset: UIEdgeInsetsMake(64, 0, 0, 0),
+		scrollIndicatorInsets: UIEdgeInsetsMake(64, 0, 0, 0),
 		selectionChanged: println)
 		.flex(1)
 }
 
-let TableViewDemo = { Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60), render: renderTableView) }
+let TableViewDemo = { Component(initialState: TableViewDemoState(headerHeight: 60, footerHeight: 60, headerSwitchIsOn: true), render: renderTableView) }
 
 func renderInput(component: Component<String>, state: String) -> Element {
 	return Element()
@@ -123,25 +138,21 @@ func renderInput(component: Component<String>, state: String) -> Element {
 let InputDemo = { Component(initialState: "", render: renderInput) }
 
 struct AppState {
+	enum ContentComponent {
+		case TableView
+		case Counter
+		case Input
+	}
+	
 	let tableViewComponent: Component<TableViewDemoState>
 	let counterComponent: Component<Int>
 	let inputComponent: Component<String>
 	
-	var activeComponent: ActiveComponent
-	
-	mutating func updateActiveComponent(newComponent: ActiveComponent) -> AppState {
-		activeComponent = newComponent
-		return self
-	}
-}
-enum ActiveComponent {
-	case TableView
-	case Counter
-	case Input
+	var activeComponent: ContentComponent
 }
 
 func renderApp(component: Component<AppState>, state: AppState) -> Element {
-	var contentComponent: Element!
+	let contentComponent: Element
 	switch state.activeComponent {
 	case .TableView:
 		contentComponent = state.tableViewComponent
@@ -151,30 +162,11 @@ func renderApp(component: Component<AppState>, state: AppState) -> Element {
 		contentComponent = state.inputComponent
 	}
 	
-	let showMore = { component.updateState(toggleDisplay) }
-	return Element()
-		.direction(.Column)
-		.children([
-			Element()
-				.children([
-					contentComponent.flex(1)
-				])
-				.flex(1),
-			Button(attributedTitle: NSAttributedString(string: "Show me more!"), action: showMore)
-				.width(200)
-				.margin(Edges(uniform: 10))
-				.selfAlignment(.Center)
+	return Element(
+		flex: 1,
+		children: [
+			contentComponent.flex(1)
 		])
 }
 
-func toggleDisplay(var state: AppState) -> AppState {
-	switch state.activeComponent {
-	case .TableView:
-		return state.updateActiveComponent(.Counter)
-	case .Counter:
-		return state.updateActiveComponent(.Input)
-	case .Input:
-		return state.updateActiveComponent(.TableView)
-	}
-}
 

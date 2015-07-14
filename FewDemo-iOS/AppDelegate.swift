@@ -27,12 +27,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		window = UIWindow(frame: UIScreen.mainScreen().bounds)
 		let vc = UIViewController()
+		vc.title = "Few Demo"
+		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .Plain, target: self, action: "nextTapped")
+		let nav = UINavigationController(rootViewController: vc)
 		vc.view.backgroundColor = UIColor.whiteColor()
 		appComponent.addToView(vc.view)
-		window?.rootViewController = vc
+		window?.rootViewController = nav
 		window?.makeKeyAndVisible()
 		
 		return true
 	}
+	
+	@objc func nextTapped() {
+		appComponent.updateState { (var state) in
+			switch state.activeComponent {
+			case .TableView:
+				state.activeComponent = .Counter
+			case .Counter:
+				state.activeComponent = .Input
+			case .Input:
+				state.activeComponent = .TableView
+			}
+			return state
+		}
+	}
 }
-

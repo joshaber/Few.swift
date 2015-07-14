@@ -251,8 +251,10 @@ public class TableView: Element {
 	private let sectionFooters: [Element?]
 	private let header: Element?
 	private let footer: Element?
+	private let contentInset: UIEdgeInsets
+	private let scrollIndicatorInsets: UIEdgeInsets
 	
-	public init(_ elements: [[Element]], sectionHeaders: [Element?] = [], sectionFooters: [Element?] = [], header: Element? = nil, footer: Element? = nil, selectedRow: NSIndexPath? = nil, selectionChanged: (NSIndexPath -> ())? = nil) {
+	public init(_ elements: [[Element]], sectionHeaders: [Element?] = [], sectionFooters: [Element?] = [], header: Element? = nil, footer: Element? = nil, selectedRow: NSIndexPath? = nil, contentInset: UIEdgeInsets = .zeroInsets, scrollIndicatorInsets: UIEdgeInsets = .zeroInsets, selectionChanged: (NSIndexPath -> ())? = nil) {
 		self.elements = elements
 		self.selectionChanged = selectionChanged
 		self.selectedRow = selectedRow
@@ -260,6 +262,8 @@ public class TableView: Element {
 		self.sectionFooters = sectionFooters
 		self.header = header
 		self.footer = footer
+		self.contentInset = contentInset
+		self.scrollIndicatorInsets = scrollIndicatorInsets
 	}
 	
 	// MARK: -
@@ -295,7 +299,14 @@ public class TableView: Element {
 			} else if tableView.tableFooterView == handler.footerView {
 				tableView.tableFooterView = nil
 			}
-
+			
+			if contentInset != tableView.contentInset {
+				tableView.contentInset = contentInset
+			}
+			
+			if scrollIndicatorInsets != tableView.scrollIndicatorInsets {
+				tableView.scrollIndicatorInsets = scrollIndicatorInsets
+			}
 		}
 
 	}
@@ -307,6 +318,8 @@ public class TableView: Element {
 		tableView.handler?.selectionChanged = selectionChanged
 		tableView.alpha = alpha
 		tableView.hidden = hidden
+		tableView.contentInset = contentInset
+		tableView.scrollIndicatorInsets = scrollIndicatorInsets
 		if let header = header {
 			handler.headerView.updateWithElement(header)
 			let layout = header.assembleLayoutNode().layout(maxWidth: tableView.frame.width)
