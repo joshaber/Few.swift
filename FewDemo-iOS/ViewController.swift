@@ -95,7 +95,7 @@ func renderTableView(component: Component<TableViewDemoState>, state: TableViewD
 				}
 			}).height(state.footerHeight).width(200),
 		sectionFooters: [Label("Section Footer!")],
-		selectionChanged: println)
+		selectionChanged: print)
 		.flex(1)
 }
 

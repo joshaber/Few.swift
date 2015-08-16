@@ -13,7 +13,7 @@ public class Image: Element {
 	public var image: NSImage?
 	public var scaling: NSImageScaling
 
-	public init(_ image: NSImage?, scaling: NSImageScaling = .ImageScaleProportionallyUpOrDown) {
+	public init(_ image: NSImage?, scaling: NSImageScaling = .NSImageScaling.ScaleProportionallyUpOrDown) {
 		self.image = image
 		self.scaling = scaling
 

@@ -104,7 +104,7 @@ public class Element {
 	/// should call super before doing their own diffing.
 	public func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		if LogDiff {
-			println("*** Diffing \(self)")
+			print("*** Diffing \(self)")
 		}
 
 		if let realizedSelf = realizedSelf {
@@ -115,14 +115,14 @@ public class Element {
 					view.hidden = hidden
 				}
 				
-				compareAndSetAlpha(view, alpha)
+				compareAndSetAlpha(view, alpha: alpha)
 			}
 			
 			if old.frame.size != frame.size && !frame.size.isUndefined {
 				realizedSelf.markNeedsLayout()
 			}
 			
-			let childrenDiff = diffElementLists(realizedSelf.children, children)
+			let childrenDiff = diffElementLists(realizedSelf.children, newList: children)
 
 			if LogDiff {
 				printChildDiff(childrenDiff, old: old)
@@ -148,21 +148,21 @@ public class Element {
 		if old.children.count == 0 && children.count == 0 { return }
 
 		let oldChildren = old.children.map { "\($0.dynamicType)" }
-		println("**** old: \(oldChildren)")
+		print("**** old: \(oldChildren)")
 
 		let newChildren = children.map { "\($0.dynamicType)" }
-		println("**** new: \(newChildren)")
+		print("**** new: \(newChildren)")
 
 		for d in diff.diff {
-			println("**** applying \(d.replacement.dynamicType) => \(d.existing.element.dynamicType)")
+			print("**** applying \(d.replacement.dynamicType) => \(d.existing.element.dynamicType)")
 		}
 
 		let removing = diff.remove.map { "\($0.element.dynamicType)" }
-		println("**** removing \(removing)")
+		print("**** removing \(removing)")
 
 		let adding = diff.add.map { "\($0.dynamicType)" }
-		println("**** adding \(adding)")
-		println()
+		print("**** adding \(adding)")
+		print("")
 	}
 
 	public func createView() -> ViewType? {
@@ -178,7 +178,7 @@ public class Element {
 		let view = createView()
 
 		let realizedSelf = createRealizedElement(view, parent: parent)
-		parent?.addRealizedChild(realizedSelf, index: indexOfObject(children, self))
+		parent?.addRealizedChild(realizedSelf, index: indexOfObject(children, element: self))
 
 		for child in children {
 			child.realize(realizedSelf)
@@ -329,14 +329,14 @@ extension Element {
 	}
 }
 
-extension Element: Printable {
+extension Element: CustomStringConvertible {
 	public var description: String {
 		return descriptionForDepth(0)
 	}
 
 	private func descriptionForDepth(depth: Int) -> String {
 		if children.count > 0 {
-			let indentation = reduce(0...depth, "\n") { accum, _ in accum + "\t" }
+			let indentation = (0...depth).reduce("\n") { accum, _ in accum + "\t" }
 			let childrenDescription = indentation.join(children.map { $0.descriptionForDepth(depth + 1) })
 			return "\(selfDescription)\(indentation)\(childrenDescription)"
 		} else {

@@ -19,7 +19,7 @@ public class Password: Input {
 		field.alphaValue = alpha
 		field.hidden = hidden
 
-		let cell = field.cell() as? NSTextFieldCell
+		let cell = field.cell as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 		return field
 	}
