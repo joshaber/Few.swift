@@ -60,12 +60,12 @@ class TemperatureConverter_<LOL>: Component<ConverterState> {
 			.childAlignment(.Center)
 			.direction(.Column)
 			.children([
-				renderLabeledInput("Fahrenheit", "\(state.fahrenheit)", true) {
+				renderLabeledInput("Fahrenheit", value: "\(state.fahrenheit)", autofocus: true) {
 					if let f = parseFloat($0) {
 						self.updateState { _ in ConverterState(fahrenheit: f, celcius: f2c(f)) }
 					}
 				},
-				renderLabeledInput("Celcius", "\(state.celcius)", false) {
+				renderLabeledInput("Celcius", value: "\(state.celcius)", autofocus: false) {
 					if let c = parseFloat($0) {
 						self.updateState { _ in ConverterState(fahrenheit: c2f(c), celcius: c) }
 					}
