@@ -22,5 +22,5 @@ internal func markNeedsDisplay(view: ViewType) {
 }
 
 internal func configureViewToAutoresize(view: ViewType?) {
-	view?.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+	view?.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
 }

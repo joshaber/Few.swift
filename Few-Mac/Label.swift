@@ -15,7 +15,7 @@ private let StringFudge = CGSize(width: 4, height: 0)
 private let ABigDimension: CGFloat = 10000
 
 internal func estimateStringSize(string: NSAttributedString, maxSize: CGSize = CGSize(width: ABigDimension, height: ABigDimension)) -> CGSize {
-	let rect = string.boundingRectWithSize(maxSize, options: .UsesLineFragmentOrigin | .UsesFontLeading)
+	let rect = string.boundingRectWithSize(maxSize, options: [.UsesLineFragmentOrigin, .UsesFontLeading])
 	let width = ceil(rect.size.width) + StringFudge.width
 	let height = ceil(rect.size.height) + StringFudge.height
 	return CGSize(width: width, height: height)

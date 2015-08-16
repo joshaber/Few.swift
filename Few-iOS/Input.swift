@@ -33,7 +33,13 @@ public class Input: Element {
 	private var actionTrampoline = TargetActionTrampolineWithSender<UITextField>()
 	private var inputDelegate = InputDelegate()
 	
-	public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, borderStyle: UITextBorderStyle = .None, keyboardType: UIKeyboardType = .Default, returnKeyType: UIReturnKeyType = .Default, autocorrectionType: UITextAutocorrectionType = .Default, autocapitalizationType: UITextAutocapitalizationType = .Sentences, shouldReturn: String -> Bool = { _ in true }, textChanged: String -> () = { _ in }) {
+	private let shouldReturn: String -> Bool
+	private let textChanged: String -> ()
+
+	
+	public init(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, initialText: String? = nil, placeholder: String? = nil, enabled: Bool = true, secure: Bool = false, borderStyle: UITextBorderStyle = .None, keyboardType: UIKeyboardType = .Default, returnKeyType: UIReturnKeyType = .Default, autocorrectionType: UITextAutocorrectionType = .Default
+		, autocapitalizationType: UITextAutocapitalizationType = .Sentences, shouldReturn: String -> Bool = { _ in true }, textChanged: String -> () = { _ in }
+		) {
 		self.text = text
 		self.textColor = textColor
 		self.font = font
@@ -46,14 +52,19 @@ public class Input: Element {
 		self.returnKeyType = returnKeyType
 		self.autocorrectionType = autocorrectionType
 		self.autocapitalizationType = autocapitalizationType
-		actionTrampoline.action = { textField in
-			textChanged(textField.text)
-		}
-		inputDelegate.shouldReturn = { textField in
-			shouldReturn(textField.text)
-		}
+		self.shouldReturn = shouldReturn
+		self.textChanged = textChanged
 		
 		super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 23))
+
+		actionTrampoline.action = { textField in
+			let text = textField.text ?? ""
+			self.textChanged(text)
+		}
+		inputDelegate.shouldReturn = {[unowned self] textField in
+			let text = textField.text ?? ""
+			return self.shouldReturn(text)
+		}
 	}
 	
 	// MARK: Element

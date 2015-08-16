@@ -9,7 +9,7 @@
 import Foundation
 
 internal func indexOfObject<T: AnyObject>(array: [T], element: T) -> Int? {
-	for (i, e) in enumerate(array) {
+	for (i, e) in array.enumerate() {
 		if element === e { return i }
 	}
 
@@ -77,7 +77,7 @@ public class RealizedElement {
 	}
 
 	private final func removeRealizedChild(child: RealizedElement) {
-		if let index = indexOfObject(children, child) {
+		if let index = indexOfObject(children, element: child) {
 			children.removeAtIndex(index)
 		}
 	}
@@ -94,7 +94,7 @@ public class RealizedElement {
 		if !needsLayout { return }
 
 		let node = element.assembleLayoutNode()
-		let layout = node.layout(maxWidth: maxWidth)
+		let layout = node.layout(maxWidth)
 
 		applyLayout(layout, offset: CGPointZero)
 	}
@@ -139,7 +139,7 @@ public class RealizedElement {
 			childOffset = layoutFrame.origin
 		}
 
-		for (child, layout) in Zip2(children, layout.children) {
+		for (child, layout) in Zip2Sequence(children, layout.children) {
 			child.applyLayout(layout, offset: childOffset)
 		}
 

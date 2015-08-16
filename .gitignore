@@ -18,3 +18,7 @@ DerivedData
 *.xcuserstate
 
 .DS_Store
+
+# Carthage
+#
+Carthage/

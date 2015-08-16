@@ -51,11 +51,13 @@ struct ScrollViewState {
 
 private func keyDown(event: NSEvent, component: Component<ScrollViewState>) -> Bool {
 	let characters = event.charactersIgnoringModifiers!.utf16
-	let firstCharacter = first(characters)
+	let firstCharacter = characters.first
 	if firstCharacter == UInt16(NSDeleteCharacter) {
 		component.updateState { state in
 			var items = state.items
-			items.removeAtIndex <^> state.selectedRow
+			if let selectedRow = state.selectedRow {
+				items.removeAtIndex(selectedRow)
+			}
 			return ScrollViewState(selectedRow: state.selectedRow, items: items)
 		}
 		return true
@@ -76,7 +78,7 @@ private func renderScrollView() -> Element {
 		let itemPlurality = (items.count == 1 ? "item" : "items")
 		return View(
 			keyDown: { _, event in
-				return keyDown(event, component)
+				return keyDown(event, component: component)
 			})
 			.direction(.Column)
 			.children([
@@ -114,11 +116,11 @@ private func renderLogin() -> Element {
 		return Element()
 			.direction(.Column)
 			.children([
-				renderThingy(count(state.username.utf16)),
-				renderInput(component, "Username", false) {
+				renderThingy(state.username.utf16.count),
+				renderInput(component, label: "Username", secure: false) {
 					LoginState(username: $1, password: $0.password)
 				},
-				renderInput(component, "Password", true) {
+				renderInput(component, label: "Password", secure: true) {
 					LoginState(username: $0.username, password: $1)
 				},
 				Button(title: "Login", enabled: loginEnabled, action: {})

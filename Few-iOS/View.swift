@@ -31,8 +31,8 @@ public class View: Element {
 				backgroundView.backgroundColor = backgroundColor
 			}
 			
-			if backgroundView.layer.borderColor != nil {
-				let backgroundViewBorderColor = UIColor(CGColor: backgroundView.layer.borderColor)
+			if let backgroundColor = backgroundView.layer.borderColor {
+				let backgroundViewBorderColor = UIColor(CGColor: backgroundColor)
 				if borderColor != backgroundViewBorderColor {
 					backgroundView.layer.borderColor = borderColor?.CGColor
 				}
