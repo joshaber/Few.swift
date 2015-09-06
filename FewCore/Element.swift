@@ -134,7 +134,7 @@ public class Element {
 			}
 
 			for child in childrenDiff.add {
-				let realizedChild = child.realize(realizedSelf)
+				_ = child.realize(realizedSelf)
 				realizedSelf.markNeedsLayout()
 			}
 
@@ -337,7 +337,7 @@ extension Element: CustomStringConvertible {
 	private func descriptionForDepth(depth: Int) -> String {
 		if children.count > 0 {
 			let indentation = (0...depth).reduce("\n") { accum, _ in accum + "\t" }
-			let childrenDescription = indentation.join(children.map { $0.descriptionForDepth(depth + 1) })
+			let childrenDescription = children.map { $0.descriptionForDepth(depth + 1) }.joinWithSeparator(indentation)
 			return "\(selfDescription)\(indentation)\(childrenDescription)"
 		} else {
 			return selfDescription

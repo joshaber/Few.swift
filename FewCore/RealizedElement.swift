@@ -128,13 +128,13 @@ public class RealizedElement {
 	}
 
 	private final func applyLayout(layout: Layout, offset: CGPoint) {
-		layoutFrame = layout.frame.rectByOffsetting(dx: offset.x, dy: offset.y)
+		layoutFrame = layout.frame.offsetBy(dx: offset.x, dy: offset.y)
 
 		let childOffset: CGPoint
 		if let view = view {
 			// If we have a view then children won't need to be offset at all.
 			childOffset = CGPointZero
-			view.frame = layoutFrame.integerRect
+			view.frame = layoutFrame.integral
 		} else {
 			childOffset = layoutFrame.origin
 		}
