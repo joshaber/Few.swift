@@ -188,11 +188,7 @@ public class Component<S>: Element {
 
 		renderQueued = true
 		
-		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault,
-			CFRunLoopActivity.BeforeWaiting.rawValue,
-			false,
-			0)
-			{ (observer, activity) -> Void in
+		let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.BeforeWaiting.rawValue, false, 0) { _ in
 			self.renderQueued = false
 			self.rerender()
 		}

@@ -139,7 +139,7 @@ public class RealizedElement {
 			childOffset = layoutFrame.origin
 		}
 
-		for (child, layout) in Zip2Sequence(children, layout.children) {
+		for (child, layout) in zip(children, layout.children) {
 			child.applyLayout(layout, offset: childOffset)
 		}
 
