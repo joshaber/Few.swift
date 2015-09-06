@@ -1,3 +1,3 @@
-github "Quick/Nimble" "dbfc4ebd53395361c14eb2c9b13f629fc541bba2"
-github "Quick/Quick" "6b8507b28767b6fe54cfdc7112ab554505604c95"
-github "joshaber/SwiftBox" "f5020bad46004c937ef14afa7dc74713a75eb648"
+github "Quick/Nimble" "v2.0.0-rc.3"
+github "Quick/Quick" "v0.6.0"
+github "joshaber/SwiftBox" "6ec5ef5492c411163d34cd46c46434bbd2181faf"
