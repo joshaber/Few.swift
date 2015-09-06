@@ -267,7 +267,7 @@ public class TableView: Element {
 	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 		
-		if let tableView = realizedSelf?.view as? FewTableView, handler = tableView.handler, oldSelf = old as? TableView {
+		if let tableView = realizedSelf?.view as? FewTableView, handler = tableView.handler, _ = old as? TableView {
 			
 			handler.update(elements, sectionHeaders: sectionHeaders, sectionFooters: sectionFooters)
 			handler.selectionChanged = selectionChanged
