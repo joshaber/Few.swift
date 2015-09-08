@@ -39,7 +39,7 @@ private class FewTableHeaderFooter: UIView {
 		}
 		
 		realizedElement?.layoutFromRoot()
-		let layout = element.assembleLayoutNode().layout(maxWidth: bounds.width)
+		let layout = element.assembleLayoutNode().layout(bounds.width)
 		let oldHeight = bounds.height
 		layout.apply(contentView)
 
@@ -227,12 +227,12 @@ private class TableViewHandler: NSObject, UITableViewDelegate, UITableViewDataSo
 		}
 		allElements += headers
 		allElements += footers
-
+		
 		cachedHeights.removeAll(keepCapacity: true)
 		for element in allElements {
 			if let element = element {
 				let node = element.assembleLayoutNode()
-				let layout = node.layout(maxWidth: tableView.frame.size.width)
+				let layout = node.layout(tableView.frame.size.width)
 				cachedHeights[memoryAddress(element)] = layout.frame.size.height
 			}
 		}
@@ -267,11 +267,11 @@ public class TableView: Element {
 	public override func applyDiff(old: Element, realizedSelf: RealizedElement?) {
 		super.applyDiff(old, realizedSelf: realizedSelf)
 		
-		if let tableView = realizedSelf?.view as? FewTableView, handler = tableView.handler, oldSelf = old as? TableView {
+		if let tableView = realizedSelf?.view as? FewTableView, handler = tableView.handler, _ = old as? TableView {
 			
 			handler.update(elements, sectionHeaders: sectionHeaders, sectionFooters: sectionFooters)
 			handler.selectionChanged = selectionChanged
-			let tableSelected = tableView.indexPathForSelectedRow()
+			let tableSelected = tableView.indexPathForSelectedRow
 			if tableSelected != selectedRow {
 				if let selectedRow = selectedRow {
 					tableView.selectRowAtIndexPath(selectedRow, animated: false, scrollPosition: .None)
@@ -309,13 +309,13 @@ public class TableView: Element {
 		tableView.hidden = hidden
 		if let header = header {
 			handler.headerView.updateWithElement(header)
-			let layout = header.assembleLayoutNode().layout(maxWidth: tableView.frame.width)
+			let layout = header.assembleLayoutNode().layout(tableView.frame.width)
 			layout.apply(handler.headerView)
 			tableView.tableHeaderView = handler.headerView
 		}
 		if let footer = footer {
 			handler.footerView.updateWithElement(footer)
-			let layout = footer.assembleLayoutNode().layout(maxWidth: tableView.frame.width)
+			let layout = footer.assembleLayoutNode().layout(frame.width)
 			layout.apply(handler.footerView)
 			tableView.tableFooterView = handler.footerView
 		}

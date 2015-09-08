@@ -30,7 +30,7 @@ public func <^><A, B>(f: A -> B, a: A?) -> B? {
 }
 
 public func <^><A, B>(f: A -> B, a: [A]) -> [B] {
-	return map(a, f)
+	return a.map(f)
 }
 
 infix operator <*> { associativity left }

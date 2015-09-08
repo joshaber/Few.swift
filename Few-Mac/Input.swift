@@ -54,7 +54,7 @@ public class Input: Element {
 		if let textField = realizedSelf?.view as? NSTextField {
 			textField.delegate = inputDelegate
 
-			let cell = textField.cell() as? NSTextFieldCell
+			let cell = textField.cell as? NSTextFieldCell
 			cell?.placeholderString = placeholder ?? ""
 
 			if let text = text {
@@ -85,7 +85,7 @@ public class Input: Element {
 		field.alphaValue = alpha
 		field.hidden = hidden
 
-		let cell = field.cell() as? NSTextFieldCell
+		let cell = field.cell as? NSTextFieldCell
 		cell?.placeholderString = placeholder ?? ""
 		return field
 	}

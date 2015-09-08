@@ -65,7 +65,7 @@ public func diffElementLists(existingList: [RealizedElement], newList: [Element]
 			childQueue.removeAtIndex(0)
 
 			// It has a key and we didn't already match it up.
-			if let key = match!.element.key {
+			if match!.element.key != nil {
 				match = nil
 			}
 		}

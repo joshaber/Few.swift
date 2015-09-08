@@ -18,28 +18,28 @@ class DiffTests: QuickSpec {
 			let label = Label("Hey").size(100, 23)
 
 			it("should detect simple diffing") {
-				let diff = diffElementLists([ realizedButton ], [ button ])
+				let diff = diffElementLists([ realizedButton ], newList: [ button ])
 				expect(diff.add.count).to(equal(0))
 				expect(diff.remove.count).to(equal(0))
 				expect(diff.diff.count).to(equal(1))
 			}
 
 			it("should detect replacement") {
-				let diff = diffElementLists([ realizedButton ], [ label ])
+				let diff = diffElementLists([ realizedButton ], newList: [ label ])
 				expect(diff.add.count).to(equal(1))
 				expect(diff.remove.count).to(equal(1))
 				expect(diff.diff.count).to(equal(0))
 			}
 
 			it("should detect removal") {
-				let diff = diffElementLists([ realizedButton ], [])
+				let diff = diffElementLists([ realizedButton ], newList: [])
 				expect(diff.add.count).to(equal(0))
 				expect(diff.remove.count).to(equal(1))
 				expect(diff.diff.count).to(equal(0))
 			}
 
 			it("should detect addition") {
-				let diff = diffElementLists([ realizedButton ], [ button, label ])
+				let diff = diffElementLists([ realizedButton ], newList: [ button, label ])
 				expect(diff.add.count).to(equal(1))
 				expect(diff.remove.count).to(equal(0))
 				expect(diff.diff.count).to(equal(1))
@@ -50,7 +50,7 @@ class DiffTests: QuickSpec {
 
 				let newLabel = Label("No.")
 				newLabel.key = "key"
-				let diff = diffElementLists([ realizedButton, realizedLabel ], [ button, newLabel, label ])
+				let diff = diffElementLists([ realizedButton, realizedLabel ], newList: [ button, newLabel, label ])
 				expect(diff.add.count).to(equal(1))
 				expect(diff.remove.count).to(equal(0))
 				expect(diff.diff.count).to(equal(2))

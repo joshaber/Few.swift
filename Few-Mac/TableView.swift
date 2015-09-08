@@ -130,7 +130,7 @@ private class TableViewHandler: NSObject, NSTableViewDelegate, NSTableViewDataSo
 		cachedHeights.removeAll(keepCapacity: true)
 		for element in elements {
 			let node = element.assembleLayoutNode()
-			let layout = node.layout(maxWidth: tableView.frame.size.width)
+			let layout = node.layout(tableView.frame.size.width)
 			cachedHeights[memoryAddress(element)] = layout.frame.size.height
 		}
 	}

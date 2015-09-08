@@ -128,7 +128,7 @@ private class FewView: NSView {
 		didSet {
 			for view in subviews {
 				if let control = view as? NSControl {
-					if let cell = control.cell() as? NSCell {
+					if let cell = control.cell {
 						cell.backgroundStyle = backgroundStyle
 					}
 				} else if let fewView = view as? FewView {
