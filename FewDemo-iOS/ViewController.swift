@@ -18,7 +18,7 @@ func renderCounter(component: Component<Int>, count: Int) -> Element {
 		// The children should be centered in the view.
 		.childAlignment(.Center)
 		// Layout children in a column.
-		.direction(.Column)
+		.flexDirection(.Column)
 		.flex(1)
 		.children([
 			Label("You've clicked \(count) times!"),
@@ -32,7 +32,7 @@ let Counter = { Component(initialState: 0, render: renderCounter) }
 
 private func renderRow1(row: Int) -> Element {
 	return Element()
-		.direction(.Row)
+		.flexDirection(.Row)
 		.padding(Edges(uniform: 10))
 		.children([
 			Image(UIImage(named: "Apple_Swift_Logo.png"))
@@ -40,7 +40,7 @@ private func renderRow1(row: Int) -> Element {
 				.selfAlignment(.FlexStart),
 			Element()
 				.margin(Edges(left: 10))
-				.direction(.Column)
+				.flexDirection(.Column)
 				.children([
 					Label("I am a banana.", textColor: UIColor.blackColor(), font: UIFont.systemFontOfSize(18)),
 					Label("\(row)", textColor: UIColor.greenColor())
@@ -50,7 +50,7 @@ private func renderRow1(row: Int) -> Element {
 
 private func renderRow2(row: Int) -> Element {
 	return Element()
-		.direction(.Row)
+		.flexDirection(.Row)
 		.padding(Edges(uniform: 10))
 		.children([
 			Image(UIImage(named: "Apple_Swift_Logo.png"))
@@ -58,7 +58,7 @@ private func renderRow2(row: Int) -> Element {
 				.selfAlignment(.FlexStart),
 			Element()
 				.margin(Edges(left: 10))
-				.direction(.Column)
+				.flexDirection(.Column)
 				.children([
 					Label("I am a banana.", textColor: UIColor.redColor(), font: UIFont.systemFontOfSize(18)),
 					Label("\(row)", textColor: UIColor.greenColor())
@@ -108,7 +108,7 @@ func renderInput(component: Component<String>, state: String) -> Element {
 		.flex(1)
 		.children([
 			View(backgroundColor: UIColor.greenColor())
-				.direction(.Column)
+				.flexDirection(.Column)
 				.children([
 					View(backgroundColor: UIColor.blueColor(), borderColor: UIColor.blackColor(), borderWidth: 2, cornerRadius: 5)
 						.margin(Edges(uniform: 10))
@@ -153,7 +153,7 @@ func renderApp(component: Component<AppState>, state: AppState) -> Element {
 	
 	let showMore = { component.updateState(toggleDisplay) }
 	return Element()
-		.direction(.Column)
+		.flexDirection(.Column)
 		.children([
 			Element()
 				.children([

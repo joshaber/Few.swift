@@ -36,7 +36,7 @@ public class Element {
 	public var children: [Element] {
 		didSet {
 #if os(OSX)
-			if direction == .Column {
+			if flexDirection == .Column {
 				children = children.reverse()
 			}
 #endif
@@ -44,15 +44,15 @@ public class Element {
 	}
 
 #if os(OSX)
-	public var direction: Direction {
+	public var flexDirection: FlexDirection {
 		didSet {
-			if direction != oldValue {
+			if flexDirection != oldValue {
 				children = children.reverse()
 			}
 		}
 	}
 #else
-	public var direction: Direction
+	public var flexDirection: FlexDirection
 #endif
 
 	public var margin: Edges
@@ -66,14 +66,29 @@ public class Element {
 	/// Should the input make itself the focus after it's been realized?
 	public var autofocus: Bool
 
-	public init(frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined), key: String? = nil, hidden: Bool = false, alpha: CGFloat = 1, autofocus: Bool = false, children: [Element] = [], direction: Direction = .Row, margin: Edges = Edges(), padding: Edges = Edges(), wrap: Bool = false, justification: Justification = .FlexStart, selfAlignment: SelfAlignment = .Auto, childAlignment: ChildAlignment = .Stretch, flex: CGFloat = 0) {
+	public init(
+		frame: CGRect = CGRect(x: 0, y: 0, width: Node.Undefined, height: Node.Undefined),
+		key: String? = nil,
+		hidden: Bool = false,
+		alpha: CGFloat = 1,
+		autofocus: Bool = false,
+		children: [Element] = [],
+		flexDirection: FlexDirection = .Row,
+		margin: Edges = Edges(),
+		padding: Edges = Edges(),
+		wrap: Bool = false,
+		justification: Justification = .FlexStart,
+		selfAlignment: SelfAlignment = .Auto,
+		childAlignment: ChildAlignment = .Stretch,
+		flex: CGFloat = 0
+	) {
 		self.frame = frame
 		self.key = key
 		self.hidden = hidden
 		self.alpha = alpha
 		self.autofocus = autofocus
 		self.children = children
-		self.direction = direction
+		self.flexDirection = flexDirection
 		self.margin = margin
 		self.padding = padding
 		self.wrap = wrap
@@ -193,7 +208,17 @@ public class Element {
 	public func assembleLayoutNode() -> Node {
 		let childNodes = children.map { $0.assembleLayoutNode() }
 
-		return Node(size: frame.size, children: childNodes, direction: direction, margin: marginWithPlatformSpecificAdjustments, padding: paddingWithPlatformSpecificAdjustments, wrap: wrap, justification: justification, selfAlignment: selfAlignment, childAlignment: childAlignment, flex: flex)
+		return Node(
+			size: frame.size,
+			children: childNodes,
+			flexDirection: flexDirection,
+			margin: marginWithPlatformSpecificAdjustments,
+			padding: paddingWithPlatformSpecificAdjustments,
+			wrap: wrap,
+			justification: justification,
+			selfAlignment: selfAlignment,
+			childAlignment: childAlignment,
+			flex: flex)
 	}
 
 	private final func verticallyFlippedEdges(edges: Edges) -> Edges {
@@ -278,8 +303,8 @@ extension Element {
 		return self
 	}
 
-	public func direction(d: Direction) -> Self {
-		direction = d
+	public func flexDirection(d: FlexDirection) -> Self {
+		flexDirection = d
 		return self
 	}
 
