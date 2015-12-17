@@ -24,7 +24,7 @@ class Counter_<LOL>: Component<Int> {
 			// The children should be centered in the view.
 			.childAlignment(.Center)
 			// Layout children in a column.
-			.direction(.Column)
+			.flexDirection(.Column)
 			.children([
 				Label("You've clicked \(count) times!"),
 				Button(title: "Click me!", action: {

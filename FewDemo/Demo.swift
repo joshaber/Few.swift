@@ -32,7 +32,7 @@ private func renderInput(component: Component<LoginState>, label: String, secure
 	}
 
 	return Element()
-		.direction(.Row)
+		.flexDirection(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
 			Label(label).size(75, 19),
@@ -80,7 +80,7 @@ private func renderScrollView() -> Element {
 			keyDown: { _, event in
 				return keyDown(event, component: component)
 			})
-			.direction(.Column)
+			.flexDirection(.Column)
 			.children([
 				Label("\(items.count) \(itemPlurality)"),
 				TableView(items, selectionChanged: { row in
@@ -93,7 +93,7 @@ private func renderScrollView() -> Element {
 
 private func renderRow1(row: Int) -> Element {
 	return Element()
-		.direction(.Column)
+		.flexDirection(.Column)
 		.children([
 			Label("\(row)"),
 			Label("I am a banana.", textColor: .blackColor(), font: .systemFontOfSize(18)),
@@ -103,7 +103,7 @@ private func renderRow1(row: Int) -> Element {
 
 private func renderRow2(row: Int) -> Element {
 	return Element()
-		.direction(.Row)
+		.flexDirection(.Row)
 		.children([
 			Image(NSImage(named: NSImageNameApplicationIcon)).size(14, 14),
 			Label("I am a banana.", textColor: .redColor(), font: .systemFontOfSize(11)),
@@ -114,7 +114,7 @@ private func renderLogin() -> Element {
 	return Component(initialState: LoginState()) { component, state in
 		let loginEnabled = !state.username.isEmpty && !state.password.isEmpty
 		return Element()
-			.direction(.Column)
+			.flexDirection(.Column)
 			.children([
 				renderThingy(state.username.utf16.count),
 				renderInput(component, label: "Username", secure: false) {
@@ -145,7 +145,7 @@ class Demo_<LOL>: Component<()> {
 		return Element()
 			.justification(.Center)
 			.childAlignment(.Center)
-			.direction(.Column)
+			.flexDirection(.Column)
 			.children([
 				renderLogin(),
 				renderScrollView().size(100, 200),

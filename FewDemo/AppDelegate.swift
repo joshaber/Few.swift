@@ -29,7 +29,7 @@ func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) ->
 	return Element()
 		.justification(.Center)
 		.childAlignment(.Center)
-		.direction(.Column)
+		.flexDirection(.Column)
 		.children([
 			contentComponent,
 			CustomButton(title: "Show me more!") {
@@ -39,7 +39,7 @@ func renderApp(component: Component<ActiveComponent>, state: ActiveComponent) ->
 		])
 
 //	return Element()
-//		.direction(.Column)
+//		.flexDirection(.Column)
 //		.justification(.Center)
 //		.children([
 //			Element().height(90).children([

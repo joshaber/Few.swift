@@ -30,7 +30,7 @@ private func f2c(f: CGFloat) -> CGFloat {
 
 private func renderLabeledInput(label: String, value: String, autofocus: Bool, fn: String -> ()) -> Element {
 	return Element()
-		.direction(.Row)
+		.flexDirection(.Row)
 		.padding(Edges(bottom: 4))
 		.children([
 			Label(label).width(75),
@@ -58,7 +58,7 @@ class TemperatureConverter_<LOL>: Component<ConverterState> {
 		return Element()
 			.justification(.Center)
 			.childAlignment(.Center)
-			.direction(.Column)
+			.flexDirection(.Column)
 			.children([
 				renderLabeledInput("Fahrenheit", value: "\(state.fahrenheit)", autofocus: true) {
 					if let f = parseFloat($0) {
